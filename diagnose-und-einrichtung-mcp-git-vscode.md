@@ -46,7 +46,10 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
      }
    }
    ```
-3. **Hinweis bei Änderungen an MCP-Servern:** Nach einer Konfigurationsänderung den Server im **Customizations-Tab** neu starten (*Restart*).
+3. **So starten Sie den `github-mcp-server` nach einer Änderung neu (lokal auf dem PC, nicht auf GitHub.com):**
+   * **In der Antigravity Desktop-App:** Links in der Haupt-Seitenleiste auf **Customizations** (bzw. *Skills & Customizations*) klicken → **MCP Servers** auswählen → neben `github-mcp-server` auf **Restart** (↻) klicken.
+   * **In der Antigravity IDE (Editor-Ansicht):** Oben rechts im Chat-Bereich auf das **Drei-Punkte-Menü (`...`)** klicken → **MCP Servers** → neben `github-mcp-server` auf **Restart** klicken.
+   * **Im klassischen VS Code:** `Strg + Umschalt + P` drücken → `MCP: List Servers` eingeben → `github-mcp-server` auswählen → **Restart Server**.
 
 ---
 
