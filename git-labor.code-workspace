@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../local_Cyborg"
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"printfn.gemini-improved"
+		]
+	}
+}
