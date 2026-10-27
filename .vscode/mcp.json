@@ -1,45 +1,4 @@
 {
 	"servers": {
-		"io.github.shariqriazz/google-ai-search-mcp": {
-			"type": "stdio",
-			"command": "npx",
-			"args": [
-				"google-ai-search-mcp@1.1.1"
-			],
-			"env": {
-				"AI_PROVIDER": "${input:AI_PROVIDER}",
-				"GOOGLE_CLOUD_PROJECT": "${input:GOOGLE_CLOUD_PROJECT}",
-				"GOOGLE_CLOUD_LOCATION": "${input:GOOGLE_CLOUD_LOCATION}",
-				"GEMINI_API_KEY": "${input:GEMINI_API_KEY}"
-			},
-			"gallery": "https://api.mcp.github.com",
-			"version": "1.1.1"
-		}
-	},
-	"inputs": [
-		{
-			"id": "AI_PROVIDER",
-			"type": "promptString",
-			"description": "Select vertex or gemini. Defaults to vertex.",
-			"password": false
-		},
-		{
-			"id": "GOOGLE_CLOUD_PROJECT",
-			"type": "promptString",
-			"description": "Google Cloud project ID. Required when AI_PROVIDER is vertex.",
-			"password": false
-		},
-		{
-			"id": "GOOGLE_CLOUD_LOCATION",
-			"type": "promptString",
-			"description": "Vertex AI location. Defaults to us-central1.",
-			"password": false
-		},
-		{
-			"id": "GEMINI_API_KEY",
-			"type": "promptString",
-			"description": "Gemini API key. Required when AI_PROVIDER is gemini.",
-			"password": true
-		}
-	]
+	}
 }

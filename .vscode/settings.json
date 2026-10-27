@@ -1,0 +1,9 @@
+{
+    "antigravityCopilot.server.autoStart": true,
+    "antigravityCopilot.server.enabled": true,
+    "antigravity.autoOpenFiles": true,
+    "antigravity.autoRecover": true,
+    "antigravityCopilot.rateLimit.cooldownMs": 15000,
+    "chat.agent.sandbox.enabled": "off",
+    "task.allowAutomaticTasks": "on"
+}

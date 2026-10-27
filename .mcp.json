@@ -1,0 +1,33 @@
+{
+	"mcpServers": {
+		"local-workspace-filesystem": {
+			"type": "stdio",
+			"command": "npx.cmd",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"C:\\Users\\strik\\git-labor",
+				"C:\\local_Cyborg"
+			],
+			"tools": [
+				"*"
+			]
+		},
+		"io.github.shariqriazz/google-ai-search-mcp": {
+			"type": "stdio",
+			"command": "npx.cmd",
+			"args": [
+				"-y",
+				"google-ai-search-mcp@1.1.1"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"AI_PROVIDER": "vertex",
+				"GOOGLE_CLOUD_PROJECT": "aicode-consumers",
+				"GOOGLE_CLOUD_LOCATION": "us-central1"
+			}
+		}
+	}
+}

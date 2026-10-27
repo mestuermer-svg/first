@@ -1,0 +1,26 @@
+services:
+  ac-windows-sandbox:
+    image: dockurr/windows:latest
+    container_name: ac-win11-sandbox
+    environment:
+      VERSION: "11"
+      RAM_SIZE: "6G"
+      CPU_CORES: "4"
+      DISK_SIZE: "64G"
+      LANGUAGE: "German"
+      REGION: "de-DE"
+      KEYBOARD: "de-de"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "127.0.0.1:8006:8006"
+      - "127.0.0.1:3389:3389/tcp"
+      - "127.0.0.1:3389:3389/udp"
+    volumes:
+      - ./storage:/storage
+      - ./shared:/shared
+    stop_grace_period: 2m
+    restart: unless-stopped
