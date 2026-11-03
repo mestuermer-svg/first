@@ -13,8 +13,8 @@ Diese Anleitung dokumentiert die schlüsselfertige Einrichtung eines bootfähige
 ```mermaid
 graph TD
     subgraph SimRacer [SimRacer Workstation]
-        C[Laufwerk C: 1 TB System-SSD]
-        D[Laufwerk D: 1.8 TB Daten-SSD]
+        C[Laufwerk C: 1 TB interne NVMe System-SSD]
+        D[Laufwerk D: 1.8 TB externe USB-SSD]
         USB[USB-Rettungsstick 8 GB]
     end
 
@@ -59,7 +59,7 @@ Das Rettungsmedium ist die Voraussetzung, um das System auch dann wiederherzuste
 <details>
 <summary><h3>Option A: Saubere Laufwerkstrennung (Best Practice)</h3></summary>
 
-Falls die Steam-Bibliothek auf der **1.8 TB Daten-SSD (Laufwerk D:)** liegt:
+Falls die Steam-Bibliothek auf der **1.8 TB externen USB-SSD (Laufwerk D:)** liegt:
 1. **Backup Mode:** Wähle **Volume level backup**.
 2. **Volumes:** Markiere ausschließlich **Laufwerk C:** (System & EFI-Boot-Partition).
 3. **Vorteil:** Alle Spiele liegen unberührt auf D:, Laufwerk C: wird schlank und blitzschnell gesichert.
@@ -72,10 +72,11 @@ Falls die Steam-Bibliothek auf der **1.8 TB Daten-SSD (Laufwerk D:)** liegt:
 Falls Steam und die Spiele aktuell auf Laufwerk C: installiert sind:
 1. **Backup Mode:** Wähle **File level backup**.
 2. **Items:** Wähle `Operating system` und Laufwerk `C:`.
-3. Klicke auf **Filters / Advanced Options** und trage unter **Exclusions** folgende Pfade ein:
+3. Klicke auf **Filters / Advanced Options** und trage unter **Exclusions** folgende Pfade ein (Spiele sowie die virtuelle Festplatte der Docker-Sandbox, falls diese auf `C:\ac-sandbox` läuft):
    ```text
    C:\Program Files (x86)\Steam\steamapps\common\*
    C:\SteamLibrary\*
+   C:\ac-sandbox\storage\*
    ```
 4. Temporäre Ordner und Caches werden von Veeam automatisch gefiltert.
 
@@ -121,6 +122,7 @@ Falls Windows nach einem fehlgeschlagenen Update, Mod-Konflikt oder Absturz nich
 <details>
 <summary><h2>7. Weiterführende Dokumente & Verknüpfungen</h2></summary>
 
+* [Praxisanleitung: 64-GB Docker-Sandbox auf den SimRacer übertragen, vergrößern & remote nutzen](./sandbox-umzug-skalierung-simracer.md)
 * [Architektur-Übersicht: VS Code Agent, Localhost-Proxy, Gemini & Antigravity](./uebersicht-vscode-agent-localhost-gemini-antigravity.md)
 * [Multi-PC-Architektur & Einsatzkonzept (VanstrikeCyborg & SimRacer)](./multi-pc-architektur-ki-agents-simracing.md)
 * [Technische Hardware- und Stabilitätsanalyse (MSI Cyborg 15 & Docker)](./hardware-analyse-system-stabilitaet-docker-ki.md)

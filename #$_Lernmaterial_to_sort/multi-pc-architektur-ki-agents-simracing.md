@@ -1,10 +1,12 @@
 # Multi-PC-Architektur & Einsatzkonzept: KI-Agents, Simulation & Entwicklung
 
+# Markdown heading
 <details>
 <summary><h2>1. Ausgangslage & Hardware-Gegenüberstellung</h2></summary>
 
 Zur optimalen Verteilung von Rechenlasten, Entwicklungsaufgaben und Simulationsanwendungen stehen zwei dedizierte Windows-11-Systeme zur Verfügung:
 
+<h1>Inline HTML heading</h1>
 <details>
 <summary><h3>1.1 Rechner 1: VanstrikeCyborg (Laptop / MSI Cyborg 15)</h3></summary>
 
@@ -22,7 +24,7 @@ Zur optimalen Verteilung von Rechenlasten, Entwicklungsaufgaben und Simulationsa
 * **CPU:** AMD Ryzen 9 3900X (12 Kerne / 24 Threads, 3.80 – 4.20 GHz)
 * **RAM:** 32 GB DDR4
 * **GPU:** NVIDIA GeForce RTX 5070 Ti (16 GB GDDR7 VRAM, 256-Bit Bus, 8960 CUDA-Kerne)
-* **Speicher:** 2.8 TB NVMe SSDs (1 TB System-SSD + 1.8 TB Daten-SSD)
+* **Speicher:** 1 TB interne NVMe System-SSD (`C:`) + 1.8 TB externe USB-SSD (`D:`)
 * **Peripherie:** HTC VIVE Focus Vision VR-Headset (DisplayPort, Dual 2.5K @ 120 Hz), Fanatec ClubSport V2.5 Wheel Base + Formula V2.0, 4K-Display (Hisense)
 * **Charakteristik:** Massives Rechenkraftwerk mit doppelter Speicherkapazität, doppelter VRAM-Größe und enormer Multithreading-Leistung.
 
@@ -119,6 +121,7 @@ Konsolidierung aller ressourcenintensiven Aufgaben auf der Desktop-Hardware:
 <summary><h3>4.1 Kernfazit</h3></summary>
 
 Die vorhandene Hardware ergänzt sich ideal:
+
 1. Der **MSI Cyborg Laptop** ist das agile Programmierwerkzeug.
 2. Der **SimRacer Desktop** ist der Hochleistungs-Knoten für Virtualisierung, schwere KI-Inferenz und das VR-Simulationserlebnis.
 

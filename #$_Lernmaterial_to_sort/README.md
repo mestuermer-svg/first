@@ -28,6 +28,7 @@ Dieses Verzeichnis enthält die Dokumentationen, Leitfäden und Diagnoseberichte
 
 ## 3. Docker, Sandbox & Virtualisierung
 
+- [sandbox-umzug-skalierung-simracer.md](sandbox-umzug-skalierung-simracer.md) – **NEU:** Praxisanleitung: 64-GB Docker-Sandbox (`ac-sandbox`) auf den SimRacer (`C:\ac-sandbox` interne NVMe + Backup auf externe USB-SSD `D:`) übertragen, vergrößern (12 GB RAM, 8 Kerne, 160+ GB Disk) & vom Laptop aus fernsteuern.
 - [docker.md](docker.md) – Grundlagen und Befehle für Docker Container.
 - [docker-sbx-anleitung.md](docker-sbx-anleitung.md) – Anleitung zur isolierten Sandbox-Containerumgebung.
 - [SANDBOX_ANLEITUNG.md](SANDBOX_ANLEITUNG.md) – Vollständige Anleitung zum Windows-11-Sandbox-System in Docker.

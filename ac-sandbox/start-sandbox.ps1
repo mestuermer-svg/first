@@ -1,11 +1,12 @@
-# Automatischer Start-Service für den VS Code Workspace "git-labor"
+﻿# Automatischer Start-Service für den VS Code Workspace "git-labor"
 # Startet:
 # 1. Antigravity Proxy (CLIProxyAPI auf Port 8317)
 # 2. Docker Desktop Engine (falls noch nicht aktiv)
 # 3. Windows 11 Assetto-Corsa Sandbox-Container (dockurr/windows auf Port 8006)
 
 param(
-    [switch]$NoDocker
+    [switch]$NoDocker,
+    [string]$RemoteHost = ""
 )
 
 $ErrorActionPreference = "Continue"
@@ -39,6 +40,32 @@ if ($proxyOk) {
     Write-Host "      CLIProxyAPI läuft und antwortet auf 127.0.0.1:8317." -ForegroundColor Green
 } else {
     Write-Host "      CLIProxyAPI läuft noch nicht (Start wird durch die VS Code Extension 'Antigravity for Copilot' gesteuert)." -ForegroundColor Yellow
+}
+
+# -----------------------------------------------------------------------------
+# 1b. Remote-Modus: Sandbox läuft auf dem SimRacer (spart 100% RAM auf dem Laptop)
+# -----------------------------------------------------------------------------
+if (-not [string]::IsNullOrWhiteSpace($RemoteHost)) {
+    Write-Host "[2/3] Remote-Modus aktiv: Prüfe Verbindung zu SimRacer ($RemoteHost)..." -ForegroundColor Cyan
+    $vncCheck = Test-NetConnection -ComputerName $RemoteHost -Port 8006 -WarningAction SilentlyContinue
+    $rdpCheck = Test-NetConnection -ComputerName $RemoteHost -Port 3389 -WarningAction SilentlyContinue
+
+    if ($vncCheck.TcpTestSucceeded -or $rdpCheck.TcpTestSucceeded) {
+        Write-Host "[3/3] Remote-Sandbox auf '$RemoteHost' ist online!" -ForegroundColor Green
+        Write-Host ""
+        Write-Host "=================================================================" -ForegroundColor Green
+        Write-Host " Remote-Sandbox (SimRacer) & Antigravity aktiv!" -ForegroundColor Green
+        Write-Host " -> Antigravity Proxy (lokal):                  http://127.0.0.1:8317" -ForegroundColor Cyan
+        Write-Host " -> Web-Ansicht (auch für Chrome DevTools MCP): http://${RemoteHost}:8006" -ForegroundColor Cyan
+        Write-Host " -> RDP-Zugang (Windows Remotedesktop):         ${RemoteHost}:3389" -ForegroundColor Cyan
+        Write-Host " -> SSH-Zugang (OpenSSH Bridge):                ssh -p 2222 Docker@${RemoteHost}" -ForegroundColor Cyan
+        Write-Host " -> Remote-Shared-Ordner (SMB):                 \\${RemoteHost}\ac-sandbox\shared" -ForegroundColor Cyan
+        Write-Host "=================================================================" -ForegroundColor Green
+    } else {
+        Write-Host "[3/3] WARNUNG: Remote-Sandbox auf '$RemoteHost' (Port 8006/3389) antwortet noch nicht." -ForegroundColor Yellow
+        Write-Host "      Bitte prüfen Sie auf dem SimRacer in C:\ac-sandbox: 'docker compose up -d'" -ForegroundColor Yellow
+    }
+    return
 }
 
 # -----------------------------------------------------------------------------
