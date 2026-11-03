@@ -15,6 +15,7 @@ Dieses Verzeichnis enthält die Dokumentationen, Leitfäden und Diagnoseberichte
 
 ## 2. VS Code, Git & MCP (Model Context Protocol)
 
+- [uebersicht-vscode-agent-localhost-gemini-antigravity.md](uebersicht-vscode-agent-localhost-gemini-antigravity.md) – **NEU:** Architektur-Übersicht: VS Code Agent, Localhost-Proxy (`cli-proxy-api.exe`), Gemini/Antigravity, lokale MCP-Server & zweigeteilter Git-Mirror (`.git`-Datenbank vs. Klartext).
 - [visual_studio_code_doku.md](visual_studio_code_doku.md) – Umfassende Dokumentation zur VS Code Umgebung.
 - [vsc.md](vsc.md) – Schnelleinstieg & nützliche Shortcuts für Visual Studio Code.
 - [vsc+git.md](vsc+git.md) – Zusammenspiel von VS Code und Git Versionskontrolle.
@@ -43,8 +44,9 @@ Dieses Verzeichnis enthält die Dokumentationen, Leitfäden und Diagnoseberichte
 
 ---
 
-## 5. Systemarchitektur, Hardware & Simracing
+## 5. Systemarchitektur, Hardware, Backup & Simracing
 
+- [simracer-system-backup-wiederherstellung-veeam.md](simracer-system-backup-wiederherstellung-veeam.md) – **NEU:** Praxisanleitung für ein bootfähiges System-Image (Veeam Agent Free) des SimRacers ohne Steam-Spiele (`steamapps\common`) inkl. Bare-Metal-Recovery.
 - [multi-pc-architektur-ki-agents-simracing.md](multi-pc-architektur-ki-agents-simracing.md) – Netzwerk- und Host-Architektur für verteilte KI-Agenten im Simracing (Assetto Corsa).
 - [hardware-analyse-system-stabilitaet-docker-ki.md](hardware-analyse-system-stabilitaet-docker-ki.md) – Hardware-Ressourcen, CPU/RAM-Auslastung und Stabilitätsanalyse.
 
