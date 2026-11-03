@@ -40,7 +40,8 @@ flowchart TB
     Browser <-->|"Web-Oberfläche http://127.0.0.1:8006"| Win11
 ```
 
-### Kurz erklärt für Einsteiger:
+### Kurz erklärt für Einsteiger
+
 * **Antigravity / `cli-proxy-api.exe` (Das Gehirn):** Ein kleines Hilfsprogramm auf Ihrem PC, das im Hintergrund auf `127.0.0.1:8317` lauscht. Es nimmt Anfragen aus VS Code entgegen und leitet sie über Ihr Google-Konto an die Gemini-/Antigravity-Modelle weiter.
 * **MCP-Server (Die Werkzeuge):** *Model Context Protocol (MCP)* ist ein Standard, über den ein KI-Agent Werkzeuge bekommt. Ohne MCP kann eine KI nur Text schreiben. Mit MCP bekommt sie „Hände“ (Dateien bearbeiten via *Filesystem MCP*, Webseiten anschauen via *Chrome DevTools MCP*, Wissen nachschlagen via *Google AI Search MCP*).
 * **Docker-Sandbox (Die Werkbank):** Ein komplett eigener, abgeschotteter Windows-11-Computer, der in einem Container (Docker) läuft. Wenn der Agent dort drin Programme installiert oder Einstellungen für Assetto Corsa testet, bleibt Ihr echter Windows-PC zu 100 % sauber und unangetastet.
@@ -52,6 +53,7 @@ flowchart TB
 Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftraten, und was wir geändert haben:
 
 ### Problem 1: Windows „Intelligente App-Steuerung“ blockierte `cli-proxy-api.exe`
+
 * **Der Fehler:** `Eine Anwendungssteuerungsrichtlinie hat diese Datei blockiert`
 * **Warum passierte das?** Windows 11 besitzt eine Sicherheitsfunktion namens *Smart App Control (Intelligente App-Steuerung)*. Wenn diese aktiv ist, verbietet Windows den Start aller Programme, die kein teures Firmen-Zertifikat von Microsoft besitzen. Da `cli-proxy-api.exe` ein Open-Source-Entwicklerwerkzeug ohne solche Signatur ist, hat Windows den Start verweigert.
 * **Folge:** Ohne laufende `cli-proxy-api.exe` konnte VS Code keine Verbindung zu Antigravity aufbauen.
@@ -60,6 +62,7 @@ Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftrate
 ---
 
 ### Problem 2: Rotes `(x)` bei den MCP-Servern (`npx` vs. `npx.cmd`)
+
 * **Der Fehler:** Im VS-Code-Menü *Agent Customizations → MCP Servers* zeigten `local-workspace-filesystem` und `chrome-devtools-mcp` ein rotes `(x)` (`PSSecurityException / UnauthorizedAccess`).
 * **Warum passierte das?**
   Node.js installiert unter Windows zwei Startdateien für `npx`:
@@ -72,6 +75,7 @@ Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftrate
 ---
 
 ### Problem 3: `Google AI Search MCP` meldete `Unsupported. See Migrations for details.`
+
 * **Der Fehler:** Der Server startete im Copilot-Agenten nicht und zeigte in Rot `Unsupported`.
 * **Warum passierte das?**
   In der Datei [.vscode/mcp.json](file:///C:/Users/strik/git-labor/.vscode/mcp.json) standen Platzhalter wie `"${input:GEMINI_API_KEY}"`. Solche `${input:...}`-Variablen öffnen in VS Code normalerweise ein kleines Eingabefenster für den Benutzer. Der neue **Copilot Background/CLI Agent** kann solche Pop-up-Fenster technisch nicht anzeigen und lehnt jeden MCP-Server ab, der `${input:...}` verwendet.
@@ -81,6 +85,7 @@ Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftrate
 ---
 
 ### Problem 4: Gemini CLI in der PowerShell brach mit `402 Payment Required` ab
+
 * **Der Fehler:** `Your prepayment credits are depleted (code: 402)` beim Aufruf von `gemini`.
 * **Warum passierte das?**
   In Ihrer Datei [.gemini/settings.json](file:///C:/Users/strik/.gemini/settings.json) war eingestellt, dass die Gemini CLI einen **API-Key** (`"selectedType": "gemini-api-key"`) verwenden soll. Auf dem zugehörigen Google-AI-Studio-Konto war das Prepaid-Guthaben leer. Gleichzeitig hatten Sie sich aber bereits erfolgreich per Google-Konto (OAuth) angemeldet (`oauth_creds.json`).
@@ -90,6 +95,7 @@ Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftrate
 ---
 
 ### Problem 5: Das Missverständnis um die „Sandbox“-Einstellung in VS Code
+
 * **Das Problem:** In den VS-Code-Einstellungen war `"chat.agent.sandbox.enabled": "on"` aktiviert.
 * **Warum ist das wichtig zu verstehen?**
   Es gibt zwei völlig unterschiedliche Dinge, die beide „Sandbox“ heißen:
@@ -122,7 +128,9 @@ Hier sind die **fünf konkreten Ursachen**, warum zuvor Fehlermeldungen auftrate
 ## 4. Praxisleitfaden: Worauf Sie im Betrieb mit Agent & Docker achten müssen
 
 ### A. Was passiert beim Öffnen von VS Code?
+
 Sobald Sie den Ordner `C:\Users\strik\git-labor` in VS Code öffnen, startet im Hintergrund automatisch die Aufgabe **`Auto-Start: Antigravity + Docker AC-Sandbox (Win11)`**:
+
 1. Sie prüft, ob `cli-proxy-api.exe` auf Port `8317` läuft (und startet ihn bei Bedarf).
 2. Sie prüft, ob **Docker Desktop** läuft (und startet es bei Bedarf).
 3. Sie startet den Container `ac-win11-sandbox` über Docker Compose.
@@ -132,7 +140,9 @@ Sobald Sie den Ordner `C:\Users\strik\git-labor` in VS Code öffnen, startet im 
 > Beim ersten Mal lädt der Container einmalig das offizielle deutsche Windows-11-Image von Microsoft herunter und installiert sich vollautomatisch. Sie können dabei live im Browser unter **`http://127.0.0.1:8006`** zuschauen! Alle späteren Starts dauern nur noch wenige Sekunden, weil die virtuelle Festplatte im Ordner `C:\Users\strik\git-labor\ac-sandbox\storage` dauerhaft gespeichert bleibt.
 
 ### B. Wie Sie (und der Agent) in die Windows-11-Sandbox hineinschauen
+
 Sie haben zwei Wege, um den Desktop des Windows 11 im Docker-Container zu sehen und zu bedienen:
+
 1. **Im Webbrowser (und für den Agenten):**
    Öffnen Sie **`http://127.0.0.1:8006`**.
    *Vorteil:* Auch Ihr KI-Agent kann über den **`chrome-devtools-mcp`** diese Adresse öffnen, Screenshots vom Windows-11-Desktop machen und sehen, was im Content Manager passiert!
@@ -140,7 +150,9 @@ Sie haben zwei Wege, um den Desktop des Windows 11 im Docker-Container zu sehen 
    Drücken Sie `Win + R`, tippen Sie `mstsc` ein und verbinden Sie sich mit **`127.0.0.1:3389`** (Benutzername: `Docker`, Passwort: `admin` bzw. leer). Das ist besonders flüssig und unterstützt Audio sowie Copy & Paste.
 
 ### C. Wie der Agent Dateien in die Sandbox schickt (Der `Shared`-Ordner)
+
 Damit der Agent Python-Skripte für Assetto Corsa oder Konfigurationsdateien (`.ini`, `.json`, `.lua`) für den Content Manager schreiben kann, ohne umständlich über das Netzwerk kopieren zu müssen, gibt es eine direkte Brücke:
+
 * **Auf Ihrem echten PC (für VS Code & den Agenten):**
   `C:\Users\strik\git-labor\ac-sandbox\shared`
 * **Innerhalb der Windows-11-Sandbox:**
@@ -149,6 +161,7 @@ Damit der Agent Python-Skripte für Assetto Corsa oder Konfigurationsdateien (`.
   Jede Datei, die der Agent in `C:\Users\strik\git-labor\ac-sandbox\shared\apps_python` oder `cfg_content_manager` speichert, ist **in derselben Sekunde** im Windows-11-Container sichtbar. Innerhalb der Sandbox können Sie (oder das Skript) diese Ordner direkt mit dem Assetto-Corsa-Ordner verknüpfen.
 
 ### D. Nützliche Befehle für den Alltag (im VS-Code-Terminal)
+
 Falls Sie den Zustand der Sandbox manuell prüfen oder steuern möchten:
 
 ```powershell

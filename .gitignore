@@ -1,0 +1,23 @@
+# Virtual Machine Storage & Large Disk Images
+ac-sandbox/storage/
+*.img
+*.iso
+*.vdi
+*.qcow2
+*.rom
+*.vars
+
+# Installer & Executables
+*.exe
+*.msi
+
+# Temporary & Image Dumps
+*.ppm
+
+# OS Artifacts
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Session / Terminal history dumps
+.history-memo/

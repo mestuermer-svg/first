@@ -10,6 +10,9 @@
 		"antigravity.autoOpenFiles": true,
 		"antigravity.autoRecover": true,
 		"antigravityCopilot.rateLimit.cooldownMs": 15000,
-		"chat.agent.sandbox.enabled": "off"
+		"chat.agent.sandbox.enabled": "off",
+		"chat.agent.sandbox.network.allowLocalNetwork": true,
+		"containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+		"acpHub.agents.google.authPreference": "oauth"
 	}
 }

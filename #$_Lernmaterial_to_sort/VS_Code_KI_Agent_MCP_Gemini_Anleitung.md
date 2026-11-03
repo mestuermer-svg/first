@@ -81,7 +81,7 @@ Für den isolierten Betrieb des Agenten:
 
 }
 
-3. Unten links auf das Remote-Symbol klicken und **Reopen in Container** wählen. Der Agent arbeitet isoliert in der Sandbox mit MCP-Zugriff auf Gemini.
+1. Unten links auf das Remote-Symbol klicken und **Reopen in Container** wählen. Der Agent arbeitet isoliert in der Sandbox mit MCP-Zugriff auf Gemini.
 
 ## 5\. Integration von Google Antigravity
 

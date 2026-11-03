@@ -3,6 +3,7 @@
 **Datum:** 26. Oktober 2026  
 **Benutzer / GitHub-Account:** `mestuermer-svg` (`m.e.stuermer@gmail.com`)  
 **Betroffene Repositories:**
+
 1. [`mestuermer-svg/first`](https://github.com/mestuermer-svg/first) (Lokal: `C:\Users\strik\git-labor`)
 2. [`mestuermer-svg/local_Cyborg`](https://github.com/mestuermer-svg/local_Cyborg) (Lokal: `C:\local_Cyborg`)
 
@@ -11,6 +12,7 @@
 ## 1. Fehlerdiagnose: Warum `github-mcp-server` nicht startete
 
 ### Ursprüngliche Fehlermeldung
+
 ```text
 failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine;
 check if the path is correct and if the daemon is running:
@@ -19,11 +21,13 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
 ```
 
 ### Ursache
+
 * In der globalen Konfigurationsdatei `C:\Users\strik\.gemini\config\mcp_config.json` war der `github-mcp-server` so eingestellt, dass er über einen **Docker-Container** (`docker run -i --rm ... ghcr.io/github/github-mcp-server`) gestartet wird.
 * Auf dem System ist zwar **Docker Desktop (`v29.8.2` / `4.95.0`)** installiert (`C:\Users\strik\AppData\Local\Programs\DockerDesktop\`), aber der **Docker-Hintergrunddienst (Daemon)** lief nicht.
 * Wenn Docker Desktop geschlossen ist, existiert die Windows Named Pipe `\\.\pipe\dockerDesktopLinuxEngine` nicht – der Start des MCP-Servers bricht sofort ab.
 
 ### Warum das native Go-Binary (`Option 2`) für VMs & VS-Code-Sandboxen besser ist
+
 | Kriterium | Option 1: Docker (`ghcr.io/...`) | **Option 2: Natives Binary (`github-mcp-server.exe`)** | Option 3: `npx` (`@modelcontextprotocol/server-github`) |
 | :--- | :--- | :--- | :--- |
 | **Funktionsumfang** | Aktuell & vollständig (`v2.0.3`) | **Aktuell & vollständig (`v2.0.3`)** | Veraltet (Deprecated), weniger Tools |
@@ -32,9 +36,11 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
 | **VM- & Sandbox-Eignung** | Schlecht (Nested Virtualization & Named Pipes nötig) | **Exzellent (einzelne statische `.exe`-Datei über `stdio`)** | Mittel |
 
 ### Durchgeführte Lösung beim MCP-Server
+
 1. Das offizielle Windows-Binary (`v2.0.3`, x64) von GitHub Releases heruntergeladen und entpackt nach:
    `C:\Users\strik\.local\bin\github-mcp-server.exe`
 2. Die Datei `C:\Users\strik\.gemini\config\mcp_config.json` von Docker auf das direkte Binary umgestellt:
+
    ```json
    "github-mcp-server": {
      "command": "C:\\Users\\strik\\.local\\bin\\github-mcp-server.exe",
@@ -46,6 +52,7 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
      }
    }
    ```
+
 3. **So starten Sie den `github-mcp-server` nach einer Änderung neu (lokal auf dem PC, nicht auf GitHub.com):**
    * **In der Antigravity Desktop-App:** Links in der Haupt-Seitenleiste auf **Customizations** (bzw. *Skills & Customizations*) klicken → **MCP Servers** auswählen → neben `github-mcp-server` auf **Restart** (↻) klicken.
    * **In der Antigravity IDE (Editor-Ansicht):** Oben rechts im Chat-Bereich auf das **Drei-Punkte-Menü (`...`)** klicken → **MCP Servers** → neben `github-mcp-server` auf **Restart** klicken.
@@ -56,13 +63,17 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
 ## 2. Was in Git & VS Code falsch eingestellt war (und behoben wurde)
 
 ### A. Globale Git-Konfiguration (`C:\Users\strik\.gitconfig`)
+
 * **Gefundener Fehler:** In der `.gitconfig` waren beim Benutzernamen versehentlich Zeilenumbrüche (`\n`) gespeichert:
+
   ```ini
   name = \nmestuermer-svg\n
   ```
+
   Das kann beim Erstellen von Commits zu Fehlern oder defekten Autoren-Einträgen führen.
 * **Gefundene Schwachstelle:** In der System-Konfiguration war noch `init.defaultbranch = master` hinterlegt (GitHub nutzt heute `main`), und `push.autoSetupRemote` fehlte.
 * **Durchgeführte Korrektur in `C:\Users\strik\.gitconfig`:**
+
   ```ini
   [core]
       editor = \"C:\\Users\\strik\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait
@@ -76,7 +87,9 @@ open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specifie
   ```
 
 ### B. Geprüfte VS-Code-Einstellungen (`C:\Users\strik\AppData\Roaming\Code\User\settings.json`)
+
 Diese Einstellungen waren bereits sinnvoll gesetzt und wurden beibehalten:
+
 * `"git.enableSmartCommit": true` – Nimmt beim Klick auf *Commit* automatisch alle geänderten Dateien mit, falls vorher nichts manuell mit `+` ausgewählt wurde.
 * `"git.autofetch": true` – Prüft regelmäßig im Hintergrund, ob Änderungen auf GitHub vorliegen.
 * `"git.confirmSync": false` – Synchronisiert direkt ohne unnötige Bestätigungsdialoge.
@@ -87,10 +100,12 @@ Diese Einstellungen waren bereits sinnvoll gesetzt und wurden beibehalten:
 ## 3. Warum die beiden GitHub-Repositories leer waren (und wie es gelöst wurde)
 
 ### Repository 1: `mestuermer-svg/first` (Lokal: `C:\Users\strik\git-labor`)
+
 * **Ursache:** Die neuen Dateien (`lernmaterial-google-antigravity.md`, `verbindungsbericht-vscode-github-gemini.md`, `prozess-log.md` usw.) lagen zwar im **Staging-Bereich (Warenkorb)**, es fehlten aber noch der **Commit** (lokales Speichern im `.git`-Archiv) und der **Push** (Hochladen zu GitHub).
 * **Lösung:** Alle Dateien inklusive dieser Dokumentation wurden ordentlich committet und auf `origin/main` (`https://github.com/mestuermer-svg/first.git`) gepusht.
 
 ### Repository 2: `mestuermer-svg/local_Cyborg` (Lokal: `C:\local_Cyborg`)
+
 * **Ursache 1 (13 GB großes, beschädigtes `.git`-Archiv):** Im Ordner `C:\local_Cyborg` liegen große Programm-Installer und Treiber (`Apps und Treiber` mit **12,55 GB** und `Tool-Box` mit **239 MB**). Beim ersten Commit-Versuch wollte Git alle 13+ GB in das lokale `.git`-Archiv packen. Dabei ist die Pack-Datei `.git/objects/pack/pack-57754643c4e4bdeb932d437f81b4b3b9de4890eb.pack` abgebrochen und **korrupt** geworden (`fatal: packed object ... is corrupt`).
 * **Ursache 2 (GitHub 100-MB-Dateilimit):** GitHub lehnt jeden Upload (`Push`) komplett ab, sobald eine einzelne Datei größer als **100 MB** ist (z. B. `SolarSystemScope-Setup-3-2-3.exe` mit 176 MB oder Treiber-Archive).
 * **Lösung:**

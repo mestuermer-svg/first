@@ -4,14 +4,14 @@ services:
     container_name: ac-win11-sandbox
     environment:
       VERSION: "11"
-      RAM_SIZE: "6G"
+      KVM: "N"
+      RAM_SIZE: "4G"
       CPU_CORES: "4"
       DISK_SIZE: "64G"
       LANGUAGE: "German"
       REGION: "de-DE"
       KEYBOARD: "de-de"
     devices:
-      - /dev/kvm
       - /dev/net/tun
     cap_add:
       - NET_ADMIN
