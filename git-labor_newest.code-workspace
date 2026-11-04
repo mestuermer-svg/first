@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../../local_Cyborg"
 		}
 	],
 	"settings": {
@@ -13,6 +16,8 @@
 		"chat.agent.sandbox.enabled": "off",
 		"chat.agent.sandbox.network.allowLocalNetwork": true,
 		"containers.containerClient": "com.microsoft.visualstudio.containers.docker",
-		"acpHub.agents.google.authPreference": "oauth"
+		"acpHub.agents.google.authPreference": "oauth",
+		"google.cloud.project": "gen-lang-client-0668043276",
+		"google.cloud.region": "europe-west3"
 	}
 }
