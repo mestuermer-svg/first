@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-11-05T05:30:17.3820245+01:00",
+  "computer_name": "WIN-L8EGEB9H1A6",
+  "user_name": "Docker",
+  "c_drive_total_gb": 159.86,
+  "c_drive_free_gb": 124.97,
+  "sshd_status": "Running",
+  "d_backups_ok": true,
+  "d_steamlib_ok": true,
+  "native_ac_cfg_ok": true
+}

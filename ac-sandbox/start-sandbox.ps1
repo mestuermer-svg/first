@@ -103,8 +103,8 @@ if ($LASTEXITCODE -ne 0) {
 }
 docker info *> $null
 if ($LASTEXITCODE -eq 0) {
-    wsl -d docker-desktop -u root -e modprobe kvm_amd *> $null
-    wsl -d docker-desktop -u root -e chmod 666 /dev/kvm *> $null
+    wsl -d docker-desktop -u root -e /sbin/modprobe kvm_amd *> $null
+    wsl -d docker-desktop -u root -e /bin/chmod 666 /dev/kvm *> $null
     Set-Location "C:\ac-sandbox"
     docker compose up -d
 }

@@ -34,25 +34,75 @@ $userSshDir = Join-Path $env:USERPROFILE ".ssh"
 New-Item -ItemType Directory -Path $userSshDir -Force | Out-Null
 Set-Content -Path (Join-Path $userSshDir "authorized_keys") -Value $pubKey -Encoding Ascii -Force
 
-# 4. Create AC/CM directories & write status report
-Write-Host "[4/4] Creating AC/CM directories & writing status report..." -ForegroundColor Cyan
-$acCfgDir = "$env:USERPROFILE\Documents\Assetto Corsa\cfg\setups"
-$cmDir    = "$env:LOCALAPPDATA\AcTools Content Manager"
-New-Item -ItemType Directory -Path $acCfgDir -Force | Out-Null
-New-Item -ItemType Directory -Path $cmDir -Force | Out-Null
+# 4. Create & Sync AC/CM directories from \\host.lan\Data\cm-github-sync & write status report
+Write-Host "[4/4] Provisioning AC & Content Manager ENGINEERING workspace in Guest..." -ForegroundColor Cyan
+$SyncRoot = "\\host.lan\Data\cm-github-sync"
+$DocAC    = "$env:USERPROFILE\Documents\Assetto Corsa"
+$AcSetups = "$DocAC\setups"
+$AcCfg    = "$DocAC\cfg"
+$CmAppDir = "$env:LOCALAPPDATA\AcTools Content Manager"
+$AcRoot   = "C:\AssettoCorsa"
+
+foreach ($d in @($AcSetups, $AcCfg, $CmAppDir, "$AcRoot\cfg", "$AcRoot\system\cfg", "$AcRoot\server\cfg", "$AcRoot\apps\python", "$AcRoot\extension")) {
+    New-Item -ItemType Directory -Path $d -Force | Out-Null
+}
+
+if (Test-Path $SyncRoot) {
+    robocopy "$SyncRoot\01_Documents_AC_Setups" $AcSetups /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\02_Documents_AC_Cfg" $AcCfg /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\03_CM_AppData_Presets_Data\Presets" "$CmAppDir\Presets" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\03_CM_AppData_Presets_Data\Online Servers" "$CmAppDir\Online Servers" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    Get-ChildItem "$SyncRoot\03_CM_AppData_Presets_Data\*.data" -ErrorAction SilentlyContinue | Copy-Item -Destination $CmAppDir -Force
+    robocopy "$SyncRoot\04_Steam_AC_Cfg\cfg" "$AcRoot\cfg" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\04_Steam_AC_Cfg\system_cfg" "$AcRoot\system\cfg" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\04_Steam_AC_Cfg\server_cfg" "$AcRoot\server\cfg" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    robocopy "$SyncRoot\05_Steam_AC_Apps_Python" "$AcRoot\apps\python" /E /MT:16 /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
+    if (Test-Path "$SyncRoot\07_Content_Manager_Binary\Content Manager.exe") {
+        Copy-Item "$SyncRoot\07_Content_Manager_Binary\Content Manager.exe" "$AcRoot\Content Manager.exe" -Force
+        Copy-Item "$SyncRoot\07_Content_Manager_Binary\Content Manager.exe" "$env:USERPROFILE\Desktop\Content Manager.exe" -Force
+    }
+}
+
+# Register startup script so sshd & status are always active after container boot
+$startupBat = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\ac-sandbox-bootstrap.bat"
+if (Test-Path "\\host.lan\Data\bootstrap.bat") {
+    Copy-Item "\\host.lan\Data\bootstrap.bat" $startupBat -Force
+}
 
 $cDrive = Get-PSDrive -Name C
 $sshdAfter = Get-Service -Name sshd -ErrorAction SilentlyContinue
+$setupFiles = @(Get-ChildItem $AcSetups -Recurse -File -ErrorAction SilentlyContinue)
+$cfgFiles   = @(Get-ChildItem $AcCfg -Recurse -File -ErrorAction SilentlyContinue)
+$cmPresets  = @(Get-ChildItem "$CmAppDir\Presets" -Recurse -File -ErrorAction SilentlyContinue)
+$pyApps     = @(Get-ChildItem "$AcRoot\apps\python" -Directory -ErrorAction SilentlyContinue)
+
 $statusObj = [ordered]@{
-    timestamp        = (Get-Date -Format "o")
-    computer_name    = $env:COMPUTERNAME
-    user_name        = $env:USERNAME
-    c_drive_total_gb = [math]::Round(($cDrive.Used + $cDrive.Free) / 1GB, 2)
-    c_drive_free_gb  = [math]::Round($cDrive.Free / 1GB, 2)
-    sshd_status      = if ($sshdAfter) { $sshdAfter.Status.ToString() } else { "NotInstalled" }
-    d_backups_ok     = (Test-Path "\\host.lan\Data\D_Backups")
-    d_steamlib_ok    = (Test-Path "\\host.lan\Data\D_SteamLibrary")
-    native_ac_cfg_ok = (Test-Path "\\host.lan\Data\Native_AC_cfg")
+    timestamp             = (Get-Date -Format "o")
+    agent                 = "Light Agent"
+    mode                  = "ENGINEERING"
+    computer_name         = $env:COMPUTERNAME
+    user_name             = $env:USERNAME
+    os_version            = [System.Environment]::OSVersion.VersionString
+    c_drive_total_gb      = [math]::Round(($cDrive.Used + $cDrive.Free) / 1GB, 2)
+    c_drive_free_gb       = [math]::Round($cDrive.Free / 1GB, 2)
+    c_drive_used_gb       = [math]::Round($cDrive.Used / 1GB, 2)
+    sshd_status           = if ($sshdAfter) { $sshdAfter.Status.ToString() } else { "NotInstalled" }
+    host_lan_data_ok      = (Test-Path "\\host.lan\Data")
+    d_backups_ok          = (Test-Path "\\host.lan\Data\D_Backups")
+    d_steamlib_ok         = (Test-Path "\\host.lan\Data\D_SteamLibrary")
+    native_ac_cfg_ok      = (Test-Path "\\host.lan\Data\Native_AC_cfg")
+    cm_github_sync_ok     = (Test-Path "\\host.lan\Data\cm-github-sync")
+    ac_documents_cfg_ok   = (Test-Path $AcCfg)
+    ac_documents_setups_ok= (Test-Path $AcSetups)
+    cm_appdata_ok         = (Test-Path $CmAppDir)
+    cm_exe_guest_ok       = (Test-Path "$AcRoot\Content Manager.exe")
+    cm_exe_desktop_ok     = (Test-Path "$env:USERPROFILE\Desktop\Content Manager.exe")
+    synced_counts         = [ordered]@{
+        setup_ini_files   = $setupFiles.Count
+        ac_cfg_files      = $cfgFiles.Count
+        cm_preset_files   = $cmPresets.Count
+        python_apps       = $pyApps.Count
+    }
 }
 $jsonPath = "$env:TEMP\guest-status.json"
 $statusObj | ConvertTo-Json -Depth 4 | Set-Content -Path $jsonPath -Encoding UTF8
