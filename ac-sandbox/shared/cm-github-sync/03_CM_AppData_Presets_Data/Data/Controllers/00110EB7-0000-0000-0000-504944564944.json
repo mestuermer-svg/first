@@ -1,0 +1,35 @@
+// Fanatec CSR Wheel
+{
+  "name": "Fanatec CSR Wheel",
+  "axis": {
+    "0": "1",
+    "1": "2;Accel",
+    "5": "6;{ToolsStrings.Controls_Brake}",
+    "6": "7;{ToolsStrings.Controls_Clutch}"
+  },
+  "pov": [
+    "P1;Left Stick"
+  ],
+  "buttons": {
+    "0": "×;X",
+    "1": "☐;A",
+    "2": "○;B",
+    "3": "△;Y",
+    "4": "G+;RB-Paddle",
+    "5": "G−;LB-Paddle",
+    "6": "R2;RSB",
+    "7": "L2;LSB",
+    "8": "SE;❮",
+    "9": "ST;❯",
+    "10": "R3;Right Button",
+    "11": "R3;Left Button",
+    "12": "G1;Gear 1",
+    "13": "G2;Gear 2",
+    "14": "G3;Gear 3",
+    "15": "G4;Gear 4",
+    "16": "G5;Gear 5",
+    "17": "G6;Gear 6",
+    "18": "GR;Gear R",
+    "20": "PS;XBOX-Button"
+  }
+}

@@ -1,0 +1,26 @@
+// Controller (Gamepad F310)
+{
+  "name": "Xbox 360",
+  "axis": {
+    "0": "LH;Left Stick, Horizontal Axis",
+    "1": "LV;Left Stick, Vertical Axis",
+    "2": "LT/RT;L2/R2",
+    "3": "RH;Right Stick, Horizontal Axis",
+    "4": "RV;Right Stick, Vertical Axis"
+  },
+  "pov": [
+    "P"
+  ],
+  "buttons": [
+    "A",
+    "B",
+    "X",
+    "Y",
+    "LB",
+    "RB",
+    "SE;Select Button",
+    "ST;Start Button",
+    "LS;Left Stick Button",
+    "RS;Right Stick Button"
+  ]
+}

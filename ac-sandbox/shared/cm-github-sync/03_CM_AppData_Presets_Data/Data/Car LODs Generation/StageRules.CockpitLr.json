@@ -1,0 +1,173 @@
+{
+  "Simplygon": {
+    "Settings": {
+      "ReductionProcessor": {
+        "ReductionSettings": {
+          "ReductionHeuristics": 0,
+          "ReductionTargetStopCondition": 0,
+          "ReductionTargetTriangleRatioEnabled": false,
+          "ReductionTargetTriangleRatio": 0.15,
+          "ReductionTargetTriangleCountEnabled": true,
+          "ReductionTargetTriangleCount": 7000,
+          "ReductionTargetMaxDeviationEnabled": false,
+          "ReductionTargetMaxDeviation": 1.0,
+          "ReductionTargetOnScreenSizeEnabled": false,
+          "ReductionTargetOnScreenSize": 10,
+          "GeometryImportance": 3.0,
+          "TextureImportance": 0.5,
+          "ShadingImportance": 0.5,
+          "GroupImportance": 0.0,
+          "MaterialImportance": 0.0,
+          "CurvatureImportance": 0.0,
+          "VertexColorImportance": 10.0,
+          "SkinningImportance": 0.0,
+          "EdgeSetImportance": 0.0,
+          "AllowDegenerateTexCoords": true,
+          "CreateGeomorphGeometry": false,
+          "DataCreationPreferences": 2,
+          "UseHighQualityNormalCalculation": false,
+          "MergeGeometries": false,
+          "LockGeometricBorder": false,
+          "OutwardMoveMultiplier": 1.0,
+          "InwardMoveMultiplier": 0.2,
+          "KeepSymmetry": false,
+          "UseAutomaticSymmetryDetection": false,
+          "UseSymmetryQuadRetriangulator": false,
+          "SymmetryAxis": 1,
+          "SymmetryOffset": 0.0,
+          "SymmetryDetectionTolerance": 0.0004
+        },
+        "RepairSettings": {
+          "UseTJunctionRemover": true,
+          "UseWelding": true,
+          "TJuncDist": 0,
+          "WeldDist": 0,
+          "WeldOnlyBorderVertices": true,
+          "WeldOnlyWithinMaterial": false,
+          "WeldOnlyWithinSceneNode": false,
+          "WeldOnlyBetweenSceneNodes": false,
+          "ProgressivePasses": 3
+        },
+        "VisibilitySettings": {
+          "UseVisibilityWeightsInReducer": false,
+          "UseVisibilityWeightsInTexcoordGenerator": false,
+          "VisibilityWeightsPower": 10.0,
+          "CullOccludedGeometry": false,
+          "ForceVisibilityCalculation": false,
+          "UseBackfaceCulling": true,
+          "CameraSelectionSetName": "",
+          "OccluderSelectionSetName": "",
+          "FillNonVisibleAreaThreshold": 0.0,
+          "RemoveTrianglesNotOccludingOtherTriangles": false,
+          "ConservativeMode": false,
+          "ComputeVisibilityMode": 0
+        },
+        "NormalCalculationSettings": {
+          "ReplaceNormals": true,
+          "ReplaceTangents": true,
+          "HardEdgeAngle": 160.0,
+          "RepairInvalidNormals": true,
+          "ReorthogonalizeTangentSpace": true,
+          "ScaleByArea": true,
+          "ScaleByAngle": true,
+          "SnapNormalsToFlatSurfaces": false
+        },
+        "VertexWeightSettings": {
+          "UseVertexWeightsInReducer": false
+        },
+        "BoneSettings": {
+          "UseBoneReducer": false
+        },
+        "MappingImageSettings": {
+          "GenerateMappingImage": false
+        }
+      }
+    },
+    "Pipeline": "Reduction"
+  },
+  "PolygonCruncher": {
+    "Arguments": {
+      "Base": [
+        "-uv-preserve",
+        "-normal-preserve",
+        "-normal-tolerance",
+        "20",
+        "-noui"
+      ],
+      "UV2": [
+        "-vc-protect",
+        "-vc-tolerance",
+        "20"
+      ],
+      "Welding": [
+        "-mergepoints",
+        "-mergepoints-threshold",
+        "1"
+      ]
+    },
+    "RateScale": 0.7,
+    "RateLimit": 0.001
+  },
+  "MeshLab": {
+    "Arguments": {
+      "Base": [
+        "--quality-threshold", 0.3,
+        "--boundary-weight", 1.0,
+        "--min-keep", 20,
+        "--min-target-perc", 0.04,
+        "--no-auto-span-protect",
+        "--preserve-normal",
+        "--planar-quadric",
+        "--with-texture"
+      ],
+      "Welding": [
+        "--apply-welding",
+        "--welding-threshold", 0.01
+      ],
+      "UV2": []
+    },
+    "RateScale": 1.8,
+    "RateLimit": 0.001
+  },
+  "Blender": {
+    "Arguments": {
+      "Base": [
+        "--mode", "mixed",
+        "--min-keep", 20,
+        "--planar-angle", 5,
+        "--normal-weight", 50,
+        "--sharp-angle", 30,
+        "--min-target-perc", 0.04,
+        "--max-vertex-drift", 0.04,
+        "--delimit-uv",
+        "--weighted-normals",
+        "--boundary-corner-protect",
+        "--area-variance-threshold", 80,
+        "--high-variance-min-keep", 0.05
+      ],
+      "Welding": [
+        "--weld-distance", 0.01
+      ],
+      "UV2": []
+    },
+    "RateScale": 1.8,
+    "RateLimit": 0.001
+  },
+  "MeshOptimizer": {
+    "Arguments": {
+      "Base": [
+        "--min-keep", 20,
+        "--min-target-perc", 0.04,
+        "--target-error", 0.06,
+        "--normal-weight", 0.1,
+        "--uv-weight", 0.5,
+        "--permissive",
+        "--error-absolute"
+      ],
+      "Welding": [],
+      "UV2": []
+    },
+    "RateScale": 1.0,
+    "RateLimit": 0.001
+  }
+}

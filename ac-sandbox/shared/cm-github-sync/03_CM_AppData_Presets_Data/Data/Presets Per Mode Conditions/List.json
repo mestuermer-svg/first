@@ -1,0 +1,62 @@
+[
+    {
+        "id": "online",
+        "name": "Online",
+        "script": "race['REMOTE'].GetBool('ACTIVE', false)"
+    },
+    {
+        "id": "replay",
+        "name": "Replay",
+        "script": "race['REPLAY'].GetBool('ACTIVE', false)"
+    },
+    {
+        "id": "hotlap",
+        "name": "Hotlap",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.Hotlap"
+    },
+    {
+        "id": "rsr",
+        "name": "RSR hotlap",
+        "script": "race['SESSION_0'].GetNonEmpty('NAME').Contains('RSR')"
+    },
+    {
+        "id": "timeAttack",
+        "name": "Time attack",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.TimeAttack"
+    },
+    {
+        "id": "trackday",
+        "name": "Track day",
+        "script": "race['SESSION_0'].GetInt('DURATION_MINUTES', 0) == 720"
+    },
+    {
+        "id": "practice",
+        "name": "Practice",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.Practice and not race.ContainsKey('SESSION_1') and race['SESSION_0'].GetInt('DURATION_MINUTES', 0) < 720"
+    },
+    {
+        "id": "race",
+        "name": "Race",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.Race and not race.ContainsKey('SESSION_1')"
+    },
+    {
+        "id": "weekend",
+        "name": "Weekend",
+        "script": "race.ContainsKey('SESSION_1')"
+    },
+    {
+        "id": "drag",
+        "name": "Drag",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.Drag"
+    },
+    {
+        "id": "drift",
+        "name": "Drift",
+        "script": "race['SESSION_0'].GetInt('TYPE', 0) == SessionType.Drift"
+    },
+    {
+        "id": "specialEvent",
+        "name": "Special event",
+        "script": "race.ContainsKey('SPECIAL_EVENT')"
+    }
+]

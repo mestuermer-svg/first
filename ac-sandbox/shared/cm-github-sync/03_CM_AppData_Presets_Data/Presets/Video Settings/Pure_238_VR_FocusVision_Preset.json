@@ -1,0 +1,77 @@
+{
+  "version": "2.38",
+  "presetName": "Pure 2.38 - VR Focus Vision",
+  "clouds": {
+    "quality": "medium",
+    "resolution": 1024,
+    "detailBlend": 0.35,
+    "windInfluence": 0.85,
+    "shadowCast": false
+  },
+  "lighting": {
+    "dynamicExposure": true,
+    "exposureTarget": 1.02,
+    "exposureSpeed": 0.85,
+    "useAlternativeAE": true,
+    "ambientBoost": 0.12,
+    "sunIntensity": 1.0,
+    "headlightBrightness": 0.95,
+    "nightAmbient": 0.3
+  },
+  "effects": {
+    "godrays": false,
+    "bloom": false,
+    "fogBlur": false,
+    "heatShimmer": false,
+    "glare": false,
+    "lightSmearing": false,
+    "magicBloomStrength": 0.0,
+    "speedTunnel": false
+  },
+  "fog": {
+    "type": "pure",
+    "fogDensity": 0.7,
+    "heightFog": 0.15,
+    "fogSaturation": 0.9,
+    "pollutionTint": 0.25
+  },
+  "weatherFx": {
+    "rainEffects": false,
+    "wetReflectionQuality": "low",
+    "puddleQuality": "low",
+    "heatHaze": false
+  },
+  "performance": {
+    "enableVRMode": true,
+    "reducePPOverhead": true,
+    "forceLDRScriptableFilters": false,
+    "shadowFiltering": "fast",
+    "cubemapBoost": 0.75,
+    "cloudShadowResolution": 0.5
+  },
+  "sky": {
+    "sunSize": 1.0,
+    "moonSize": 1.0,
+    "horizonFade": 0.65,
+    "skySaturation": 0.95,
+    "skyGamma": 1.0
+  },
+  "tonemapping": {
+    "mode": "pureHDR",
+    "contrast": 1.04,
+    "saturation": 0.98,
+    "gamma": 1.0,
+    "lumaThreshold": 0.42,
+    "lumaMidpoint": 0.5,
+    "highlightCompression": 0.28,
+    "shadowLift": 0.1
+  },
+  "vrSpecific": {
+    "lensDirt": false,
+    "motionBlurVR": false,
+    "doubleVisionFix": true,
+    "flickerReduction": true,
+    "stereoSunFix": true,
+    "autoAdjustUIBrightness": true
+  }
+}

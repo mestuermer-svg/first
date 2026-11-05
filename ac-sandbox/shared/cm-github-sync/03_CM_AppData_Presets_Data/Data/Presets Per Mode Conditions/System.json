@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "group": "Race",
+      "required": "0.8.2763.39678",
+      "id": "serverName",
+      "name": "Online & server name",
+      "description": "Active if server name matches configured filter",
+      "param": "Monitor name (use “*” to match any character, leave string empty to see the name when starting a race)",
+      "script": "race['REMOTE'].GetBool('ACTIVE', false) and strutils.match(param, race['REMOTE'].GetNonEmpty('SERVER_NAME'))"
+    },
+    {
+      "group": "System",
+      "required": "0.8.2763.39678",
+      "id": "secondDesktop",
+      "name": "Two or more desktops",
+      "description": "Second monitor is connected and extends desktop",
+      "script": "sysutils.numdesktops() > 1"
+    },
+    {
+      "group": "System",
+      "required": "0.8.2763.39678",
+      "id": "primaryMonitor",
+      "name": "Primary monitor name",
+      "description": "Leave monitor name empty to see a message with the current monitor name",
+      "param": "Monitor name (use “*” to match any character, leave string empty to see the name when starting a race)",
+      "script": "param == '' and sysutils.message('Primary monitor name:\\n'..sysutils.primarymonitor()) or strutils.match(param, sysutils.primarymonitor())"
+    },
+    {
+      "group": "System",
+      "required": "0.8.2769.39678",
+      "id": "discharging",
+      "name": "Discharging battery",
+      "description": "Active if PC/laptop is not currently connected to power",
+      "script": "sysutils.discharging()"
+    }
+  ]
+}
