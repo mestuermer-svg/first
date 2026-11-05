@@ -1,17 +1,38 @@
 ﻿# Automatischer Start-Service für den VS Code Workspace "git-labor"
-# Startet:
+# Zuständiger Agent in der Docker-Sandbox-Instanz: Light Agent
+# Startet / verbindet:
 # 1. Antigravity Proxy (CLIProxyAPI auf Port 8317)
-# 2. Docker Desktop Engine (falls noch nicht aktiv)
-# 3. Windows 11 Assetto-Corsa Sandbox-Container (dockurr/windows auf Port 8006)
+# 2. Remote-Verbindung zur SimRacer Docker-Sandbox (192.168.178.68) ODER lokale Docker Engine
+# 3. Windows 11 Assetto-Corsa Sandbox-Container (dockurr/windows auf Port 8006 - Light Agent)
 
 param(
     [switch]$NoDocker,
-    [string]$RemoteHost = ""
+    [switch]$LocalDocker,
+    [string]$RemoteHost = "192.168.178.68"
 )
 
 $ErrorActionPreference = "Continue"
 $SandboxDir = $PSScriptRoot
 $SharedDir  = Join-Path $SandboxDir "shared"
+
+# Falls das Skript direkt auf dem SimRacer ausgeführt wird oder -LocalDocker aktiv ist, lokal starten
+if ($LocalDocker -or $env:COMPUTERNAME -match "SIMRACER") {
+    $RemoteHost = ""
+}
+
+function Test-TcpPortFast {
+    param([string]$TargetHost, [int]$Port, [int]$TimeoutMs = 1500)
+    $tcp = New-Object System.Net.Sockets.TcpClient
+    try {
+        $async = $tcp.BeginConnect($TargetHost, $Port, $null, $null)
+        $connected = $async.AsyncWaitHandle.WaitOne($TimeoutMs, $false) -and $tcp.Connected
+        return $connected
+    } catch {
+        return $false
+    } finally {
+        $tcp.Close()
+    }
+}
 
 # Gemeinsame Austausch-Ordner für den Agenten und das Gast-Windows anlegen
 foreach ($sub in @("apps_python", "cfg_content_manager", "scripts", "telemetry")) {
@@ -43,26 +64,79 @@ if ($proxyOk) {
 }
 
 # -----------------------------------------------------------------------------
-# 1b. Remote-Modus: Sandbox läuft auf dem SimRacer (spart 100% RAM auf dem Laptop)
+# 1b. Remote-Modus: Sandbox läuft auf dem SimRacer (Light Agent aktiv)
 # -----------------------------------------------------------------------------
 if (-not [string]::IsNullOrWhiteSpace($RemoteHost)) {
-    Write-Host "[2/3] Remote-Modus aktiv: Prüfe Verbindung zu SimRacer ($RemoteHost)..." -ForegroundColor Cyan
-    $vncCheck = Test-NetConnection -ComputerName $RemoteHost -Port 8006 -WarningAction SilentlyContinue
-    $rdpCheck = Test-NetConnection -ComputerName $RemoteHost -Port 3389 -WarningAction SilentlyContinue
+    Write-Host "[2/3] Remote-Modus aktiv: Prüfe Docker-Sandbox-Instanz (Light Agent) auf SimRacer ($RemoteHost)..." -ForegroundColor Cyan
+    docker context inspect simracer *> $null
+    if ($LASTEXITCODE -ne 0) {
+        docker context create simracer --description "SimRacer Docker Engine ($RemoteHost)" --docker "host=ssh://Mike@$RemoteHost" *> $null
+    }
+    docker context use simracer *> $null
 
-    if ($vncCheck.TcpTestSucceeded -or $rdpCheck.TcpTestSucceeded) {
-        Write-Host "[3/3] Remote-Sandbox auf '$RemoteHost' ist online!" -ForegroundColor Green
+    $vncOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 8006
+    $rdpOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 3390
+    $sshOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 2222
+    $smbOk = Test-Path "\\$RemoteHost\ac-sandbox\shared"
+
+    if (-not ($vncOk -or $rdpOk)) {
+        Write-Host "      Remote-Sandbox auf '$RemoteHost' antwortet noch nicht – prüfe Docker Engine & Container via SSH..." -ForegroundColor Yellow
+        try {
+            $remoteStart = @'
+$ErrorActionPreference = "Continue"
+$ProgressPreference = "SilentlyContinue"
+docker info *> $null
+if ($LASTEXITCODE -ne 0) {
+    Start-Service com.docker.service -ErrorAction SilentlyContinue
+    $ddExe = "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+    if (Test-Path $ddExe) {
+        $action = New-ScheduledTaskAction -Execute $ddExe
+        $principal = New-ScheduledTaskPrincipal -UserId "Mike" -LogonType Interactive -RunLevel Highest
+        Register-ScheduledTask -TaskName "StartDockerDesktopInteractive" -Action $action -Principal $principal -Force | Out-Null
+        Start-ScheduledTask -TaskName "StartDockerDesktopInteractive"
+        for ($i = 0; $i -lt 45; $i++) {
+            Start-Sleep -Seconds 2
+            docker info *> $null
+            if ($LASTEXITCODE -eq 0) { break }
+        }
+    }
+}
+docker info *> $null
+if ($LASTEXITCODE -eq 0) {
+    wsl -d docker-desktop -u root -e modprobe kvm_amd *> $null
+    wsl -d docker-desktop -u root -e chmod 666 /dev/kvm *> $null
+    Set-Location "C:\ac-sandbox"
+    docker compose up -d
+}
+'@
+            $b64Start = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($remoteStart))
+            ssh -o ConnectTimeout=5 "Mike@$RemoteHost" "powershell -NoProfile -EncodedCommand $b64Start" *> $null
+            for ($w = 0; $w -lt 20; $w++) {
+                Start-Sleep -Seconds 2
+                $vncOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 8006
+                $rdpOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 3390
+                $sshOk = Test-TcpPortFast -TargetHost $RemoteHost -Port 2222
+                if ($vncOk -or $rdpOk) { break }
+            }
+        } catch {
+            # Fallback auf manuellen Hinweis
+        }
+    }
+
+    if ($vncOk -or $rdpOk) {
+        Write-Host "[3/3] Docker-Sandbox-Instanz (Light Agent) auf '$RemoteHost' ist IN BETRIEB!" -ForegroundColor Green
         Write-Host ""
         Write-Host "=================================================================" -ForegroundColor Green
-        Write-Host " Remote-Sandbox (SimRacer) & Antigravity aktiv!" -ForegroundColor Green
+        Write-Host " Docker-Sandbox (SimRacer) & Light Agent aktiv in Betrieb!" -ForegroundColor Green
+        Write-Host " -> Zuständiger Sandbox-Agent:                  Light Agent" -ForegroundColor Magenta
         Write-Host " -> Antigravity Proxy (lokal):                  http://127.0.0.1:8317" -ForegroundColor Cyan
-        Write-Host " -> Web-Ansicht (auch für Chrome DevTools MCP): http://${RemoteHost}:8006" -ForegroundColor Cyan
-        Write-Host " -> RDP-Zugang (Windows Remotedesktop):         ${RemoteHost}:3389" -ForegroundColor Cyan
-        Write-Host " -> SSH-Zugang (OpenSSH Bridge):                ssh -p 2222 Docker@${RemoteHost}" -ForegroundColor Cyan
-        Write-Host " -> Remote-Shared-Ordner (SMB):                 \\${RemoteHost}\ac-sandbox\shared" -ForegroundColor Cyan
+        Write-Host " -> Web-Ansicht (auch für Chrome DevTools MCP): http://${RemoteHost}:8006 (Online: $vncOk)" -ForegroundColor Cyan
+        Write-Host " -> RDP-Zugang Sandbox (Windows Remotedesktop): ${RemoteHost}:3390 (Online: $rdpOk)" -ForegroundColor Cyan
+        Write-Host " -> SSH-Zugang (OpenSSH Bridge):                ssh -p 2222 Docker@${RemoteHost} (Online: $sshOk)" -ForegroundColor Cyan
+        Write-Host " -> Remote-Shared-Ordner (SMB):                 \\${RemoteHost}\ac-sandbox\shared (Verbunden: $smbOk)" -ForegroundColor Cyan
         Write-Host "=================================================================" -ForegroundColor Green
     } else {
-        Write-Host "[3/3] WARNUNG: Remote-Sandbox auf '$RemoteHost' (Port 8006/3389) antwortet noch nicht." -ForegroundColor Yellow
+        Write-Host "[3/3] WARNUNG: Remote-Sandbox auf '$RemoteHost' (Port 8006/3390) antwortet noch nicht." -ForegroundColor Yellow
         Write-Host "      Bitte prüfen Sie auf dem SimRacer in C:\ac-sandbox: 'docker compose up -d'" -ForegroundColor Yellow
     }
     return
@@ -128,7 +202,8 @@ if ($dockerReady) {
     Write-Host " Sandbox & Antigravity aktiv!" -ForegroundColor Green
     Write-Host " -> Antigravity Proxy:                         http://127.0.0.1:8317" -ForegroundColor Cyan
     Write-Host " -> Web-Ansicht (auch für Chrome DevTools MCP): http://127.0.0.1:8006" -ForegroundColor Cyan
-    Write-Host " -> RDP-Zugang (Windows Remotedesktop):         127.0.0.1:3389" -ForegroundColor Cyan
+    Write-Host " -> RDP-Zugang (Windows Remotedesktop):         127.0.0.1:3390" -ForegroundColor Cyan
+    Write-Host " -> SSH-Zugang (OpenSSH Bridge):                127.0.0.1:2222" -ForegroundColor Cyan
     Write-Host " -> Gemeinsamer Ordner (Host <-> Win11):        $SharedDir" -ForegroundColor Cyan
     Write-Host "=================================================================" -ForegroundColor Green
 }

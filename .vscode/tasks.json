@@ -10,7 +10,9 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-File",
-                "${workspaceFolder}\\ac-sandbox\\start-sandbox.ps1"
+                "${workspaceFolder}\\ac-sandbox\\start-sandbox.ps1",
+                "-RemoteHost",
+                "192.168.178.68"
             ],
             "runOptions": {
                 "runOn": "folderOpen"

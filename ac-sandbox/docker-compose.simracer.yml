@@ -9,7 +9,7 @@ services:
     container_name: ac-win11-sandbox
     environment:
       VERSION: "11"
-      KVM: "N"
+      KVM: "Y"
       RAM_SIZE: "12G"
       CPU_CORES: "8"
       DISK_SIZE: "160G"
@@ -17,16 +17,20 @@ services:
       REGION: "de-DE"
       KEYBOARD: "de-de"
     devices:
+      - /dev/kvm
       - /dev/net/tun
     cap_add:
       - NET_ADMIN
     ports:
       - "0.0.0.0:8006:8006"
-      - "0.0.0.0:3389:3389/tcp"
-      - "0.0.0.0:3389:3389/udp"
+      - "0.0.0.0:3390:3389/tcp"
+      - "0.0.0.0:3390:3389/udp"
       - "0.0.0.0:2222:22/tcp"
     volumes:
       - ./storage:/storage
       - ./shared:/shared
+      - D:/Backups:/shared/D_Backups
+      - D:/SteamLibrary:/shared/D_SteamLibrary
+      - C:/Users/Mike/Documents/Assetto Corsa/cfg:/shared/Native_AC_cfg
     stop_grace_period: 2m
     restart: unless-stopped

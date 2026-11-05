@@ -227,23 +227,26 @@ Sofort danach zeigt Laufwerk `C:` im Explorer der Sandbox die vollen **160 GB** 
 
 Sobald der Container auf dem SimRacer läuft, arbeiten Sie am **VanstrikeCyborg** genauso komfortabel wie zuvor lokal – nur dass Ihr Laptop **0 MB RAM für Docker** verbraucht und kühl/leise bleibt:
 
-### 1. Start-Skript auf dem Laptop im Remote-Modus nutzen
-Das aktualisierte Skript `ac-sandbox/start-sandbox.ps1` auf dem VanstrikeCyborg unterstützt nun den Parameter `-RemoteHost`:
+### 1. Start-Skript auf dem Laptop im Remote-Modus nutzen (inkl. Session-1-Autostart & KVM-Check)
+Das aktualisierte Skript `ac-sandbox/start-sandbox.ps1` auf dem VanstrikeCyborg verwendet standardmäßig `-RemoteHost "192.168.178.68"` und erledigt beim Start von VS Code automatisch folgende Schritte:
+1. **Lokaler Docker-Kontext (`simracer`):** Richtet `ssh://Mike@192.168.178.68` als aktiven Docker-Kontext ein, sodass die **VS Code Containers-Erweiterung** und `docker ps` auf dem Laptop direkt die Container des SimRacers anzeigen.
+2. **Session-1-Autostart von Docker Desktop:** Falls Docker auf dem SimRacer noch nicht läuft, wird zuerst der Dienst `com.docker.service` gestartet und `Docker Desktop.exe` über den Windows Taskplaner (`StartDockerDesktopInteractive` mit `-LogonType Interactive`) in der aktiven Benutzer-Sitzung (**Session 1**) gestartet (umgeht die SSH-Session-0-Isolation).
+3. **KVM-Kernelmodul (`kvm_amd`) & Container-Start:** Lädt in der `docker-desktop`-WSL2-Distro automatisch `modprobe kvm_amd` (`chmod 666 /dev/kvm`) und startet `docker compose up -d` in `C:\ac-sandbox`.
 
 ```powershell
-# Prüft auf dem Laptop den Antigravity-Proxy UND die Erreichbarkeit der Sandbox auf dem SimRacer:
-.\ac-sandbox\start-sandbox.ps1 -RemoteHost "SimRacer"
+# Prüft auf dem Laptop den Antigravity-Proxy UND startet/verbindet die Sandbox auf dem SimRacer:
+.\ac-sandbox\start-sandbox.ps1 -RemoteHost "192.168.178.68"
 ```
-*(Sie können statt `"SimRacer"` auch direkt die IP-Adresse des SimRacers übergeben, z. B. `-RemoteHost "192.168.178.50"`).*
 
-### 2. Die 4 Zugriffswege vom Laptop auf die SimRacer-Sandbox
+### 2. Die 5 Zugriffswege vom Laptop auf die SimRacer-Sandbox
 
 | Zugriffsart vom VanstrikeCyborg | Adresse / Befehl am Laptop | Zweck |
 | :--- | :--- | :--- |
-| **1. Web-Oberfläche & Chrome DevTools MCP** | `http://<SimRacer-IP>:8006` | Schneller Blick in den Windows-11-Gast im Browser; der KI-Agent kann über Chrome DevTools MCP direkt Screenshots machen und klicken. |
-| **2. Windows Remotedesktop (`mstsc.exe`)** | `Win + R` → `mstsc /v:<SimRacer-IP>:3389`<br/>*(User: `Docker`, Passwort: `admin` oder leer)* | Flüssigste Vollbild-Ansicht mit Ton, Zwischenablage (Copy & Paste) und direkter Tastatur-/Maussteuerung. |
-| **3. Gemeinsamer `Shared`-Ordner (Dateiaustausch)** | `\\<SimRacer-IP>\ac-sandbox\shared` | Skripte, `.ini`-Configs und Python-Apps vom Laptop direkt in die Sandbox speichern. |
-| **4. OpenSSH für KI-Agenten-Befehle** | `ssh -p 2222 Docker@<SimRacer-IP>` | Direkte PowerShell-Kommandos vom Laptop-Agenten in die Sandbox senden (siehe [Steam & KI-Agenten-Architektur](./docker-windows-steam-ki-agent-architektur.md)). |
+| **1. Web-Oberfläche & Chrome DevTools MCP** | `http://192.168.178.68:8006` | Schneller Blick in den Windows-11-Gast im Browser; der KI-Agent kann über Chrome DevTools MCP direkt Screenshots machen und klicken. |
+| **2. Windows Remotedesktop (`mstsc.exe`)** | `Win + R` → `mstsc /v:192.168.178.68:3390`<br/>*(User: `Docker`, Passwort: `admin` oder leer)* | Flüssigste Vollbild-Ansicht mit Ton, Zwischenablage (Copy & Paste) und direkter Tastatur-/Maussteuerung (Port `3390`, damit Host-RDP `3389` frei bleibt). |
+| **3. Gemeinsamer `Shared`-Ordner (Dateiaustausch)** | `\\192.168.178.68\ac-sandbox\shared` | Skripte, `.ini`-Configs und Python-Apps vom Laptop direkt in die Sandbox speichern. |
+| **4. OpenSSH für KI-Agenten-Befehle** | `ssh -p 2222 Docker@192.168.178.68` | Direkte PowerShell-Kommandos vom Laptop-Agenten in die Sandbox senden (siehe [Steam & KI-Agenten-Architektur](./docker-windows-steam-ki-agent-architektur.md)). |
+| **5. VS Code Containers-Erweiterung & Docker CLI** | Docker Context `simracer` (`ssh://Mike@192.168.178.68`) | Container direkt in der VS Code Seitenleiste (*Containers*) sehen, starten, stoppen und Logs einsehen. |
 
 </details>
 

@@ -1,61 +1,45 @@
-# Lernmaterial-Übersicht & Index (`#$_Lernmaterial_to_sort`)
+# Lehrmaterial & Architektur-Dokumentation: KI-Agenten, SimRacer & Docker-Sandbox
 
-Dieses Verzeichnis enthält die Dokumentationen, Leitfäden und Diagnoseberichte des Projekts, unterteilt in thematische Schwerpunkte:
-
----
-
-## 1. KI-Agenten, Regeln & Workflows
-
-- [Agent-guidline.md](Agent-guidline.md) – Grundlegende Verhaltensrichtlinien und Rollenverständnis für den KI-Agenten.
-- [agent_ruler.md](agent_ruler.md) – Regelwerk und Leitplanken für automatisierte Bearbeitung und Code-Qualität.
-- [Agent_setup.md](Agent_setup.md) – Schritt-für-Schritt-Einrichtung und Aktivierung der Agenten-Konfiguration.
-- [SKILL.md](SKILL.md) – Skill-Definitionen und Fähigkeiten des Agenten im Workspace.
+Dieses Verzeichnis bündelt alle technischen Analysen, Architektur-Übersichten und Praxisanleitungen für das Zusammenspiel aus **VanstrikeCyborg (Engineering-Laptop)**, **SimRacer (Simulations- & Compute-Workstation)**, **VS Code KI-Agenten (Copilot, Gemini, Antigravity)** und der **Docker-Windows-11-Sandbox**.
 
 ---
 
-## 2. VS Code, Git & MCP (Model Context Protocol)
+<details>
+<summary><h2>1. KI-Agenten, Localhost-Proxy & Git-Architektur</h2></summary>
 
-- [uebersicht-vscode-agent-localhost-gemini-antigravity.md](uebersicht-vscode-agent-localhost-gemini-antigravity.md) – **NEU:** Architektur-Übersicht: VS Code Agent, Localhost-Proxy (`cli-proxy-api.exe`), Gemini/Antigravity, lokale MCP-Server & zweigeteilter Git-Mirror (`.git`-Datenbank vs. Klartext).
-- [visual_studio_code_doku.md](visual_studio_code_doku.md) – Umfassende Dokumentation zur VS Code Umgebung.
-- [vsc.md](vsc.md) – Schnelleinstieg & nützliche Shortcuts für Visual Studio Code.
-- [vsc+git.md](vsc+git.md) – Zusammenspiel von VS Code und Git Versionskontrolle.
-- [git-source-control-anleitung-fuer-einsteiger.md](git-source-control-anleitung-fuer-einsteiger.md) – Leitfaden für Git-Befehle, Branches und Commits.
-- [VS_Code_KI_Agent_MCP_Gemini_Anleitung.md](VS_Code_KI_Agent_MCP_Gemini_Anleitung.md) – Zusammenspiel von VS Code, MCP-Servern und Gemini.
-- [diagnose-und-einrichtung-mcp-git-vscode.md](diagnose-und-einrichtung-mcp-git-vscode.md) – Fehleranalyse und Einrichtung der MCP-Schnittstellen.
-- [diagnose-und-loesung-nvidia-app-agent-mcp-zugriff.md](diagnose-und-loesung-nvidia-app-agent-mcp-zugriff.md) – Fehlerbehebung beim Aktivieren des NVIDIA App Agent-Zugriffs (MCP-Server, Named Pipe, NvContainer).
+* **[Architektur-Übersicht: VS Code Agent, Localhost-Proxy, Gemini & Antigravity](./uebersicht-vscode-agent-localhost-gemini-antigravity.md)**
+  * Erklärt das Zusammenspiel zwischen lokalem VS Code, dem `cli-proxy-api.exe` Localhost-Endpunkt, den lokalen MCP-Servern (`127.0.0.1:13508`) und den Cloud-Sprachmodellen (Gemini / Antigravity).
+  * Beinhaltet die Erklärung zur zweigeteilten Speicherung des Git-Repositorys auf der lokalen SSD (Klartext-Arbeitsverzeichnis vs. komprimierte/Hash-codierte `.git`-Datenbank).
 
----
+</details>
 
-## 3. Docker, Sandbox & Virtualisierung
+<details>
+<summary><h2>2. Backup & System-Wiederherstellung (SimRacer)</h2></summary>
 
-- [sandbox-umzug-skalierung-simracer.md](sandbox-umzug-skalierung-simracer.md) – **NEU:** Praxisanleitung: 64-GB Docker-Sandbox (`ac-sandbox`) auf den SimRacer (`C:\ac-sandbox` interne NVMe + Backup auf externe USB-SSD `D:`) übertragen, vergrößern (12 GB RAM, 8 Kerne, 160+ GB Disk) & vom Laptop aus fernsteuern.
-- [docker.md](docker.md) – Grundlagen und Befehle für Docker Container.
-- [docker-sbx-anleitung.md](docker-sbx-anleitung.md) – Anleitung zur isolierten Sandbox-Containerumgebung.
-- [SANDBOX_ANLEITUNG.md](SANDBOX_ANLEITUNG.md) – Vollständige Anleitung zum Windows-11-Sandbox-System in Docker.
-- [docker-windows-steam-ki-agent-architektur.md](docker-windows-steam-ki-agent-architektur.md) – Virtualisierungs-Analyse (Steam unter QEMU/Docker) & 3 Architekturen zur KI-Agenten-Integration.
+* **[Praxisanleitung: System-Image & Wiederherstellung (Veeam Agent Free) für SimRacer](./simracer-system-backup-wiederherstellung-veeam.md)**
+  * Schritt-für-Schritt-Anleitung für ein schlankes, bootfähiges Windows-11-Systemabbild (25–40 GB) inklusive aller Treiber (NVIDIA RTX 5070 Ti, Fanatec, HTC VIVE Focus Vision).
+  * Ausschluss der großen Steam-Spiele (`steamapps\common`) und Bare-Metal-Recovery via USB-Rettungsstick in 10–15 Minuten.
 
----
+</details>
 
-## 4. Google Antigravity & Gemini Ökosystem
+<details>
+<summary><h2>3. Multi-PC-Topologie & Hardware-Analysen</h2></summary>
 
-- [gemini_kosystem_bersicht.md](gemini_kosystem_bersicht.md) – Überblick über das Gemini-Modell- und API-Ökosystem.
-- [gemini-code-1792359280588.md](gemini-code-1792359280588.md) – Referenzcode und spezifische Gemini-Konfigurationen.
-- [lernmaterial-google-antigravity.md](lernmaterial-google-antigravity.md) – Hintergrundwissen zu Google Antigravity & Agenten-Routing.
-- [verbindungsbericht-vscode-github-gemini.md](verbindungsbericht-vscode-github-gemini.md) – Verbindungs- und Testbericht zu GitHub & Gemini.
+* **[Multi-PC-Architektur & Einsatzkonzept: KI-Agents, Simulation & Entwicklung](./multi-pc-architektur-ki-agents-simracing.md)**
+  * Gegenüberstellung von *VanstrikeCyborg* (MSI Cyborg 15) und *SimRacer* (Ryzen 9 3900X, 32 GB RAM, RTX 5070 Ti).
+  * Drei strategische Betriebsmodelle (u. a. „PG & Leitstand“ nach Vorbild der industriellen Automatisierungstechnik).
+* **[Technische Hardware- und Stabilitätsanalyse: Docker-Sandbox, KI-Agenten & Sim-Setup](./hardware-analyse-system-stabilitaet-docker-ki.md)**
+  * Detailbewertung von CPU, RAM-Flaschenhals (16 GB vs. 32 GB), GPU und NVMe-SSD sowie Dokumentation der NVIDIA App MCP-Integration.
 
----
+</details>
 
-## 5. Systemarchitektur, Hardware, Backup & Simracing
+<details>
+<summary><h2>4. Docker-Windows-Sandbox & Assetto Corsa Planung</h2></summary>
 
-- [simracer-system-backup-wiederherstellung-veeam.md](simracer-system-backup-wiederherstellung-veeam.md) – **NEU:** Praxisanleitung für ein bootfähiges System-Image (Veeam Agent Free) des SimRacers ohne Steam-Spiele (`steamapps\common`) inkl. Bare-Metal-Recovery.
-- [multi-pc-architektur-ki-agents-simracing.md](multi-pc-architektur-ki-agents-simracing.md) – Netzwerk- und Host-Architektur für verteilte KI-Agenten im Simracing (Assetto Corsa).
-- [hardware-analyse-system-stabilitaet-docker-ki.md](hardware-analyse-system-stabilitaet-docker-ki.md) – Hardware-Ressourcen, CPU/RAM-Auslastung und Stabilitätsanalyse.
+* **[Docker Windows-11 Sandbox: Steam & KI-Agenten-Architektur](./docker-windows-steam-ki-agent-architektur.md)**
+  * Technische Funktionsweise von `dockurr/windows` (QEMU/KVM), Steam-Ausführung im Container und Anbindung von KI-Agenten via OpenSSH, MCP-Worker oder Shared Folder.
+* **[Projektplanung, Umsetzungs-Logbuch & Master-Checkliste: Assetto Corsa & Container-Infrastruktur](./planing.md)**
+  * Technische Spezifikation für **Sarah Coach** (`sarah_targets.json`), Pitfile-Optimizer (`.ini`) und die 3-stufige Agent-Fokus-Steuerung (`ENGINEERING`, `LIVE_RACE`, `PITBOX_SETUP`).
+  * Enthält das **aktuelle Umsetzungs-Logbuch (erledigte Meilensteine am SimRacer `192.168.178.68`)** sowie die **Master-Checkliste für alle nächsten Arbeitsschritte**.
 
----
-
-## 6. Protokolle, Diagnosen & Schlüssel
-
-- [diagnose-und-loesung-antigravity-server-port8000-8317.md](diagnose-und-loesung-antigravity-server-port8000-8317.md) – Fehlerbehebung bei Port-Konflikten (8000/8317).
-- [diagnose-und-reparatur-docker-antigravity.md](diagnose-und-reparatur-docker-antigravity.md) – Reparaturanleitung für die Docker-Antigravity-Pipeline.
-- [prozess-log.md](prozess-log.md) – Chronologisches Protokoll der Einrichtung und Änderungen.
-- [API_Keys.md](API_Keys.md) – Konfiguration und Verwaltung der API-Schlüssel.
+</details>
