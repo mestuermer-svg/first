@@ -1,0 +1,106 @@
+[size=20]Custom Shaders Patch[/size]
+
+First of all, of course, we’d first like to thank the Kunos developers for all of the effort they put into making AC such a great simulator and giving us an excellent basis for our work.
+
+[b]Made by:[/b]
+- Dmitrii A, henter, Jackson Papageorge (mclarenf1papa/JPG_18) of IER Simulations, Neoned, Stereo, x4fab.
+
+[b]With help from:[/b]
+- Alessandro Micali: nicely done grass tyre texture;
+- Blamer: great app for setting up track lights and more;
+- Bombadil: new chaser camera script;
+- Cheesy: documentation and tech support;
+- Chr0m3 (Chr0m3 Motorsport): tyre wear triggering tyres blowing, a way to fix misconfigured car soundbanks;
+- leBluem: improvements for Python apps, documentation;
+- Levels: new chaser camera script;
+- Nikita Kulikovskiy: presets for VR;
+- Peter Boese: incredible Weather FX implementations, Pure and Sol;
+- Scott Shaw: amazing tyre damages textures;
+- Silent: per-set textures for Tyres FX;
+- Tsuka1427: invaluable help with core functionality of Custom Shaders Patch;
+- Yokai: fix for the default chaser camera script;
+- zgshnk: idea to tilt driver with G-forces.
+
+[b]Thanks for a lot of testing to:[/b]
+- AlleyViper, atrip3, Cheesy, cjk28, clutch, compu, DasCiba, __EASY__, Johnr777, leBluem, Ligneel, Rusty, Schmawlik, Tuttertep.
+
+[b]Using:[/b]
+- Lens flare based on [example](https://www.shadertoy.com/view/4sX3Rs) by mu6k;
+- Single pass DOF based on [this article](https://blog.voxagon.se/2018/05/04/bokeh-depth-of-field-in-single-pass.html) by Dennis Gustafsson;
+- Clouds noise texture based on [demo](https://www.shadertoy.com/view/3dVXDc) by piyushslayer;
+- GPU-accelerated particles based on [this article](https://wickedengine.net/2017/11/07/gpu-based-particle-simulation/) by turanszkij;
+- Grass idea [from GRID](http://blog.codemasters.com/wp-content/uploads/2014/10/Rendering-Fields-of-Grass-using-DirectX11-in-GRID-Autosport.pdf) by Richard Kettlewell (Codemasters);
+- Lighting algorithm based on [a great idea](https://worldoffries.wordpress.com/2015/02/19/simple-alternative-to-clustered-shading-for-thousands-of-lights/) by Luke Mamacos;
+- Minimal AgX implementation from [this helpful post](https://iolite-engine.com/blog_posts/minimal_agx_implementation) by Benjamin Wrensch;
+- Old sky shader forked from [this shader](https://www.shadertoy.com/view/Ml2cWG) made by robobo1221;
+- VRWorks by NVIDIA;
+- 8K star map from NASA.
+
+[b]Separate thanks to people preparing configs:[/b]
+- atrip3, Benner900, Black Velvet Tzenamo, Blamer, demonized, fanapryde, Fat-Alfie, Fuzo, Gunnar333, Inori, Kavoriken, Kavoriken, leBluem, Ly993, Marocco2, NoThrottleControl aka nptc364, Paul12451, Peter Boese, Ruske06, Rusty#9643, Tovey LD2F, WilliamRiker, RealAKP.
+
+[b]And the ones who shared backgrounds:[/b]
+- ACZeldaFan17, AssettoDrive.net, Gunnar333, ItsDraik, JavireTwo, MadMat, T-Top, demonized, exydeus, hamzah, kelnor34, maymate, nptc.
+
+[b]Special effects used:[/b]
+- ASSAO and CMAA2 by Intel;
+- FidelityFX and FSR by AMD;
+- FXAA and HBAO+ by NVIDIA;
+- SMAA.
+
+[b]Plus, other open-source software:[/b]
+- [AnimatedGIF](https://github.com/bitbank2/AnimatedGIF);
+- [BakingLab](https://github.com/TheRealMJP/BakingLab);
+- [bc7enc](https://github.com/richgel999/bc7enc_rdo);
+- [Chromium Embedded Framework (CEF)](https://github.com/chromiumembedded/cef);
+- [cpp-lru-cache](https://github.com/lamerman/cpp-lru-cache);
+- [Crypto++](https://www.cryptopp.com/);
+- [CTTI](https://github.com/Manu343726/ctti);
+- [db-perlin](https://github.com/daniilsjb/perlin-noise);
+- [Dear ImGui](https://github.com/ocornut/imgui);
+- [Delegate](https://github.com/bdiamand/Delegate);
+- [DualSense-Windows](https://github.com/Ohjurot/DualSense-Windows);
+- [Embree](https://github.com/embree/embree);
+- [FFT by LIBROW](http://www.librow.com/);
+- [fmtlib/fmt](https://github.com/fmtlib/fmt);
+- [gta5_fsr](https://github.com/NarutoUA/gta5_fsr);
+- [HIDAPI](https://github.com/libusb/hidapi);
+- [JoyShockLibrary](https://github.com/JibbSmart/JoyShockLibrary);
+- [json.lua](https://github.com/rxi/json.lua);
+- [libdeflate](https://github.com/ebiggers/libdeflate);
+- [libwebp](https://chromium.googlesource.com/webm/libwebp);
+- [Lua OpenSSL](https://github.com/wahern/luaossl);
+- [LuaSocket](https://lunarmodules.github.io/luasocket/index.html);
+- [kd-tree](https://github.com/gishi523/kd-tree);
+- [MaskedOcclusionCulling](https://github.com/GameTechDev/MaskedOcclusionCulling);
+- [meshoptimizer](https://github.com/zeux/meshoptimizer);
+- [minhook fork from ReShade](https://github.com/crosire/reshade);
+- [miniball](https://github.com/hbf/miniball);
+- [miniz](https://github.com/richgel999/miniz);
+- [moodycamel::ConcurrentQueue](https://github.com/cameron314/concurrentqueue);
+- [moodycamel::ReaderWriterQueue](https://github.com/cameron314/readerwriterqueue);
+- [NanoRT](https://github.com/lighttransport/nanort);
+- [obfy](https://github.com/fritzone/obfy);
+- [ODE physics engine](http://ode.org/);
+- [OpenResty’s fork of LuaJIT](https://github.com/openresty/luajit2);
+- [OpenRGB.NET](https://github.com/diogotr7/OpenRGB.NET);
+- [OpenSSL](https://github.com/openssl/openssl);
+- [poly2tri](https://github.com/jhasse/poly2tri);
+- [RandomLib](http://randomlib.sourceforge.net/);
+- [robin_hood unordered map & set](https://github.com/martinus/robin-hood-hashing);
+- [SimplexNoise](https://github.com/SRombauts/SimplexNoise);
+- [StackWalker](https://github.com/JochenKalmbach/StackWalker);
+- [SQLite](https://www.sqlite.org/);
+- [tinyexpr](https://github.com/codeplea/tinyexpr);
+- [utf-cpp](https://github.com/ww898/utf-cpp);
+- [ValveFileVDF](https://github.com/TinyTinni/ValveFileVDF);
+- [X1nput](https://github.com/araghon007/X1nput);
+- [xatlas](https://github.com/jpcy/xatlas);
+- [xxHash](https://github.com/Cyan4973/xxHash).
+
+[b]And resources:[/b]
+- Emoji made by [Twitter](https://github.com/twitter/twemoji);
+- Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [fjstudio](https://www.flaticon.com/authors/fjstudio) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [Those Icons](https://www.flaticon.com/authors/those-icons) from [www.flaticon.com](https://www.flaticon.com/);
+- Icons made by [Pixel perfect](https://www.flaticon.com/authors/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/).

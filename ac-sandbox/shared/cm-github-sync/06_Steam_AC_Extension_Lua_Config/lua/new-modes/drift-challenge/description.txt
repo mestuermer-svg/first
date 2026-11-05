@@ -1,0 +1,8 @@
+Drift Challenge
+
+Test your drifting skills in this custom challenge mode.
+Create own track in Drift Zones Editor and export it to new game mode. 
+Drift Challenge replicates competitive drift events, rules and judging system.
+
+See the included available tracks in 
+\assettocorsa\extension\lua\new-modes\drift-challenge\tracks
