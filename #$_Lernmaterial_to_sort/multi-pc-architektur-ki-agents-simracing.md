@@ -150,14 +150,23 @@ Sarah Coach unterscheidet anhand der Telemetrie strikt zwischen **Fahrer-Korrekt
 </details>
 
 <details>
-<summary><h3>4.2 Inbetriebnahme-Checkliste für den 4-PC-Verbund</h3></summary>
+<summary><h3>4.2 Inbetriebnahme-Checkliste für den 4-PC-Verbund (Status: 04.11.2026)</h3></summary>
 
-1. **Raspberry Pi 4 (Arch Linux):** Mosquitto MQTT-Broker und zentrales Bare-Git-Repository (`/srv/git/simrig.git`) für Setups & Skripte aktivieren.
-2. **SimRacer (Windows 11):**
-   * Veeam OS-Backup auf `D:\Backups\Veeam_OS` (exkl. Steam & Docker-Storage) + tägliches Pitfile-Backup-Skript einrichten.
-   * Fokus-Wächter (`watch-sim-focus.ps1`) aktivieren, der bei Start von `acs.exe` die Docker-Sandbox pausiert.
-3. **IdeaPad 5 (Linux Omarchy):** Sarah Coach Service und Telemetrie-Dashboard starten, verbunden mit dem MQTT-Broker auf dem RPi 4.
-4. **VanstrikeCyborg (Windows 11):** Über VS Code (mit `simrig-windows.code-workspace` und Remote-SSH) alle Knoten zentral verwalten.
+1. **SimRacer (Windows 11 – `192.168.178.68`):**
+   * [x] OpenSSH-Server (`sshd`) aktiviert und passwortlosen SSH-Key-Login (`ssh simracer` $\rightarrow$ `Mike@192.168.178.68`) eingerichtet.
+   * [x] 64-GB-Sandbox nach `C:\ac-sandbox` migriert, Docker Desktop `v4.98.0` installiert, KVM (`kvm_amd`) aktiviert und Container `ac-win11-sandbox` (8 Kerne, 12 GB RAM, 160 GB Disk, Web `:8006`, RDP `:3390`, SSH `:2222`) gestartet.
+   * [x] `D:`-Festplatte verknüpft: Host-Junction `D:\ac-sandbox` $\rightarrow$ `C:\ac-sandbox` sowie Container-Mounts für `D:\Backups`, `D:\SteamLibrary` und `Documents\Assetto Corsa\cfg`.
+   * [x] Erstes Pitfile- & Config-Backup (`D:\Backups\SimRacer_Configs\2026-11-04_17-37`) sowie `D:\Backups\Veeam_Exclusions.txt` erstellt.
+   * [ ] Fokus-Wächter (`C:\ac-sandbox\watch-sim-focus.ps1`) als geplante Autostart-Aufgabe registrieren und erstes Veeam OS-Image nach `D:\Backups\Veeam_OS` sichern.
+2. **VanstrikeCyborg (Windows 11):**
+   * [x] Über VS Code, `~/.ssh/config` (`simracer`, `ac-sandbox`) und `start-sandbox.ps1 -RemoteHost 192.168.178.68` mit dem SimRacer gekoppelt.
+   * [ ] Nach Abschluss der Gast-Prüfungen die lokale 64-GB-Altkopie (`storage\data.img`) auf dem Laptop archivieren/freigeben.
+3. **Raspberry Pi 4 (Arch Linux):**
+   * [ ] Mosquitto MQTT-Broker (`simrig/mode`, `simrig/telemetry`) und zentrales Bare-Git-Repository (`/srv/git/simrig.git`) für Setups & Skripte aktivieren.
+4. **IdeaPad 5 (Linux Omarchy):**
+   * [ ] Sarah Coach Service (`sarah_targets.json`, `sarah_pitfile_optimizer.py`) und Telemetrie-Dashboard starten, verbunden mit dem MQTT-Broker auf dem RPi 4.
+
+*(Die detaillierte Schritt-für-Schritt-Aufgabenliste befindet sich in [planing.md](./planing.md) unter Abschnitt 5.)*
 
 </details>
 

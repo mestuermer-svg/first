@@ -247,31 +247,33 @@ Lege im Hauptordner `git-labor` genau **zwei** getrennte `.code-workspace`-Datei
 Trage in deiner Datei `C:\Users\strik\.ssh\config` (auf dem VanstrikeCyborg) bzw. `~/.ssh/config` (auf dem IdeaPad 5 unter Omarchy) folgende Host-Blöcke ein:
 
 ```sshconfig
-# 1. SimRacer Workstation (Windows 11 Host)
+# 1. SimRacer Workstation (Windows 11 Host - produktiv eingerichtet)
 Host simracer
-    HostName 192.168.1.50
-    User strik
+    HostName 192.168.178.68
+    User Mike
     Port 22
+    IdentityFile ~/.ssh/id_ed25519
 
 # 2. Docker AC-Sandbox direkt auf dem SimRacer (Windows 11 Gast)
 Host ac-sandbox
-    HostName 192.168.1.50
+    HostName 192.168.178.68
     User Docker
     Port 2222
+    IdentityFile ~/.ssh/id_ed25519
 
 # 3. IdeaPad 5 (Linux Omarchy - Sarah Coach & Pitwall)
 Host ideapad-omarchy
-    HostName 192.168.1.60
+    HostName 192.168.178.60
     User strik
     Port 22
 
 # 4. Raspberry Pi 4 (Arch Linux - 24/7 Broker & Git)
 Host rpi4-broker
-    HostName 192.168.1.70
+    HostName 192.168.178.70
     User alarm
     Port 22
 ```
-*(Hinweis: IP-Adressen `192.168.1.x` einmalig an dein lokales Heimnetz/LAN anpassen.)*
+*(Hinweis: `simracer` und `ac-sandbox` auf `192.168.178.68` sind bereits aktiv und getestet; Web-VNC läuft auf `:8006`, Sandbox-RDP auf `:3390`.)*
 
 </details>
 

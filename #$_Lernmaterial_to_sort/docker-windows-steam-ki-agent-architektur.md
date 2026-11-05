@@ -36,7 +36,31 @@ graph TD
 
 1. **Vollständiger Windows NT-Kernel:** Echtes Windows 11 mit allen Standard-Bibliotheken (`kernel32.dll`, `user32.dll`, `shell32.dll`) und NTFS-Dateisystem.
 2. **Netzwerk- & Socket-Stack:** Virtuelle Netzwerkkarte (`virtio-net`) für uneingeschränkte Socket-, SMB- und SSH-Kommunikation.
-3. **2D/3D-Rendering für Content Manager UI:** Der Content Manager benötigt zum Verwalten von Presets, `race.ini` und `.ini`-Setups keine 3D-Renn-Engine, sondern läuft flüssig über das virtuelle Display (`127.0.0.1:8006` / RDP `:3389`).
+3. **2D/3D-Rendering für Content Manager UI:** Der Content Manager benötigt zum Verwalten von Presets, `race.ini` und `.ini`-Setups keine 3D-Renn-Engine, sondern läuft flüssig über das virtuelle Display (`http://192.168.178.68:8006` / RDP `192.168.178.68:3390`).
+
+</details>
+
+<details>
+<summary><h3>1.3 Aktive Live-Konfiguration auf dem SimRacer (<code>192.168.178.68</code>)</h3></summary>
+
+Die Sandbox ist produktiv auf dem **SimRacer** unter `C:\ac-sandbox` eingerichtet und mit der `D:`-Festplatte verknüpft:
+
+* **KVM-Hardwarebeschleunigung (`kvm_amd`):** Aktiviert über `C:\Users\Mike\.wslconfig` (`nestedVirtualization=true`, `kernelCommandLine=kvm_amd.nested=1`) und `/dev/kvm` (`KVM: "Y"`).
+* **Ressourcen:** **8 CPU-Kerne** (Ryzen 9 3900X), **12 GB DDR4 RAM**, **160 GB virtuelles Laufwerk** (`data.img`, Gast-Partition `C:` per diskpart auf volle **159,86 GB** erweitert mit **125 GB freiem Speicher**).
+* **Gast-Status:**
+  * **OpenSSH Server (`sshd`):** Aktiv und gestartet (`Automatic`, Status `Running`). Ed25519-Keys für `strik@VanstrikeCyborg` eingerichtet.
+  * **Content Manager:** Einsatzbereit auf dem Desktop und unter `C:\AssettoCorsa\`.
+  * **Assetto Corsa Profile & Setups:** Alle 7 GitHub-Ordnerpakete per Robocopy ins Gastsystem synchronisiert.
+* **Netzwerk-Ports auf `192.168.178.68`:**
+  * **Web-VNC (NoVNC):** `http://192.168.178.68:8006`
+  * **Sandbox-RDP:** `192.168.178.68:3390` *(auf Port `3390` gemappt, damit der native Windows-Remotedesktop des SimRacer-Hosts auf Port `3389` frei bleibt)*
+  * **OpenSSH-Bridge:** `192.168.178.68:2222` (`ssh ac-sandbox`)
+* **Verknüpfung der `D:`-Festplatte & Native Configs:**
+  * **Host-Junction:** `D:\ac-sandbox` $\rightarrow$ `C:\ac-sandbox`
+  * **Container-Volumes (`\\host.lan\Data` / `Desktop\Shared`):**
+    * `D:/Backups:/shared/D_Backups`
+    * `D:/SteamLibrary:/shared/D_SteamLibrary`
+    * `C:/Users/Mike/Documents/Assetto Corsa/cfg:/shared/Native_AC_cfg`
 
 </details>
 

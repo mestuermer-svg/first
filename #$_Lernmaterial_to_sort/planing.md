@@ -206,15 +206,25 @@ VALUE=57
     7. `07_Content_Manager_Binary` (`1 Datei` | `10,90 MB` – `Content Manager.exe`)
   - Alle 7 Pakete wurden in einzelnen Commits erfolgreich nach GitHub (`origin/main`) hochgeladen und stehen rechnerübergreifend auf **VanstrikeCyborg**, **SimRacer** und in der **Docker-Sandbox** zur Verfügung.
 
+#### Phase 4: Gast-Konfiguration & Live-Inbetriebnahme der Windows-11-Sandbox (05.11.2026)
+- [x] **Gast-Partition `C:` auf 160 GB erweitert:** Recovery-Partition (Partition 4) per `diskpart override` entfernt, Partition C: auf **159,86 GB** erweitert und Windows Explorer neu gestartet. Gast zeigt nun **125 GB frei von 159 GB**.
+- [x] **OpenSSH-Server (`sshd`) im Windows-11-Gast installiert & betriebsbereit:** OpenSSH MSI unattended installiert, Host-Keys per `ssh-keygen -A` erzeugt, Dienst `sshd` auf `Automatic` gesetzt und gestartet (Status `Running`, Port 22 lauscht auf `0.0.0.0` / `[::]`).
+- [x] **SSH-Key-Authentifizierung im Gast eingerichtet:** Ed25519-Public-Key für `strik@VanstrikeCyborg` in `administrators_authorized_keys` und `C:\Users\Docker\.ssh\authorized_keys` hinterlegt und Berechtigungen fixiert.
+- [x] **Content Manager & Assetto Corsa Verzeichnisse im Gast bereitgestellt:**
+  - `Content Manager.exe` auf dem Desktop und unter `C:\AssettoCorsa\` platziert.
+  - Alle 7 Ordner-Pakete (`Documents\Assetto Corsa\setups`, `cfg`, `AppData\Local\AcTools Content Manager` Presets & Data, Steam `cfg`, `system/cfg`, `server/cfg`, Python-Apps) per Robocopy ins Gastsystem synchronisiert.
+- [x] **Netzwerk-Mounts & Autostart-Bootstrap verifiziert:** Zugriff auf `\\host.lan\Data\D_Backups`, `\\host.lan\Data\D_SteamLibrary` und `\\host.lan\Data\Native_AC_cfg` erfolgreich geprüft; `ac-sandbox-bootstrap.bat` im Autostart-Ordner hinterlegt; Status-Report `guest-status.json` erzeugt.
+
 </details>
 
 <details>
 <summary><h3>5.2 Master-Checkliste: Nächste Arbeitsschritte (Next Steps)</h3></summary>
 
-#### Block A: Feinschliff in der laufenden Windows-11-Sandbox (`ac-win11-sandbox`)
-- [ ] **A.1 Gast-Partition `C:` auf 160 GB erweitern:** In der Sandbox (`http://192.168.178.68:8006` oder RDP `192.168.178.68:3390`) über PowerShell (Admin) das Skript `\\host.lan\Data\scripts\expand-guest-disk.ps1` ausführen, damit Windows 11 die vollen 160 GB nutzt.
-- [ ] **A.2 OpenSSH-Server im Windows-11-Gast prüfen/aktivieren:** Sicherstellen, dass `sshd` innerhalb der Sandbox auf Port `22` läuft, damit `ssh ac-sandbox` (`Port 2222`) vom VanstrikeCyborg direkt durchverbunden wird.
-- [ ] **A.3 Content Manager & Python im Gast-Labor einrichten:** Content Manager und Python 3.11 im Gast prüfen und den Zugriff auf die gemounteten Ordner `D_SteamLibrary`, `D_Backups` und `Native_AC_cfg` unter `\\host.lan\Data` testen.
+#### Block A: Feinschliff & Automatisierung in der Windows-11-Sandbox (`ac-win11-sandbox`)
+- [x] **A.1 Gast-Partition `C:` auf 160 GB erweitern:** Erfolgreich durchgeführt (159,86 GB gesamt, 125 GB frei).
+- [x] **A.2 OpenSSH-Server im Windows-11-Gast aktivieren:** Erfolgreich installiert, Host-Keys generiert und Dienst gestartet (Status `Running`).
+- [x] **A.3 Content Manager & AC-Strukturen im Gast einrichten:** Vollständig synchronisiert, Content Manager auf Desktop und Zugriff auf alle Host-Volumes (`D_Backups`, `D_SteamLibrary`, `Native_AC_cfg`) bestätigt.
+- [ ] **A.4 Python 3.11 & Skript-Runner im Gast ergänzen:** Python 3.11 (via `winget` oder lokales Installationspaket) installieren für direkte Ausführung von Pitfile-Generatoren und Telemetrie-Validatoren im Gast.
 
 #### Block B: SimRacer Host-Automatisierung & Systemsicherung (Veeam)
 - [ ] **B.1 Fokus-Wächter (`watch-sim-focus.ps1`) als Autostart-Task registrieren:** Geplante Aufgabe (`SimRacer-Focus-Watchdog`) für Benutzer `Mike` anlegen, damit `ac-win11-sandbox` beim Start von `acs.exe` vollautomatisch pausiert (`LIVE_RACE`) und nach Rennende wieder fortgesetzt wird (`ENGINEERING`).
