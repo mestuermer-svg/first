@@ -33,11 +33,11 @@ Bei jeder Übertragung ist im Chat folgender Statusblock auszugeben:
 
 ## 2. Live-Terminal-Monitor & Grafisches 5s-Auto-Refresh-Panel
 
-- **Vorhandenes Skript im Workspace:** `c:\Users\strik\git-labor\ac-sandbox\shared\scripts\watch-transfer-status.ps1`
+- **Vorhandenes Skript im Workspace:** `c:\Users\strik\assetto-corsa-content\ac-sandbox\shared\scripts\watch-transfer-status.ps1`
 - **Automatisch generierte Live-Ansichten (aktualisieren sich alle 5 Sekunden von selbst):**
-  - **Grafisches VS-Code-Browser-Dashboard:** `c:\Users\strik\git-labor\ac-sandbox\LIVE-TRANSFER-STATUS.html` (via `open_browser_page` direkt als Tab in VS Code öffnen – aktualisiert sich alle 5 Sek. per `<meta http-equiv="refresh" content="5">`).
-  - **Live-Markdown-Datei:** `c:\Users\strik\git-labor\ac-sandbox\LIVE-TRANSFER-STATUS.md`
+  - **Grafisches VS-Code-Browser-Dashboard:** `c:\Users\strik\assetto-corsa-content\ac-sandbox\LIVE-TRANSFER-STATUS.html` (via `open_browser_page` direkt als Tab in VS Code öffnen – aktualisiert sich alle 5 Sek. per `<meta http-equiv="refresh" content="5">`).
+  - **Live-Markdown-Datei:** `c:\Users\strik\assetto-corsa-content\ac-sandbox\LIVE-TRANSFER-STATUS.md`
 - **Aufruf (immer im `async`-Modus starten + Browser-Tab öffnen):**
   ```powershell
-  powershell.exe -NoProfile -ExecutionPolicy Bypass -File "c:\Users\strik\git-labor\ac-sandbox\shared\scripts\watch-transfer-status.ps1" -IntervalSeconds 5 -TotalSizeGB <GesamtgroesseInGB>
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File "c:\Users\strik\assetto-corsa-content\ac-sandbox\shared\scripts\watch-transfer-status.ps1" -IntervalSeconds 5 -TotalSizeGB <GesamtgroesseInGB>
   ```

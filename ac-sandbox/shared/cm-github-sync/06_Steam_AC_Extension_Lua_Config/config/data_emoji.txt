@@ -1,8 +1,0 @@
-# List of emojies to show in the chat selector 🤠
-# Replace it with something custom if needed
-
-😎😄😅😁😂😍🤩😳🤠🥳😱
-😤😭🥴🥺😡🙌👍👎👋✌️🤝
-🙏🤷‍♂️🤦‍♂️🏆🎉🥇🏁🚗🚦🛑⛽
-⏱️🌍💡❓❗💬🍀🚀💥🐢🐇💀
-

@@ -41,5 +41,5 @@ Direkte Live-Mounts unter `\\host.lan\Data` im Gast:
 - `\\host.lan\Data\D_Backups` -> `D:\Backups` (SimRacer)
 - `\\host.lan\Data\guest-status.json` -> Aktueller Statusbericht von `scripts\bootstrap-guest.ps1`
 
-Vollständige Anleitung: `ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md`
+Vollständige Anleitung: `C:\Users\strik\assetto-corsa-content\ac-sandbox\LIGHT-AGENT-UND-AC-STRUKTUR.md`
 

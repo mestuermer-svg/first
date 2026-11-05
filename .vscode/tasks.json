@@ -10,7 +10,7 @@
                 "-ExecutionPolicy",
                 "Bypass",
                 "-File",
-                "${workspaceFolder}\\ac-sandbox\\start-sandbox.ps1",
+                "C:\\Users\\strik\\assetto-corsa-content\\ac-sandbox\\start-sandbox.ps1",
                 "-RemoteHost",
                 "192.168.178.68"
             ],

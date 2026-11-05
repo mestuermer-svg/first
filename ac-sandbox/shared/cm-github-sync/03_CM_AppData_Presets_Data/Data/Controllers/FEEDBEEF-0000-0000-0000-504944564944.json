@@ -1,9 +1,0 @@
-// Monect Hid Device
-{
-  "name": "Monect Device",
-  "axis": 0,
-  "pov": [
-    "P1"
-  ],
-  "buttons": 0
-}

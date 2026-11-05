@@ -1,3 +1,0 @@
-rescan
-select volume C
-extend
