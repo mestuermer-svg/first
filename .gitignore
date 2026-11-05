@@ -7,12 +7,33 @@ ac-sandbox/storage/
 *.rom
 *.vars
 
-# Installer & Executables
+# Installer & Executables (außer Content Manager.exe im Sync-Ordner)
 *.exe
+!ac-sandbox/shared/cm-github-sync/07_Content_Manager_Binary/Content Manager.exe
 *.msi
+
+# Schwere Steam-Spieldateien & Content-Manager-Binärcaches (GitHub 100-MB-Schutz)
+*.kn5
+*.bank
+*.dds
+*.acd
+*.wav
+*.mp3
+*.ogg
+*.pdb
+*.dmp
+ac-sandbox/shared/cm-github-sync/**/Plugins/
+ac-sandbox/shared/cm-github-sync/**/Temporary/
+ac-sandbox/shared/cm-github-sync/**/Static/
+ac-sandbox/shared/cm-github-sync/**/Logs/
+ac-sandbox/shared/cm-github-sync/**/Cache/
+ac-sandbox/shared/cm-github-sync/**/GPUCache/
 
 # Temporary & Image Dumps
 *.ppm
+ac-sandbox/screen_now.png
+ac-sandbox/shared/screen.png
+ac-sandbox/shared/screen_now.png
 
 # OS Artifacts
 Thumbs.db
