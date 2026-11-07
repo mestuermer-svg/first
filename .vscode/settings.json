@@ -5,5 +5,12 @@
     "antigravity.autoRecover": true,
     "antigravityCopilot.rateLimit.cooldownMs": 15000,
     "chat.agent.sandbox.enabled": "off",
-    "task.allowAutomaticTasks": "on"
+    "task.allowAutomaticTasks": "on",
+    "python-envs.pythonProjects": [
+        {
+            "path": ".",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ]
 }

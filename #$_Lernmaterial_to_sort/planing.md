@@ -215,6 +215,24 @@ VALUE=57
   - Alle 7 Ordner-Pakete (`Documents\Assetto Corsa\setups`, `cfg`, `AppData\Local\AcTools Content Manager` Presets & Data, Steam `cfg`, `system/cfg`, `server/cfg`, Python-Apps) per Robocopy ins Gastsystem synchronisiert.
 - [x] **Netzwerk-Mounts & Autostart-Bootstrap verifiziert:** Zugriff auf `\\host.lan\Data\D_Backups`, `\\host.lan\Data\D_SteamLibrary` und `\\host.lan\Data\Native_AC_cfg` erfolgreich geprüft; `ac-sandbox-bootstrap.bat` im Autostart-Ordner hinterlegt; Status-Report `guest-status.json` erzeugt.
 
+#### Phase 5: Multi-Agenten-Architektur & SimRacer Hardware-Hub (06.11.2026)
+- [x] **Dark Agent (In-Container-Spezialist) eingerichtet:**
+  - `.github/agents/dark.agent.md` in beiden Repositories angelegt.
+  - `runner.ps1` & `worker.ps1` in `\\host.lan\Data\agents\dark` für lokale Ausführung, Setup-Syntaxprüfungen und App-Validierung implementiert.
+  - `Invoke-DarkAgent.ps1` für SSH-Fernsteuerung (Port 2222) vom Laptop bereitgestellt.
+- [x] **Rig Agent (SimRacer Nativer Host & Hardware-Hub) eingerichtet:**
+  - `.github/agents/rig.agent.md` in beiden Repositories angelegt.
+  - `scripts/rig-hub.ps1` auf dem SimRacer für Überwachung von SteamVR (`vrserver`, `vrmonitor`), `acs.exe`, Fanatec-Geräten und NVIDIA RTX 5070 Ti (GPU/VRAM Telemetrie) eingerichtet.
+  - **Auto-Provisioning (`AutoProvisionFromRaceIni`):** Liest die aktive `race.ini` (`MODEL=`, `TRACK=`) aus und erzeugt automatisch Verzeichnis-Junctions (`mklink /J`) nach `C:\ac-sandbox\shared\content\cars` und `tracks`, ohne 500 GB zu duplizieren.
+  - `Invoke-RigAgent.ps1` für direkte Host-Steuerung über SSH (Port 22) erstellt.
+- [x] **Content-Integration in die Sandbox erweitert:** `bootstrap-guest.ps1` bindet bereitgestellte Autos und Strecken beim Container-Start automatisch nach `C:\AssettoCorsa\content\` ein.
+
+#### Phase 6: Gast-Laufzeit-Härtung (Python 3.11), QEMU-Boot-Analyse & Task-Resilienz (06.11.2026)
+- [x] **Python 3.11.9 im Gast installiert & verlinkt:** Unattended Setup unter `C:\Program Files\Python311`, Symlinks nach `C:\Windows\python.exe` und `C:\Windows\pip.exe` gesetzt, um Microsoft Store AppExecutionAliases zu umgehen.
+- [x] **QEMU-Boot-Verhalten analysiert & dokumentiert:** Ermittelt, dass Kaltstarts von Windows 11 unter QEMU ca. 60–90 s für UEFI und DHCP (`dnsmasq`) benötigen. Diagnose-Skripte `take_screen.py` und `qmp_cmd.py` für Screendumps und QEMU-Monitor-Befehle implementiert.
+- [x] **Dark Agent runner.ps1 korrigiert:** Syntaxfehler (`[ValidateSetSet]`) behoben und Ausführungsrichtlinie auf `RemoteSigned` im Gast fixiert.
+- [x] **VS Code Start-Task gehärtet:** In `.vscode/tasks.json` beider Repositories `powershell.exe` durch `${env:SystemRoot}\System32\WindowsPowerShell\v1.0\powershell.exe` ersetzt, um PATH-Unregelmäßigkeiten auf dem Host zu eliminieren.
+
 </details>
 
 <details>
@@ -224,13 +242,15 @@ VALUE=57
 - [x] **A.1 Gast-Partition `C:` auf 160 GB erweitern:** Erfolgreich durchgeführt (159,86 GB gesamt, 125 GB frei).
 - [x] **A.2 OpenSSH-Server im Windows-11-Gast aktivieren:** Erfolgreich installiert, Host-Keys generiert und Dienst gestartet (Status `Running`).
 - [x] **A.3 Content Manager & AC-Strukturen im Gast einrichten:** Vollständig synchronisiert, Content Manager auf Desktop und Zugriff auf alle Host-Volumes (`D_Backups`, `D_SteamLibrary`, `Native_AC_cfg`) bestätigt.
-- [ ] **A.4 Python 3.11 & Skript-Runner im Gast ergänzen:** Python 3.11 (via `winget` oder lokales Installationspaket) installieren für direkte Ausführung von Pitfile-Generatoren und Telemetrie-Validatoren im Gast.
+- [x] **A.4 Dark Agent & In-Container Test-Runner bereitstellen:** Runner, Worker und Queue unter `agents/dark/` voll einsatzbereit.
+- [x] **A.5 Python 3.11 & Skript-Runner im Gast ergänzen:** Python 3.11.9 unter `C:\Program Files\Python311` installiert, Symlinks nach `C:\Windows\python.exe` und `pip.exe` gesetzt (Bypass für MS Store Aliases) – einsatzbereit für Setup-Validierung und Telemetrie-Tests.
 
 #### Block B: SimRacer Host-Automatisierung & Systemsicherung (Veeam)
-- [ ] **B.1 Fokus-Wächter (`watch-sim-focus.ps1`) als Autostart-Task registrieren:** Geplante Aufgabe (`SimRacer-Focus-Watchdog`) für Benutzer `Mike` anlegen, damit `ac-win11-sandbox` beim Start von `acs.exe` vollautomatisch pausiert (`LIVE_RACE`) und nach Rennende wieder fortgesetzt wird (`ENGINEERING`).
-- [ ] **B.2 Tägliches Pitfile-Backup (`backup-simracer-configs.ps1`) automatisieren:** Task-Scheduler-Job auf dem SimRacer einrichten, der täglich (oder bei Systemstart) einen Snapshot nach `D:\Backups\SimRacer_Configs` schreibt.
-- [ ] **B.3 Lokale Sandbox-Rohdaten am VanstrikeCyborg archivieren/freigeben:** Nach erfolgreichem Dauerbetrieb auf dem SimRacer die alte 64-GB-Datei `C:\Users\strik\git-labor\ac-sandbox\storage\data.img` auf dem Laptop bereinigen (spart 64 GB NVMe-Speicher auf dem Cyborg) bzw. ein Cold-Backup nach `D:\Backups\ac-sandbox` auf dem SimRacer legen.
-- [ ] **B.4 Veeam Agent Free Bare-Metal-Backup erstellen:** Bootfähigen USB-Rettungsstick erstellen und erstes System-Image von `C:` (mit den vorbereiteten Pfaden aus `D:\Backups\Veeam_Exclusions.txt`) nach `D:\Backups\Veeam_OS` sichern.
+- [x] **B.1 Rig Agent & Auto-Content-Link (`mklink /J`) einrichten:** `rig-hub.ps1` liest `race.ini` aus und verlinkt das aktuelle Auto und die Strecke automatisch in die Sandbox.
+- [ ] **B.2 Fokus-Wächter / Watchdog als Autostart-Task registrieren:** Geplante Aufgabe (`SimRacer-Focus-Watchdog`) für Benutzer `Mike` anlegen (`rig-hub.ps1 -Action Watchdog`), damit `ac-win11-sandbox` beim Start von `acs.exe` vollautomatisch pausiert (`LIVE_RACE`) und nach Rennende wieder fortgesetzt wird (`ENGINEERING`).
+- [ ] **B.3 Tägliches Pitfile-Backup (`backup-simracer-configs.ps1`) automatisieren:** Task-Scheduler-Job auf dem SimRacer einrichten, der täglich (oder bei Systemstart) einen Snapshot nach `D:\Backups\SimRacer_Configs` schreibt.
+- [ ] **B.4 Lokale Sandbox-Rohdaten am VanstrikeCyborg archivieren/freigeben:** Nach erfolgreichem Dauerbetrieb auf dem SimRacer die alte 64-GB-Datei `C:\Users\strik\git-labor\ac-sandbox\storage\data.img` auf dem Laptop bereinigen (spart 64 GB NVMe-Speicher auf dem Cyborg) bzw. ein Cold-Backup nach `D:\Backups\ac-sandbox` auf dem SimRacer legen.
+- [ ] **B.5 Veeam Agent Free Bare-Metal-Backup erstellen:** Bootfähigen USB-Rettungsstick erstellen und erstes System-Image von `C:` (mit den vorbereiteten Pfaden aus `D:\Backups\Veeam_Exclusions.txt`) nach `D:\Backups\Veeam_OS` sichern.
 
 #### Block C: Telemetrie-Brücke, Raspberry Pi 4 & Sarah Coach (IdeaPad 5 Omarchy)
 - [ ] **C.1 AC Shared-Memory Telemetrie-Sender am SimRacer einrichten:** Leichtgewichtiges Python-Skript (`ac_telemetry_sender.py`) auf dem SimRacer bereitstellen, das `acpmf_physics`, `acpmf_graphics` und `acpmf_static` ausliest und per UDP/MQTT ins LAN streamt.

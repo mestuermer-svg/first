@@ -1,0 +1,60 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lernmaterial – Orientierung in 2 Minuten</title>
+<style>
+:root{--ink:#182431;--muted:#526273;--blue:#176b87;--pale:#eaf3f6;--line:#cbd8df;--paper:#f8fafb;--gold:#c27b25}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink);background:#dfe7eb}body{display:grid;place-items:center}
+.deck{width:min(100vw,177.78vh);height:min(100vh,56.25vw);background:var(--paper);position:relative;overflow:hidden;box-shadow:0 18px 55px #1b2a3526}
+.slide{position:absolute;inset:0;padding:7.2% 8%;display:none;flex-direction:column;justify-content:center}.slide.active{display:flex}
+h1{font-size:clamp(34px,5.1vw,68px);line-height:1.04;letter-spacing:-.035em;margin:0 0 .22em;max-width:920px}h2{font-size:clamp(27px,3.5vw,45px);line-height:1.08;letter-spacing:-.025em;margin:0 0 .65em}h3{font-size:clamp(18px,2.1vw,27px);margin:0 0 .3em}p,li{font-size:clamp(16px,1.75vw,22px);line-height:1.4;margin:.25em 0;color:var(--muted)}.eyebrow{font-size:clamp(13px,1.2vw,16px);font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}.lead{font-size:clamp(19px,2.2vw,29px);max-width:800px}.path{font-family:Consolas,"Courier New",monospace;font-size:.8em;color:#244659;overflow-wrap:anywhere}.rule{height:3px;width:72px;background:var(--gold);margin:8px 0 25px}
+.columns{display:grid;grid-template-columns:repeat(3,1fr);gap:4.5%;align-items:start}.columns.two{grid-template-columns:1fr 1fr}.col{border-top:3px solid var(--blue);padding-top:16px}.col p{max-width:340px}.sequence{display:grid;grid-template-columns:1fr 36px 1fr 36px 1fr;align-items:center;gap:8px;margin-top:20px}.step{font-size:clamp(17px,1.8vw,23px);line-height:1.25}.arrow{font-size:26px;color:var(--gold);text-align:center}.index{font-size:clamp(18px,2vw,25px);line-height:1.4}.index strong{color:var(--blue)}.ending{font-size:clamp(24px,3vw,39px);max-width:880px;font-weight:600;line-height:1.2}.controls{position:absolute;bottom:2.2%;left:8%;right:8%;display:flex;align-items:center;gap:14px;color:var(--muted);font-size:14px}.progress{height:3px;background:#d7e1e6;flex:1}.progress span{display:block;height:100%;width:20%;background:var(--blue);transition:width .2s}.counter{min-width:42px}.notes-toggle{border:0;background:none;color:var(--blue);font:inherit;cursor:pointer;text-decoration:underline}.notes{position:absolute;left:8%;right:8%;bottom:7%;padding:13px 16px;background:#eef4f6;border-left:3px solid var(--gold);font-size:15px;line-height:1.4;color:#314554;display:none}.notes.show{display:block}.hint{position:absolute;right:8%;top:4%;font-size:13px;color:#7a8993}.accent{color:var(--blue)}
+@media(max-width:700px){.deck{width:100vw;height:100vh}.slide{padding:7% 8% 13%}.columns,.columns.two{grid-template-columns:1fr;gap:12px}.col{padding-top:6px}.sequence{grid-template-columns:1fr;gap:4px}.arrow{display:none}.controls{left:7%;right:7%}.notes{left:7%;right:7%;bottom:8%}}
+@media print{html,body{height:auto;background:white;display:block}.deck{height:auto;width:auto;box-shadow:none;overflow:visible}.slide{position:relative;display:flex!important;width:100vw;height:56.25vw;page-break-after:always}.controls,.hint,.notes-toggle{display:none}.notes{display:block;position:absolute;bottom:1%;font-size:12px}}
+</style>
+</head>
+<body>
+<main class="deck" aria-label="Präsentation: Orientierung im Lernmaterial">
+  <div class="hint">← → zum Blättern · N für Sprechtext</div>
+  <section class="slide active" data-notes="Willkommen. In zwei Minuten zeige ich, wie unser Lernmaterial organisiert ist und wo Sie die passende Anleitung finden. Der Ausgangspunkt ist der Ordner Lernmaterial – er erklärt den Workspace und verlinkt zu den Spezialdokumenten.">
+    <div class="eyebrow">Orientierung · 2 Minuten</div><h1>Lernmaterial, Workspace & Architektur</h1><div class="rule"></div><p class="lead">Ein kurzer Wegweiser: Welche Ablage ist wofür da – und wo beginnt die Suche?</p><p class="path">C:\Users\strik\git-labor\#$_Lernmaterial_to_sort\README.md</p>
+  </section>
+  <section class="slide" data-notes="Der Workspace bündelt drei eigenständige Repositories. Git-Labor enthält Agenten, Skills und zentrale Dokumentation. Assetto-Corsa-Content enthält die Sandbox, Setups und Sim-Racing-Dateien. Local-Cyborg sammelt lokale Laptop-Tools und Lernmaterial. Für Änderungen zuerst prüfen, in welchem Repository die Datei liegt.">
+    <div class="eyebrow">01 · Ablage</div><h2>Drei Repositories im Workspace</h2>
+    <div class="columns">
+      <div class="col"><h3>Git-Labor</h3><p>Agenten, Skills, MCP-Konfiguration und dieses Lernmaterial.</p><p class="path">C:\Users\strik\git-labor</p></div>
+      <div class="col"><h3>Assetto-Corsa-Content</h3><p>Docker-Sandbox, Content Manager, Setups und Telemetrie.</p><p class="path">C:\Users\strik\assetto-corsa-content</p></div>
+      <div class="col"><h3>Local-Cyborg</h3><p>Lokale Tools, Gemini, OpenCode und Laptop-Lernmaterial.</p><p class="path">C:\local_Cyborg</p></div>
+    </div>
+    <div class="sequence"><div class="step"><strong>Workspace-Datei</strong><br><span class="path">git-labor.code-workspace</span></div><div class="arrow">→</div><div class="step"><strong>3 Repositories</strong><br>jeweils eigene Dateien & Git-Historie</div><div class="arrow">→</div><div class="step"><strong>Source Control</strong><br>Änderung im richtigen Repo committen</div></div>
+  </section>
+  <section class="slide" data-notes="Die Dokumente sind nach Aufgaben sortiert. Für Git und VS Code starten Sie bei den Einsteigeranleitungen. Für KI-Agenten, Gemini und MCP nehmen Sie den Architekturüberblick oder die Agent-Anleitung. Für die Sandbox gibt es eine Betriebsanleitung und ein separates Handbuch zu Light und den sieben Paketen. Hardware und Wiederherstellung liegen im letzten Abschnitt.">
+    <div class="eyebrow">02 · Themen</div><h2>Dokumente nach Aufgabe</h2>
+    <div class="columns two">
+      <div class="col"><h3>Git & VS Code</h3><p>Synchronisieren, Workspaces einrichten, GitHub verwenden.</p><p class="path">git-source-control-anleitung-fuer-einsteiger.md<br>visual_studio_code_doku.md</p></div>
+      <div class="col"><h3>KI-Agenten & MCP</h3><p>Agentenrollen, lokale Proxy-Architektur, Gemini und MCP.</p><p class="path">Agent_setup.md<br>uebersicht-vscode-agent-localhost-gemini-antigravity.md</p></div>
+      <div class="col"><h3>Sandbox & Assetto Corsa</h3><p>Start, Zugriff, Architektur und Aufgabenverteilung.</p><p class="path">SANDBOX_ANLEITUNG.md<br>docker-windows-steam-ki-agent-architektur.md</p></div>
+      <div class="col"><h3>Hardware & Backup</h3><p>PC-Aufteilung, Stabilität und Wiederherstellung.</p><p class="path">multi-pc-architektur-ki-agents-simracing.md<br>simracer-system-backup-wiederherstellung-veeam.md</p></div>
+    </div>
+  </section>
+  <section class="slide" data-notes="Die README ist das Inhaltsverzeichnis. Abschnitt eins erklärt die Workspace-Struktur. Abschnitt zwei beschreibt Git, Synchronisierung und Codespaces. Abschnitt drei listet die Dokumente thematisch auf. Am schnellsten: README öffnen, Strg+F und ein Stichwort wie Sandbox, MCP, Commit oder Backup eingeben. Dann dem Link zum passenden Detaildokument folgen.">
+    <div class="eyebrow">03 · Einstieg</div><h2>Die README ist der Wegweiser</h2>
+    <div class="index"><p><strong>1.</strong> Workspace-Übersicht – Repositories und Speicherorte</p><p><strong>2.</strong> Arbeitsabläufe – Git, GitHub und Codespaces</p><p><strong>3.</strong> Inhaltsverzeichnis – Anleitungen nach Thema</p></div>
+    <div class="rule"></div><p class="lead"><strong>In der README Strg+F drücken</strong> und nach „Sandbox“, „MCP“, „Commit“ oder „Backup“ suchen.</p>
+  </section>
+  <section class="slide" data-notes="Für den Sandbox-Einstieg: SANDBOX_ANLEITUNG erklärt Betrieb und Zugriff. Das Architektur-Dokument erklärt Steam und KI-Agenten. Das Light-Handbuch liegt im Repository assetto-corsa-content unter ac-sandbox und beschreibt die sieben Sync-Pakete. planing.md dokumentiert Rollen und Betriebsmodi. Merksatz: README für den Einstieg, Spezialdokument für die konkrete Aufgabe.">
+    <div class="eyebrow">04 · Beispiel Sandbox</div><h2>Vom Überblick zur passenden Anleitung</h2>
+    <div class="sequence"><div class="step"><strong>README</strong><br>Abschnitt 3.3 öffnen</div><div class="arrow">→</div><div class="step"><strong>Betrieb & Zugriff</strong><br><span class="path">SANDBOX_ANLEITUNG.md</span></div><div class="arrow">→</div><div class="step"><strong>Light & 7 Pakete</strong><br><span class="path">ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md</span></div></div>
+    <div class="rule"></div><p class="ending">Merksatz: README zum Finden – Detaildokument zum Umsetzen.</p>
+  </section>
+  <nav class="controls" aria-label="Foliennavigation"><button class="notes-toggle" type="button">Sprechtext</button><span class="counter">1 / 5</span><div class="progress"><span></span></div><span>← →</span></nav>
+  <aside class="notes" aria-live="polite"></aside>
+</main>
+<script>
+(()=>{const slides=[...document.querySelectorAll('.slide')],count=document.querySelector('.counter'),bar=document.querySelector('.progress span'),notes=document.querySelector('.notes');let i=0;function show(n){i=(n+slides.length)%slides.length;slides.forEach((s,j)=>s.classList.toggle('active',j===i));count.textContent=`${i+1} / ${slides.length}`;bar.style.width=`${(i+1)/slides.length*100}%`;notes.textContent=slides[i].dataset.notes||''}function toggle(){notes.classList.toggle('show')}document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(i+1)}else if(e.key==='ArrowLeft'){e.preventDefault();show(i-1)}else if(e.key.toLowerCase()==='n')toggle()});document.querySelector('.notes-toggle').addEventListener('click',toggle);document.querySelector('.deck').addEventListener('click',e=>{if(e.target.closest('button'))return;const r=e.currentTarget.getBoundingClientRect();if(e.clientX>r.left+r.width*.55)show(i+1);else if(e.clientX<r.left+r.width*.45)show(i-1)});show(0)})();
+</script>
+</body>
+</html>
+

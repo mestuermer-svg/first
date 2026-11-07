@@ -20,3 +20,10 @@ Dieses Repository ist das **Steuerungs-, Dokumentations- und KI-Agenten-Zentrum*
 
 1. **Workspace öffnen:** Immer über `C:\Users\strik\git-labor\git-labor.code-workspace` starten.
 2. **Git Source Control (Strg+Shift+G):** In der Quellcodeverwaltung von VS Code werden alle 3 Repositories getrennt aufgelistet und können unabhängig voneinander committed, gepullt und gepusht werden.
+
+---
+
+## Aktuelle Roadmap & Master-Checklisten
+
+* **[Nächste Schritte: SimRacer Host & VanstrikeCyborg](./#$_Lernmaterial_to_sort/naechste-schritte-simracer-und-cyborg.md):** Konkreter Fahrplan vor dem Wechsel auf das IdeaPad 5 (Omarchy / Sarah Coach).
+* **[Master-Plan & Umsetzungslogbuch](./#$_Lernmaterial_to_sort/planing.md):** Gesamte 4-Agenten-Architektur, Sarah Coach Targets, Pitfile-Workflow und Checkliste.

@@ -198,23 +198,35 @@ New-NetFirewallRule -DisplayName "AC-Sandbox Remote RDP-UDP (LAN)" -Direction In
 docker compose up -d
 ```
 
-### Schritt 4.2: Partition `C:` innerhalb der Windows-11-Sandbox auf die neue Größe (160 GB) erweitern
+### Schritt 4.2: Partition `C:` innerhalb der Windows-11-Sandbox auf die neue Größe (160 GB) erweitern (inkl. Recovery-Partition-Blockade lösen)
 
-Beim Start von `docker compose up -d` erkennt `dockurr/windows`, dass `DISK_SIZE` von `64G` auf `160G` erhöht wurde, und vergrößert die virtuelle Festplattendatei `storage\data.img` automatisch im Hintergrund.
+Beim Start von `docker compose up -d` erkennt `dockurr/windows`, dass `DISK_SIZE` von `64G` auf `160G` erhöht wurde, und vergrößert die virtuelle Festplattendatei `storage\data.img` automatisch im Hintergrund (`System > Info` zeigt sofort `160 GB` an).
 
-Damit Windows **innerhalb** der Sandbox den neuen unzugeordneten Speicherplatz auch für das Laufwerk `C:` nutzt, führen Sie **innerhalb der Windows-11-Sandbox** (über `http://<SimRacer-IP>:8006` oder RDP) einmalig das mitgelieferte Skript aus:
+#### Warum `Windows (C:)` im Explorer trotzdem zunächst bei `62,9 GB` (`4,46 GB frei`) hängen bleiben kann:
+Windows 11 legt bei der Erstinstallation am Ende der ursprünglichen 64-GB-Platte (bei Offset `63 GB`) eine **versteckte 799 MB große Wiederherstellungspartition (`Partition 4`)** an:
+* `Partition 1`: System (128 MB)
+* `Partition 2`: Reserviert (128 MB)
+* `Partition 3`: Primär `Windows (C:)` (62,9 GB)
+* `Partition 4`: Wiederherstellung (799 MB bei Offset 63 GB) $\rightarrow$ **blockiert das direkte Erweitern von `C:` in die dahinterliegenden 97 GB!**
+* **Folge:** Im Explorer bleibt `C:` rot (`4,46 GB frei von 62,9 GB`) und **Steam** bricht den Download von *Assetto Corsa* (13,2 GB) mit *„NICHT GENÜGEND FREIER SPEICHERPLATZ“* ab.
 
-1. Öffnen Sie in der Windows-11-Sandbox den Ordner **`Shared\scripts`** auf dem Desktop.
-2. Rechtsklick auf **`expand-guest-disk.ps1`** → *Mit PowerShell ausführen* (oder in einer Admin-PowerShell im Gast):
+#### Die automatische & manuelle Lösung (in `bootstrap-guest.ps1` hinterlegt):
+Über die SSH-Bridge (`ssh -p 2222 Docker@192.168.178.68`) oder eine Admin-PowerShell im Gast wird die blockierende `Partition 4` per `diskpart` (`delete partition override`) entfernt, `C:` auf die vollen **159,75 GB** erweitert und das Netzlaufwerk `Z:` (`\\host.lan\Data`) sauber verbunden:
 
 ```powershell
-# Direkt-Befehl in der PowerShell innerhalb der Windows-11-Sandbox:
-Update-Disk -Number 0
-$MaxSize = (Get-PartitionSupportedSize -DriveLetter C).SizeMax
-Resize-Partition -DriveLetter C -Size $MaxSize
+# Direkt-Befehl (per SSH-Bridge Port 2222 oder in der Admin-PowerShell innerhalb der Windows-11-Sandbox):
+reagentc /disable 2>$null | Out-Null
+@("rescan", "select disk 0", "select partition 4", "delete partition override", "select volume C", "extend") |
+    Set-Content "$env:TEMP\expand_c.txt" -Encoding Ascii
+diskpart /s "$env:TEMP\expand_c.txt"
+
+# Netzlaufwerk Z: (\\host.lan\Data) ohne rotes X verbinden:
+cmd /c "net use Z: /delete /y" 2>$null | Out-Null
+cmd /c "net use Z: \\host.lan\Data /persistent:yes" | Out-Null
+
 Get-Volume -DriveLetter C
 ```
-Sofort danach zeigt Laufwerk `C:` im Explorer der Sandbox die vollen **160 GB** (bzw. jeden Wert, den Sie bei `DISK_SIZE` eingetragen haben) ohne Neustart und ohne Datenverlust an!
+Sofort danach zeigt Laufwerk `C:` im Explorer der Sandbox (`WIN-54U68T9T2FA`) die vollen **159,75 GB (`> 100 GB frei`)** mit blauem Balken ohne Neustart und ohne Datenverlust an, und Steam kann *Assetto Corsa* sofort installieren!
 
 > **Wichtiger Hinweis:** `DISK_SIZE` kann jederzeit weiter **vergrößert** werden (z. B. später von `160G` auf `250G`), aber niemals verkleinert.
 

@@ -82,14 +82,23 @@ graph TD
         RPI["Raspberry Pi 4 (Arch Linux)<br/>MQTT-Broker, Mode-Switch & Pitfile-Sync"]
     end
 
-    subgraph LiveRace ["3. Echtzeit-Fahrbetrieb am Rig (VR + Fanatec)"]
-        SIM["SimRacer Native (Win 11)<br/>Assetto Corsa VR (120 Hz) + Fanatec FFB<br/>+ Shared-Memory Sender (<1% CPU)"]
+    subgraph SimRacerHost ["3. SimRacer Host (192.168.178.68 Nativ)"]
+        RIG["Rig Agent (Host & Hub)<br/>- SteamVR & acs.exe Überwachung<br/>- GPU/VRAM RTX 5070 Ti Telemetrie<br/>- Auto-Link (/J) für Cars & Tracks in Sandbox<br/>- Watchdog: Sandbox Pause/Resume"]
+        SIM["Assetto Corsa VR (120 Hz) + Fanatec FFB<br/>+ Shared-Memory Telemetrie (<1% CPU)"]
+    end
+
+    subgraph Container ["4. Docker Sandbox (ac-win11-sandbox)"]
+        DARK["Dark Agent (In-Container Specialist)<br/>Trockentest für CM-Skripte & Pitfiles (.ini)"]
+    end
+
+    subgraph LiveCoach ["5. Pitwall & Coaching"]
         IDEA["IdeaPad 5 (Linux Omarchy)<br/>Sarah Coach (Live-Voice + Soll-Vorgaben)<br/>+ Pitfile-Nachberechnung für Boxenstopp"]
     end
 
-    CYB -->|"Testet CM-Skripte & Setups"| SBX
-    SBX -->|"Geprüftes Pitfile (.ini)"| RPI
-    RPI -->|"Hot-Deploy in Documents\\Assetto Corsa\\cfg\\setups"| SIM
+    CYB -->|"Master-Auftrag via SSH :22"| RIG
+    CYB -->|"In-Container Auftrag via SSH :2222"| DARK
+    RIG -->|"Auto-Provisioning /J"| DARK
+    RIG -->|"Hot-Deploy Setups in Documents\\setups"| SIM
     SIM -->|"Live-Telemetrie (Shared Memory -> UDP/MQTT)"| RPI
     RPI -->|"Echtzeit-Stream"| IDEA
     IDEA -->|"Sprach-Coaching (Funk auf Geraden)"| SIM
@@ -99,7 +108,19 @@ graph TD
 </details>
 
 <details>
-<summary><h3>2.2 Die drei Betriebsmodi (Fokus-Steuerung der lokalen Agents)</h3></summary>
+<summary><h3>2.2 Das 4-Agenten-Gespann (Light, Rig, Dark, Sarah)</h3></summary>
+
+| Agent | Standort | Rolle & Aufgaben |
+| :--- | :--- | :--- |
+| **Light Agent** | **VanstrikeCyborg (Laptop VS Code)** | Master-Orchestrator, Entwicklung, Git-Sync, Schnittstellensteuerung |
+| **Rig Agent** | **SimRacer Nativ (`192.168.178.68`)** | Host-Hub, SteamVR-/GPU-Überwachung, Auto-Junction (/J) für Cars/Tracks in Sandbox, Docker-Watchdog |
+| **Dark Agent** | **Docker Sandbox Gast (`ac-win11-sandbox`)** | In-Container-Executor (`runner.ps1`), Setup-Syntaxchecks, Python-Apps Validierung, CM-Tests |
+| **Sarah Coach** | **IdeaPad 5 (Linux Omarchy / Rig-Pitwall)** | Live-Telemetrie-Coaching (Voice) & Stint-Pitfile-Kalkulation im `LIVE_RACE` |
+
+</details>
+
+<details>
+<summary><h3>2.3 Die drei Betriebsmodi (Fokus-Steuerung der lokalen Agents)</h3></summary>
 
 Damit sich die lokalen Agents nicht gegenseitig Ressourcen wegnehmen oder gleichzeitig Setup-Dateien überschreiben, schaltet das System automatisch zwischen drei Modi um:
 
@@ -113,6 +134,26 @@ Damit sich die lokalen Agents nicht gegenseitig Ressourcen wegnehmen oder gleich
 3. **Modus 3: `PITBOX_SETUP` (Fahrzeug steht in der Boxengasse `IsInPit == 1` oder zwischen Sessions)**
    * **Aktiver Fokus:** **Sarah Coach (als Setup-Ingenieurin)** + **CM-Pitfile-Synchronizer**.
    * **Was passiert:** Sarah wertet die gefahrenen Runden aus (z. B. Reifendruck-Abweichung vom Zielwert, Überhitzen der Hinterachse, Untersteuern am Eingang), berechnet die exakten Klick-Änderungen (PSI, Flügel, Sturz, Dämpfer, Bremsbalance, Spritmenge) und legt das neue Pitfile direkt als `Sarah_Opt_Stint.ini` im echten Assetto-Corsa-Setup-Ordner ab.
+
+</details>
+
+<details>
+<summary><h3>2.4 Container-Lebenszyklus, Boot-Phasen & Pause-Resilienz</h3></summary>
+
+Für den stabilen Betrieb der Docker-Windows-11-Sandbox (`dockurr/windows`) auf dem SimRacer gelten feste technische Gesetzmäßigkeiten:
+
+1. **Boot-Dauer bei Kaltstart (60 bis 90 Sekunden):**
+   * Beim Start (`docker compose up -d` oder Systemneustart) durchläuft die VM unter QEMU/KVM den UEFI-Bootloader (`BdsDxe: loading Boot0005 Windows Boot Manager`), lädt den Windows-Kernel und initialisiert virtuelle Geräte.
+   * Während dieser Phase lastet QEMU die zugewiesenen 8 Kerne temporär voll aus. Weder SSH (Port 2222) noch Netzwerkbefehle antworten, bis Windows 11 eine DHCP-Lease von `dnsmasq` (`172.30.0.2`) empfängt.
+   * **Goldene Regel:** Kein verfrühtes Eingreifen oder Neustarten in den ersten 90 Sekunden! Der Boot läuft selbstständig durch.
+2. **`docker pause` vs. `docker stop` im Rennbetrieb:**
+   * **Modus `LIVE_RACE`:** Sobald `acs.exe` startet, pausiert der Rig Agent die Sandbox mit `docker pause ac-win11-sandbox`. Dadurch friert QEMU die CPU-Zyklen komplett ein (0 % Host-CPU-Last, 0 % GPU-Last), behält aber den RAM-Zustand (12 GB) im Arbeitsspeicher.
+   * **Modus `ENGINEERING`:** Nach Beendigung von Assetto Corsa führt `docker unpause ac-win11-sandbox` die Sandbox innerhalb von Millisekunden nahtlos fort – ohne erneuten 90-Sekunden-Windows-Boot.
+3. **Diagnose ohne VNC:**
+   * **Screendump:** Über `python3 /shared/take_screen.py` im Container wird sekundenschnell ein Screenshot aus dem QEMU-Monitor (`/run/shm/monitor.sock`) als PNG (`screen_now.png`) erzeugt.
+   * **DHCP-Kontrolle:** `docker exec ac-win11-sandbox tail -n 10 /var/log/dnsmasq.log` zeigt, ob der Gast bereits eine IP hat.
+4. **Gast-Laufzeitumgebung:**
+   * Python 3.11.9 ist fest unter `C:\Program Files\Python311` verankert und über `C:\Windows\python.exe` / `pip.exe` global registriert, sodass Dark Agent Skripte ohne Microsoft-Store-Umleitung direkt ausführen kann.
 
 </details>
 

@@ -143,6 +143,10 @@ Damit das neue Repository dauerhaft Teil unseres Multi-Root-Workspaces bleibt, w
 <details open>
 <summary><h3>3.2 KI-Agenten, Localhost-Proxy, Gemini & MCP</h3></summary>
 
+* **[KI-Agenten-Systemarchitektur & Rollen-Handbuch](./agenten-system-architektur-uebersicht.md)**
+  * Gesamte Topologie (Mermaid-Diagramme), Sequenzabläufe, Betriebsmodi (`ENGINEERING`, `LIVE_RACE`, `PITBOX_SETUP`) und Priming-Anleitungen für alle 5 Agenten.
+* **[Agenten-Spezifikationen & Handbücher Verzeichnis (`agents/`)](./agents/README.md)**
+  * Einzelheiten zu [General Agent](./agents/general.agent.md), [SimRacer Light](./agents/light.agent.md), [Rig Agent](./agents/rig.agent.md), [Dark Agent](./agents/dark.agent.md) und [Sarah Coach](./agents/sarah-coach.md).
 * **[Architektur-Übersicht: VS Code Agent, Localhost-Proxy, Gemini & Antigravity](./uebersicht-vscode-agent-localhost-gemini-antigravity.md)**
   * Zusammenspiel zwischen lokalem VS Code, `cli-proxy-api.exe` (Port `8317`), lokalen MCP-Servern und Cloud-Modellen.
 * **[VS Code KI-Agent, MCP & Gemini Anleitung](./VS_Code_KI_Agent_MCP_Gemini_Anleitung.md)**
