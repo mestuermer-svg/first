@@ -12,5 +12,8 @@
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         }
+    ],
+    "markdown.styles": [
+        ".vscode/doku-minimap.css"
     ]
 }

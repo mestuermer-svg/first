@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git-Labor – Interaktiver Zahlenrechner (Rubrik 04)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      padding-top: 4rem;
+      margin: 0;
+    }
+    .card {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 360px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid #334155;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: #38bdf8;
+    }
+    label {
+      display: block;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.65rem;
+      margin-top: 0.35rem;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    input {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-top: 0;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .result {
+      margin-top: 1rem;
+      padding: 0.85rem;
+      background: #0f172a;
+      border-radius: 6px;
+      font-weight: 600;
+      border-left: 4px solid #38bdf8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Git-Labor Zahlenrechner</h2>
+    <label for="zahlA">Erste Zahl:</label>
+    <input id="zahlA" type="number" step="any" placeholder="z. B. 12.5" />
+
+    <label for="zahlB">Zweite Zahl:</label>
+    <input id="zahlB" type="number" step="any" placeholder="z. B. 7.5" />
+
+    <div class="btn-row">
+      <button id="btnAdd" type="button">Addieren (+)</button>
+      <button id="btnSub" type="button">Subtrahieren (-)</button>
+    </div>
+
+    <div id="ausgabe" class="result">Ergebnis: –</div>
+  </div>
+
+  <script>
+    const inputA = document.getElementById("zahlA");
+    const inputB = document.getElementById("zahlB");
+    const ausgabe = document.getElementById("ausgabe");
+
+    function berechne(operator) {
+      const textA = inputA.value.trim();
+      const textB = inputB.value.trim();
+
+      if (textA === "" || textB === "") {
+        ausgabe.textContent = "Bitte beide Zahlenfelder ausfüllen!";
+        return;
+      }
+
+      const wertA = Number(textA);
+      const wertB = Number(textB);
+
+      if (Number.isNaN(wertA) || Number.isNaN(wertB)) {
+        ausgabe.textContent = "Ungültige Zahleneingabe!";
+        return;
+      }
+
+      const ergebnis = operator === "+" ? wertA + wertB : wertA - wertB;
+      ausgabe.textContent = `Ergebnis (${wertA} ${operator} ${wertB}): ${ergebnis}`;
+    }
+
+    document.getElementById("btnAdd").addEventListener("click", () => berechne("+"));
+    document.getElementById("btnSub").addEventListener("click", () => berechne("-"));
+  </script>
+</body>
+</html>

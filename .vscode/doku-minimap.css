@@ -1,0 +1,309 @@
+/* Interaktive Architektur-Grafik & Überlagerte Miniaturansicht (Minimap) für git-labor/Doku */
+.doku-arch-flow {
+  font-family: var(--vscode-font-family, system-ui, -apple-system, sans-serif);
+  color: #cdd6f4;
+  background: #181825;
+  border: 1px solid #45475a;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px 0;
+  box-sizing: border-box;
+}
+.doku-arch-root-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+}
+.doku-arch-root {
+  background: linear-gradient(135deg, #1e1e2e 0%, #313244 100%);
+  border: 2px solid #89b4fa;
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  max-width: 520px;
+  width: 100%;
+}
+.doku-arch-root-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #cdd6f4;
+  margin-bottom: 6px;
+}
+.doku-arch-root-links {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.doku-arch-root-links a {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #89b4fa !important;
+  background: rgba(137, 180, 250, 0.14);
+  border: 1px solid rgba(137, 180, 250, 0.4);
+  border-radius: 6px;
+  padding: 3px 10px;
+  text-decoration: none !important;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.doku-arch-root-links a:hover {
+  background: rgba(137, 180, 250, 0.28);
+  transform: translateY(-1px);
+}
+.doku-arch-stem {
+  width: 2px;
+  height: 16px;
+  background: #89b4fa;
+}
+.doku-arch-bus {
+  width: 82%;
+  height: 2px;
+  background: linear-gradient(90deg, #a6e3a1, #89b4fa, #f9e2af, #94e2d5, #cba6f7);
+  margin: 0 auto 12px auto;
+}
+.doku-arch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.doku-arch-card {
+  background: #1e1e2e;
+  border: 1.5px solid #45475a;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+.doku-arch-card.r1 { border-top: 3px solid #a6e3a1; }
+.doku-arch-card.r2 { border-top: 3px solid #89b4fa; }
+.doku-arch-card.r3 { border-top: 3px solid #f9e2af; }
+.doku-arch-card.r4 { border-top: 3px solid #94e2d5; }
+.doku-arch-card.r5 { border-top: 3px solid #cba6f7; }
+.doku-arch-card.active-rubric {
+  box-shadow: 0 0 0 2px #89b4fa, 0 6px 18px rgba(137, 180, 250, 0.25);
+}
+.doku-arch-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid #313244;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none !important;
+  color: #cdd6f4 !important;
+  transition: background 0.15s ease;
+}
+.doku-arch-card-head:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.doku-arch-rows {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: 4px;
+}
+.doku-arch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #bac2de !important;
+  text-decoration: none !important;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.doku-arch-row:hover {
+  background: rgba(137, 180, 250, 0.14);
+  border-color: rgba(137, 180, 250, 0.45);
+  color: #ffffff !important;
+}
+.doku-arch-row.active-file {
+  background: rgba(166, 227, 161, 0.16);
+  border-color: #a6e3a1;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+.doku-arch-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cdd6f4 !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+.doku-arch-badge:hover {
+  background: rgba(137, 180, 250, 0.3);
+}
+
+/* Überlagerte Miniaturansicht (Floating Minimap Overlay) in allen Preview-Fenstern */
+details.doku-minimap {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 9999;
+  margin: 0;
+  font-family: var(--vscode-font-family, system-ui, -apple-system, sans-serif);
+}
+details.doku-minimap > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+details.doku-minimap > summary::-webkit-details-marker {
+  display: none;
+}
+details.doku-minimap:not([open]) .minimap-open-bar {
+  display: none;
+}
+details.doku-minimap[open] .minimap-thumb {
+  display: none;
+}
+.minimap-thumb {
+  width: 225px;
+  background: rgba(24, 24, 37, 0.94);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid #585b70;
+  border-radius: 10px;
+  padding: 8px 10px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+  color: #cdd6f4;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.minimap-thumb:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: #89b4fa;
+  box-shadow: 0 10px 30px rgba(137, 180, 250, 0.3);
+}
+.minimap-thumb-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #cdd6f4;
+}
+.minimap-thumb-zoom {
+  font-size: 10px;
+  background: rgba(137, 180, 250, 0.2);
+  color: #89b4fa;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(137, 180, 250, 0.4);
+}
+.minimap-schema {
+  background: #11111b;
+  border: 1px solid #313244;
+  border-radius: 6px;
+  padding: 6px;
+}
+.minimap-schema-root {
+  background: #313244;
+  border: 1px solid #89b4fa;
+  border-radius: 3px;
+  font-size: 8px;
+  font-weight: 700;
+  text-align: center;
+  padding: 2px 4px;
+  color: #cdd6f4;
+  margin: 0 auto 3px auto;
+  width: 75%;
+}
+.minimap-schema-line {
+  height: 2px;
+  background: linear-gradient(90deg, #a6e3a1, #89b4fa, #f9e2af, #94e2d5, #cba6f7);
+  width: 88%;
+  margin: 0 auto 4px auto;
+}
+.minimap-schema-cols {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+}
+.minimap-col {
+  background: #1e1e2e;
+  border: 1px solid #45475a;
+  border-radius: 3px;
+  padding: 2px;
+  text-align: center;
+}
+.minimap-col span {
+  display: block;
+  font-size: 8px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.minimap-col i {
+  display: block;
+  height: 2px;
+  background: #45475a;
+  margin: 1.5px 1px;
+  border-radius: 1px;
+}
+.minimap-col.c1 { border-top: 2px solid #a6e3a1; }
+.minimap-col.c2 { border-top: 2px solid #89b4fa; }
+.minimap-col.c3 { border-top: 2px solid #f9e2af; }
+.minimap-col.c4 { border-top: 2px solid #94e2d5; }
+.minimap-col.c5 { border-top: 2px solid #cba6f7; }
+.minimap-col.active {
+  background: rgba(137, 180, 250, 0.22);
+  border-color: #89b4fa;
+  box-shadow: 0 0 6px rgba(137, 180, 250, 0.45);
+}
+.minimap-col.active i {
+  background: #89b4fa;
+}
+.minimap-thumb-foot {
+  font-size: 9.5px;
+  color: #a6adc8;
+  margin-top: 5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+details.doku-minimap[open] {
+  width: min(94vw, 980px);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: rgba(17, 17, 27, 0.98);
+  backdrop-filter: blur(12px);
+  border: 2px solid #89b4fa;
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.8);
+}
+.minimap-open-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #1e1e2e, #313244);
+  border: 1px solid #585b70;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  color: #cdd6f4;
+  font-size: 13px;
+  font-weight: 700;
+}
+.minimap-close-btn {
+  background: rgba(243, 139, 168, 0.2);
+  color: #f38ba8;
+  border: 1px solid rgba(243, 139, 168, 0.45);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 11px;
+}

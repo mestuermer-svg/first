@@ -28,6 +28,10 @@
 				"GOOGLE_CLOUD_PROJECT": "aicode-consumers",
 				"GOOGLE_CLOUD_LOCATION": "us-central1"
 			}
+		},
+		"geminiDocs": {
+			"type": "http",
+			"url": "https://gemini-api-docs-mcp.dev"
 		}
 	}
 }
