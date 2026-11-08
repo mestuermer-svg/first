@@ -12,7 +12,7 @@ Diese Rubrik bündelt das gesamte Wissen rund um deine **Visual Studio Code Entw
 | Modul | Datei | Inhalt & Fokus |
 | :--- | :--- | :--- |
 | **Modul 2.1** | [01_vscode-architektur-lsp-und-remote.md](./01_vscode-architektur-lsp-und-remote.md) | Entstehung (Monaco & Electron), Multi-Prozess-Trennung (Renderer vs. Extension Host), Language Server Protocol (LSP) und Dev Containers. |
-| **Modul 2.2** | [02_git-github-und-multi-root-workspaces.md](./02_git-github-und-multi-root-workspaces.md) | Der 4-Stufen-Workflow in Git, physische Speicherorte (`.git`), `.gitignore`-Regeln, Multi-Root-Workspaces (`.code-workspace`) vs. GitHub Codespaces. |
+| **Modul 2.2** | [02_git-github-und-multi-root-workspaces.md](./02_git-github-und-multi-root-workspaces.md) | Der 4-Stufen-Workflow, `.gitignore`, Multi-Root-Workspaces, `git stash`, essenzielle Git-Funktionen (`switch`, `diff`, `reset`/`revert`) & Feature-Branch-Workflows (GitHub Flow & 3-Way-Merge). |
 | **Modul 2.3** | [03_mcp-server-localhost-proxy-und-ports.md](./03_mcp-server-localhost-proxy-und-ports.md) | Hybride Localhost-Bridge, Port-Architektur (`8317` CLIProxyAPI vs. `8000` Antigravity UI), GitHub MCP Binary, NVIDIA App MCP (`13508`) und `geminiDocs`. |
 | **Modul 2.4** | [04_gemini-oekosystem-ai-studio-und-api-keys.md](./04_gemini-oekosystem-ai-studio-und-api-keys.md) | Unterschied AI Pro Abo vs. API, Google AI Studio, Standard- vs. Auth-API-Keys, Umgebungsvariablen und Hardware-Dimensionierung (MSI Cyborg 15). |
 

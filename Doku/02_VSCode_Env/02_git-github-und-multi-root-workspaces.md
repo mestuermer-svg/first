@@ -8,6 +8,9 @@
 * Den **4-Stufen-Workflow von Git** (Working Directory $\rightarrow$ Staging $\rightarrow$ Lokaler Commit $\rightarrow$ GitHub Remote Sync) sicher über die VS Code Oberfläche (`Strg + Shift + G`) und die Shell beherrschen.
 * Die physische Speicherung im versteckten **`.git`-Ordner** verstehen und große Binärdateien oder Geheimnisse konsequent per **`.gitignore`** schützen.
 * Einen **Multi-Root-Workspace (`.code-workspace`)** sauber konfigurieren und den Unterschied zu **GitHub Codespaces** kennen.
+* Unfertige Arbeitsstände mit **`git stash`** verlustfrei zwischenspeichern, um unterbrechungsfrei Branches zu wechseln oder Pull-Konflikte zu vermeiden.
+* Die **gängigsten Git-Funktionen** (Branching mit `switch`, Merging, Rebase, `diff`, `restore`, `reset` vs. `revert`) sicher und zielgerichtet einsetzen.
+* Den industriellen **Feature-Branch-Workflow** (GitHub Flow) verstehen und **Merge-Konflikte** im visuellen 3-Way-Editor von VS Code souverän auflösen.
 
 </details>
 
@@ -108,6 +111,194 @@ Eine saubere globale `C:\Users\strik\.gitconfig` vermeidet Probleme mit Zeilenum
 
 </details>
 
+<details>
+<summary>1.6 <code>git stash</code> – Die temporäre Zwischenablage für unterbrechungsfreies Arbeiten</summary>
+
+In der industriellen Praxis (vergleichbar mit einer Notfall-Störung an einer SPS-Anlage, während du gerade mitten im Entwurf eines neuen Funktionsbausteins steckst) musst du häufig sofort den Branch wechseln oder dringende Remote-Änderungen per `git pull` laden. Ohne Commit verweigert Git diesen Wechsel oder riskiert Konflikte mit unfertigem Code.
+
+**`git stash`** dient als sichere „Schreibtisch-Schublade“: Der Befehl räumt das Arbeitsverzeichnis auf, sichert unfertige Änderungen (Modifikationen sowie optional neue, untracked Dateien) in einem temporären Stapel (*Stash Stack*) und setzt das Repository auf den Stand des letzten sauberen Commits (`HEAD`) zurück.
+
+```mermaid
+flowchart TD
+    A["Aktive Änderungen im Arbeitsverzeichnis<br/><i>(unfertiger Code / Modifikationen)</i>"] -->|"git stash push -m 'WIP'"| B[("Stash-Zwischenablage<br/><i>stash@{0}</i>")]
+    A -->|"Arbeitsverzeichnis wieder sauber (HEAD)"| C["Anderen Branch auschecken<br/>oder git pull ausführen"]
+    C -->|"Arbeit beendet, zurück auf Branch"| D["Bereit für Weiterarbeit"]
+    B -.->|"git stash pop"| D
+```
+
+#### Die wichtigsten Stash-Befehle
+
+| Befehl | Zweck | Typischer Anwendungsfall |
+| :--- | :--- | :--- |
+| `git stash` | Sichert alle modifizierten, getrackten Dateien. | Schneller Arbeitsplatz-Reset vor Branch-Wechsel. |
+| `git stash push -m "WIP: Feature"` | Sichert mit präziser Notiz. | **Best Practice:** Eindeutiges Wiederfinden bei mehreren Stashes. |
+| `git stash -u` *(oder `--include-untracked`)* | Sichert auch neue, noch nicht getrackte Dateien. | Wenn neue Skripte/Dateien im Projekt angelegt wurden. |
+| `git stash list` | Listet alle abgelegten Stashes auf (`stash@{0}`, `stash@{1}`). | Schneller Überblick über alle geparkten Stände. |
+| `git stash pop` | Stellt den neuesten Stash wieder her und **löscht** ihn aus der Liste. | Direkte Fortsetzung der unterbrochenen Arbeit. |
+| `git stash apply` | Stellt den Stash wieder her, **behält** ihn aber in der Liste. | Wenn derselbe Stand auf mehreren Test-Branches geprüft werden soll. |
+| `git stash drop stash@{0}` | Löscht einen bestimmten Stash-Eintrag gezielt. | Bereinigen nicht mehr benötigter Zwischenstände. |
+| `git stash clear` | Löscht den gesamten Stash-Speicher restlos. | Kompletter Frühjahrsputz im lokalen Arbeitsverzeichnis. |
+
+#### VS Code GUI-Bedienung
+In VS Code lässt sich `git stash` vollständig ohne Shell bedienen:
+1. Öffne die **Source Control** Ansicht (`Strg + Shift + G`).
+2. Klicke oben rechts auf das Drei-Punkte-Menü (**`...`**).
+3. Navigiere zu **Stash** $\rightarrow$ wähle z. B. **Stash (Include Untracked)** oder **Pop Latest Stash...**.
+
+</details>
+
+<details>
+<summary>1.7 Die essenziellen Git-Funktionen im Entwickler-Alltag</summary>
+
+Im professionellen Alltag genügen einfaches `add` und `commit` oft nicht. Git bietet präzise Werkzeuge, um Branches zu verwalten, Arbeitsstände zu vergleichen und Fehler sicher zu revidieren:
+
+#### 1. Branching & Switching (Arbeiten in isolierten Zweigen)
+Anstatt mit dem historisch überladenen `git checkout` zu arbeiten, trennt modernes Git (ab v2.23) Datei-Operationen (`restore`) und Branch-Operationen (`switch`):
+
+* **Neuen Branch erstellen und sofort hineinwechseln:**
+  ```bash
+  git switch -c feature/neue-messlogik
+  ```
+* **Zu einem bestehenden Branch wechseln:**
+  ```bash
+  git switch main
+  ```
+* **Alle Branches auflisten (lokal und remote):**
+  ```bash
+  git branch -a
+  ```
+* **Einen Branch löschen:**
+  ```bash
+  # Sicher löschen (nur wenn Änderungen bereits gemergt wurden)
+  git branch -d feature/altes-feature
+  # Erzwingen (auch bei ungemergten Änderungen)
+  git branch -D feature/abgebrochener-versuch
+  ```
+
+#### 2. Inspektion & Vergleich (`diff` & `status`)
+Vor jedem Commit und Push solltest du genau wissen, was geändert wurde:
+
+* **Schnelle Statusübersicht im Terminal:**
+  ```bash
+  git status -sb
+  ```
+* **Differenz im Arbeitsverzeichnis (noch nicht gestaged):**
+  ```bash
+  git diff
+  ```
+* **Differenz im Warenkorb (bereits gestaged vs. letzter Commit):**
+  ```bash
+  git diff --staged
+  ```
+* **Kompakter Commit-Baum über alle Branches:**
+  ```bash
+  git log --graph --oneline --all -n 15
+  ```
+
+#### 3. Remote-Abgleich: `git fetch` vs. `git pull`
+
+| Befehl | Was passiert im Hintergrund? | Risiko für lokale Arbeit | Wann einsetzen? |
+| :--- | :--- | :--- | :--- |
+| **`git fetch origin`** | Lädt alle neuen Commits, Branches und Tags vom Server in deinen lokalen `.git`-Speicher, fasst aber dein Arbeitsverzeichnis **nicht** an. | **Kein Risiko** (0 % Konfliktpotenzial). | **Immer zuerst:** Um zu prüfen, was Kollegen gepusht haben, bevor man selbst weiterarbeitet. |
+| **`git pull`** | Führt intern automatisch zwei Schritte aus: `git fetch` + `git merge origin/<branch>`. | **Möglich:** Kann zu unerwarteten Merge-Konflikten im Arbeitsverzeichnis führen. | Wenn du auf einem sauberen Stand bist und die Remote-Stände direkt einbinden willst. |
+
+#### 4. Undo-Strategien: Änderungen sicher zurücknehmen
+
+| Situation | Empfohlener Befehl | Auswirkung |
+| :--- | :--- | :--- |
+| **Datei ungestaged verwerfen** | `git restore <datei>` | Setzt die Datei auf den Stand des letzten Commits zurück. Nicht gespeicherte Änderungen gehen verloren! |
+| **Datei aus dem Staging entfernen** | `git restore --staged <datei>` | Nimmt die Datei aus dem Staging-Bereich (`git add`), lässt deine geschriebenen Codezeilen aber intakt. |
+| **Letzten Commit rückgängig machen (lokal)** | `git reset --soft HEAD~1` | Der Commit-Schnappschuss verschwindet, aber alle Änderungen bleiben sauber im Staging-Warenkorb erhalten. |
+| **Letzten Commit & Staging verwerfen** | `git reset --mixed HEAD~1` | Default bei `git reset`. Änderungen bleiben im Arbeitsverzeichnis ungestaged erhalten. |
+| **Kompletten Arbeitsstand zerstören** | `git reset --hard HEAD~1` | **Achtung Gefahr!** Setzt Commit, Staging und Arbeitsdateien unwiderruflich auf den vorherigen Stand zurück. |
+| **Öffentlichen Commit zurückrollen** | `git revert <commit-hash>` | **Kollaborativer Standard:** Erstellt einen neuen Gegen-Commit, der die Änderungen exakt aufhebt, ohne die Git-Historie für andere Entwickler zu zerstören. |
+
+</details>
+
+<details>
+<summary>1.8 Git-Workflows & Konfliktlösung in der Praxis</summary>
+
+In professionellen Teams und anspruchsvollen Automatisierungsprojekten ist ein stabiler Workflow Pflicht: Der Branch `main` repräsentiert stets die lauffähige „Produktionsanlage“. Direkte Änderungen auf `main` sind tabu.
+
+#### 1. Der Feature-Branch-Workflow (GitHub Flow)
+
+```mermaid
+gitGraph
+    commit id: "v1.0 (Produktion)"
+    branch feature/sensoren
+    checkout feature/sensoren
+    commit id: "feat: Sensortreiber"
+    commit id: "test: Filterfunktion"
+    checkout main
+    commit id: "docs: Doku-Update"
+    checkout feature/sensoren
+    commit id: "fix: Glaettung"
+    checkout main
+    merge feature/sensoren id: "PR #12 Gemergt"
+    commit id: "v1.1 (Release)"
+```
+
+Der standardisierte Lebenszyklus einer Funktionserweiterung:
+1. **Ausgangspunkt aktualisieren:**
+   ```bash
+   git switch main
+   git pull
+   ```
+2. **Eigenen Isolations-Branch anlegen:**
+   ```bash
+   git switch -c feature/sensorauswertung
+   ```
+3. **Schrittweise entwickeln & committen:**
+   Kleine, logische Einheiten mit aussagekräftigen Nachrichten committen:
+   ```bash
+   git commit -m "feat: Mittelwertfilter fuer Analogeingaenge ergaenzt"
+   ```
+4. **Auf GitHub veröffentlichen:**
+   ```bash
+   git push -u origin feature/sensorauswertung
+   ```
+5. **Pull Request (PR) erstellen:**
+   Auf GitHub.com einen PR gegen `main` öffnen, Code-Review durchführen und CI-Tests (z. B. `pytest`) abwarten.
+6. **Merge & Aufräumen:**
+   Nach erfolgreichem Merge wird der Feature-Branch auf GitHub gelöscht und lokal aufgeräumt:
+   ```bash
+   git switch main
+   git pull
+   git branch -d feature/sensorauswertung
+   ```
+
+#### 2. Zusammenführen: `merge` vs. `rebase`
+
+* **`git merge <branch>`:** Führt zwei Historien zusammen und erzeugt einen expliziten **Merge-Commit**. Vorteil: Die exakte Zeithistorie bleibt nachvollziehbar. Nachteil: Bei vielen Branches entstehen unübersichtliche Verzweigungen.
+* **`git rebase <ziel-branch>`:** Nimmt deine neuen Commits und verpflanzt sie virtuell an das aktuelle Ende des Ziel-Branches. Vorteil: Schnurgerade, lineare Historie ohne Merge-Bubbles.
+* **Die Goldene Rebase-Regel:** *Rebase niemals einen Branch, den du bereits auf GitHub mit anderen geteilt hast!* (Da sich alle Commit-Hashes verändern).
+
+#### 3. Merge-Konflikte im VS Code 3-Way Merge Editor lösen
+
+Ein Merge-Konflikt entsteht, wenn in zwei Branches **dieselbe Datei in denselben Zeilen** unterschiedlich geändert wurde. Git kann nicht erraten, welcher Stand gültig ist, und markiert den Konflikt:
+
+```text
+<<<<<<< HEAD (Current Change - dein aktueller Stand)
+messwert = sensor.read_fast()
+=======
+messwert = sensor.read_with_filter()
+>>>>>>> feature/sensorauswertung (Incoming Change)
+```
+
+**Konfliktbehebung in VS Code (Der 3-Klick-Weg):**
+1. Öffne die betroffene Datei. VS Code bietet direkt über dem Konflikt vier intuitive Schnellaktionen:
+   * **Accept Current Change:** Behält deinen lokalen Stand.
+   * **Accept Incoming Change:** Übernimmt den Stand aus dem Ziel-Branch.
+   * **Accept Both Changes:** Behält beide Blöcke.
+   * **Compare Changes:** Zeigt einen direkten Side-by-Side-Diff.
+2. Für komplexe Konflikte klicke unten rechts auf **Resolve in Merge Editor** (3-Wege-Vergleich: *Current*, *Result*, *Incoming*).
+3. Nach Auswahl des gewünschten Codes die Datei speichern (`Strg + S`), stagen (`+` bzw. `git add <datei>`) und den Merge-Commit abschließen:
+   ```bash
+   git commit -m "merge: Konflikt in Sensorauswertung behoben"
+   ```
+
+</details>
+
 </details>
 
 <details>
@@ -116,6 +307,10 @@ Eine saubere globale `C:\Users\strik\.gitconfig` vermeidet Probleme mit Zeilenum
 1. **Die 4 Stufen prüfen:** Du speicherst eine Datei mit `Strg + S` und schließt VS Code. Warum ist diese Änderung noch nicht auf GitHub.com sichtbar und welche drei Schritte fehlen noch?
 2. **Große-Dateien-Schutz:** Du legst einen neuen Ordner `downloads/` mit einer 250 MB großen `.zip`-Datei im Projekt ab. Wie verhinderst du in VS Code mit zwei Klicks (oder per `.gitignore`), dass Git versucht, diese Datei hochzuladen?
 3. **Multi-Root-Einbindung:** Wie sieht der JSON-Eintrag unter `"folders"` in `git-labor.code-workspace` aus, wenn du ein neues Nachbarverzeichnis `C:\Users\strik\mein-testprojekt` einbinden möchtest?
+4. **Notfall-Branch-Wechsel mit Stash:** Du hast zwei bestehende Skripte bearbeitet und eine neue Hilfsdatei angelegt. Plötzlich musst du auf `main` wechseln, um einen dringenden Fix zu testen. Mit welchen Befehlen sicherst du deinen kompletten Stand (inkl. neuer Datei), wechselst den Branch und holst deine Arbeit danach wieder zurück?
+5. **Reset vs. Revert:** Du hast versehentlich einen fehlerhaften Commit bereits auf GitHub gepusht. Welchen Befehl (`git reset` oder `git revert`) musst du wählen, um das Problem im Team sauber zu beheben, und was ist der technische Grund?
+6. **Feature-Branch-Zyklus:** Nenne die 5 wichtigsten Terminal-Befehle, um von `main` ausgehend ein neues Feature zu entwickeln, hochzuladen und nach dem Merge den lokalen Branch zu bereinigen.
+7. **Fetch vs. Pull:** Warum ist `git fetch origin` vor einem `git switch` oder `git merge` sicherer als ein blindes `git pull`?
 
 </details>
 
@@ -123,7 +318,9 @@ Eine saubere globale `C:\Users\strik\.gitconfig` vermeidet Probleme mit Zeilenum
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
 * [VS Code Version Control (Git) Dokumentation](https://code.visualstudio.com/docs/sourcecontrol/overview)
+* [VS Code 3-Way Merge Editor](https://code.visualstudio.com/docs/sourcecontrol/overview#_3way-merge-editor)
 * [VS Code Multi-Root Workspaces Guide](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
+* [Git Stash Dokumentation (Offiziell)](https://git-scm.com/docs/git-stash)
 * [Pro Git Book (Deutsch)](https://git-scm.com/book/de/v2)
 
 </details>
@@ -135,6 +332,12 @@ Eine saubere globale `C:\Users\strik\.gitconfig` vermeidet Probleme mit Zeilenum
 * **Keine Binärriesen in Git:** Dateien über 50–100 MB (`.exe`, `.zip`, `.img`) und Geheimnisse (`.env`) gehören immer in die `.gitignore`.
 * **Klare Einstellungs-Hierarchie:** Globale Vorlieben in User-`settings.json`, Repo-übergreifende Regeln in `.code-workspace`, Repo-spezifische Details in `.vscode/settings.json`.
 * **`schannel` unter Windows:** Bei SSL-Fehlern mit Git for Windows sorgt `git config --global http.sslBackend schannel` für die Nutzung des nativen Windows-Zertifikatsspeichers.
+* **`git stash` rettet unfertige Arbeit:** Mit `git stash -u` parkst du unfertigen Code (inkl. untracked files) verlustfrei in der Zwischenablage, um sofort sauber Branches zu wechseln oder ohne Konflikte zu pullen.
+* **`main` ist Produktionslinie:** Entwickle Features isoliert mit `git switch -c feature/<name>`, teste sie und merge erst nach Review (GitHub Flow).
+* **`git switch` & `git restore` nutzen:** Moderne Git-Befehle ersetzen das fehleranfällige, überladene `git checkout`.
+* **`fetch` ist Sichtprüfung, `pull` greift ein:** `git fetch` holt gefahrlos Metadaten, `git pull` mutiert sofort deinen lokalen Arbeitsstand.
+* **Revert für geteilte Commits:** Niemals `git reset --hard` auf bereits gepushten Remote-Branches anwenden; nutze `git revert <hash>` für einen sicheren Gegen-Commit.
+* **VS Code 3-Way Merge Editor:** Konflikte müssen keinen Schrecken verbreiten – mit *Current*, *Incoming* und *Accept Both* lassen sich Überlappungen visuell lösen.
 
 </details>
 
