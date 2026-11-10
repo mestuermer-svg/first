@@ -127,6 +127,9 @@ Um zu testen, ob dein Agent korrekt mit dem `geminiDocs` MCP-Server und den Gemi
 <details>
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
+* **Aktive Workspace- &amp; Gemini-Skills:** [`live-transfer-status-monitor` (`.agents/skills`)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`live-transfer-status-monitor` (`.gemini/skills`)](../../.gemini/skills/live-transfer-status-monitor/SKILL.md)
+* **Globale Benutzer-Skills (`~/.copilot/skills/`):** [`live-transfer-status-monitor`](../../../.copilot/skills/live-transfer-status-monitor/SKILL.md) · [`managing-python-dependencies`](../../../.copilot/skills/managing-python-dependencies/SKILL.md) · [`notebook-guidance`](../../../.copilot/skills/notebook-guidance/SKILL.md) · [`accidental-data-loss-prevention`](../../../.copilot/skills/accidental-data-loss-prevention/SKILL.md) · [`ml-best-practices`](../../../.copilot/skills/ml-best-practices/SKILL.md)
+* **MCP-Konfiguration &amp; Workspace:** [`.vscode/mcp.json`](../../.vscode/mcp.json) · [`git-labor.code-workspace`](../../git-labor.code-workspace)
 * [Gemini API Coding Agents & MCP Setup Guide](https://aistudio.google.com/docs/coding-agents)
 * [Offizielles `google-gemini/gemini-skills` Repository auf GitHub](https://github.com/google-gemini/gemini-skills)
 * [Gemini API Dokumentation als `llms.txt` Index](https://aistudio.google.com/docs/llms.txt)

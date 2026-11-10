@@ -1,3 +1,54 @@
+# Python Environments & Bytecode
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.ipynb_checkpoints/
+
+# Node / Web
+node_modules/
+dist/
+
+# VS Code & Chromium / Electron Runtime Caches & Profiles
+Cache/
+CachedConfigurations/
+CachedData/
+CachedExtensionVSIXs/
+CachedProfilesData/
+Code Cache/
+Crashpad/
+DawnGraphiteCache/
+DawnWebGPUCache/
+Dictionaries/
+GPUCache/
+Local Storage/
+Network/
+Service Worker/
+Session Storage/
+Shared Dictionary/
+User/
+WebStorage/
+agentPlugins/
+agentSessionData/
+blob_storage/
+logs/
+Local State
+Preferences
+SharedStorage
+languagepacks.json
+machineid
+DIPS
+
+# OS Artifacts
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Session / Terminal history dumps & Extension Runtime Status
+.history-memo/
+.vscode/gemini-mcp/
+**/.vscode/gemini-mcp/
+
 # Virtual Machine Storage & Large Disk Images
 ac-sandbox/storage/
 *.img
@@ -34,13 +85,3 @@ ac-sandbox/shared/cm-github-sync/**/GPUCache/
 ac-sandbox/screen_now.png
 ac-sandbox/shared/screen.png
 ac-sandbox/shared/screen_now.png
-
-# OS Artifacts
-Thumbs.db
-desktop.ini
-.DS_Store
-
-# Session / Terminal history dumps & Extension Runtime Status
-.history-memo/
-.vscode/gemini-mcp/
-**/.vscode/gemini-mcp/

@@ -1,6 +1,7 @@
 {
     "antigravityCopilot.server.autoStart": true,
     "antigravityCopilot.server.enabled": true,
+    "antigravity.serverPort": 0,
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,
     "antigravityCopilot.rateLimit.cooldownMs": 15000,
@@ -9,11 +10,70 @@
     "python-envs.pythonProjects": [
         {
             "path": ".",
-            "envManager": "ms-python.python:venv",
+            "envManager": "ms-python.python:system",
             "packageManager": "ms-python.python:pip"
         }
     ],
     "markdown.styles": [
         ".vscode/doku-minimap.css"
-    ]
+    ],
+    "chat.mcp.serverSampling": {
+        "1_Git-Labor (mestuermer-svg/first)/.vscode/mcp.json: geminiDocs": {
+            "allowedModels": [
+                "copilot/auto",
+                "copilotcli/auto",
+                "agent-host-copilotcli:customendpoint/Antigravity/claude-opus-5-5-high",
+                "customendpoint/Antigravity/claude-opus-5-5-high",
+                "agent-host-copilotcli:customendpoint/Antigravity/claude-sonnet-5-5-high",
+                "customendpoint/Antigravity/claude-sonnet-5-5-high",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-2.5-flash",
+                "customendpoint/Antigravity/gemini-2.5-flash",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-2.5-flash-lite",
+                "customendpoint/Antigravity/gemini-2.5-flash-lite",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-2.5-pro",
+                "customendpoint/Antigravity/gemini-2.5-pro",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3-flash-preview",
+                "customendpoint/Antigravity/gemini-3-flash-preview",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3-pro",
+                "customendpoint/Antigravity/gemini-3-pro",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3-pro-preview",
+                "customendpoint/Antigravity/gemini-3-pro-preview",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.1-flash-image",
+                "customendpoint/Antigravity/gemini-3.1-flash-image",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.1-flash-lite-preview",
+                "customendpoint/Antigravity/gemini-3.1-flash-lite-preview",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.1-pro",
+                "customendpoint/Antigravity/gemini-3.1-pro",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.1-pro-preview",
+                "customendpoint/Antigravity/gemini-3.1-pro-preview",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.1-pro-preview-customtools",
+                "customendpoint/Antigravity/gemini-3.1-pro-preview-customtools",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.5-flash",
+                "customendpoint/Antigravity/gemini-3.5-flash",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.5-flash-lite",
+                "customendpoint/Antigravity/gemini-3.5-flash-lite",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.8-flash",
+                "customendpoint/Antigravity/gemini-3.8-flash",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-3.8-flash-high",
+                "customendpoint/Antigravity/gemini-3.8-flash-high",
+                "agent-host-copilotcli:customendpoint/Antigravity/gemini-4-argon-high",
+                "customendpoint/Antigravity/gemini-4-argon-high",
+                "agent-host-copilotcli:customendpoint/Antigravity/gpt-oss-120b-medium",
+                "customendpoint/Antigravity/gpt-oss-120b-medium",
+                "agent-host-copilotcli:auto",
+                "agent-host-copilotcli:Google Agent/claude-opus-5-5",
+                "agent-host-copilotcli:Google Agent/claude-sonnet-5-5",
+                "agent-host-copilotcli:airelay/gemini-3.1-pro",
+                "agent-host-copilotcli:airelay/gemini-3.5-flash-lite",
+                "agent-host-copilotcli:airelay/gemini-3.7-flash",
+                "agent-host-copilotcli:Google Agent/gemini-3.8-flash",
+                "agent-host-copilotcli:google-acp/gemini-3.8-flash",
+                "agent-host-copilotcli:airelay/gemini-3.8-flash",
+                "agent-host-copilotcli:Google Agent/gemini-4-argon",
+                "agent-host-copilotcli:google-acp/gemini-4-argon",
+                "agent-host-copilotcli:airelay/gemini-4-argon",
+                "agent-host-copilotcli:Google Agent/gpt-oss-120b-medium"
+            ]
+        }
+    }
 }

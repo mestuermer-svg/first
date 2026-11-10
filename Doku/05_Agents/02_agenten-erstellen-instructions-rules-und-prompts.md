@@ -24,7 +24,7 @@
 | **1. Chat-Prompt** | Einmalig bei deiner aktuellen Nachricht im Chat. | Konkreter Einzelauftrag mit Ziel, Grenze und Prüfkriterium. | *„Erkläre die Funktion `berechne_summe`, ändere noch keine Datei.“* |
 | **2. Instruction / Rule** | Automatisch (global oder passend zum Dateimuster `applyTo` / `globs`). | Dauerhafte Projekt- und Coding-Standards (Sprache, SDK-Pflicht, Vorschau-Pflicht). | `.github/instructions/gemini-api.instructions.md` (`applyTo: "**/*.py"`) |
 | **3. Skill (`SKILL.md`)** | Bei Bedarf (*On-Demand*), wenn die Aufgabe zur `description` passt. | Mehrstufiges Spezialwissen inkl. Hilfsskripten und Vorlagen. | `.agents/skills/live-transfer-status-monitor/SKILL.md` |
-| **4. Custom Agent (`*.agent.md`)** | Wenn du den Agenten gezielt auswählst oder mit `@name` aufrufst. | Eigene Rolle/Persönlichkeit mit festem Aufgabenbereich und Werkzeugkasten. | `general.agent.md` (*General Agent* für VS Code & Workspace-Architektur) |
+| **4. Custom Agent (`*.agent.md`)** | Wenn du den Agenten gezielt auswählst oder mit `@name` aufrufst. | Eigene Rolle/Persönlichkeit mit festem Aufgabenbereich und Werkzeugkasten. | `General Cyborg` (global, `VanstrikeCyborg`) & `General Sim` (SimRacer-Leitstand) |
 
 </details>
 
@@ -148,6 +148,8 @@ In modernen Entwicklungsumgebungen agiert der Editor nicht mehr als starrer Chat
 <details>
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
+* **Projekt-Regeln &amp; Instructions:** [`AGENTS.md`](../../AGENTS.md) · [`gemini-api.instructions.md`](../../.github/instructions/gemini-api.instructions.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`01_agent-stilfibel-und-didaktik-ruler.md`](./01_agent-stilfibel-und-didaktik-ruler.md)
+* **Aktive Custom Agents (`.github/agents/`):** [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md)
 * [VS Code Custom Instructions Dokumentation](https://code.visualstudio.com/docs/copilot/customization/custom-instructions)
 * [VS Code Custom Agents (`.agent.md`) Dokumentation](https://code.visualstudio.com/docs/copilot/customization/custom-agents)
 * [Microsoft Language Server Protocol (LSP) Spezifikation](https://microsoft.github.io/language-server-protocol/)

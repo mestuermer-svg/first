@@ -1,37 +1,37 @@
-# Projektregeln & KI-Richtlinien für `git-labor` (`AGENTS.md`)
+﻿# Projektregeln & KI-Richtlinien fÃ¼r `git-labor` (`AGENTS.md`)
 
 Dieses Repository dient als zentraler **Test- und Lern-Workspace** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`) mit 5 klar definierten Fachrubriken:
-1. **`Doku/01_Linux_Bash/`** & **`labs/01_linux_bash/`** – Linux, Bash, Arch/Omarchy, SSH & Docker Sandboxes (`sbx`)
-2. **`Doku/02_VSCode_Env/`** & **`labs/02_vscode_env/`** – VS Code Architektur, Git/GitHub, MCP-Server, Ports (`8317`) & Gemini Ökosystem
-3. **`Doku/03_Python_Coding/`**, **`labs/03_python/`** & **`notebook-agent-environments/`** – Python (`uv`, `.venv`, Notebooks, Pylance, `pytest`, `google-genai`)
-4. **`Doku/04_JS_TS_Web/`** & **`labs/04_js_ts_web/`** – HTML5, CSS3, DOM, modernes JavaScript, TypeScript & `@google/genai`
-5. **`Doku/05_Agents/`** & **`.github/` / `.agents/`** – KI-Agenten erstellen, mit Skills & MCP ausrüsten, primen/trainieren & orchestrieren
+1. **`Doku/01_Linux_Bash/`** & **`labs/01_linux_bash/`** â€“ Linux, Bash, Arch/Omarchy, SSH & Docker Sandboxes (`sbx`)
+2. **`Doku/02_VSCode_Env/`** & **`labs/02_vscode_env/`** â€“ VS Code Architektur, Git/GitHub, MCP-Server, Ports (`8317`) & Gemini Ã–kosystem
+3. **`Doku/03_Python_Coding/`**, **`labs/03_python/`** & **`notebook-agent-environments/`** â€“ Python (`uv`, `.venv`, Notebooks, Pylance, `pytest`, `google-genai`)
+4. **`Doku/04_JS_TS_Web/`** & **`labs/04_js_ts_web/`** â€“ HTML5, CSS3, DOM, modernes JavaScript, TypeScript & `@google/genai`
+5. **`Doku/05_Agents/`** & **`.github/` / `.agents/`** â€“ KI-Agenten erstellen, mit Skills & MCP ausrÃ¼sten, primen/trainieren & orchestrieren
 
 ---
 
 ## 1. Verbindliche Dokumentations- & Didaktik-Regeln (`agent_ruler.md` & `Agent-guidline.md`)
-- **Sprache & Stil:** Deutsch, präzise, direkt, technisch fundiert (mit Praxisbezug zu Software-Engineering & Automatisierungstechnik/SPS), frei von Floskeln.
-- **Einklapp-Pflicht (`<details>`):** Alle Hauptüberschriften und Unterkapitel in Lernskripten unter `Doku/` müssen mit `<details>` und `<summary>` umschlossen sein (**ohne** `open`-Attribut), sodass beim Öffnen der Datei standardmäßig alles geschlossen ist.
-- **7-Stufen-Aufbau für Lernskripte:**
-  1. Nicht einklappbarer Metadaten-Kopf (`Thema`, `Autor: Michael Stürmer`, `Datum`)
+- **Sprache & Stil:** Deutsch, prÃ¤zise, direkt, technisch fundiert (mit Praxisbezug zu Software-Engineering & Automatisierungstechnik/SPS), frei von Floskeln.
+- **Einklapp-Pflicht (`<details>`):** Alle HauptÃ¼berschriften und Unterkapitel in Lernskripten unter `Doku/` mÃ¼ssen mit `<details>` und `<summary>` umschlossen sein (**ohne** `open`-Attribut), sodass beim Ã–ffnen der Datei standardmÃ¤ÃŸig alles geschlossen ist.
+- **7-Stufen-Aufbau fÃ¼r Lernskripte:**
+  1. Nicht einklappbarer Metadaten-Kopf (`Thema`, `Autor: Michael StÃ¼rmer`, `Datum`)
   2. `<details><summary><b>Lernziele</b></summary>`
   3. `<details><summary><b>Kernkonzepte</b></summary>` (mit einklappbaren Unterkapiteln)
-  4. `<details><summary><b>Übungsaufgaben</b></summary>`
-  5. `<details><summary><b>Weiterführende Links & Quellen</b></summary>`
+  4. `<details><summary><b>Ãœbungsaufgaben</b></summary>`
+  5. `<details><summary><b>WeiterfÃ¼hrende Links & Quellen</b></summary>`
   6. `<details><summary><b>Chips & Kernaussagen</b></summary>`
-  7. Standardisierter Fußhinweis am Dateiende.
+  7. Standardisierter FuÃŸhinweis am Dateiende.
 
 ## 2. Gemini API & SDK Richtlinien (`Agent_setup.md`)
 - Konsultiere vor dem Schreiben von Gemini-API-Code den **`geminiDocs` MCP-Server** (`gemini_search_docs` / `gemini_get_doc` unter `https://gemini-api-docs-mcp.dev`) oder den Index unter `https://aistudio.google.com/docs/llms.txt`.
-- Verwende ausschließlich das aktuelle **Google Gen AI SDK**:
-  - **Python:** `google-genai` (`from google import genai`) – niemals `google-generativeai`.
-  - **TypeScript / JavaScript:** `@google/genai` (`import { GoogleGenAI } from "@google/genai"`) – niemals `@google/generative-ai`.
-- Bevorzuge die **Interactions API** (`client.interactions.create` bzw. `ai.interactions.create`) für neue Anwendungen.
+- Verwende ausschlieÃŸlich das aktuelle **Google Gen AI SDK**:
+  - **Python:** `google-genai` (`from google import genai`) â€“ niemals `google-generativeai`.
+  - **TypeScript / JavaScript:** `@google/genai` (`import { GoogleGenAI } from "@google/genai"`) â€“ niemals `@google/generative-ai`.
+- Bevorzuge die **Interactions API** (`client.interactions.create` bzw. `ai.interactions.create`) fÃ¼r neue Anwendungen.
 
 ## 3. Arbeitsweise im Workspace
-- **Vorschau-Pflicht:** Zeige vor Änderungen an globalen Konfigurationsdateien (`settings.json` oder `*.code-workspace`) immer zuerst ein Diff / eine Vorschau.
+- **Vorschau-Pflicht:** Zeige vor Ã„nderungen an globalen Konfigurationsdateien (`settings.json` oder `*.code-workspace`) immer zuerst ein Diff / eine Vorschau.
 - **Python-Umgebungen:** Verwende niemals globales `pip install`, sondern immer die lokale `.venv` oder `uv` (`uv add`, `uv run`).
-- **Geheimnisschutz:** Schreibe niemals echte API-Keys oder Passwörter in versionierte Dateien; nutze Umgebungsvariablen (`GEMINI_API_KEY`) oder `sbx secret`.
+- **Geheimnisschutz:** Schreibe niemals echte API-Keys oder PasswÃ¶rter in versionierte Dateien; nutze Umgebungsvariablen (`GEMINI_API_KEY`) oder `sbx secret`.
 
 <!-- DOKU-MINIMAP-START -->
 <style>
@@ -67,54 +67,54 @@ details.doku-minimap .minimap-preview-strip span { background: rgba(30, 41, 59, 
 details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
+<summary><span>ðŸ—ºï¸ Doku-Minimap (5 Rubriken &amp; Labs)</span><span title="Klicken zum VergrÃ¶ÃŸern / Einklappen">â›¶</span></summary>
 <div class="minimap-preview-strip"><span>01 Linux</span><span>02 VSCode</span><span>03 Python</span><span>04 JS/TS</span><span>05 Agents</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root">🏛️ <a href="Doku/README.md">VanstrikeCyborg — git-labor Lern- &amp; Test-Architektur (Doku-Index)</a>  |  <a href="README.md">Repo-README</a>  |  <a href="AGENTS.md">AGENTS.md</a>  |  <a href="notebook-agent-environments/README.md">Notebooks</a></div>
+<div class="doku-arch-root">ðŸ›ï¸ <a href="Doku/README.md">VanstrikeCyborg â€” git-labor Lern- &amp; Test-Architektur (Doku-Index)</a> Â |Â  <a href="README.md">Repo-README</a> Â |Â  <a href="AGENTS.md">AGENTS.md</a> Â |Â  <a href="notebook-agent-environments/README.md">Notebooks</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
-<div class="doku-arch-card-title">🐧 <a href="Doku/01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
+<div class="doku-arch-card-title">ðŸ§ <a href="Doku/01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="Doku/01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
-<li>├─ <a href="Doku/01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
-<li>├─ <a href="Doku/01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
-<li>├─ <a href="Doku/01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
-<li>└─ <a href="Doku/01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
+<li>â”œâ”€ <a href="Doku/01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 â€¢ Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>â”œâ”€ <a href="Doku/01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 â€¢ Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
+<li>â”œâ”€ <a href="Doku/01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 â€¢ Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
+<li>â”œâ”€ <a href="Doku/01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 â€¢ Advanced Bash: Arrays, getopts &amp; Backups</a></li>
+<li>â””â”€ <a href="Doku/01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 â€¢ Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🧩 <a href="Doku/02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
+<div class="doku-arch-card-title">ðŸ§© <a href="Doku/02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="Doku/02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
-<li>├─ <a href="Doku/02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="Doku/02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
-<li>└─ <a href="Doku/02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
+<li>â”œâ”€ <a href="Doku/02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 â€¢ VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
+<li>â”œâ”€ <a href="Doku/02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 â€¢ Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="git-labor.code-workspace">Workspace</a></li>
+<li>â”œâ”€ <a href="Doku/02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 â€¢ MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>â””â”€ <a href="Doku/02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 â€¢ Gemini Ã–kosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r3">
-<div class="doku-arch-card-title">🐍 <a href="Doku/03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
+<div class="doku-arch-card-title">ðŸ <a href="Doku/03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="Doku/03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance &amp; Notebooks</a></li>
-<li>├─ <a href="Doku/03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
-<li>└─ <a href="Doku/03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
+<li>â”œâ”€ <a href="Doku/03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 â€¢ Python Setup: uv, .venv, Pylance &amp; Notebooks</a></li>
+<li>â”œâ”€ <a href="Doku/03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 â€¢ Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
+<li>â””â”€ <a href="Doku/03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 â€¢ Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r4">
-<div class="doku-arch-card-title">🌐 <a href="Doku/04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
+<div class="doku-arch-card-title">ðŸŒ <a href="Doku/04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="Doku/04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="labs/04_js_ts_web/rechner.html">rechner.html</a></li>
-<li>├─ <a href="Doku/04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
-<li>└─ <a href="Doku/04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
+<li>â”œâ”€ <a href="Doku/04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 â€¢ HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>â”œâ”€ <a href="Doku/04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 â€¢ Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
+<li>â””â”€ <a href="Doku/04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 â€¢ Google GenAI SDK (@google/genai) fÃ¼r Web-Apps</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r5">
-<div class="doku-arch-card-title">🤖 <a href="Doku/05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
+<div class="doku-arch-card-title">ðŸ¤– <a href="Doku/05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
-<li>├─ <a href="Doku/05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href=".github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
-<li>├─ <a href="Doku/05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href=".agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
-<li>└─ <a href="Doku/05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href=".github/agents/light.agent.md">@light</a> <a class="doku-arch-badge" href=".github/agents/rig.agent.md">@rig</a></li>
+<li>â”œâ”€ <a href="Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 â€¢ Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
+<li>â”œâ”€ <a href="Doku/05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 â€¢ Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href=".github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>â”œâ”€ <a href="Doku/05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 â€¢ Agenten ausrÃ¼sten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href=".agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>â””â”€ <a href="Doku/05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 â€¢ Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href=".github/agents/light.agent.md">@light</a> <a class="doku-arch-badge" href=".github/agents/rig.agent.md">@rig</a></li>
 </ul>
 </div>
 </div>

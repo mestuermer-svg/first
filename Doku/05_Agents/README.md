@@ -15,6 +15,29 @@ Diese Rubrik ist das **Herzstück für den Bau und die Führung deiner KI-Agente
 | **Modul 5.2** | [02_agenten-erstellen-instructions-rules-und-prompts.md](./02_agenten-erstellen-instructions-rules-und-prompts.md) | Wie man Agenten von Grund auf erstellt: Unterschied Prompt vs. Instruction vs. Custom Agent (`*.agent.md`), Model Harnesses, dynamische Reasoning-Stufen (Thinking), Pylance/TypeScript LSP-Anbindung, Speicherorte (`AGENTS.md`, `.github/`) & YAML-Frontmatter. |
 | **Modul 5.3** | [03_agenten-ausruesten-skills-und-mcp-tools.md](./03_agenten-ausruesten-skills-und-mcp-tools.md) | Agenten mit Fähigkeiten ausrüsten (`Agent_setup.md` & `SKILL.md`): Offizielle Gemini Skills (`skills.sh`), eigene `SKILL.md`-Pakete, `geminiDocs` MCP & `llms.txt`. |
 | **Modul 5.4** | [04_agenten-trainieren-primen-und-orchestrieren.md](./04_agenten-trainieren-primen-und-orchestrieren.md) | Agenten-Training (Priming, Evaluierung, Memory-System), Remote Extension Host & Headless-Agenten (Arch/Pi 4), Privacy-First Observability & KI-Traffic-Analyse (On-Premise Matomo) sowie die Systemarchitektur um den **General Agenten** auf `VanstrikeCyborg`. |
+| **Modul 5.5** | [05_workspace-schnittstelle-simracer-und-agenten-terminals.md](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md) | Workspace-Schnittstelle zwischen Git-Labor und SimRacer: Task-Queue (`inbox/` -> `outbox/`), Rückversicherungs- & Freigabe-Gate (`@rig`/`@light` ↔ `@general`), zentrale `AGENT_KOMMUNIKATION_HISTORIE.md`, OSC-8 Logfile-Links und `sim_agent_bridge.py`. |
+
+</details>
+
+<details>
+<summary><b>Direktlinks: Agent-Dateien, Skills, Regeln &amp; Terminal-Historie</b></summary>
+
+| Kategorie | Datei | Zweck &amp; Geltungsbereich |
+| :--- | :--- | :--- |
+| **Custom Agent (Global – `General Cyborg`)** | [`general.agent.md` (User)](../../../.copilot/agents/general.agent.md) | Läuft auf `VanstrikeCyborg` (global): MSI Cyborg 15 Hardware/BIOS/MSI Center, NVIDIA App MCP (`:13508`), VIVE VR, VS Code Workspaces &amp; Profile. |
+| **Custom Agent (Ebene 1 – `General Sim`)** | [`general.agent.md` (Workspace)](../../.github/agents/general.agent.md) | Läuft auf `VanstrikeCyborg` (Workspace-Leitstand): steuert SimRacer (`192.168.178.68`), Assetto Corsa, Docker-Sandbox &amp; Freigabe-Hub (`ok`/`nein`/`reply`). |
+| **Custom Agent (Ebene 2)** | [`rig.agent.md`](../../.github/agents/rig.agent.md) | Läuft nativ auf SimRacer (`192.168.178.68`): Hardware-Hub (Ryzen 9, RTX 5070 Ti), SteamVR, `acs.exe`, Rückversicherungspflicht mit `@general`. |
+| **Custom Agent (Ebene 2)** | [`light.agent.md`](../../.github/agents/light.agent.md) | Läuft nativ auf SimRacer (`192.168.178.68`): Docker Engine, Session- &amp; Content-Orchestrator, Rückversicherungspflicht mit `@general`. |
+| **Custom Agent (Ebene 3)** | [`dark.agent.md`](../../.github/agents/dark.agent.md) | Läuft isoliert im Docker-Container `ac-win11-sandbox` auf SimRacer: Setups, CM &amp; In-Guest-Tests. |
+| **Custom Agent (Pitwall)** | [`sarah.agent.md`](../../.github/agents/sarah.agent.md) | Läuft auf IdeaPad 5 (`omARCHy`): Live-Telemetrie-Coaching &amp; Videoschnitt. |
+| **Projekt-Regeln** | [`AGENTS.md`](../../AGENTS.md) | Verbindliche Projekt- und Didaktik-Richtlinien für Copilot &amp; Antigravity. |
+| **API-Regeln (`applyTo`)** | [`gemini-api.instructions.md`](../../.github/instructions/gemini-api.instructions.md) | Regeln für `google-genai` / `@google/genai`, Interactions API &amp; `geminiDocs` MCP. |
+| **Globale Regeln** | [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) | Profil- &amp; Workspace-Regeln für den General Agent. |
+| **Skill (`SKILL.md`)** | [`live-transfer-status-monitor` (Workspace)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) | Live-Dashboard-Pflicht bei Datei-, Backup- &amp; LAN-Transfers (Spiegel: [`.gemini/skills`](../../.gemini/skills/live-transfer-status-monitor/SKILL.md)). |
+| **Benutzer-Skills** | [`managing-python-dependencies`](../../../.copilot/skills/managing-python-dependencies/SKILL.md) · [`notebook-guidance`](../../../.copilot/skills/notebook-guidance/SKILL.md) · [`accidental-data-loss-prevention`](../../../.copilot/skills/accidental-data-loss-prevention/SKILL.md) | Globale Copilot-Skills unter `C:\Users\strik\.copilot\skills\`. |
+| **Kommunikations-Historie** | [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md) | Vollständige Markdown-Historie aller Agenten-Übergaben, Antworten &amp; Freigaben. |
+| **Testbericht (10.11.2026)** | [`agenten-kommunikation-und-sandbox-testbericht.md`](../../../assetto-corsa-content/docs/03_agenten_system/agenten-kommunikation-und-sandbox-testbericht.md) | Verifizierter E2E-Testbericht zu `@general`, `@light`, `@rig`, `@dark`, `@sarah`, Sandbox-Start &amp; OSC-8-Log-Links. |
+| **Terminal-Konsolen &amp; Tasks** | [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1) · [`tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json) | PowerShell-REPL-Konsolen mit OSC-8 Logfile-Links und optimierter VS-Code-Task-Konfiguration. |
 
 </details>
 
@@ -102,7 +125,8 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <li>├─ <a href="01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
 <li>├─ <a href="02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href="../../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
 <li>├─ <a href="03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
-<li>└─ <a href="04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a> <a class="doku-arch-badge" href="../../.github/agents/rig.agent.md">@rig</a></li>
+<li>├─ <a href="04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a> <a class="doku-arch-badge" href="../../.github/agents/rig.agent.md">@rig</a></li>
+<li>└─ <a href="05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Workspace-Schnittstelle: SimRacer &amp; Agenten-Terminals</a> <a class="doku-arch-badge" href="../../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
 </ul>
 </div>
 </div>

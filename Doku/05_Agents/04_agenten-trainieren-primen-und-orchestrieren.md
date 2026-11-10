@@ -51,32 +51,42 @@ flowchart LR
 </details>
 
 <details>
-<summary>1.2 Die Agenten-Hierarchie: General Agent als Leitstand auf <code>VanstrikeCyborg</code></summary>
+<summary>1.2 Die Agenten-Hierarchie: <code>General Cyborg</code> &amp; <code>General Sim</code> auf <code>VanstrikeCyborg</code> vs. SimRacer-Agenten</summary>
 
-Nach dem Prinzip einer modernen Anlagensteuerung (Leitstand $\rightarrow$ Bereichs-Controller $\rightarrow$ Feld-Aktor) arbeitet unser Agenten-System in einer klaren Befehlskette:
+Nach dem Prinzip einer modernen Anlagensteuerung (Leitstand $\rightarrow$ Bereichs-Controller $\rightarrow$ Feld-Aktor) ist der Haupt-Agent bewusst in zwei klar getrennte Rollen aufgeteilt: **`General Cyborg`** (global für Laptop & VS Code) und **`General Sim`** (Workspace-Leitstand für den SimRacer).
 
 ```mermaid
 flowchart TB
-    subgraph Ebene1 ["Ebene 1: Strategie & Leitstand (Laptop VanstrikeCyborg)"]
+    subgraph Ebene1 ["Ebene 1: Laptop VanstrikeCyborg (MSI Cyborg 15 B2RWFKG – Core 7 240H / RTX 5060 / 16 GB)"]
         USER["Entwickler (Michael Stürmer)"]
-        GA["<b>General Agent (@general)</b><br/><i>vscode-experte.instructions.md</i><br/>• Höchste Instanz für VS Code, Workspaces & Profile<br/>• Orchestriert git-labor (Lern- & Test-Labor)<br/>• Erstellt, rüstet aus & trainiert alle Agenten/Skills<br/>• Überwacht MCP-Server, Ports (8317) & KI-Modelle"]
-        USER <--> GA
+        GC["<b>General Cyborg</b> (Global)<br/><i>~/.copilot/agents/general.agent.md</i><br/>• Laptop-System, BIOS, MSI Center &amp; VIVE VR<br/>• NVIDIA App MCP (:13508) &amp; VS Code Profile<br/>• Workspaces, Tasks, MCP &amp; KI-Modelle"]
+        GS["<b>General Sim</b> (Workspace-Leitstand)<br/><i>git-labor/.github/agents/general.agent.md</i><br/>• Steuert SimRacer (192.168.178.68) per LAN/SSH<br/>• Freigabe-Gate (@general Terminal)<br/>• Koordiniert AC, Sandbox &amp; Sync"]
+        USER <--> GC
+        USER <--> GS
     end
 
-    subgraph Ebene2 ["Ebene 2: Bereichs- & Spezial-Agenten (Subagenten)"]
-        EXPLORE["<b>@Explore Agent</b><br/>Schnelle, schreibgeschützte Codebase- & Doku-Recherche"]
-        LAB["<b>Fach-Workflows im git-labor</b><br/>• Linux/Bash & sbx Sandboxes<br/>• Python / Notebooks / BigFrames<br/>• JS/TS & Web-Apps"]
-        EXT_WS["<b>Externe / Getrennte Workspaces</b><br/>z.B. separater SimRacing-Workspace<br/>(@light, @rig, @dark – dort eigenständig dokumentiert)"]
+    subgraph Ebene2 ["Ebene 2: SimRacer Host (192.168.178.68 – Ryzen 9 / RTX 5070 Ti)"]
+        RIG["<b>@rig</b> (Nativ SimRacer)<br/>SteamVR, acs.exe, GPU &amp; FFB"]
+        LIGHT["<b>@light</b> (Nativ SimRacer)<br/>Docker Engine, race.ini &amp; Presets"]
     end
 
-    GA -->|"Delegiert Recherche"| EXPLORE
-    GA -->|"Steuert & prüft"| LAB
-    GA -.->|"Schnittstellen-Standard & Pflege"| EXT_WS
+    subgraph Ebene3 ["Ebene 3: Docker-Sandbox &amp; Pitwall"]
+        DARK["<b>@dark</b> (ac-win11-sandbox auf SimRacer)<br/>Isolierte In-Guest-Tests &amp; CM"]
+        SARAH["<b>@sarah</b> (IdeaPad 5 omARCHy)<br/>Live-Coaching &amp; Videoschnitt"]
+    end
+
+    GS -->|"SSH / SMB / Freigabe-Gate"| RIG
+    GS -->|"SSH / SMB / Freigabe-Gate"| LIGHT
+    LIGHT -->|"Port 2222 / Queue"| DARK
+    RIG -->|"UDP-Telemetrie"| SARAH
 ```
 
-### Warum diese Trennung so wichtig ist:
-* **Fokus im `git-labor`:** Hier stehen **Software-Entwicklung, Linux, VS Code/MCP, Python, JS/TS und das Agenten-Training** im Mittelpunkt – frei von fachfremdem Simulations-Ballast.
-* **General Agent als Architekt:** Der General Agent (definiert in `c:\Users\strik\.copilot\instructions\vscode-experte.instructions.md` und `.github/agents/`) hält die gesamte VS-Code-Umgebung, die `.code-workspace`-Dateien und alle Agenten-Definitionen sauber.
+### Hardware-Zuordnung &amp; klare Differenzierung:
+* **`General Cyborg`** (`C:\Users\strik\.copilot\agents\general.agent.md`, global): Läuft auf **`VanstrikeCyborg`**, nutzt dessen Ressourcen und besitzt das hinterlegte Systemwissen aus `C:\local_Cyborg\Gemini\VanstrikeCyborg\` (Core 7 240H, 16 GB DDR5-5600 / max. 96 GB, RTX 5060 Laptop 8 GB @ 55 W ohne MUX-Switch, 3-Monitor-Setup, `MSI Center`, `F3`-Recovery, `NVIDIA App` MCP `http://127.0.0.1:13508/mcp` und `VIVE Hub` / Fehlercode `337`).
+* **`General Sim`** (`git-labor\.github\agents\general.agent.md`, Workspace): Läuft physisch **ebenfalls auf `VanstrikeCyborg`** (VS Code & `@general`-PowerShell-Terminal), steuert aber über LAN/SSH/SMB die **SimRacer-Workstation (`192.168.178.68`)** und bildet das Freigabe-Gate (`ok`/`nein`/`reply`) für `@rig` und `@light`.
+* **SimRacer-Agenten (`@rig`, `@light`, `@dark`):** Laufen **nicht** auf dem Laptop, sondern direkt auf der **Hardware des `SimRacer` (`192.168.178.68`)** (`@rig` & `@light` nativ auf dem Host; `@dark` gekapselt in der Docker-VM `ac-win11-sandbox`).
+* **Pitwall (`@sarah`):** Läuft dediziert auf dem **IdeaPad 5 (`omARCHy` / `192.168.178.98`)**, um die SimRacer-CPU beim Videoschnitt zu entlasten.
+* **Verbindliche Rückversicherung &amp; Freigabe-Gate:** Die SimRacer-Agenten ([`rig.agent.md`](../../.github/agents/rig.agent.md) und [`light.agent.md`](../../.github/agents/light.agent.md)) sichern sich vor jeder System-, Container- oder Weiterleitungs-Aktion beim `@general`-Leitstand (`General Sim`) ab (`ApprovalRequest` in `agents/general/inbox/`), sofern kein direkter General-Auftrag (`approved_by: GeneralAgent_Laptop`) vorliegt. Details siehe [Modul 5.5](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md).
 
 </details>
 
@@ -175,6 +185,9 @@ Wenn Agenten autonom mit Webdiensten, internen APIs und Dokumentationen interagi
 * [Modul 5.1: Verbindliche Stilfibel & Didaktik-Ruler](./01_agent-stilfibel-und-didaktik-ruler.md)
 * [Modul 5.2: Agenten erstellen (Instructions, Rules & Custom Agents)](./02_agenten-erstellen-instructions-rules-und-prompts.md)
 * [Modul 5.3: Agenten ausrüsten (Skills & MCP-Tools)](./03_agenten-ausruesten-skills-und-mcp-tools.md)
+* [Modul 5.5: Workspace-Schnittstelle, Freigabe-Gate & Agenten-Terminals](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md)
+* **Agent-Definitionen &amp; Regeln:** [`AGENTS.md`](../../AGENTS.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md)
+* **Skills &amp; Historie:** [`live-transfer-status-monitor` (`SKILL.md`)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
 * [Matomo Web Analytics – On-Premise & Privacy-First](https://matomo.org/)
 * [VS Code Remote Development Architektur](https://code.visualstudio.com/docs/remote/remote-overview)
 
@@ -184,7 +197,8 @@ Wenn Agenten autonom mit Webdiensten, internen APIs und Dokumentationen interagi
 <summary><b>Chips & Kernaussagen</b></summary>
 
 * **Gutes Priming = Präzises Training:** Klare Rollen-Grenzen, Positiv-Beispiele und das 3-Stufen-Memory (`/memories/`) formen einen verlässlichen Experten-Agenten.
-* **General Agent = Oberste Instanz auf `VanstrikeCyborg`:** Verwaltet VS Code, Multi-Root-Workspaces, MCP-Server und die Ausbildung aller weiteren Agenten.
+* **Klare Trennung `General Cyborg` vs. `General Sim`:** Beide laufen auf dem Laptop `VanstrikeCyborg` — `General Cyborg` betreut global das MSI-Laptop-System, VIVE VR, MCP & VS Code; `General Sim` steuert den `SimRacer` (`192.168.178.68`) & das Freigabe-Gate.
+* **Hardware-Treue der Subagenten:** `@rig` und `@light` laufen nativ auf dem `SimRacer`, `@dark` gekapselt im Docker-Container auf dem `SimRacer`, `@sarah` auf dem `IdeaPad 5`.
 * **Vorschau-Pflicht schützt Konfigurationen:** Vor Eingriffen in `.code-workspace` oder globale `settings.json` wird immer erst ein Diff gezeigt.
 * **Sicher trainieren mit `sbx` + `:ro`:** Autonome Agenten-Tests laufen isoliert in der Micro-VM, während Referenz-Ordner wie `./Doku:ro` schreibgeschützt bleiben.
 * **Remote Extension Host entkoppelt UI:** Komplexe Skripte und Server laufen auf dem Headless-Host (Raspberry Pi / Arch Linux), während der Entwickler auf dem Laptop verzögerungsfrei weiterarbeitet.

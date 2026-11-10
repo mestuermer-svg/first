@@ -11,6 +11,10 @@
     {
       "name": "3_AC-CM-CSP-Sandbox (mestuermer-svg/ac-cm-csp-sandbox)",
       "path": "../ac-cm-csp-sandbox"
+    },
+    {
+      "name": "4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)",
+      "path": "../assetto-corsa-content"
     }
   ],
   "mcp": {
@@ -22,7 +26,6 @@
     }
   },
   "settings": {
-    "antigravityCopilot.server.autoStart": true,
     "antigravityCopilot.server.enabled": true,
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,
@@ -40,12 +43,189 @@
     "markdown.styles": [
       ".vscode/doku-minimap.css"
     ],
-    "python.defaultInterpreterPath": "C:\\Users\\strik\\AppData\\Roaming\\uv\\python\\cpython-3.12-windows-x86_64-none\\python.exe"
+    "python.defaultInterpreterPath": "C:\\Users\\strik\\AppData\\Roaming\\uv\\python\\cpython-3.12-windows-x86_64-none\\python.exe",
+    "chat.tools.terminal.autoApprove": {
+      "/^ssh -o BatchMode=yes -o ConnectTimeout=5 Mike@192\\.168\\.178\\.68 \"Get-Process -Name '\\*docker\\*' -ErrorAction SilentlyContinue \\| Select-Object Id, ProcessName\"$/": {
+        "approve": true,
+        "matchCommandLine": true
+      }
+    },
+    "github.copilot.chat.githubMcpServer.enabled": true,
+    "github.copilot.chat.githubMcpServer.lockdown": true,
+    "github.copilot.chat.githubMcpServer.readonly": true,
+    "google.datacloud.executeCellToolForNotebookMCP": false,
+    "antigravity.serverPort": 8317,
+    "antigravityCopilot.server.autoStart": true,
+    "inlineChat.defaultModel": "Gemini 3.8 Flash (gemini)",
+    "accessibility.voice.autoSynthesize": "on",
+    "accessibility.voice.keywordActivation": "inlineChat"
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "🚀 Start All Agent Terminals (Multi-PC Verbund)",
+        "dependsOn": [
+          "Terminal: @general (Laptop Master)",
+          "Terminal: @light (SimRacer Software/Sessions)",
+          "Terminal: @rig (SimRacer Hardware/VR)",
+          "Terminal: @sarah (Archibald Pitwall)"
+        ],
+        "dependsOrder": "parallel",
+        "runOptions": {
+          "runOn": "folderOpen"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @general (Laptop Master)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\agents\\general\\start_general_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @light (SimRacer Software/Sessions)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_light_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @rig (SimRacer Hardware/VR)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_rig_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @sarah (Archibald Pitwall)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_sarah_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🐳 Docker: Start auf SimRacer (On-Demand)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\start-sandbox.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🛑 Docker: Stopp auf SimRacer",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\stop-docker.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "▶️ Aktives PowerShell-Skript ausführen",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${file}"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always",
+          "panel": "dedicated",
+          "clear": false
+        },
+        "problemMatcher": []
+      }
+    ]
   },
   "extensions": {
     "recommendations": [
       "printfn.gemini-improved",
-      "google.google-antigravity"
+      "google.google-antigravity",
+      "ms-vscode-remote.remote-ssh",
+      "ms-azuretools.vscode-docker"
     ]
   }
 }

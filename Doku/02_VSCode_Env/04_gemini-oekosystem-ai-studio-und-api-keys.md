@@ -67,19 +67,23 @@ API-Schlüssel dürfen **niemals** im Klartext in Markdown-Dokumente oder Git-Co
 </details>
 
 <details>
-<summary>1.4 Hardware-Analyse & RAM-Management auf dem MSI Cyborg 15 (<code>VanstrikeCyborg</code>)</summary>
+<summary>1.4 Hardware-Analyse, Systemprofile &amp; Schnittstellen auf dem MSI Cyborg 15 (<code>VanstrikeCyborg</code>)</summary>
 
-| Komponente | Spezifikation (`VanstrikeCyborg`) | Bewertung für KI- & Dev-Workflows |
+| Komponente | Verifizierte Spezifikation (`VanstrikeCyborg` / `MS-15Q3`) | Relevanz für KI-, Dev- &amp; VR-Workflows |
 | :--- | :--- | :--- |
-| **CPU** | Intel Core 7 240H (10 Kerne / 16 Threads, bis 5.20 GHz) | **Sehr hohe Reserve:** Ideal für parallele Sprachserver, Compiler und Hintergrund-Proxys. |
-| **GPU** | NVIDIA GeForce RTX 5060 Laptop (8 GB GDDR7 VRAM) | **Exzellent:** Schneller GDDR7-Speicher für lokale Beschleunigung und CUDA-Experimente. |
-| **SSD** | 1 TB NVMe SSD (Sandisk SN5000S) | **Sehr schnell:** Darauf achten, dass stets **> 100 GB frei** bleiben (keine verwaisten VM-Images lagern). |
-| **RAM** | **16 GB DDR5-5600 Dual-Channel** | **Kritischer Pfad (Haupt-Engpass bei schweren VMs):** Windows 11 (~5.5 GB) + VS Code & Language Server (~2.5 GB) lassen ~8 GB frei. |
+| **Modell &amp; Firmware** | MSI Cyborg 15 B2RWFKG (`MS-15Q3`), BIOS `E15Q3IMS.110`, EC `15Q3EMS1.108`, Windows 11 Home 26H2 (`26300.9711`) | TPM 2.0 aktiv; Recovery über `F3`-Hotkey (HDI / WinPE Rescue USB). |
+| **CPU** | Intel Core 7 240H (2.50 GHz, 16 Threads) | **Hohe Reserve:** Ideal für parallele Sprachserver (LSP), Python/TS-Builds &amp; Proxys. |
+| **Dual-GPU (Optimus)** | NVIDIA GeForce RTX 5060 Laptop (8 GB GDDR7, 3328 CUDA, 55 W Max-Q Gen-5, Treiber `617.42`) + Intel Graphics (`32.0.101.5972`) | **MSHybrid ohne Hardware-MUX-Switch** (`Graphic Switch` / `Win32 SHIFT mode` = *Unsupportive*). |
+| **RAM** | **16 GB DDR5-5600** (2× 8 GB Kingston SO-DIMM) | **Engpass bei schweren VMs:** Ausbau bis max. **96 GB DDR5** über 2× SO-DIMM möglich. |
+| **Speicher &amp; I/O** | `1 × M.2 2280 NVMe` (SanDisk SN5000S 1 TB) + ext. `WD My Passport 0741`; Wi-Fi 6E AX211, Realtek GbE, `2× USB-A 10 Gbit/s`, `1× USB-C 10 Gbit/s` (DP Alt Mode + PD-In 45–100 W, optimal 65–100 W), `1× HDMI` | Stets **&gt; 100 GB frei** auf NVMe halten; für USB-C-Laden min. **65–100 W PD** nutzen. |
+| **Display- &amp; VR-Setup** | 3 aktive Displays: Intern (1080p@144 Hz) + `Samsung C27F398` (DP@72 Hz) + `Samsung U28E590` (4K via USB-C-DP) | **Achtung VIVE Hub:** Fehlercode `337` tritt auf, wenn 3 Monitore aktiv sind (Max-Monitor-Limit). |
+| **Steuerung &amp; MCP** | `MSI Center` (`Extreme Performance` / `MSI AI Engine` / `Battery Master`), `NVIDIA App` MCP auf `http://127.0.0.1:13508/mcp` (`NvAppMcpServer.exe`) | Betreut durch den globalen **`General Cyborg`** Agenten (`~/.copilot/agents/general.agent.md`). |
 
 **Best Practices für maximale Stabilität auf dem Laptop:**
-1. **Kein schweres Dauer-Docker-Desktop im Hintergrund**, wenn es nicht aktiv für ein Container-Projekt gebraucht wird (spart 2.5–4 GB RAM durch Wegfall von `vmmemWSL`).
+1. **Kein schweres Dauer-Docker-Desktop im Hintergrund**, wenn es nicht aktiv für ein Container-Projekt gebraucht wird (spart 2.5–4 GB RAM durch Wegfall von `vmmemWSL`; Container-Workloads laufen auf dem `SimRacer`).
 2. **Nutzung von `sbx` oder nativen Binaries** (`github-mcp-server.exe`) für Agenten-Tools.
-3. **Ausblick Hardware-Upgrade:** Durch Tausch der 2× 8 GB SO-DIMMs auf **32 GB DDR5-5600 (2× 16 GB)** verschwindet auch bei parallelen lokalen Containern jedes Pagefile-Swapping.
+3. **VIVE Hub / Multi-Monitor:** Vor VR-Betrieb am Laptop (`VIVE Focus Vision` / `XR Elite`) ggf. einen externen Monitor trennen, um Fehler `337` zu vermeiden (USB/ADB-Fallback Port `5037`, Fehler `3105`).
+4. **Ausblick RAM-Upgrade:** Durch Tausch der 2× 8 GB SO-DIMMs auf **32–96 GB DDR5-5600** verschwindet auch bei parallelen lokalen Containern jedes Pagefile-Swapping.
 
 </details>
 
