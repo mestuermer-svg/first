@@ -341,6 +341,54 @@ Der 6. Agent **`@rick`** (`.github/agents/rick.agent.md`) betreut den **Raspberr
 </details>
 
 <details>
+<summary>1.12 Freigabe-Policy <code>AUTO</code>/<code>MANUAL</code> &amp; MQTT-Anbindung (Stand 11.11.2026)</summary>
+
+#### 1. Freigabe-Policy des General-Sim-Gates
+Das Freigabe-Gate aus 1.8 ist über die Datei `\\192.168.178.68\ac-sandbox\shared\agents\general\approval_policy.json` umschaltbar:
+
+| Modus | Wirkung |
+| :--- | :--- |
+| `MANUAL` | Rückfragen von `@rig`/`@light` warten im `@general`-Terminal auf `ok` / `nein` / `reply` (Fallback, wenn die Datei fehlt) |
+| `AUTO` | Dauerfreigabe, geeignet für autonome Ketten und CI/CD-ähnliche Abläufe |
+
+Dateiformat (Felder: `mode`, `description`, `updated_at`):
+```json
+{ "mode": "AUTO", "description": "...", "updated_at": "2026-11-11T09:00:53+01:00" }
+```
+
+```powershell
+# Modus setzen (schreibt approval_policy.json auf dem SimRacer)
+.\labs\Send-SimAgentTask.ps1 -SetApprovalMode AUTO
+.\labs\Send-SimAgentTask.ps1 -SetApprovalMode MANUAL
+
+# Aktuellen Modus samt Queue-Status aller Agenten anzeigen
+.\labs\Send-SimAgentTask.ps1 -QueryStatus
+```
+
+```python
+from sim_agent_bridge import SimAgentBridge
+bridge = SimAgentBridge()
+print(bridge.get_approval_policy())      # {'mode': 'AUTO', ...}
+bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zurück
+```
+
+> [!WARNING]
+> `AUTO` hebelt die Rückversicherungspflicht aus 1.8 praktisch aus. Vor Aktionen mit Datenverlust-Risiko (Löschen, Docker-Prune, Container-Reset) auf `MANUAL` zurückschalten.
+
+#### 2. MQTT-Anbindung (StrikerPi `192.168.178.86:1883`)
+- **Broker:** `mosquitto.service` (`:1883` TCP, `:9001` WebSockets), 24/7 aktiv.
+- **Task-Events aus Python:** `SimAgentBridge.publish_mqtt_task(agent, payload)` ruft per SSH `mosquitto_pub` auf StrikerPi auf. Topic-Schema: `agents/<agent>/inbox`. Eine zusätzliche Python-Abhängigkeit wie `paho-mqtt` ist dafür nicht nötig.
+- **Relay-Topics:** `simrig/mode` (Betriebsmodus) und `simrig/telemetry` (max. 10 Hz).
+- **Weiterhin gültig:** Die Dateischnittstelle (`inbox/` → `outbox/`) bleibt der Standardweg. MQTT ergänzt sie.
+
+#### 3. Statusprüfung aller Agenten
+```powershell
+.\labs\Agent-Terminals.ps1 -StatusOnly   # schneller TCP-Port-Check der Agenten-Endpunkte, ohne Terminal zu öffnen
+```
+
+</details>
+
+<details>
 <summary><b>Übungsaufgaben</b></summary>
 
 1. **Queue-Pfad-Verständnis:** Unter welchem Netzwerk-Pfad muss das Skript aus `git-labor` eine JSON-Datei ablegen, wenn es dem `@rig`-Agenten am SimRacer einen Auftrag erteilen will?

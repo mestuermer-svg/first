@@ -108,4 +108,49 @@ Als nächster architektonischer Evolutionsschritt ist vorgesehen, die lokalen Ko
 </details>
 
 ---
+<details>
+<summary><b>5. Abgleich mit dem Ist-Stand (verifiziert am 11.11.2026)</b></summary>
+
+Die Aussagen dieses Dokuments wurden gegen Workspace-Dateien, Skripte, die Policy-Datei auf dem SimRacer und die Dienste auf StrikerPi (nur lesend) geprüft:
+
+| Aussage | Befund | Status |
+| :--- | :--- | :--- |
+| `folderOpen`-Autostart entfernt | `git-labor.code-workspace` enthält keinen `folderOpen`-Eintrag | ✅ bestätigt |
+| 6 SSH-Terminalprofile | Vorhanden sind **5** SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) plus `PowerShell (Git-Labor)`. `@general` läuft lokal (Task `Terminal: @general`), nicht als SSH-Profil. `@rig` und `@light` nutzen beide den SSH-Host `simracer`. | ⚠️ abweichend |
+| `Agent-Terminals.ps1 -StatusOnly` mit Port-Sockets | Vorhanden (`Test-TcpPortFast`, Parameter `-StatusOnly`) | ✅ bestätigt |
+| `Send-SimAgentTask.ps1 -SetApprovalMode <AUTO\|MANUAL>` | Vorhanden, schreibt `general\approval_policy.json`. Ein MQTT-Publikationstest ist im Skript **nicht** enthalten. | ⚠️ teilweise |
+| `sim_agent_bridge.py`: `get_/set_approval_policy()` | Vorhanden | ✅ bestätigt |
+| MQTT via `paho-mqtt`, Topics `sim/tasks/...` | Die Bridge nutzt **kein** `paho-mqtt`. `publish_mqtt_task()` ruft per SSH `mosquitto_pub` auf StrikerPi auf, Topic `agents/<agent>/inbox`. Echte Topics im Relay: `simrig/mode`, `simrig/telemetry`. | ⚠️ abweichend |
+| `approval_policy.json` mit `{"mode": "AUTO", "auto_approve": true}` | Datei existiert, Felder: `mode`, `description`, `updated_at`. Ein Feld `auto_approve` gibt es nicht. Aktueller Wert: `AUTO` (Stand 11.11.2026 09:00). | ⚠️ Feldname abweichend |
+| Relay-Zustandslogik (Status `2` nur bei Bewegung) | **Deployt auf StrikerPi:** `live_on_track` bei `(ac_status == 2 und rpm > 0)` oder `(speed > 3.0 und rpm > 500)`. Die Arbeitskopie `C:\Users\strik\strikerpi-hub\telemetry-relay\telemetry_relay.py` war zuerst im Rueckstand (bedingungsloses `live_on_track`). Sie wurde am 11.11.2026 vom Pi uebernommen, SHA-256 identisch (`1B2F9044…`). Sie wurde als Commit `7db7657` nach `simrig.git` (`origin/main`) gepusht. | ✅ angeglichen & committet |
+| Mosquitto 24/7 (`1883`/`9001`) | `mosquitto`, `telemetry-relay`, `rick-agent` aktiv, Ports `1883`, `9001`, `8080` lauschen | ✅ bestätigt |
+| Caddy auf StrikerPi (Roadmap) | Binary `/usr/bin/caddy` vorhanden. Dienststatus, Webroot und Routing wurden nicht geprüft. | 🔜 offen |
+
+> [!NOTE]
+> **Offene Punkte aus dem Abgleich:** (1) Relay-Kopie ist erledigt (Commit `7db7657` in `simrig.git`). (2) Topic-Schema für Task-Events festlegen. Zurzeit gilt `agents/<agent>/inbox`, im Konzept stand `sim/tasks/...`. (3) Entscheiden, ob ein `@general`-SSH-Profil nötig ist.
+
+</details>
+
+---
+
+<details>
+<summary><b>6. Betriebsnachweis aus den Systemtests (Snapshot 11.11.2026 07:18)</b></summary>
+
+**Datenbasis:** `Systemtests/Systemchecks_Doku_Logs_2026-11-11` und `..._0718` sind inhaltlich identisch (93 Dateien, Hash-Vergleich ohne Abweichung). Struktur: `01_Dokumentation`, `02_Logs`, `03_Status_und_Outbox`, `04_Check_Skripte`.
+
+| Bereich | Nachweis aus Logs & Status |
+| :--- | :--- |
+| **Dark-Gast** | `dark-status.json` (11.11. 00:37): CSP `0.2.11.0` aktiv, `host_lan_data_ok: true`, `C:` 75,17 von 159,75 GB frei, Content Manager läuft, `acs.exe` aus |
+| **Dark-Aktionen (Log 11.11.)** | `SetSession` (`gp_2025_mcl39` / `monza`), `ValidateSetups` (**203 Setup-Dateien** syntaktisch valide), `LaunchCM`/`StopCM`, `ApplyPreset desktop_4k` (Video-, CSP-Preset und `video.ini` auf `MODE=DEFAULT`) |
+| **Handshakes (10.11.)** | Testketten General→Light→Dark, Rig→Light, Dark→Light, Dark→Rig und General→Dark direkt: alle `Success` |
+| **Freigabe-Gate** | Vier Rückfragen (`req_light_…222241`, `…222600`, `…003400`, `req_rig_…222744`) wurden mit `Approved` beantwortet. Seit 11.11. 09:00 steht die Policy auf `AUTO`. |
+| **Pitwall-Probes** | Mehrere `Status`-Aufträge `StrikerPi Pitwall` → `@dark` am 11.11. zwischen 01:30 und 01:35, `pitwall_1794357228032` und `…316259` mit `Success` beantwortet |
+| **Sarah** | `task_video_editor_onboarding` (06:54) und `task_2saeulen_video_strategie` (07:09) sind `Queued`. Im Snapshot liegt dazu **keine Rückmeldung** vor. |
+| **Light-Prompt (11.11. 00:34)** | „Programm zum Öffnen der Agent-Logs installieren“ wurde freigegeben und mit `Success` quittiert. Das Light-Log zeigt nur die Intent-Prüfung, **keinen Installationsnachweis**. |
+
+**Vergleich Snapshot ↔ Repo-Doku:** Alle 7 `assetto-corsa-content`-Dokus und `05_workspace-schnittstelle-…` sind byte-identisch. Abweichend: `README.md` von `assetto-corsa-content` (Repo 12.985 B, Snapshot 11.718 B, das Repo ist neuer). `05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md` fehlte im Repo und wurde aus dem Snapshot nach `Doku/05_Agents/` übernommen.
+
+</details>
+
+---
 *Dokumentation abgelegt unter `Doku/05_Agents/` zur Referenz für anstehende VR- und Telemetrietests.*
