@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Send-SimAgentTask.ps1 - Sendet Aufgaben aus Git-Labor an die SimRacer-Agenten-Terminals.
 .DESCRIPTION
@@ -40,14 +40,45 @@ param(
     [string]$StrikerPiHost = "strikerpi",
 
     [Parameter()]
+    [ValidateSet("AUTO", "MANUAL", "")]
+    [string]$SetApprovalMode = "",
+
+    [Parameter()]
     [switch]$QueryStatus
 )
 
 $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
+$PolicyFile = Join-Path $AgentsRoot "general\approval_policy.json"
+
+if ($SetApprovalMode -ne "") {
+    $mode = $SetApprovalMode.ToUpper()
+    $p = [ordered]@{
+        mode = $mode
+        description = "Steuert das General Sim Freigabe-Gate: MANUAL = Warten auf Bestaetigung; AUTO = Dauerfreigabe"
+        updated_at = (Get-Date -Format "o")
+    }
+    if (Test-Path (Split-Path -Parent $PolicyFile)) {
+        $p | ConvertTo-Json -Depth 3 | Set-Content -Path $PolicyFile -Encoding UTF8
+        Write-Host "`n[+] Freigabemodus für General Sim erfolgreich auf '$mode' gesetzt!`n" -ForegroundColor Green
+    } else {
+        Write-Warning "Kann Policy-Datei nicht schreiben ($PolicyFile nicht erreichbar)."
+    }
+    return
+}
 
 # Status-Abfrage aller Agenten
 if ($QueryStatus) {
+    $curPolicy = "MANUAL (Standard)"
+    if (Test-Path $PolicyFile) {
+        try {
+            $polObj = Get-Content -Path $PolicyFile -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($polObj.mode) { $curPolicy = $polObj.mode.ToUpper() }
+        } catch {}
+    }
     Write-Host "`n=== SimRacer & Verbund Agenten-Terminals Status ===" -ForegroundColor Cyan
+    $pColor = if ($curPolicy -eq "AUTO") { "Green" } else { "Yellow" }
+    Write-Host "  General Sim Freigabe-Gate: [$curPolicy] (Umschalten mit -SetApprovalMode AUTO/MANUAL)" -ForegroundColor $pColor
+    Write-Host ""
     $agents = @("general", "light", "rig", "dark", "sarah")
     foreach ($ag in $agents) {
         $inbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$ag\inbox" }

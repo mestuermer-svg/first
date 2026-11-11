@@ -1,0 +1,11 @@
+﻿{
+    "task_id":  "test_gen_light_20261110_221913",
+    "agent":  "light",
+    "sender":  "LightAgent",
+    "requester":  "GeneralAgent_Laptop",
+    "reply_to":  "general",
+    "action":  "ProcessPrompt",
+    "timestamp":  "2026-11-10T22:19:29.8132280+01:00",
+    "status":  "Success",
+    "output":  "[Light Agent] Auftrag an Dark Agent uebergeben (delegated_20261110_221914). Verarbeitung laeuft im Gast."
+}

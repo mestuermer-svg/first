@@ -1,0 +1,14 @@
+﻿{
+    "task_id":  "test_gen_dark_direct_20261110_222741",
+    "agent":  "dark",
+    "sender":  "DarkAgent",
+    "requester":  "GeneralAgent_Laptop",
+    "reply_to":  "general",
+    "action":  "ProcessPrompt",
+    "file":  "test_gen_dark_direct_20261110_222741.json",
+    "timestamp":  "2026-11-10T22:27:44.2147458+01:00",
+    "status":  "Success",
+    "failed_stage":  null,
+    "exit_code":  0,
+    "output":  "[2026-11-10T22:27:44.0897559+01:00] [INFO] [Dark-InContainer] Action \u0027ProcessPrompt\u0027 gestartet...\r\n[2026-11-10T22:27:44.0897559+01:00] [INFO] [Dark-InContainer] Verarbeite Prompt als Textdaten im Gast...\r\n[Dark Agent @ Sandbox In-Container]\r\nPrompt erfolgreich als reine Textdaten empfangen und verarbeitet.\r\nLaenge: 83 Zeichen | Zeilen: 1\r\n--- Prompt Inhalt ---\r\n[TEST-3C] General Sim -\u003e Dark Agent direkt: Bitte Sandbox-Bereitschaft bestaetigen.\r\n---------------------\r\nStatus: Erfolgreich im Gast registriert (Keine Code-Ausfuehrung / Syntaxfehler-sicher).\r\n[2026-11-10T22:27:44.0897559+01:00] [SUCCESS] [Dark-InContainer] Prompt-Verarbeitung abgeschlossen (83 Zeichen)."
+}

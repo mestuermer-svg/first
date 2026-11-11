@@ -1,0 +1,67 @@
+﻿[2026-11-11T00:33:48.4385819+01:00] [INFO] [Dark-InContainer] Action 'Status' gestartet...
+[2026-11-11T00:33:48.4385819+01:00] [SUCCESS] [Dark-InContainer] Statusbericht gespeichert unter \\host.lan\Data\agents\dark\dark-status.json
+
+
+Name  : timestamp
+Value : 2026-11-11T00:33:48.4385819+01:00
+
+Name  : agent
+Value : Dark Agent
+
+Name  : role
+Value : In-Container Specialist (Guest Execution)
+
+Name  : hostname
+Value : WIN-54U68T9T2FA
+
+Name  : user
+Value : Docker
+
+Name  : os
+Value : Microsoft Windows NT 10.0.26200.0
+
+Name  : disk_c_free_gb
+Value : 75,18
+
+Name  : disk_c_total_gb
+Value : 159,75
+
+Name  : free_ram_mb
+Value : 8754
+
+Name  : cm_running
+Value : False
+
+Name  : acs_running
+Value : False
+
+Name  : csp_dll_present
+Value : True
+
+Name  : csp_version
+Value : 0.2.11.0
+
+Name  : csp_enabled
+Value : True
+
+Name  : current_car
+Value : rss_formula_hybrid_x_2026
+
+Name  : current_track
+Value : acu_cota_2021
+
+Name  : current_config
+Value : 
+
+Name  : host_lan_data_ok
+Value : True
+
+Name  : ac_installed_path
+Value : C:\AssettoCorsa
+
+Name  : ac_documents_path
+Value : C:\Users\Docker\Documents\Assetto Corsa
+
+
+
+

@@ -1,0 +1,8 @@
+﻿{
+    "task_id":  "prompt_20261109_020759",
+    "file":  "prompt_20261109_020759.json",
+    "timestamp":  "2026-11-09T02:08:00.2090640+01:00",
+    "status":  "Failed",
+    "exit_code":  1,
+    "output":  "Die Benennung \"prüfe\" wurde nicht als Name eines Cmdlet, einer Funktion, einer Skriptdatei oder eines ausführbaren Programms erkannt. Überprüfen Sie die Schreibweise des Namens, oder ob der Pfad korrekt ist (sofern enthalten), und wiederholen Sie den Vorgang."
+}

@@ -1,0 +1,21 @@
+[09:44:41] Rig Agent Native Host-Hub initialisiert.
+[09:44:41] GPU-Monitoring (RTX 5070 Ti) und Hardware-Sensoren aktiv.
+[09:44:41] Process Watchdog & Inbox/Outbox-Handshake aktiv.
+[10:09:52] Rig Agent Native Host-Hub initialisiert.
+[10:09:52] GPU-Monitoring (RTX 5070 Ti) und Hardware-Sensoren aktiv.
+[10:09:52] Process Watchdog & Inbox/Outbox-Handshake aktiv.
+[21:34:23] Rig Agent Native Host-Hub initialisiert.
+[21:34:23] GPU-Monitoring (RTX 5070 Ti) und Hardware-Sensoren aktiv.
+[21:34:23] Process Watchdog & Inbox/Outbox-Handshake aktiv.
+[22:19:13] Verarbeite Rig-Inbox Auftrag (General-Order): test_gen_rig_20261110_221913...
+[22:19:14] [COMM][ANTWORT] @rig -> GeneralAgent_Laptop (test_gen_rig_20261110_221913 | Success): Name  : timestamp
+[22:19:15] Rig-Inbox Auftrag test_gen_rig_20261110_221913 abgeschlossen (Success).
+[22:22:40] Verarbeite Rig-Inbox Auftrag (General-Order): test_rig_handoff_20261110_222239...
+[22:22:40] Delegiere test_rig_handoff_20261110_222239 an Light (rig_to_light_test_rig_handoff_20261110_222239)...
+[22:22:55] [COMM][ANTWORT] @rig -> GeneralAgent_Laptop (test_rig_handoff_20261110_222239 | Success): [Rig Agent @ SimRacer] Auftrag '[TEST-2A] Rig Agent: Pruefe Status und leite @light weiter: Host-Bereitschaft pruefen' empfangen und registriert.
+[22:22:55] Rig-Inbox Auftrag test_rig_handoff_20261110_222239 abgeschlossen (Success).
+[22:27:44] Inbox-Auftrag test_dark_to_rig_20261110_222741 von DarkAgentConsole erfordert General-Freigabe -> frage @general...
+[22:27:44] [COMM][RUECKFRAGE] @rig -> @general (req_rig_20261110_222744_391): Warte auf Freigabe fuer '[TEST-3D] Dark Agent (Gast) -> Rig Agent: Bitte AC-Host Status bestaetigen.'
+[22:27:58] [GENERAL FREIGABE ERHALTEN] req_rig_20261110_222744_391 -> fuehre test_dark_to_rig_20261110_222741 aus.
+[22:27:58] [COMM][ANTWORT] @rig -> DarkAgentConsole (test_dark_to_rig_20261110_222741 | Success): [GENERAL FREIGABE ERTEILT] Test-3D (Dark->Rig) freigegeben.
+[22:27:58] Rig-Auftrag test_dark_to_rig_20261110_222741 abgeschlossen (Outbox aktualisiert).

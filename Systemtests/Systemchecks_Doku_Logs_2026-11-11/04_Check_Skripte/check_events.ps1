@@ -1,0 +1,1 @@
+Get-WinEvent -LogName Application -MaxEvents 50 | Where-Object { $_.LevelDisplayName -match 'Error|Warning' -or $_.Message -match 'Content' } | Select-Object TimeCreated, ProviderName, Id, LevelDisplayName, Message | Format-List

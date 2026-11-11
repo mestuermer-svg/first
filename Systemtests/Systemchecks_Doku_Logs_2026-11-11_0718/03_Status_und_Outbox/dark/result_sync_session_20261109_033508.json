@@ -1,0 +1,8 @@
+﻿{
+    "task_id":  "sync_session_20261109_033508",
+    "file":  "sync_session_20261109_033508.json",
+    "timestamp":  "2026-11-09T02:35:16.8883451+01:00",
+    "status":  "Success",
+    "exit_code":  0,
+    "output":  "powershell.exe : \\\\host.lan\\Data\\agents\\dark\\runner.ps1 : Das Argument für den Parameter \"Action\" kann nicht überprüft \r\nwerden. Das \r\nIn \\\\host.lan\\Data\\agents\\dark\\start_dark_terminal.ps1:195 Zeichen:31\r\n+ ...   $output = \u0026 powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...\r\n+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : NotSpecified: (\\\\host.lan\\Data...ft werden. Das :String) [], RemoteException\r\n    + FullyQualifiedErrorId : NativeCommandError\r\n \r\nArgument \"SetSession\" gehört nicht zu dem vom ValidateSet-Attribut angegebenen Satz \"Status;RunScript;TestApp;ValidateS\r\netups;LaunchCM;StopCM;CleanTemp;ApplyPreset;ListPresets;LaunchSession;StopSession;DiagnoseAndHandoff;SyncCoreAssets;Ope\r\nnExplorer\". Geben Sie ein Argument an, das in dem Satz enthalten ist, und führen Sie dann den Befehl erneut aus.\r\n    + CategoryInfo          : InvalidData: (:) [runner.ps1], ParentContainsErrorRecordException\r\n    + FullyQualifiedErrorId : ParameterArgumentValidationError,runner.ps1"
+}

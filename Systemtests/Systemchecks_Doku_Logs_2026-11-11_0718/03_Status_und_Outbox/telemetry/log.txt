@@ -1,0 +1,1544 @@
+Hello there! This is Custom Shaders Patch, v0.2.11. All hooks are set and ready to work.
+Installing CrashGuard Fault Handler
+Steam Name:Vanstrike
+Steam Community ID: 76561198265254905
+LOADING AC VERSION : 1.16.4 -----------PRINTING VIDEO INI-----------
+CURRENT LOCALE en
+TagDocumentReader:: couldn't load system/locales/tutorial/en.tag
+WM_SIZE 3840 2160
+QueryPerformanceFrequency: 10000.000000
+[DX11] MAXIMUM_FRAME_LATENCY: 0
+Display mode 0: 640x480 @ 24.00 [24/1] 28
+Display mode 76: 1024x768 @ 29.97 [29970/1000] 28
+Display mode 84: 1152x864 @ 30.00 [30/1] 28
+Display mode 97: 1176x664 @ 24.00 [24/1] 28
+Display mode 109: 1176x664 @ 29.97 [29970/1000] 28
+Display mode 123: 1280x720 @ 23.98 [23976/1000] 28
+Display mode 138: 1280x768 @ 23.98 [23976/1000] 28
+Display mode 317: 1920x1080 @ 29.97 [29970/1000] 28
+Display mode 329: 1920x1200 @ 60.00 [60/1] 28
+Display mode 333: 1920x1200 @ 29.97 [29970/1000] 28
+Display mode 337: 1920x1440 @ 24.00 [24/1] 28
+Display mode 344: 1920x1440 @ 60.00 [60/1] 28
+Display mode 349: 1920x1440 @ 29.97 [29970/1000] 28
+Display mode 354: 2048x1536 @ 25.00 [25/1] 28
+Display mode 361: 2048x1536 @ 60.00 [60/1] 28
+Display mode 366: 2048x1536 @ 59.94 [59940/1000] 28
+Display mode 372: 2560x1440 @ 30.00 [30/1] 28
+Display mode 377: 2560x1440 @ 60.00 [60/1] 28
+Display mode 382: 2560x1440 @ 59.94 [59940/1000] 28
+Display mode 388: 2560x1600 @ 30.00 [30/1] 28
+Display mode 394: 2560x1600 @ 23.98 [23976/1000] 28
+Display mode 398: 2560x1600 @ 59.94 [59940/1000] 28
+DISPLAY MODE FOUND
+Display mode 406: 3840x2160 @ 29.97 [29970/1000] 28
+Display mode 412: 4096x2160 @ 29.97 [29970/1000] 28
+ADAPTER DESCRIPTION
+DESCRIPTION: NVIDIA GeForce RTX 5070 Ti
+
+***** GOING FULLSCREEN ***
+
+SWAP CHAIN DESC
+KGL CREATE FONT Segoe UI with locale 
+KGL CREATE FONT Consolas with locale 
+[SETTINGS] LIVE_UPDATE: 0
+FMOD driver switched to:
+FMOD running @48000 speaker mode:3 speakers: 2
+----- Listing FMOD audio drivers -----
+Id: 0
+Id: 1
+Id: 2
+Id: 3
+Audio log (AudioEngine.cpp:939): Audio DSP buffer size: bufferLength 1024, numBuffers 4
+Audio log (AudioEngine.cpp:1198): Loading bank content/sfx/common.bank
+Audio log (AudioEngine.cpp:1198): Loading bank extension/sfx/csp_base.bank
+Audio log (AudioEngine.cpp:1198): Loading bank extension/sfx/csp_extras.bank
+Audio log (AudioEngine.cpp:1198): Loading bank extension/sfx/csp_surface_gravel.bank
+[ASSETTO_CORSA] SLEEP_TIME: -1
+KGL CREATE FONT Segoe UI with locale 
+[OPTIONS] AUTOFLIP_RECOVERY: 1.000000
+Ideal size 2896 2896
+Creating render target 2896 2896
+Creating render target 2896 2896
+YebisPP 2896 2896
+Loading PP set from: system/cfg/ppfilters/default.ini
+Creating render target 2896 2896
+Creating render target 2896 2896
+Creating render target 2896 2896
+******** Kunos Simulazioni Physics Engine ********
+USING FF LOW SPEED VALUES: 10.000000 kmh MIN_VALUE:0.100000
+Update Clouds Generation to 4_mid_clear 
+Creating render target 1024 256
+KGL CREATE FONT Segoe UI with locale 
+KGL CREATE FONT Segoe UI with locale 
+KGL CREATE FONT Orbitron with locale 
+[BENCHMARK] ACTIVE: 0
+Creating physics track: acu_cota_2021 []
+ADDED TRACK SKIN OVERRIDE: default
+DEBUG TIMER: TrackAvatar::init3D():1875.948800
+ERROR: SURFACE NOT FOUND FOR OBJECT:1DIRT_INVISIBLE
+ERROR: SURFACE NOT FOUND FOR OBJECT:1DIRT_INVISIBLE
+LOOKING FOR: content/tracks/acu_cota_2021/ai/fast_lane.ai
+LOADING SPLINE: content/tracks/acu_cota_2021/ai/fast_lane.ai
+Loading AI Spline: content/tracks/acu_cota_2021/ai/fast_lane.ai
+Straight 0, start: 0.482398, length: 1082.177246
+Spline is at last version
+DEBUG TIMER: AISpline::calculateNormals:24.627200
+LOOKING FOR: content/tracks/acu_cota_2021/ai/pit_lane.ai
+LOADING SPLINE: content/tracks/acu_cota_2021/ai/pit_lane.ai
+Loading AI Spline: content/tracks/acu_cota_2021/ai/pit_lane.ai
+Straight 0, start: 0.270076, length: 677.867188
+Scanning 944 points
+SPLINE POINTS COUNT : 3404  | PAYLOADS COUNT : 3404
+Loading AI Hints from: content/tracks/acu_cota_2021/data/ai_hints.ini
+BRAKEHINT_0 START:0.000000 END:0.000000 VALUE:0.000000
+DEBUG TIMER: INIT TRACK SPLINES:174.272700
+IDEAL LINE FROM FILE: content/tracks/acu_cota_2021/data/ideal_line.ai
+Loading AI Spline: content/tracks/acu_cota_2021/data/ideal_line.ai
+DEBUG TIMER: IDEALLINE:79.841600
+WARNING: TRACK :: NO POSITION DATA FOUND
+TRACK LENGTH: 5418.423340
+[RACE] FIXED_SETUP: 0
+[RACE] CARS: 1
+USING DEFAULT DRIVER SYSTEM
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/steer.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/shift_dw.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/shift_up.ksanim
+VERSION: 2
+USING DEFAULT DRIVER SYSTEM
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/steer.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/shift_dw.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/shift_up.ksanim
+VERSION: 2
+USING ANIMATED SUSPENSIONS
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/CAR_SUSP_RF.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/CAR_SUSP_LR.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/CAR_SUSP_RR.ksanim
+VERSION: 2
+INIT LOD:0
+WARNING, DISC DISC_RR
+ NOT FOUND
+GRAPHICS RADIUS: 0.000000 0.000000
+INIT LOD:1
+INIT LOD:2
+WARNING, DISC DISC_LF
+ NOT FOUND
+WARNING, DISC DISC_RF
+ NOT FOUND
+WARNING, DISC DISC_LR
+ NOT FOUND
+WARNING, DISC DISC_RR
+ NOT FOUND
+INIT LOD:3
+CAR LOADED IN 2816
+Creating car: rss_formula_hybrid_x_2026 []
+LOCAL INERTIA: 1147.488525 1227.934814 118.906693
+Brake bias limits set to (0.470000 , 0.660000)
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.36
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.60
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.32
+Using camber LUT
+SMOOTH 47
+
+-10.500000: 1.029030
+-6.000000: 1.037000
+-1.000000: 1.009000
+4.000000: 0.996000
+8.500000: 0.991000
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_1.lut
+MAX WEAR AT: 4.275200 vKM , mult 0.875000
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.33
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.58
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.30
+Using camber LUT
+SMOOTH 47
+
+-12.000000: 1.026286
+-8.000000: 1.034000
+-4.000000: 1.036000
+-0.500000: 1.005000
+3.500000: 0.996000
+7.500000: 0.992000
+11.500000: 0.989099
+16.000000: 0.984679
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_2.lut
+MAX WEAR AT: 5.557760 vKM , mult 0.875000
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.31
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.57
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.29
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.022154
+-10.500000: 1.029030
+-7.000000: 1.035000
+-3.500000: 1.032000
+0.000000: 1.000000
+4.000000: 0.996000
+7.500000: 0.992000
+11.000000: 0.989177
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_3.lut
+MAX WEAR AT: 7.225088 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.28
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.55
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.28
+Using camber LUT
+SMOOTH 47
+
+-13.500000: 1.023751
+-9.000000: 1.032000
+-5.500000: 1.038000
+-1.000000: 1.009000
+3.000000: 0.997000
+7.000000: 0.992000
+11.000000: 0.989177
+15.500000: 0.985416
+20.000000: 0.978000
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_4.lut
+MAX WEAR AT: 9.392614 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.26
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.53
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.26
+Using camber LUT
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/camber_table_front.lut
+SMOOTH 47
+
+-14.500000: 1.022154
+-10.000000: 1.030000
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_5.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.24
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.84
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.52
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.25
+Using camber LUT
+SMOOTH 47
+
+-10.500000: 1.029030
+-7.000000: 1.035000
+-3.500000: 1.032000
+0.000000: 1.000000
+3.500000: 0.996000
+7.000000: 0.992000
+11.000000: 0.989177
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_6.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.36
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.94
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.60
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.32
+Using camber LUT
+SMOOTH 47
+
+-16.000000: 1.019861
+-12.000000: 1.026286
+-8.000000: 1.034000
+-3.500000: 1.032000
+0.000000: 1.000000
+4.500000: 0.995000
+8.500000: 0.991000
+12.000000: 0.988920
+15.500000: 0.985416
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_1.lut
+MAX WEAR AT: 4.275200 vKM , mult 0.875000
+SOFTNESS INDEX: 1.019059
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.33
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.92
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.58
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.30
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.021378
+-10.000000: 1.030000
+-6.500000: 1.036000
+-2.500000: 1.023000
+1.000000: 0.999000
+4.500000: 0.995000
+8.000000: 0.991000
+11.500000: 0.989099
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_2.lut
+MAX WEAR AT: 5.557760 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.31
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.90
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.57
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.29
+Using camber LUT
+SMOOTH 47
+
+-15.500000: 1.020614
+-11.500000: 1.027175
+-8.000000: 1.034000
+-4.500000: 1.039000
+-1.000000: 1.009000
+2.500000: 0.997000
+6.500000: 0.993000
+8.500000: 0.991000
+12.500000: 0.988646
+16.000000: 0.984679
+20.000000: 0.978000
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_3.lut
+MAX WEAR AT: 7.225088 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.28
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.88
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.55
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.28
+Using camber LUT
+SMOOTH 47
+
+-15.500000: 1.020614
+-12.000000: 1.026286
+-8.500000: 1.033000
+-5.000000: 1.039000
+-1.500000: 1.014000
+2.000000: 0.998000
+5.500000: 0.994000
+9.000000: 0.990000
+13.000000: 0.988285
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_4.lut
+MAX WEAR AT: 9.392614 vKM , mult 0.875000
+SOFTNESS INDEX: 0.958488
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.26
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.86
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.53
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.26
+Using camber LUT
+SMOOTH 47
+
+-17.500000: 1.017646
+-15.000000: 1.021378
+-10.500000: 1.029030
+-6.500000: 1.036000
+-3.000000: 1.027000
+0.000000: 1.000000
+4.000000: 0.996000
+8.000000: 0.991000
+11.500000: 0.989099
+15.000000: 0.986109
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_5.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.24
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.52
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.25
+Using camber LUT
+-20.000000: 1.014000
+-11.500000: 1.027175
+-7.500000: 1.034000
+-3.500000: 1.032000
+1.000000: 0.999000
+5.000000: 0.994000
+9.000000: 0.990000
+13.000000: 0.988285
+17.000000: 0.983097
+19.500000: 0.978845
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_6.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.39
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:2.01
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.69
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.42
+Using camber LUT
+Loading curve from:content/cars/rss_formula_hybrid_x_2026/data/camber_table_rear.lut
+SMOOTH 47
+
+-14.000000: 1.014461
+-10.000000: 1.021000
+-6.000000: 1.027000
+-2.000000: 1.021000
+2.000000: 0.998000
+6.000000: 0.993000
+10.000000: 0.989000
+14.500000: 0.986749
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_1.lut
+MAX WEAR AT: 6.840320 vKM , mult 0.875000
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.37
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.99
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.67
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.41
+Using camber LUT
+SMOOTH 47
+
+-9.000000: 1.023000
+-5.000000: 1.029000
+-1.500000: 1.016000
+2.000000: 0.998000
+5.500000: 0.994000
+9.000000: 0.990000
+13.000000: 0.988285
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_2.lut
+MAX WEAR AT: 8.892416 vKM , mult 0.875000
+SOFTNESS INDEX: 1.062149
+cback: 47
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.34
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.97
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.66
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.39
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.012987
+-11.000000: 1.019245
+-7.000000: 1.026000
+-3.000000: 1.032000
+0.500000: 0.999000
+4.500000: 0.995000
+8.500000: 0.991000
+12.500000: 0.988646
+16.500000: 0.983904
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_3.lut
+MAX WEAR AT: 11.560141 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.32
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.95
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.64
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.38
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.013718
+-10.500000: 1.020111
+-7.000000: 1.026000
+-2.500000: 1.026000
+1.500000: 0.998000
+5.000000: 0.994000
+8.000000: 0.991000
+12.500000: 0.988646
+16.500000: 0.983904
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_4.lut
+MAX WEAR AT: 15.028183 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.29
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.93
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.62
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.36
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.012987
+-11.000000: 1.019245
+-7.000000: 1.026000
+-3.500000: 1.031000
+1.000000: 0.999000
+5.000000: 0.994000
+9.500000: 0.989000
+13.500000: 0.987844
+17.500000: 0.982267
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_5.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.27
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.61
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.35
+Using camber LUT
+SMOOTH 47
+
+-11.000000: 1.019245
+-8.000000: 1.024000
+-4.000000: 1.030000
+-0.500000: 1.005000
+3.500000: 0.996000
+7.000000: 0.992000
+10.500000: 0.989146
+15.000000: 0.986109
+19.500000: 0.978845
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_6.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.39
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.69
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.42
+Using camber LUT
+SMOOTH 47
+
+-13.500000: 1.015216
+-9.500000: 1.022000
+-5.000000: 1.029000
+-1.000000: 1.011000
+2.500000: 0.997000
+6.500000: 0.993000
+10.000000: 0.989000
+13.500000: 0.987844
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_1.lut
+MAX WEAR AT: 6.840320 vKM , mult 0.875000
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.37
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.99
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.67
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.41
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.012987
+-11.000000: 1.019245
+-7.500000: 1.025000
+-4.500000: 1.029000
+-0.500000: 1.005000
+3.500000: 0.996000
+7.500000: 0.992000
+11.000000: 0.989177
+15.000000: 0.986109
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_2.lut
+MAX WEAR AT: 8.892416 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.34
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.97
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.66
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.39
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.013718
+-11.000000: 1.019245
+-7.000000: 1.026000
+-3.500000: 1.031000
+0.000000: 1.000000
+3.500000: 0.996000
+6.500000: 0.993000
+10.000000: 0.989000
+14.000000: 0.987329
+18.000000: 0.981419
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_3.lut
+MAX WEAR AT: 11.560141 vKM , mult 0.875000
+SOFTNESS INDEX: 1.041319
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.32
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.64
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.38
+Using camber LUT
+SMOOTH 47
+
+-8.500000: 1.023000
+-2.500000: 1.026000
+2.500000: 0.997000
+7.500000: 0.992000
+12.500000: 0.988646
+17.500000: 0.982267
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/FR_Temp_Comp_4.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_4.lut
+MAX WEAR AT: 15.028183 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.29
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.36
+Using camber LUT
+SMOOTH 47
+
+-4.500000: 1.029000
+0.500000: 0.999000
+4.500000: 0.995000
+8.500000: 0.991000
+12.000000: 0.988920
+16.000000: 0.984679
+20.000000: 0.978000
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_5.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.27
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.61
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.35
+Using camber LUT
+SMOOTH 47
+
+-16.000000: 1.011554
+-12.500000: 1.016774
+-7.500000: 1.025000
+-2.000000: 1.021000
+1.500000: 0.998000
+4.000000: 0.996000
+8.000000: 0.991000
+12.500000: 0.988646
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_6.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+TYRE COMPOUND: UltraSoft (C5)
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_FW_AOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CD_FW_AOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_RW_AOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_F_Diff_GH.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_F_Diff_AOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_R_Diff_GH.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_R_Diff_AOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CD_BodyBase.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CD_BodyGH.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CD_BodyAOA.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_DRS.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CL_DRS2.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/CD_DRS2.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/1.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/empty.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/extra_animations_internal.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/extra_animations_internal.lut
+LOADING DRS
+Loading ERS VERSION 1
+Loading curve from:content/cars/rss_formula_hybrid_x_2026/data/kers_coast.lut
+ERS, setting Kinetic power controller index: 2 (Balanced)
+Loading engine file content/cars/rss_formula_hybrid_x_2026/data/engine.ini
+VERSION=1
+GENERATING COAST CURVE PARAMETERS for section COAST_REF
+COAST SETTINGS CURVE
+0.000000 : 0.205000
+8.000000 : 0.080000
+LOADING THROTTLE LUT
+Loading curve from:content/cars/rss_formula_hybrid_x_2026/data/throttle_max.lut
+THROTTLE RESPONSE TABLE
+000	019	019	030	039	050	050	060	070	G: 0.8 080	090	090	100	ADDING GEAR:R
+ADDING GEAR:1
+ADDING GEAR:3
+ADDING GEAR:6
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/abs.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/tc.lut
+RaceEngineer :: LOADING IDEAL LINE
+Loading AI Spline: content/tracks/acu_cota_2021/data/ideal_line.ai
+MAX NUMBER OF GEARS 10
+MAX SPEED 86.703300 TURBOS 1
+FINAL FUEL : 4.240944
+DIRECT INPUT DEVICE:FANATEC ClubSport Wheel Base V2.5
+DIRECT INPUT DEVICE:FANATEC ClubSport Wheel Base V2.5
+lpDirectInputDevice->CreateEffect successful GUID_ConstantForce
+ERROR: InputDevice::initFF(), lpDirectInputDevice->SetProperty failed
+ERROR: InputDevice::initFF(), lpDirectInputDevice->CreateEffect failed GUID_ConstantForce
+ERROR: DAMPER CREATION FAILED
+ff_post_process.ini
+Overriding assettocorsa.ini FF_SKIP_STEPS with controls.ini value: 0
+[CLUTCH] JOY: 0
+[HANDBRAKE] MAX: 1.000000
+[GLANCELEFT] JOY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[GLANCERIGHT] KEY: 69
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[GLANCEBACK] KEY: 87
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ACTION_CHANGE_CAMERA] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ACTION_HEADLIGHTS] KEY: 76
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ACTION_HEADLIGHTS_FLASH] KEY: 71
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ACTION_HORN] KEY: 72
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[HANDBRAKE] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[BALANCEDN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[BALANCEUP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[KERS] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[DRS] KEY: -1
+[BRAKES] GAMMA: 2.400000
+[ABSDN] BUTTON: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ABSUP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[TCDN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[TURBODN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[TURBOUP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ENGINE_BRAKE_UP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[ENGINE_BRAKE_DN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[MGUK_DELIVERY_UP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[MGUK_DELIVERY_DN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[MGUK_RECOVERY_UP] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[MGUK_RECOVERY_DN] KEY: -1
+[ADVANCED] COMBINE_WITH_KEYBOARD_CONTROL: 0
+[MGUH_MODE] KEY: -1
+[STEER] STEER_FILTER: 0.000000
+[STEER] SCALE: 0.880000
+[STEER] SPEED_SENSITIVITY: 0.000000
+[FF_ENHANCEMENT] SLIPS: 0.000000
+[FF_ENHANCEMENT] ABS: 0.000000
+[FF_TWEAKS] CENTER_BOOST_GAIN: 10.000000
+LOADING COLLIDER MESH FILE: content/cars/rss_formula_hybrid_x_2026/collider.kn5
+RADIUS FRONT, P:0.362500 , G:0.000000 , diff:0.362500
+SMOKE LEVEL AT 3:SMOKE LEVEL AT 3:SMOKE LEVEL AT 3:SMOKE LEVEL AT 3:ENGINE SMOKE LEVEL SELECTED : eSmokeNormal
+Audio log (AudioEngine.cpp:1198): Loading bank content/cars/rss_formula_hybrid_x_2026/sfx/rss_formula_hybrid_x_2026.bank
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/car_shift_dw.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/car_shift_up.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/brake_0.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/throttle_0.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/Wing_Rear.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/halo.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/halo_extra.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/glass_styles.ksanim
+VERSION: 2
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/car_door_R.ksanim
+VERSION: 2
+ADDING LIGHT OBJECT S1_LED_R0
+ADDING LIGHT OBJECT S1_LED_R0
+ADDING LIGHT OBJECT S1_LED_R0
+ADDING LIGHT OBJECT ERS_HARVEST_1
+ADDING LIGHT OBJECT ERS_HARVEST_1
+ADDING LIGHT OBJECT ERS_HARVEST_1
+ADDING LIGHT OBJECT LED_PIT
+ADDING LIGHT OBJECT LED_PIT
+ADDING LIGHT OBJECT LED_PIT
+ADDING LIGHT OBJECT LED_PIT_1
+ADDING LIGHT OBJECT LED_TRACK
+DigitalInstruments::initInstruments()
+DigitalPanels::initPanel()
+FOUND 0 BRAKE DISCS MESHES FOR TYRE:0
+FOUND 0 BRAKE DISCS MESHES FOR TYRE:2
+FOUND 0 BRAKE DISCS MESHES FOR TYRE:3
+User FF gain loaded and set to 0.500000
+DEBUG TIMER: PHYSICS LOAD:580.329200
+goToSpawnPosition PIT
+[CAR_0] BALLAST: 0.000000
+[GHOST_CAR] RECORDING: 0
+New session, resetting track dynamic objects
+
+POWER CLASS INDEX
+LOADING ANIMATION: content/cars/rss_formula_hybrid_x_2026/animations/car_wiper.ksanim
+VERSION: 1
+REPLAY QUALITY AT 66.666667 Hz
+ReplayManager MAX FRAMES COUNT 7352941 WHICH IS 1838.235250 MINS
+ReplayManager initialized current type 1
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR AUDIO_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR CHAT_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR CAMERA_PICTURE_MODE_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR CSPRSTATS_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_CAR_DEBUG_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_LIGHT_MAKER_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_LUA_DEBUG_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_OBJECTS_INSPECTOR_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_PYTHON_PROFILER_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_REFLECTIONSFX_DEBUG_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_WEATHERFX_DEBUG_ICON
+KGL CREATE FONT Consolas with locale 
+KGL CREATE FONT Consolas with locale 
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR FORM_OPENVR_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR FORM_MGU_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR FORM_BALLAST_ICON
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.36
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.60
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.32
+Using camber LUT
+SMOOTH 47
+
+9.500000: 0.989000
+16.000000: 0.984679
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_1.lut
+MAX WEAR AT: 4.275200 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.33
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.92
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.58
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.30
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.021378
+-10.500000: 1.029030
+-7.000000: 1.035000
+-2.000000: 1.018000
+2.000000: 0.998000
+6.000000: 0.993000
+10.000000: 0.989000
+14.500000: 0.986749
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_2.lut
+MAX WEAR AT: 5.557760 vKM , mult 0.875000
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.31
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.90
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.57
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.29
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.022154
+-10.000000: 1.030000
+-6.000000: 1.037000
+-2.000000: 1.018000
+2.000000: 0.998000
+6.000000: 0.993000
+10.000000: 0.989000
+15.000000: 0.986109
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_3.lut
+MAX WEAR AT: 7.225088 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.28
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.88
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.55
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.28
+Using camber LUT
+SMOOTH 47
+
+-14.000000: 1.022945
+-9.500000: 1.031000
+-5.500000: 1.038000
+-2.000000: 1.018000
+2.000000: 0.998000
+6.000000: 0.993000
+10.000000: 0.989000
+14.000000: 0.987329
+18.000000: 0.981419
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_4.lut
+MAX WEAR AT: 9.392614 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.26
+Using camber LUT
+SMOOTH 47
+
+-13.000000: 1.024576
+-9.000000: 1.032000
+-5.000000: 1.039000
+-1.000000: 1.009000
+3.000000: 0.997000
+7.000000: 0.992000
+10.500000: 0.989146
+15.000000: 0.986109
+19.500000: 0.978845
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_5.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.24
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.84
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.52
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.25
+Using camber LUT
+SMOOTH 47
+
+-14.000000: 1.022945
+-9.000000: 1.032000
+-5.500000: 1.038000
+-1.500000: 1.014000
+2.000000: 0.998000
+6.500000: 0.993000
+10.500000: 0.989146
+14.500000: 0.986749
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_6.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.36
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.94
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.60
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.32
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.022154
+-10.000000: 1.030000
+-6.500000: 1.036000
+-2.500000: 1.023000
+1.000000: 0.999000
+4.500000: 0.995000
+8.000000: 0.991000
+12.000000: 0.988920
+15.500000: 0.985416
+19.000000: 0.979701
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_1.lut
+MAX WEAR AT: 4.275200 vKM , mult 0.875000
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.33
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.92
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.58
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.30
+Using camber LUT
+SMOOTH 47
+
+-4.500000: 1.039000
+-0.500000: 1.005000
+3.000000: 0.997000
+6.500000: 0.993000
+11.000000: 0.989177
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_2.lut
+MAX WEAR AT: 5.557760 vKM , mult 0.875000
+SOFTNESS INDEX: 0.998869
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.31
+TEST MAX, LOAD:3460.0 1.00 @ 6.11 D:1.90
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.57
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.29
+Using camber LUT
+SMOOTH 47
+
+-14.000000: 1.022945
+-10.500000: 1.029030
+-7.000000: 1.035000
+-4.000000: 1.036000
+-1.500000: 1.014000
+1.500000: 0.998000
+4.500000: 0.995000
+7.000000: 0.992000
+9.500000: 0.989000
+12.500000: 0.988646
+16.000000: 0.984679
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_3.lut
+MAX WEAR AT: 7.225088 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.28
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.55
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.28
+Using camber LUT
+SMOOTH 47
+
+-9.500000: 1.031000
+-5.500000: 1.038000
+-1.500000: 1.014000
+2.500000: 0.997000
+6.500000: 0.993000
+11.500000: 0.989099
+16.500000: 0.983904
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_4.lut
+MAX WEAR AT: 9.392614 vKM , mult 0.875000
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.26
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.53
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.26
+Using camber LUT
+SMOOTH 47
+
+-14.000000: 1.022945
+-11.000000: 1.028089
+-8.000000: 1.034000
+-6.000000: 1.037000
+-3.500000: 1.032000
+0.000000: 1.000000
+3.500000: 0.996000
+7.000000: 0.992000
+10.500000: 0.989146
+14.500000: 0.986749
+20.000000: 0.978000
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/FR_Temp_Comp_5.lut
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_5.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+SOFTNESS INDEX: 0.938297
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.88 D:2.24
+TEST MAX, LOAD:6920.0 1.00 @ 6.56 D:1.52
+TEST MAX, LOAD:13840.0 1.00 @ 7.35 D:1.25
+Using camber LUT
+SMOOTH 47
+
+-8.000000: 1.034000
+-4.000000: 1.036000
+-0.500000: 1.005000
+3.000000: 0.997000
+7.000000: 0.992000
+11.000000: 0.989177
+15.500000: 0.985416
+19.500000: 0.978845
+COOL FACTOR FINAL:0.000373
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/F_Wear_Comp_6.lut
+MAX WEAR AT: 12.210399 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.39
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:2.01
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.69
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.42
+Using camber LUT
+SMOOTH 47
+
+-13.000000: 1.015987
+-8.500000: 1.023000
+-4.500000: 1.029000
+0.000000: 1.000000
+4.000000: 0.996000
+8.000000: 0.991000
+11.500000: 0.989099
+15.000000: 0.986109
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_1.lut
+MAX WEAR AT: 6.840320 vKM , mult 0.875000
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.37
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.99
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.67
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.41
+Using camber LUT
+SMOOTH 47
+
+-13.500000: 1.015216
+-9.500000: 1.022000
+-6.000000: 1.027000
+-2.000000: 1.021000
+2.000000: 0.998000
+6.000000: 0.993000
+9.500000: 0.989000
+13.500000: 0.987844
+17.500000: 0.982267
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_2.lut
+MAX WEAR AT: 8.892416 vKM , mult 0.875000
+SOFTNESS INDEX: 1.062149
+cback: 47
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.34
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.97
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.66
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.39
+Using camber LUT
+SMOOTH 47
+
+-11.000000: 1.019245
+-7.000000: 1.026000
+-3.000000: 1.032000
+1.000000: 0.999000
+5.000000: 0.994000
+9.000000: 0.990000
+12.500000: 0.988646
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_3.lut
+MAX WEAR AT: 11.560141 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.32
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.95
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.64
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.38
+Using camber LUT
+SMOOTH 47
+
+-7.000000: 1.026000
+-2.500000: 1.026000
+1.500000: 0.998000
+6.500000: 0.993000
+10.500000: 0.989146
+14.500000: 0.986749
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_4.lut
+MAX WEAR AT: 15.028183 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.29
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.93
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.62
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.36
+Using camber LUT
+SMOOTH 47
+
+-7.500000: 1.025000
+-3.000000: 1.032000
+1.000000: 0.999000
+5.000000: 0.994000
+9.000000: 0.990000
+13.000000: 0.988285
+17.500000: 0.982267
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_5.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+SOFTNESS INDEX: 0.999659
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.27
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.91
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.61
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.35
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.012987
+-11.000000: 1.019245
+-6.500000: 1.026000
+-2.500000: 1.026000
+1.000000: 0.999000
+5.000000: 0.994000
+9.000000: 0.990000
+13.000000: 0.988285
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_6.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+Using custom thermal spread: 1.400000
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.39
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.69
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.42
+Using camber LUT
+SMOOTH 47
+
+-1.000000: 1.011000
+4.000000: 0.996000
+8.500000: 0.991000
+13.000000: 0.988285
+18.000000: 0.981419
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_1.lut
+MAX WEAR AT: 6.840320 vKM , mult 0.875000
+SOFTNESS INDEX: 1.082978
+LOADING TYRE COMPOUND SuperSoft (C4)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.37
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.99
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.67
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.41
+Using camber LUT
+SMOOTH 47
+
+-16.000000: 1.011554
+-12.000000: 1.017578
+-7.500000: 1.025000
+-4.000000: 1.030000
+0.000000: 1.000000
+4.000000: 0.996000
+8.500000: 0.991000
+12.000000: 0.988920
+16.500000: 0.983904
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_2.lut
+MAX WEAR AT: 8.892416 vKM , mult 0.875000
+LOADING TYRE COMPOUND Soft (C3)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.34
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.97
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.66
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.39
+Using camber LUT
+SMOOTH 47
+
+-14.500000: 1.013718
+-11.000000: 1.019245
+-6.500000: 1.026000
+-3.000000: 1.032000
+1.000000: 0.999000
+4.000000: 0.996000
+7.500000: 0.992000
+11.000000: 0.989177
+14.500000: 0.986749
+18.500000: 0.980562
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_3.lut
+MAX WEAR AT: 11.560141 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Medium (C2)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.32
+TEST MAX, LOAD:3460.0 1.00 @ 5.37 D:1.95
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.64
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.38
+Using camber LUT
+SMOOTH 47
+
+-1.500000: 1.016000
+3.000000: 0.997000
+7.000000: 0.992000
+11.500000: 0.989099
+15.500000: 0.985416
+19.500000: 0.978845
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_4.lut
+MAX WEAR AT: 15.028183 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Hard (C1)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.29
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.62
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.36
+Using camber LUT
+SMOOTH 47
+
+-15.000000: 1.012987
+-11.500000: 1.018402
+-8.500000: 1.023000
+-5.000000: 1.029000
+-1.500000: 1.016000
+1.500000: 0.998000
+5.000000: 0.994000
+8.500000: 0.991000
+12.000000: 0.988920
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_5.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+cback: 47
+LOADING TYRE COMPOUND Wet (W)
+Using Stereo's combined factor: 2.200000
+TEST MAX, LOAD:1730.0 1.00 @ 5.20 D:2.27
+TEST MAX, LOAD:6920.0 1.00 @ 5.77 D:1.61
+TEST MAX, LOAD:13840.0 1.00 @ 6.50 D:1.35
+Using camber LUT
+SMOOTH 47
+
+-13.500000: 1.015216
+-9.500000: 1.022000
+-5.500000: 1.028000
+-2.000000: 1.021000
+2.000000: 0.998000
+5.500000: 0.994000
+9.500000: 0.989000
+13.000000: 0.988285
+17.000000: 0.983097
+COOL FACTOR FINAL:0.000455
+Loading lut content/cars/rss_formula_hybrid_x_2026/data/R_Wear_Comp_6.lut
+MAX WEAR AT: 19.536638 vKM , mult 0.875000
+Initialising Python Interface
+LOADING 5 PY APPS
+ERROR: Python [ERROR] File apps/python/acnotify/acnotify.py not found
+Init PyPlugin:Chat
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR Python Chat_ICON
+'module' object has no attribute 'acUpdate'
+Init PyPlugin:gMeter
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR G Meter_ICON
+'module' object has no attribute 'acUpdate'
+ERROR: Python [ERROR] File apps/python/Kissmyrank/Kissmyrank.py not found
+Init PyPlugin:SimHub
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR SimHub_ICON
+Function acUpdate bind to module
+Localized Setup I/O is NOT FOUND
+Localized GEARS is NOT FOUND
+Localized TYRES is TYRES
+Localized FUEL is FUEL
+Localized ELECTRONICS is NOT FOUND
+Loading pitstop.ini
+[SETTINGS] VISIBILITY_MAX_TIME: 5.000000
+[SETTINGS] ITEM_HEIGHT: 20.000000
+[SETTINGS] ITEM_VALUE_WIDTH: 80.000000
+[SETTINGS] FORM_ALIGNMENT_H: 2
+[SETTINGS] FONT_IS_BOLD: 0
+Loading setup.ini
+Localized SUSP2: MAIN is NOT FOUND
+Localized AERODYNAMICS is NOT FOUND
+Localized VISUALS is NOT FOUND
+Localized DRIVETRAIN is DRIVETRAIN
+Localized BRAKES is NOT FOUND
+Localized SUSP3: DAMPERS is NOT FOUND
+Localized SUSP1: ALIGNMENTS is NOT FOUND
+Localized SUSP4: HEAVE is NOT FOUND
+Localized VARIOUS is NOT FOUND
+ERROR: GEAR COULD NOT FIND GEAR_1
+Localized PITSTOP STRATEGY is NOT FOUND
+Localized VISUAL: MFD is NOT FOUND
+
+_________________________________________________________
+
+RemoteTelemetryUDP :: creating socket on port 9996
+Initializing TrackIR interface
+LoadLibrary failed
+LOADING CSV: content/tracks/acu_cota_2021/data/down5m_soft.csv
+ActiveButton :: COULD NOT FIND :: content/gui/pitstop/tyre_6_ON.png
+LOADING ANIMATION: content/objects3D/pitcrewtyre.ksanim
+VERSION: 2
+LOADING ANIMATION: content/objects3D/pitcrewtyre.ksanim
+VERSION: 2
+LOADING ANIMATION: content/objects3D/pitcrewtyre.ksanim
+VERSION: 2
+LOADING ANIMATION: content/objects3D/pitcrewtyre.ksanim
+VERSION: 2
+KGL CREATE FONT Orbitron with locale 
+Init Fanatec Updater...
+led_big MONOSPACE SIZE:0.010498 (min 0.010254)
+Car::setSlipStreamEffects: receive:1.000000 speed_factor:1.000000
+Steam Interface :: COULDN't FIND A TIME TO BEAT!
+STARTING PHYSICS ENGINE
+UNLOADING MESH RESOURCES
+ACQUIRED OK, REQUEST FF RESTART
+PhysicsAvatar:: SESSION INFO RECEIVED
+Changing Car:0  tyre:1  compoundindex:2
+Changing Car:0  tyre:3  compoundindex:2
+Changing Car:0  tyre:0  compoundindex:2
+Car::setRequestedFuel: 50.000000
+Creating render target 3840 2160
+DEBUG TIMER: Sim::Sim:10004.768600
+TIME TO INIT: 10530.805900
+SplashScreen removed from evOnEndFrame that has 0 listeners
+ERROR: NO STAT FOR rss_formula_hybrid_x_2026
+ERROR: NO STAT FOR acu_cota_2021
+Audio log (AudioEngine.cpp:1198): Loading bank C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\audio/sol.bank
+Audio log (AudioEngine.cpp:1198): Loading bank C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\audio/rain.bank
+Creating render target 1024 256
+[MIRRORS] FOV: 10.000000
+Audio log (AudioEngine.cpp:1198): Loading bank C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\lua\fireworks\holidays\extra_fireworks.bank
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_LUA_CSP Debug_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_LUA_CSP Debug_settings_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Pure Config App_main_pure_config_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Pure Planner_main_pure_planner_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_SimHubUDPConnector_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Unbound_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_comfy map_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_comfy map_smol_map_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_AI Spline Editor_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_CSP_LUA_App Shelf_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_CSP Data Logger_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Controller Tweaks_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Pocket Technician_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Pure PP App_main_pure_pp_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_RSS Settings_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Setup Exchange_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Skin Companion_main_ICON
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [TEMPLATE: TyresPattern_FHX EXTENDS TyresPattern] @  STILL USING OLD VALUE:  TyresPattern_Along, Pos = 0.16, Width = 0.01
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [TEMPLATE: TyresPattern_FHX EXTENDS TyresPattern] @  STILL USING OLD VALUE:  TyresPattern_Along, Pos = 0.16, Width = 0.01
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [TEMPLATE: TyresPattern_FHX EXTENDS TyresPattern] @  STILL USING OLD VALUE:  TyresPattern_Along, Pos = 0.16, Width = 0.01
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [TEMPLATE: TyresPattern_FHX EXTENDS TyresPattern] @  STILL USING OLD VALUE:  TyresPattern_Along, Pos = 0.16, Width = 0.01
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [TEMPLATE: TyresPattern_FHX EXTENDS TyresPattern] @  STILL USING OLD VALUE:  TyresPattern_Along, Pos = 0.16, Width = 0.01
+ERROR: INIReader:  > ERROR: MULTIPLE KEY FOUND IN FILE  [SHADER_REPLACEMENT_...] PROP_...  STILL USING OLD VALUE:  ksDiffuse, 0.11
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Time Shift_main_ICON
+WARNING: TaskBarIcon :: COULD NOT FIND TEXTURES FOR IMGUI_LUA_Extended Controls_main_ICON
+Car::setRequestedFuel: 50.000000
+goToSpawnPosition PIT
+SETTING PAUSE MODE: 1
+goToSpawnPosition PIT
+SETTING PAUSE MODE: 0
+RESET PHYSICS TIMER
+Changing Car:0  tyre:0  compoundindex:2
+Changing Car:0  tyre:2  compoundindex:2
+Car::setRequestedFuel: 50.000000
+Car::setRequestedFuel: 50.000000
+SETTING PAUSE MODE: 1
+goToSpawnPosition PIT
+SETTING PAUSE MODE: 0
+RESET PHYSICS TIMER
+Changing Car:0  tyre:0  compoundindex:2
+Changing Car:0  tyre:0  compoundindex:2
+Changing Car:0  tyre:3  compoundindex:2
+Car::setRequestedFuel: 30.000000
+Car: 0 , gasCoastOffset (7): 0.100000
+Car::setRequestedFuel: 30.000000
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 5 (Override)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 3 (High)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+LAP VALID: 1 CUTS:1, COUNT: 1
+ERS, setting Kinetic power controller index: 5 (Override)
+Car: 0 , gasCoastOffset (0): 0.205000
+Car: 0 , gasCoastOffset (10): 0.040000
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 3 (High)
+ERS, setting Kinetic power controller index: 2 (Balanced)
+ERS, setting Kinetic power controller index: 3 (High)
+LAP VALID: 1 CUTS:0, COUNT: 2
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 5 (Override)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 3 (High)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 5 (Override)
+LAP VALID: 1 CUTS:0, COUNT: 3
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 3 (High)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 5 (Override)
+ERS, setting Kinetic power controller index: 4 (Qualy)
+ERS, setting Kinetic power controller index: 3 (High)
+LAP VALID: 1 CUTS:0, COUNT: 4
+LAP VALID: 1 CUTS:0, COUNT: 5
+LAP VALID: 1 CUTS:1, COUNT: 6
+goToSpawnPosition PIT
+SETTING PAUSE MODE: 1
+Saving replay: C:\Users\Mike\Documents/Assetto Corsa/replay/temp/AC_071126-030256_O_rss_formula_hybrid_x_2026_acu_cota_2021_.acreplay
+closing pluginManager
+DELETING PY PLUGIN Chat
+km_per_liter: 1.697313 lap_eval: 3.192353  , evaluator: 1.987390 (guess: 2.315566), length:5418.423340
+Saving telemetry channel LAP_BEACON with 83898 samples @ 100
+Saving telemetry channel G_LAT with 16780 samples @ 20
+Saving telemetry channel ROTY with 16780 samples @ 20
+Saving telemetry channel STEERANGLE with 16780 samples @ 20
+Saving telemetry channel SPEED with 16780 samples @ 20
+Saving telemetry channel THROTTLE with 16780 samples @ 20
+Saving telemetry channel BRAKE with 16780 samples @ 20
+Saving telemetry channel GEAR with 16780 samples @ 20
+Saving telemetry channel G_LON with 16780 samples @ 20
+Saving telemetry channel CLUTCH with 16780 samples @ 20
+Saving telemetry channel RPMS with 16780 samples @ 20
+Saving telemetry channel SPLINE_POSITION with 16780 samples @ 20
+Saving telemetry channel SUS_TRAVEL_LF with 167796 samples @ 200
+Saving telemetry channel SUS_TRAVEL_RF with 167796 samples @ 200
+Saving telemetry channel SUS_TRAVEL_LR with 167796 samples @ 200
+Saving telemetry channel SUS_TRAVEL_RR with 167796 samples @ 200
+Saving telemetry channel WHEEL_SPEED_LF with 16780 samples @ 20
+Saving telemetry channel WHEEL_SPEED_RF with 16780 samples @ 20
+Saving telemetry channel WHEEL_SPEED_LR with 16780 samples @ 20
+Saving telemetry channel WHEEL_SPEED_RR with 16780 samples @ 20
+Openvr shutdown
+CLEAN EXIT

@@ -1,0 +1,13 @@
+﻿{
+    "task_id":  "req_light_20261110_222241_083",
+    "agent":  "general",
+    "sender":  "GeneralAgent_Laptop",
+    "requester":  "LightAgent",
+    "reply_to":  "light",
+    "action":  "ApprovalRequest",
+    "approved_by":  "GeneralAgent_Laptop",
+    "timestamp":  "2026-11-10T22:22:57.4133654+01:00",
+    "status":  "Approved",
+    "output":  "[GENERAL FREIGABE ERTEILT] Test-2A freigegeben.\nBezug: Rueckversicherung @light -\u003e @light (rig_to_light_test_rig_handoff_20261110_222239): Darf ich ausfuehren: \u0027[TEST-2A] Rig Agent: Pruefe Status und leite @light weiter: Host-Bereitschaft pruefen\u0027?",
+    "approved":  true
+}

@@ -1,0 +1,35 @@
+﻿{
+    "timestamp":  "2026-11-07T03:18:56.8391300+01:00",
+    "agent":  "Dark Agent",
+    "target_agent":  "Light Agent",
+    "status":  "ISSUES_FOUND",
+    "total_issues":  2,
+    "issues":  [
+                   {
+                       "Id":  "ISSUE_02_SFX_SOUND_BANKS_MISSING",
+                       "Severity":  "CRITICAL",
+                       "Component":  "FMOD Audio Engine",
+                       "Summary":  "content\\sfx Ordner mit Sound-Banks fehlt komplett",
+                       "Description":  "Assetto Corsa\u0027s Audiomodul (fmod64.dll) erfordert zwingend \u0027content\\sfx\\common.bank\u0027, \u0027common.strings.bank\u0027 und \u0027GUIDs.txt\u0027. Ohne diese Basissound-Dateien stuerzt acs.exe unmittelbar beim Initialisieren ab.",
+                       "Remediation":  "Ordner \u0027content\\sfx\u0027 vom SimRacer Host (Steam) in die Sandbox uebertragen."
+                   },
+                   {
+                       "Id":  "ISSUE_03_CORE_CONTENT_MISSING",
+                       "Severity":  "HIGH",
+                       "Component":  "Assetto Corsa Game Assets",
+                       "Summary":  "Grundlegende Assets fehlen: fonts, gui, weather, driver, texture",
+                       "Description":  "In C:\\AssettoCorsa\\content fehlen Basiselemente (fonts fuer Dashboards/HUD, gui fuer UI-Texturen, weather fuer Wetterprofile, driver fuer 3D-Fahrermodelle). Der Simulator bricht beim Laden der Session ab.",
+                       "Remediation":  "Light Agent muss diese Core-Ordner vom Host nach \\\\host.lan\\Data\\content bereitstellen."
+                   }
+               ],
+    "missing_folders":  [
+                            "sfx",
+                            "fonts",
+                            "gui",
+                            "weather",
+                            "driver",
+                            "texture"
+                        ],
+    "host_source_path":  "C:\\Program Files (x86)\\Steam\\steamapps\\common\\assettocorsa\\content\\",
+    "sandbox_dest_path":  "C:\\AssettoCorsa\\content\\"
+}

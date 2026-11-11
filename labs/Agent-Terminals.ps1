@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Agent-Terminals.ps1 - Zentraler SSH- & Lokal-Terminal-Launcher im Git-Labor (VanstrikeCyborg).
 .DESCRIPTION
@@ -53,6 +53,7 @@ $AgentCatalog = @(
         Port        = 8317
         Mode        = "LOKAL (Master)"
         Script      = Join-Path $SharedAgentsRoot "general\start_general_terminal.ps1"
+        SshCommand  = ""
         Description = "Workspace-, Git-Labor- & Multi-Agent-Orchestrator"
     },
     [ordered]@{
@@ -64,6 +65,7 @@ $AgentCatalog = @(
         Port        = 22
         Mode        = "SSH -ClientMode"
         Script      = Join-Path $SharedScriptsRoot "connect_rig_terminal.ps1"
+        SshCommand  = "ssh -t simracer `"powershell -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\scripts\connect_rig_terminal.ps1`""
         Description = "Hardware, SteamVR, Fanatec, AC & 50Hz-Telemetry"
     },
     [ordered]@{
@@ -75,6 +77,7 @@ $AgentCatalog = @(
         Port        = 22
         Mode        = "SSH -ClientMode"
         Script      = Join-Path $SharedScriptsRoot "connect_light_terminal.ps1"
+        SshCommand  = "ssh -t simracer `"powershell -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\scripts\connect_light_terminal.ps1`""
         Description = "Docker-Engine, Container & Sandbox-Lifecycle"
     },
     [ordered]@{
@@ -86,6 +89,7 @@ $AgentCatalog = @(
         Port        = 2222
         Mode        = "SSH -ClientMode"
         Script      = Join-Path $SharedScriptsRoot "connect_dark_terminal.ps1"
+        SshCommand  = "ssh -t ac-sandbox"
         Description = "In-Guest Windows 11, CM/CSP & Setup-Validierung"
     },
     [ordered]@{
@@ -97,6 +101,7 @@ $AgentCatalog = @(
         Port        = 22
         Mode        = "SSH (Bash)"
         Script      = Join-Path $SharedScriptsRoot "connect_sarah_terminal.ps1"
+        SshCommand  = "ssh -t archibald `"bash -l ~/ac-pitwall/start_sarah_terminal.sh`""
         Description = "Pitwall Kiosk, Live-Coaching & Replay-Schnitt"
     },
     [ordered]@{
@@ -108,6 +113,7 @@ $AgentCatalog = @(
         Port        = 22
         Mode        = "SSH (Bash)"
         Script      = Join-Path $SharedScriptsRoot "connect_rick_terminal.ps1"
+        SshCommand  = "ssh -t strikerpi `"bash -l /opt/rick-agent/start_rick_terminal.sh`""
         Description = "Telemetry-Relay (:8080), MQTT (:1883) & Bare-Git"
     }
 )
@@ -135,17 +141,28 @@ function Show-AgentMatrix {
 function Start-AgentEntry {
     param([hashtable]$Entry, [switch]$CurrentWindow)
 
-    if (-not (Test-Path $Entry.Script)) {
-        Write-Warning "Skript nicht gefunden: $($Entry.Script)"
-        return
-    }
-
-    if ($CurrentWindow) {
-        Write-Host ">>> Starte $($Entry.Name) im aktuellen Terminal ($($Entry.Mode))..." -ForegroundColor Cyan
-        & $Entry.Script
+    # Bevorzuge direktes Skript, falls vorhanden; sonst direkter SSH-Aufruf
+    if (Test-Path $Entry.Script) {
+        if ($CurrentWindow) {
+            Write-Host ">>> Starte $($Entry.Name) im aktuellen Terminal ($($Entry.Mode))..." -ForegroundColor Cyan
+            & $Entry.Script
+        } else {
+            Write-Host ">>> Oeffne separates Terminal-Fenster fuer $($Entry.Name) ($($Entry.Mode))..." -ForegroundColor Green
+            Start-Process powershell.exe -ArgumentList "-NoExit -ExecutionPolicy Bypass -File `"$($Entry.Script)`""
+        }
+    } elseif ($Entry.SshCommand) {
+        if ($CurrentWindow) {
+            Write-Host ">>> Starte $($Entry.Name) via SSH im aktuellen Terminal..." -ForegroundColor Cyan
+            Invoke-Expression $Entry.SshCommand
+        } else {
+            Write-Host ">>> Oeffne separates SSH-Terminal fuer $($Entry.Name)..." -ForegroundColor Green
+            Start-Process powershell.exe -ArgumentList "-NoExit -Command $($Entry.SshCommand)"
+        }
+    } elseif ($Entry.Id -eq "general") {
+        Write-Host ">>> General Agent Leitstand (Lokal)..." -ForegroundColor Cyan
+        & powershell.exe
     } else {
-        Write-Host ">>> Oeffne separates Terminal-Fenster fuer $($Entry.Name) ($($Entry.Mode))..." -ForegroundColor Green
-        Start-Process powershell.exe -ArgumentList "-NoExit -ExecutionPolicy Bypass -File `"$($Entry.Script)`""
+        Write-Warning "Weder lokales Skript noch SSH-Befehl fuer $($Entry.Name) definiert."
     }
 }
 

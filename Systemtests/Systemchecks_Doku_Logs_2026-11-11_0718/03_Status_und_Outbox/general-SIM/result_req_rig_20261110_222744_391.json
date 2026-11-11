@@ -1,0 +1,13 @@
+﻿{
+    "task_id":  "req_rig_20261110_222744_391",
+    "agent":  "general",
+    "sender":  "GeneralAgent_Laptop",
+    "requester":  "RigAgent",
+    "reply_to":  "rig",
+    "action":  "ApprovalRequest",
+    "approved_by":  "GeneralAgent_Laptop",
+    "approved":  true,
+    "timestamp":  "2026-11-10T22:27:56.4854634+01:00",
+    "status":  "Approved",
+    "output":  "[GENERAL FREIGABE ERTEILT] Test-3D (Dark-\u003eRig) freigegeben."
+}

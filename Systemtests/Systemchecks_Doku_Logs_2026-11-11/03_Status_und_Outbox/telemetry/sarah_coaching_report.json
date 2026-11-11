@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-11-07T02:15:27.335883",
+  "engineer": "Sarah Coach (Digital Race Engineer)",
+  "driver": "Apex_#23",
+  "car": "rss_formula_hybrid_x_2026",
+  "track": "acu_cota_2021",
+  "summary": {
+    "total_laps": 6,
+    "valid_laps_count": 4,
+    "best_lap_num": 4,
+    "best_lap_ms": 107422,
+    "best_lap_formatted": "01:47.422",
+    "ideal_lap_ms": 105374,
+    "ideal_lap_formatted": "01:45.374",
+    "potential_gain_seconds": 2.048,
+    "best_sectors": {
+      "s1_seconds": 28.582,
+      "s2_seconds": 40.297,
+      "s3_seconds": 36.495
+    }
+  },
+  "laps": [
+    {
+      "lap": 1,
+      "time_ms": 127656,
+      "time_str": "02:07.656",
+      "s1": 45521,
+      "s2": 42823,
+      "s3": 39312,
+      "tyre": "C3"
+    },
+    {
+      "lap": 2,
+      "time_ms": 111455,
+      "time_str": "01:51.455",
+      "s1": 31977,
+      "s2": 42983,
+      "s3": 36495,
+      "tyre": "C3"
+    },
+    {
+      "lap": 3,
+      "time_ms": 109055,
+      "time_str": "01:49.055",
+      "s1": 29117,
+      "s2": 41868,
+      "s3": 38070,
+      "tyre": "C3"
+    },
+    {
+      "lap": 4,
+      "time_ms": 107422,
+      "time_str": "01:47.422",
+      "s1": 28582,
+      "s2": 42120,
+      "s3": 36720,
+      "tyre": "C3"
+    }
+  ],
+  "coaching_notes": [
+    "Gefahrene Runden: 6 (davon 4 gewertete fliegende Runden).",
+    "Persönliche Bestzeit: 01:47.422 (Runde 4).",
+    "Theoretisch ideale Runde: 01:45.374 (S1: 28.582s, S2: 40.297s, S3: 36.495s).",
+    "Zeitpotenzial durch ideale Sektoren-Kombination: -2.048 Sekunden.",
+    "Sektor 2 (Esses-Ausgang & Gegengerade) zeigt sehr starke Rhythmus-Steigerung in Lap 5 (40.297s).",
+    "In Sektor 3 (Stadion-Sektion / Turn 16-18) liegt der größte Hebel: Apex früher vorbereiten und Bremsbalance um 0.5% nach hinten verlagern."
+  ],
+  "setup_recommendations": {
+    "tyres": {
+      "compound": "C3",
+      "pressure_front_left_psi": 22.8,
+      "pressure_front_right_psi": 23.2,
+      "pressure_rear_left_psi": 20.5,
+      "pressure_rear_right_psi": 20.8,
+      "reasoning": "Ausgleich für Counter-Clockwise Lastprofil in COTA (Rechte Seite höher belastet)."
+    },
+    "aero": {
+      "front_wing": 23,
+      "rear_wing": 26,
+      "balance": "Neutral-TurnIn optimiert für Esses"
+    },
+    "brakes": {
+      "front_bias": 56.5,
+      "reasoning": "Verhindert Untersteuern und Blockieren beim Bergab-Anbremsen in Turn 12."
+    }
+  }
+}

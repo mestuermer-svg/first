@@ -1,0 +1,22 @@
+﻿{
+    "timestamp":  "2026-11-11T00:37:33.4966060+01:00",
+    "agent":  "Dark Agent",
+    "role":  "In-Container Specialist (Guest Execution)",
+    "hostname":  "WIN-54U68T9T2FA",
+    "user":  "docker",
+    "os":  "Microsoft Windows NT 10.0.26200.0",
+    "disk_c_free_gb":  75.17,
+    "disk_c_total_gb":  159.75,
+    "free_ram_mb":  8939,
+    "cm_running":  true,
+    "acs_running":  false,
+    "csp_dll_present":  true,
+    "csp_version":  "0.2.11.0",
+    "csp_enabled":  true,
+    "current_car":  "gp_2025_mcl39",
+    "current_track":  "monza",
+    "current_config":  "",
+    "host_lan_data_ok":  true,
+    "ac_installed_path":  "C:\\AssettoCorsa",
+    "ac_documents_path":  "C:\\Users\\Docker\\Documents\\Assetto Corsa"
+}

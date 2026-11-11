@@ -1,0 +1,11 @@
+﻿{
+    "task_id":  "test_gen_rig_20261110_221913",
+    "agent":  "rig",
+    "sender":  "RigAgent",
+    "requester":  "GeneralAgent_Laptop",
+    "reply_to":  "general",
+    "action":  "Status",
+    "timestamp":  "2026-11-10T22:19:14.9755173+01:00",
+    "status":  "Success",
+    "output":  "\r\n\r\nName  : timestamp\r\nValue : 2026-11-10T22:19:13.9829433+01:00\r\n\r\nName  : agent\r\nValue : Rig Agent\r\n\r\nName  : role\r\nValue : Native SimRacer Host \u0026 Hardware Hub\r\n\r\nName  : hostname\r\nValue : SIMRACER\r\n\r\nName  : user\r\nValue : Mike\r\n\r\nName  : native_ac_root\r\nValue : C:\\Program Files (x86)\\Steam\\steamapps\\common\\assettocorsa\r\n\r\nName  : native_ac_found\r\nValue : True\r\n\r\nName  : steamvr_running\r\nValue : False\r\n\r\nName  : steamvr_processes\r\nValue : {}\r\n\r\nName  : acs_running\r\nValue : False\r\n\r\nName  : content_manager_run\r\nValue : False\r\n\r\nName  : mode_recommendation\r\nValue : ENGINEERING\r\n\r\nName  : docker_sandbox_state\r\nValue : running\r\n\r\nName  : gpu_telemetry\r\nValue : {name, memory_total_mb, memory_used_mb, memory_free_mb...}\r\n\r\nName  : fanatec_hardware\r\nValue : {Fanatec Wheel Virtual Mouse}\r\n\r\n\r\n\r\n"
+}

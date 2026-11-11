@@ -1,0 +1,10 @@
+﻿[2026-11-09T06:36:15.6219589+01:00] [INFO] [Dark-InContainer] Action 'ProcessPrompt' gestartet...
+[2026-11-09T06:36:15.6219589+01:00] [INFO] [Dark-InContainer] Verarbeite Prompt als Textdaten im Gast...
+[2026-11-09T06:36:15.6219589+01:00] [INFO] [Dark-InContainer] Intent 'Uhrzeit/Zeitzone' im Prompt erkannt. Fuehre Zeitsynchronisation aus...
+[Dark Agent @ Sandbox In-Container]
+Aktion ausgefuehrt: Zeitzone und Systemzeit korrigiert.
+Zeitzone: (UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien
+Aktuelle Gast-Uhrzeit: 2026-11-09 06:36:16 (Wien / CET Winterzeit UTC+1)
+Handshake-Status: Synchronisation mit Host erfolgreich abgeschlossen.
+[2026-11-09T06:36:15.6219589+01:00] [SUCCESS] [Dark-InContainer] Uhrzeit-Korrektur abgeschlossen: 2026-11-09 06:36:16 ((UTC+01:00) Amsterdam, Berlin, Bern, Rom, Stockholm, Wien)
+

@@ -1,0 +1,11 @@
+﻿{
+    "task_id":  "test_dark_to_light_20261110_222545",
+    "agent":  "light",
+    "sender":  "LightAgent",
+    "requester":  "DarkAgentConsole",
+    "reply_to":  "dark",
+    "action":  "ProcessPrompt",
+    "timestamp":  "2026-11-10T22:27:25.6510608+01:00",
+    "status":  "Success",
+    "output":  "[Light Agent] Auftrag an Dark Agent uebergeben (delegated_20261110_222710). Verarbeitung laeuft im Gast."
+}

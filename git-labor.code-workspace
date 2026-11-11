@@ -62,7 +62,54 @@
     "antigravityCopilot.server.autoStart": true,
     "inlineChat.defaultModel": "Gemini 3.8 Flash (gemini)",
     "accessibility.voice.autoSynthesize": "on",
-    "accessibility.voice.keywordActivation": "inlineChat"
+    "accessibility.voice.keywordActivation": "inlineChat",
+    "terminal.integrated.defaultProfile.windows": "PowerShell (Git-Labor)",
+    "terminal.integrated.profiles.windows": {
+      "PowerShell (Git-Labor)": {
+        "source": "PowerShell",
+        "icon": "terminal-powershell"
+      },
+      "SSH: @rig (SimRacer Host)": {
+        "path": "ssh.exe",
+        "args": [
+          "-t",
+          "simracer"
+        ],
+        "icon": "server"
+      },
+      "SSH: @light (SimRacer Docker)": {
+        "path": "ssh.exe",
+        "args": [
+          "-t",
+          "simracer"
+        ],
+        "icon": "symbol-event"
+      },
+      "SSH: @dark (Docker Sandbox)": {
+        "path": "ssh.exe",
+        "args": [
+          "-t",
+          "ac-sandbox"
+        ],
+        "icon": "package"
+      },
+      "SSH: @sarah (Pitwall Archibald)": {
+        "path": "ssh.exe",
+        "args": [
+          "-t",
+          "archibald"
+        ],
+        "icon": "dashboard"
+      },
+      "SSH: @rick (StrikerPi Hub)": {
+        "path": "ssh.exe",
+        "args": [
+          "-t",
+          "strikerpi"
+        ],
+        "icon": "chip"
+      }
+    }
   },
   "tasks": {
     "version": "2.0.0",
@@ -78,9 +125,6 @@
           "Terminal: @rick (StrikerPi 24/7 Hub)"
         ],
         "dependsOrder": "parallel",
-        "runOptions": {
-          "runOn": "folderOpen"
-        },
         "problemMatcher": []
       },
       {
@@ -109,14 +153,17 @@
         "type": "process",
         "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
         "args": [
-          "-NoExit",
+          "-NoProfile",
           "-ExecutionPolicy",
           "Bypass",
           "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\agents\\general\\start_general_terminal.ps1"
+          "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs\\Agent-Terminals.ps1",
+          "-Agent",
+          "general",
+          "-InCurrentWindow"
         ],
         "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+          "cwd": "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs"
         },
         "presentation": {
           "group": "agents",
@@ -128,17 +175,12 @@
       {
         "label": "Terminal: @light (SimRacer Software/Sessions)",
         "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command": "ssh.exe",
         "args": [
-          "-NoExit",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_light_terminal.ps1"
+          "-t",
+          "simracer",
+          "powershell -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\scripts\\connect_light_terminal.ps1"
         ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
         "presentation": {
           "group": "agents",
           "reveal": "always",
@@ -149,17 +191,12 @@
       {
         "label": "Terminal: @rig (SimRacer Hardware/VR)",
         "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command": "ssh.exe",
         "args": [
-          "-NoExit",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_rig_terminal.ps1"
+          "-t",
+          "simracer",
+          "powershell -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\scripts\\connect_rig_terminal.ps1"
         ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
         "presentation": {
           "group": "agents",
           "reveal": "always",
@@ -170,17 +207,12 @@
       {
         "label": "Terminal: @sarah (Archibald Pitwall)",
         "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command": "ssh.exe",
         "args": [
-          "-NoExit",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_sarah_terminal.ps1"
+          "-t",
+          "archibald",
+          "bash -l ~/ac-pitwall/start_sarah_terminal.sh"
         ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
         "presentation": {
           "group": "agents",
           "reveal": "always",
@@ -191,17 +223,11 @@
       {
         "label": "Terminal: @dark (ac-win11-sandbox)",
         "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command": "ssh.exe",
         "args": [
-          "-NoExit",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_dark_terminal.ps1"
+          "-t",
+          "ac-sandbox"
         ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
         "presentation": {
           "group": "agents",
           "reveal": "always",
@@ -212,17 +238,12 @@
       {
         "label": "Terminal: @rick (StrikerPi 24/7 Hub)",
         "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command": "ssh.exe",
         "args": [
-          "-NoExit",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_rick_terminal.ps1"
+          "-t",
+          "strikerpi",
+          "bash -l /opt/rick-agent/start_rick_terminal.sh"
         ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
         "presentation": {
           "group": "agents",
           "reveal": "always",

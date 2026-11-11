@@ -1,0 +1,67 @@
+﻿[2026-11-10T21:25:33.9873335+01:00] [INFO] [Dark-InContainer] Action 'Status' gestartet...
+powershell.exe : Set-Content : Der Prozess kann nicht auf die Datei 
+"\\host.lan\Data\agents\dark\dark-status.json" 
+In \\host.lan\Data\agents\dark\worker.ps1:93 Zeichen:31
++ ...   $output = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Set-Content : D...k-status.json" :String) [], Remote 
+   Exception
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+zugreifen, da sie von einem anderen Prozess verwendet wird.
+In \\host.lan\Data\agents\dark\runner.ps1:78 Zeichen:45
++ ... | ConvertTo-Json -Depth 4 | Set-Content -Path $outFile -Encoding UTF8
++                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (\\host.lan\Data...ark-status.json:String) [Set-Content 
+   ], IOException
+    + FullyQualifiedErrorId : GetContentWriterIOError,Microsoft.PowerShell.Commands.SetContentCom 
+   mand
+ 
+[2026-11-10T21:25:33.9873335+01:00] [SUCCESS] [Dark-InContainer] Statusbericht gespeichert unter \\host.lan\Data\agents\dark\dark-status.json
+
+
+Name  : timestamp
+Value : 2026-11-10T21:25:33.9873335+01:00
+
+Name  : agent
+Value : Dark Agent
+
+Name  : role
+Value : In-Container Specialist (Guest Execution)
+
+Name  : hostname
+Value : WIN-54U68T9T2FA
+
+Name  : user
+Value : docker
+
+Name  : os
+Value : Microsoft Windows NT 10.0.26200.0
+
+Name  : disk_c_free_gb
+Value : 75,74
+
+Name  : disk_c_total_gb
+Value : 159,75
+
+Name  : free_ram_mb
+Value : 8984
+
+Name  : cm_running
+Value : False
+
+Name  : acs_running
+Value : False
+
+Name  : host_lan_data_ok
+Value : True
+
+Name  : ac_installed_path
+Value : C:\AssettoCorsa
+
+Name  : ac_documents_path
+Value : C:\Users\Docker\Documents\Assetto Corsa
+
+
+
+

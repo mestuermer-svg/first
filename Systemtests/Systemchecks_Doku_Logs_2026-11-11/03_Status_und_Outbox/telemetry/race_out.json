@@ -1,0 +1,80 @@
+
+{
+	"track": "acu_cota_2021",
+	"number_of_sessions": 1,
+	"players": [
+		{
+			"name": "Apex_#23",
+			"car": "rss_formula_hybrid_x_2026",
+			"skin": "00_gsi_rss_26"
+		}],
+	"sessions": [
+		{
+			"event": 0,
+			"name": "Practice",
+			"type": 1,
+			"lapsCount": 0,
+			"duration": 0,
+			"laps": [
+				{
+					"lap": 0,
+					"car": 0,
+					"sectors": [190580, 42336, 36847],
+					"time": -1,
+					"cuts": 1,
+					"tyre": "C3"
+				}, 
+				{
+					"lap": 1,
+					"car": 0,
+					"sectors": [45521, 42823, 39312],
+					"time": 127656,
+					"cuts": 0,
+					"tyre": "C3"
+				}, 
+				{
+					"lap": 2,
+					"car": 0,
+					"sectors": [31977, 42983, 36495],
+					"time": 111455,
+					"cuts": 0,
+					"tyre": "C3"
+				}, 
+				{
+					"lap": 3,
+					"car": 0,
+					"sectors": [29117, 41868, 38070],
+					"time": 109055,
+					"cuts": 0,
+					"tyre": "C3"
+				}, 
+				{
+					"lap": 4,
+					"car": 0,
+					"sectors": [28582, 42120, 36720],
+					"time": 107422,
+					"cuts": 0,
+					"tyre": "C3"
+				}, 
+				{
+					"lap": 5,
+					"car": 0,
+					"sectors": [28626, 40297, 38704],
+					"time": -1,
+					"cuts": 1,
+					"tyre": "C3"
+				}],
+			"lapstotal": [6],
+			"bestLaps": [
+				{
+					"car": 0,
+					"time": 107422,
+					"lap": 4
+				}]
+		}],
+	"extras": [
+		{
+			"name": "bestlap",
+			"time": 107422
+		}]
+}

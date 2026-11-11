@@ -1,0 +1,38 @@
+﻿{
+    "timestamp":  "2026-11-06T16:49:05.6368494+01:00",
+    "agent":  "Dark Agent",
+    "hostname":  "WIN-54U68T9T2FA",
+    "cars_count":  16,
+    "cars":  [
+                 "rss_formula_hybrid_2023",
+                 "rss_formula_hybrid_2024",
+                 "rss_formula_hybrid_v12-r",
+                 "rss_formula_hybrid_x_2026",
+                 "rss_gtm_adonis_v8_evo",
+                 "rss_gtm_aero_v10_evo2",
+                 "rss_gtm_akuro_v6_evo2",
+                 "rss_gtm_bayer_i6_evo",
+                 "rss_gtm_bayer_v8",
+                 "rss_gtm_furiano_96_v6",
+                 "rss_gtm_hyperion_v8",
+                 "rss_gtm_lanzo_v10_evo2",
+                 "rss_gtm_lux_v8",
+                 "rss_gtm_macca_72_evo_v8",
+                 "rss_gtm_mercer_v8",
+                 "rss_gtm_protech_p92_f6"
+             ],
+    "tracks_count":  10,
+    "tracks":  [
+                   "acu_cota_2021",
+                   "imola",
+                   "ks_barcelona",
+                   "ks_nordschleife",
+                   "ks_nurburgring",
+                   "ks_red_bull_ring",
+                   "ks_silverstone",
+                   "monza",
+                   "spa",
+                   "trento-bondone"
+               ],
+    "ready_for_cm":  true
+}

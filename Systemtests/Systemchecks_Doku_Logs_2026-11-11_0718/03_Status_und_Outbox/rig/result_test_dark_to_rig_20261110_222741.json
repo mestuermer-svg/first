@@ -1,0 +1,11 @@
+﻿{
+    "task_id":  "test_dark_to_rig_20261110_222741",
+    "agent":  "rig",
+    "sender":  "RigAgent",
+    "requester":  "DarkAgentConsole",
+    "reply_to":  "dark",
+    "action":  "ProcessPrompt",
+    "timestamp":  "2026-11-10T22:27:58.6408491+01:00",
+    "status":  "Success",
+    "output":  "[GENERAL FREIGABE ERTEILT] Test-3D (Dark-\u003eRig) freigegeben.\n[Rig Agent @ SimRacer Host]\nAuftrag mit General-Freigabe ausgefuehrt: [TEST-3D] Dark Agent (Gast) -\u003e Rig Agent: Bitte AC-Host Status bestaetigen."
+}

@@ -26,6 +26,9 @@ class SimAgentBridge:
         # Standard: Shared SMB-Pfad zum SimRacer
         self.agents_base_path = agents_base_path or Path(rf"\\{self.simracer_ip}\ac-sandbox\shared\agents")
         self.known_agents = ["general", "light", "rig", "dark", "sarah", "rick"]
+        self.policy_file = self.agents_base_path / "general" / "approval_policy.json"
+        self.mqtt_broker_ip = "192.168.178.86"
+        self.mqtt_broker_port = 1883
         self.packages = {
             "setups": self.repo_path / "01_Documents_AC_Setups",
             "user_cfg": self.repo_path / "02_Documents_AC_Cfg",
@@ -98,6 +101,53 @@ class SimAgentBridge:
         if weather_dir.exists():
             return [f.name for f in weather_dir.iterdir() if f.is_dir() or f.suffix == ".lua"]
         return []
+
+    # =========================================================================
+    # Approval Policy & MQTT Gate
+    # =========================================================================
+
+    def get_approval_policy(self) -> Dict[str, Any]:
+        """Liest die aktuelle Freigabepolicy (AUTO vs. MANUAL) von General Sim."""
+        if self.policy_file.exists():
+            try:
+                return json.loads(self.policy_file.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+        return {"mode": "MANUAL", "description": "Standard Fallback"}
+
+    def set_approval_policy(self, mode: str) -> bool:
+        """Setzt die Freigabepolicy auf 'AUTO' (Dauerfreigabe) oder 'MANUAL' (Warten)."""
+        m = mode.upper().strip()
+        if m not in ["AUTO", "MANUAL"]:
+            m = "MANUAL"
+        data = {
+            "mode": m,
+            "description": "Steuert das General Sim Freigabe-Gate: MANUAL = Warten auf Bestaetigung; AUTO = Dauerfreigabe",
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        try:
+            self.policy_file.parent.mkdir(parents=True, exist_ok=True)
+            self.policy_file.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+            return True
+        except Exception:
+            return False
+
+    def publish_mqtt_task(self, target_agent: str, payload: Dict[str, Any]) -> bool:
+        """Publiziert eine Aufgabe als MQTT-Event direkt an den Broker auf StrikerPi."""
+        target = target_agent.lower().lstrip("@")
+        topic = f"agents/{target}/inbox"
+        msg = json.dumps(payload, ensure_ascii=False)
+        # Via SSH-Aufruf auf StrikerPi mosquitto_pub fuer maximale Zuverlaessigkeit ohne externe Python-Deps
+        try:
+            cmd = [
+                "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3",
+                self.strikerpi_host,
+                f"mosquitto_pub -h 127.0.0.1 -p 1883 -t '{topic}' -m '{msg}'"
+            ]
+            res = subprocess.run(cmd, capture_output=True, timeout=5)
+            return res.returncode == 0
+        except Exception:
+            return False
 
     # =========================================================================
     # Task-Queue & Agenten-Terminal Interaktion

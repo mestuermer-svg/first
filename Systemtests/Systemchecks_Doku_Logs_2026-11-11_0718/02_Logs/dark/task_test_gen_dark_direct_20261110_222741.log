@@ -1,0 +1,11 @@
+﻿[2026-11-10T22:27:44.0897559+01:00] [INFO] [Dark-InContainer] Action 'ProcessPrompt' gestartet...
+[2026-11-10T22:27:44.0897559+01:00] [INFO] [Dark-InContainer] Verarbeite Prompt als Textdaten im Gast...
+[Dark Agent @ Sandbox In-Container]
+Prompt erfolgreich als reine Textdaten empfangen und verarbeitet.
+Laenge: 83 Zeichen | Zeilen: 1
+--- Prompt Inhalt ---
+[TEST-3C] General Sim -> Dark Agent direkt: Bitte Sandbox-Bereitschaft bestaetigen.
+---------------------
+Status: Erfolgreich im Gast registriert (Keine Code-Ausfuehrung / Syntaxfehler-sicher).
+[2026-11-10T22:27:44.0897559+01:00] [SUCCESS] [Dark-InContainer] Prompt-Verarbeitung abgeschlossen (83 Zeichen).
+

@@ -1,0 +1,13 @@
+﻿powershell.exe : \\host.lan\Data\agents\dark\runner.ps1 : Fehlendes Argument für den Parameter "Command". Geben Sie 
+einen Parameter vom 
+In \\host.lan\Data\agents\dark\worker.ps1:53 Zeichen:31
++ ...   $output = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (\\host.lan\Data... Parameter vom :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Typ "System.String" an, und versuchen Sie es erneut.
+    + CategoryInfo          : InvalidArgument: (:) [runner.ps1], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingArgument,runner.ps1
+ 
+

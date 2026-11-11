@@ -1,0 +1,1240 @@
+🎉 CSP v0.2.11 b3465, enabled, date & time: 2026-11-07T02:43:20:111.
+✨ Do not use this log file, because its format will change.
+     bd     M ✅ Extension `DXGI Tweaks` disabled: not available in VR mode
+    172     M ✅   All 2371 functions were found successfully
+    270  6e38 💬 Number of cores: logical=12, physical=6
+    383     M 💬 Importing DLL: python33.dll
+    383     M 💬 Importing DLL: openvr_api.dll
+    417     M 💬 Loaded icon from DLL
+    a6d     M 💬 CPU: AMD Ryzen 9 3900X 12-Core Processor
+    a6d     M 💬 Delaying loading of Lua script ac_chaser_camera
+    a6d     M 🚀 Loading Lua script [Chaser Camera impl.]: 94.50 μs
+    a6e     M 💬 Delaying loading of Lua script ac_chaser_camera
+    a6e     M 🚀 Loading Lua script [Chaser Camera impl. (2)]: 63.00 μs
+    a6e     M 💬 PPAA: skipping original FXAA shader
+    a7d     M 💬 Delaying loading of Lua script ac_pp_filters
+    a7d     M 🚀 Loading Lua script [PP filter]: 125.80 μs
+    a89     M ✅ Extension `New Modes` disabled: not selected
+    a89     M ✅ Extension `Walking Out` disabled: not available in this mode
+    a89 12550 💬 Skidmarks fading: 20764.1 days massed, mult.: 0.000, offset: 20764.070 KB
+    a89 12550 💬 Skipping skidmarks load: data is faded to 0 anyway
+    a89 12550 💬 Creating skidmarks renderer: 5000 particles
+    a98     M ✅ Extension `Custom Rendering Modes` disabled: custom mode is not selected
+    aa9     M ✅ Extension `Mumble Plugin` disabled: available in online race only
+    c6c 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=10
+    c6c 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=10
+    c6c 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=6
+    c6c 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\tracks\acu_cota_2021\ui': 0, mode=0
+    c6d 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=10
+    c6d 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=10
+    c6d 11190 💬 Checking 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\backgrounds': 0, mode=6
+    c6e 11190 💬 Checking 'C:\Users\Mike\Documents\Assetto Corsa\screens': 12, mode=9
+    c6e 11190 ✅ Resulting image: 'C:\Users\Mike\Documents\Assetto Corsa\screens\Screenshot_rss_formula_hybrid_x_2026_acu_cota_2021_21-11-125-4-47-30.jpg'
+    c6e 11190 🚀 Looking for background: separate thread: 2880.60 μs
+    c72     M 🚨 Skipping a frame!
+    c95     M 🚨 Skipping a frame!
+    cb3     M ✅ Sim initialization started
+    e66     M 💬 Changing shadow resolution: 2048, splits=4
+    e70     M 💬 Found a script for loading screen: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\lua\loading-screen\default\splashscreen.lua'
+    e89     M 🚀 Loading Lua script [Splashscreen]: 25643.80 μs
+    e8b     M 💬 Script for loading screen is loaded and ready
+    e8b     M ✅ IMGUI font: ProggyClean.ttf, 13px, 223 glyphs (out of which, 0 fallback glyphs), 0.01 megapixels
+    e8b     M ✅ IMGUI font atlas ready: 512×64
+    e8c     M ✅ IMGUI font atlas rasterized512×64
+    e8c     M 🚀 Preparing default fonts: 1388.50 μs
+    e8d     M 💬 New instance of truct cui::imgui_offscreen created
+    e8d     M ✅ IMGUI font: ProggyClean.ttf, 13px, 223 glyphs (out of which, 0 fallback glyphs), 0.01 megapixels
+    e8d     M ✅ IMGUI font atlas ready: 512×64
+    e8e     M ✅ IMGUI font atlas rasterized512×64
+    e8e     M 🚀 Preparing default fonts: 1169.00 μs
+    e9d     M ✅ [Lua: splashscreen_overlay] C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\tracks/acu_cota_2021/ui/ui_track.json
+    f7c     M 💬 ODE flags: ODE ODE_EXT_no_debug ODE_EXT_trimesh ODE_EXT_opcode ODE_OPC_16bit_indices ODE_OPC_new_collider ODE_EXT_mt_collisions ODE_EXT_threading ODE_double_precision
+    fe5     M ✅ Loading configs for acu_cota_2021, config: 
+   1006     M 💬 [ConfigsCache] Loaded cached version of 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\tracks\acu_cota_2021\extension\ext_config.ini'
+   1007     M ✅ Weather FX: reload settings
+   102f     M ✅ Estimated timezone for longitude=-97.6°: -6.51 hours, actual value: -6.00 hours
+   102f     M ✅ Weather FX: start time=6204 (2026-11-07 01:43:24)
+   102f     M ✅ Weather FX: start date=1794009600
+   102f     M 💬 Weather FX time state: start_date_local=1794009600, offline: 1, replay: 0
+   102f     M 💬 Delaying loading of Lua script ac_wfx_impl
+   102f     M 🚀 Loading Lua script [Weather FX impl.]: 75.30 μs
+   102f     M 💬 Delaying loading of Lua script ac_wfx_controller
+   102f     M 🚀 Loading Lua script [Weather FX controller]: 77.90 μs
+   1426     M ✅ Inserted: FBX: acu_unitedstates__lits.fbx, class: Node [30], children: 30
+   1645     M 💬 Applying movement to `groove1b`
+   1646     M 💬   Moving to `acu_cota_2021`, index: 831
+   1646     M 💬 Applying movement to `groove1c`
+   1647     M 💬   Moving to `acu_cota_2021`, index: 832
+   1647     M 💬 Applying movement to `groove1a`
+   1648     M 💬   Moving to `acu_cota_2021`, index: 833
+   1648     M 💬 Applying movement to `groove2b`
+   1649     M 💬   Moving to `acu_cota_2021`, index: 834
+   1649     M 💬 Applying movement to `groove2a`
+   164b     M 💬   Moving to `acu_cota_2021`, index: 835
+   1662     M 💬 Applying movement to `groove1b`
+   1663     M 💬   Moving to `100`, index: 67
+   1663     M 💬 Applying movement to `groove1c`
+   1663     M 💬   Moving to `100`, index: 68
+   1663     M 💬 Applying movement to `groove1a`
+   1663     M 💬   Moving to `100`, index: 69
+   1663     M 💬 Applying movement to `groove2b`
+   1663     M 💬   Moving to `100`, index: 70
+   1663     M 💬 Applying movement to `groove2a`
+   1663     M 💬   Moving to `100`, index: 71
+   167a     M 💬 Applying movement to `groove1b`
+   167a     M 💬   Moving to `acu_cota_center`, index: 9
+   167a     M 💬 Applying movement to `groove1c`
+   167a     M 💬   Moving to `acu_cota_center`, index: 10
+   167a     M 💬 Applying movement to `groove1a`
+   167a     M 💬   Moving to `acu_cota_center`, index: 11
+   167a     M 💬 Applying movement to `groove2b`
+   167a     M 💬   Moving to `acu_cota_center`, index: 12
+   167a     M 💬 Applying movement to `groove2a`
+   167a     M 💬   Moving to `acu_cota_center`, index: 13
+   173a     M 💬 Applying movement to `groove1b`
+   173a     M 💬   Moving to `acu_cota_physics`, index: 184
+   173a     M 💬 Applying movement to `groove1c`
+   173b     M 💬   Moving to `acu_cota_physics`, index: 185
+   173b     M 💬 Applying movement to `groove1a`
+   173b     M 💬   Moving to `acu_cota_physics`, index: 186
+   173b     M 💬 Applying movement to `groove2b`
+   173b     M 💬   Moving to `acu_cota_physics`, index: 187
+   173b     M 💬 Applying movement to `groove2a`
+   173b     M 💬   Moving to `acu_cota_physics`, index: 188
+   177f     M 💬 Applying movement to `groove1b`
+   177f     M 💬   Moving to `acu_cota_lights`, index: 30
+   177f     M 💬 Applying movement to `groove1c`
+   177f     M 💬   Moving to `acu_cota_lights`, index: 31
+   177f     M 💬 Applying movement to `groove1a`
+   177f     M 💬   Moving to `acu_cota_lights`, index: 32
+   177f     M 💬 Applying movement to `groove2b`
+   177f     M 💬   Moving to `acu_cota_lights`, index: 33
+   177f     M 💬 Applying movement to `groove2a`
+   177f     M 💬   Moving to `acu_cota_lights`, index: 34
+   1796     M 🚀 Smoothing normals for `TRACK acu_cota_2021, class: Model [5]`: 15 meshes, 22.5 ms
+   1891 12804 🚨 Suspicious surface mismatch: 1DIRT_INVISIBLE doesn’t seem like a wall!
+   1891 12804 🚨 Suspicious surface mismatch: 1DIRT_INVISIBLE doesn’t seem like a wall!
+   1b1f     M ✅ AI spline load: content/tracks/acu_cota_2021/ai/fast_lane.ai
+   1b34     M 🚀 KD 3D build: 2842.60 μs
+   1b34     M 💬 Cached grid for 'content/tracks/acu_cota_2021/ai/fast_lane.ai' has been loaded successfully
+   1b6b     M 🚀 Loading cached payloads for fast_lane: 1828.40 μs
+   1b6b     M 🚀 Initialize straights for fast_lane: 112.00 μs
+   1b9a     M ✅ AI spline load: content/tracks/acu_cota_2021/ai/pit_lane.ai
+   1baa     M 🚀 KD 3D build: 406.20 μs
+   1baa     M 💬 Cached grid for 'content/tracks/acu_cota_2021/ai/pit_lane.ai' has been loaded successfully
+   1bbe     M 🚀 Loading cached payloads for pit_lane: 406.20 μs
+   1bbe     M 🚀 Initialize straights for pit_lane: 45.90 μs
+   1bcd     M ✅ Pit altitude for current track: 1.17549e-38
+   1bcd     M ✅ Pit Y coordinate: -138.851
+   1c20     M 🚀 IdealLine::IdealLine: 13320.50 μs
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_1`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_2`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_3`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_4`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_5`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_6`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_7`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_8`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_9`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_10`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_11`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_12`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_13`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_14`
+   1c35     M 💬 Creating a missing spawn point `AC_HOTLAP_START_15`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_16`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_17`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_18`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_19`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_20`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_21`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_22`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_23`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_24`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_25`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_26`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_27`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_28`
+   1c36     M 💬 Creating a missing spawn point `AC_HOTLAP_START_29`
+   1c37     M ✅ File not found: flag_colors.lut
+   1c37     M ✅ File not found: colorfulness.lut
+   1c3d     M 🚨 No meshes found for `MATERIAL_ADJUSTMENT_30`
+   1c3e     M 🚀 Loading trees: 52.40 μs
+   1c42     M 💬 Non-static mesh has been found: crypto_t21, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_l, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_l1, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_k, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_j1, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_j2, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_j3, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_b6, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_b5, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: texas_sponsors_b, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: obj-tyrewall-a03, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: obj-tyrewall-b03, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: obj-parkcars-05_KSLAYER5, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: obj-caravan-02_KSLAYER5, class: Node [1]
+   1c42     M 💬 Non-static mesh has been found: veh-suv-03_KSLAYER3, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_startlights, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_gantry_a, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_gantry_a_001, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_gantry_a_003, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_gantry_a_005, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_gantry_a_007, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g_001, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g_003, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g_005, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g_007, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: advert_side_g_009, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: texas_sponsors_a1, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: texas_sponsors_a3, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_bridge_walkway, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_bridge_walkway01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: fly_t21a, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: rolex_clock, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_lap_board, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_ferris, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_stage, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: lights_start, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: lights_start_a, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: lights_start_b, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: lights_start_c, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: pit_gantry_a, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: anim_board_texas_b, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: anim_board_texas_a, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: anim_board_texas, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_marquee, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_marquee01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_marquee02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: dynamic_bollard, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: dynamic_bollard01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: dynamic_bollard02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: dynamic_bollard03, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: dynamic_bollard04, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-fly_double, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-fly_double01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f1_double, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f1_double01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f1, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f03, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f04, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f05, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-f06, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-rolex_double, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-rolex_double01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj21-rolex_double02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_marquee03, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: amd_board, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: tex_stage01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri21, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri22, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri23, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri24, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri25, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: obj_tri26, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: star_floor, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: star_floor_w, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: star_floor_r, class: Node [1]
+   1c44     M 💬 Branch with AABB children: acu_cota_2021, class: Node [831]
+   1c44     M 💬 Fully static branch: 100, class: Node [67]
+   1c44     M 💬 Branch with AABB children: 100, class: Node [67]
+   1c44     M 💬 Non-static mesh has been found: 05WALL_001, class: Node [1]
+   1c44     M 💬 Branch with AABB children: acu_cota_center, class: Node [9]
+   1c44     M 💬 Non-static mesh has been found: 05PEN-GRS-B05, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06PEN-GRS-B06, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_19, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1CARPET_extra1, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1CARPET_extra3, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1OFFTRACK_shortcut, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1RIGHTSHORTCUT, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01CARPET, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01PITLANE, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 11PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 12PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 13PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_34, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_33, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_32, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_31, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_30, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1LEFTSHORTCUT, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_28, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_27, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_26, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_25, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_24, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_23, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_22, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_35, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_21, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_20, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1CONNECTION_1, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_18, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_17, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_16, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_15, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_14, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_13, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_12, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_11, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1CONNECTION_2, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 12WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 11WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02WALL, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1PTWAY_11, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1PTWAY_21, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1EASTPITS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02SAND, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 20OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TAREAST_29, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 18OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 17OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 16OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 15OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 14OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 13OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 12OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 11OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05WALL_001_001, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 12KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 11KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 07KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 06KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 05KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02KERB, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 14GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 13GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 12GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 11GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 10GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 09GRASS, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 16PEN-CNC-A, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03PEN-CNC-C02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02PEN-CNC-C03, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01PEN-GRS-B01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 02PEN-GRS-B02, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 03PEN-GRS-B03, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 04PEN-GRS-B04, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 01PEN-CNC-C01, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 19OFFTRACK, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_26, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_11, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_58, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_57, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_56, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_55, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_54, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_53, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_52, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_51, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_50, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_49, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_48, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_47, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_46, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_45, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_44, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_43, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_42, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_41, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_40, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_39, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_38, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_37, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_36, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_35, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_34, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_33, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_32, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_31, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_30, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_29, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_28, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_27, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_25, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_24, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_23, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_22, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_21, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_20, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_19, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_18, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_17, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_15, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_14, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_13, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_12, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 1TARMAC_16, class: Node [1]
+   1c44     M 💬 Non-static mesh has been found: 08OFFTRACK_001, class: Node [1]
+   1c44     M 💬 Branch with AABB children: acu_cota_physics, class: Node [184]
+   1c44     M 💬 Fully static branch: acu_cota_lights, class: Node [35]
+   1c44     M 💬 Branch with AABB children: acu_cota_lights, class: Node [35]
+   1c44     M ✅ Static meshes: 864
+   1c44     M 🚀 Horizon tube fixing: 30.00 μs
+   1c45 12758 💬 Starting Intel Embree build
+   1c48     M ✅ Reading 2D LUT: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars\rss_formula_hybrid_x_2026\data\MAP_CL_RH.2Dlut'
+   1c48     M ✅ Lut2D: bmin=0, 0, 0; bmax=0, 0, 0; points=72; coordinates=72
+   1c48     M ✅ Reading 2D LUT: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars\rss_formula_hybrid_x_2026\data\MAP_CD_RH.2Dlut'
+   1c48     M ✅ Lut2D: bmin=0, 0, 0; bmax=0, 0, 0; points=72; coordinates=72
+   1c48     M ✅ Reading 2D LUT: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars\rss_formula_hybrid_x_2026\data\MAP_BALANCE_RH.2Dlut'
+   1c48     M ✅ Lut2D: bmin=0, 0, 0; bmax=0, 0, 0; points=72; coordinates=72
+   1c49     M ✅ New aero map: Early Concept
+   1c49     M ✅ New aero map: Current Concept
+   1c4b     M ✅ Using AC Patch Custom DWB Suspension
+   1c4d     M ✅ Using new bumpstop model
+   1c4e     M ✅ CPHYS ERS not enabled; initialization skipped.
+   1c50     M 💬 Tyres ultrasoft (c5) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M 💬 Tyres supersoft (c4) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M 💬 Tyres soft (c3) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M 💬 Tyres medium (c2) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M 💬 Tyres hard (c1) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M 💬 Tyres ultrasoft (c5) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (UltraSoft, C5)
+   1c50     M 💬 Tyres ultrasoft (c5) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (UltraSoft, C5)
+   1c50     M 💬 Tyres supersoft (c4) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (SuperSoft, C4)
+   1c50     M 💬 Tyres supersoft (c4) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (SuperSoft, C4)
+   1c50     M 💬 Tyres soft (c3) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Soft, C3)
+   1c50     M 💬 Tyres soft (c3) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Soft, C3)
+   1c50     M 💬 Tyres medium (c2) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Medium, C2)
+   1c50     M 💬 Tyres medium (c2) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Medium, C2)
+   1c50     M 💬 Tyres hard (c1) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Hard, C1)
+   1c50     M 💬 Tyres hard (c1) type determined as SLICK (use TYPE_HINT=… in tyres.ini to change the type, known types: TREADED, RACING_TREADED, VINTAGE_PERFORMANCE, SEMISLICK, SLICK)
+   1c50     M ✅ Rain Extension: Assuming slick tire (Hard, C1)
+   1c50     M ✅ Rain Extension: Existing rain-enabled tire found (Wet, W)
+   1c50     M ✅ Rain Extension: Existing rain-enabled tire found (Wet, W)
+   1c50     M ✅ Read tyres.ini camber curve correctly
+   1c50     M ✅ Read tyres.ini camber curve correctly
+   1c50     M ✅ Tire constant falloff found: 0.85
+   1c50     M ✅ Tire constant falloff found: 0.85
+   1c50     M ✅ Tire constant falloff found: 3
+   1c50     M ✅ Tire constant falloff found: 3
+   1c50     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Read tyres.ini camber curve correctly
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 0.85
+   1c51     M ✅ Tire constant falloff found: 3
+   1c51     M ✅ Tire constant falloff found: 3
+   1c53     M ✅ Loading configs for rss_formula_hybrid_x_2026, skin: 00_gsi_rss_26
+   1c6c     M 💬 [ConfigsCache] Loaded cached version of 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars\rss_formula_hybrid_x_2026\skins\00_gsi_rss_26\ext_config.ini'
+   1c6c     M 💬 [ConfigsCache] Loaded cached version of 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars\rss_formula_hybrid_x_2026\extension\ext_config.ini'
+   1c6c     M ✅ Configs for rss_formula_hybrid_x_2026 loaded, time: 24.89 ms, in total 1182 values
+   1c76     M ✅ Car: rss_formula_hybrid_x_2026, skid block type: 4
+   1c76     M ✅ Collider `BODY`: center=0, 0, 0, size=0, 0, 0, skid block=0, sparks amount: 0, sparks life span: 0
+   1c76     M ✅ Collider `COLLIDER_0`: center=0, -0.21, 0.1, size=0.35, 0.00999999, 3, skid block=1, sparks amount: 0.5, sparks life span: 0.8
+   1c76     M ✅ Collider `COLLIDER_1`: center=0, -0.1, 2.8, size=1.8, 0.01, 0.7, skid block=0, sparks amount: 0.5, sparks life span: 0.8
+   1d95 12758 🚀 Intel Embree build: 336546.20 μs
+   1f09     M 💬 Applying movement to `groove1b`
+   1f09     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 1
+   1f09     M 💬 Applying movement to `groove1c`
+   1f09     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 2
+   1f09     M 💬 Applying movement to `groove1a`
+   1f0a     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 3
+   1f0a     M 💬 Applying movement to `groove2b`
+   1f0a     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 4
+   1f0a     M 💬 Applying movement to `groove2a`
+   1f0a     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 5
+   1f0a     M 🚀 Normalizing mirrors UV: 3.20 μs
+   1f32     M 💬 Applying movement to `groove1b`
+   1f32     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 1
+   1f32     M 💬 Applying movement to `groove1c`
+   1f32     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 2
+   1f32     M 💬 Applying movement to `groove1a`
+   1f32     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 3
+   1f32     M 💬 Applying movement to `groove2b`
+   1f33     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 4
+   1f33     M 💬 Applying movement to `groove2a`
+   1f33     M 💬   Moving to `FBX: 2016_driver_Hans.fbx`, index: 5
+   1f33     M 🚀 Normalizing mirrors UV: 2.10 μs
+   1f52     M ✅ Load LOD: formula_hybrid_X_2026.kn5
+   2719     M 💬 Applying movement to `groove1b`
+   2719     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 36
+   2719     M 💬 Applying movement to `groove1c`
+   271a     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 37
+   271a     M 💬 Applying movement to `groove1a`
+   271a     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 38
+   271a     M 💬 Applying movement to `groove2b`
+   271a     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 39
+   271a     M 💬 Applying movement to `groove2a`
+   271b     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 40
+   271b     M 🚀 Setting element IDs for animated wipers: KN5: formula_hybrid_X_2026.kn5: 7.50 μs
+   271e     M 🚀 Splitting `MIRROR_L`: 182 triangles, 1 pieces, 137.1 μs
+   271e     M 🚨   Some of normals are facing away (72), aborting the whole operation
+   271e     M 🚀 Splitting `MIRROR_R`: 182 triangles, 1 pieces, 88.9 μs
+   271e     M 🚨   Some of normals are facing away (72), aborting the whole operation
+   271e     M 🚀 Normalizing mirrors UV: 323.10 μs
+   271e     M ✅ Fake shadows for rss_formula_hybrid_x_2026: 3.91636, 7.28957, AABB: 1.91636, 5.28957
+   2722     M ✅ Load LOD: formula_hybrid_X_2026_LOD_B.kn5
+   2750     M 💬 Applying movement to `groove1b`
+   2750     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 34
+   2750     M 💬 Applying movement to `groove1c`
+   2750     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 35
+   2750     M 💬 Applying movement to `groove1a`
+   2751     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 36
+   2751     M 💬 Applying movement to `groove2b`
+   2751     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 37
+   2751     M 💬 Applying movement to `groove2a`
+   2751     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 38
+   2751     M 🚀 Setting element IDs for animated wipers: KN5: formula_hybrid_X_2026_LOD_B.kn5: 2.80 μs
+   2752     M 🚀 Splitting `MIRROR_L`: 2 triangles, 1 pieces, 7.8 μs
+   2752     M 🚀 Splitting `MIRROR_R`: 2 triangles, 1 pieces, 1.9 μs
+   2752     M 🚀 Normalizing mirrors UV: 27.60 μs
+   2752     M ✅ Load LOD: formula_hybrid_X_2026_LOD_C.kn5
+   276d     M 💬 Applying movement to `groove1b`
+   276d     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 34
+   276d     M 💬 Applying movement to `groove1c`
+   276e     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 35
+   276e     M 💬 Applying movement to `groove1a`
+   276e     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 36
+   276e     M 💬 Applying movement to `groove2b`
+   276e     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 37
+   276e     M 💬 Applying movement to `groove2a`
+   276e     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 38
+   276e     M 🚀 Setting element IDs for animated wipers: KN5: formula_hybrid_X_2026_LOD_C.kn5: 2.30 μs
+   276e     M 🚀 Splitting `MIRROR_L`: 2 triangles, 1 pieces, 13.2 μs
+   276e     M 🚀 Splitting `MIRROR_R`: 2 triangles, 1 pieces, 2.1 μs
+   276e     M 🚀 Normalizing mirrors UV: 39.60 μs
+   276f     M ✅ Load LOD: formula_hybrid_X_2026_LOD_D.kn5
+   277f     M 💬 Applying movement to `groove1b`
+   277f     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 34
+   277f     M 💬 Applying movement to `groove1c`
+   277f     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 35
+   277f     M 💬 Applying movement to `groove1a`
+   277f     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 36
+   277f     M 💬 Applying movement to `groove2b`
+   277f     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 37
+   277f     M 💬 Applying movement to `groove2a`
+   277f     M 💬   Moving to `FBX: RSS_Formula_Hybrid_2022.FBX`, index: 38
+   277f     M 🚀 Setting element IDs for animated wipers: KN5: formula_hybrid_X_2026_LOD_D.kn5: 1.30 μs
+   277f     M 🚀 Normalizing mirrors UV: 2.40 μs
+   279d     M ✅ DynamicWingController::initCommon(): rss_formula_hybrid_x_2026, car=0000013D48D088F0
+   279d     M ✅ DynamicWingController::initCommon(): rss_formula_hybrid_x_2026, car=0000013D48D088F0
+   27d4     M 💬 Starting to initialize DirectInput devices
+   282e     M 💬 New joystick found: FANATEC ClubSport Wheel Base V2.5
+   282e     M 💬   Device type: DRIVING DUALPEDALS,  usage page: 1, usage: 4
+   282e     M 💬   Product GUID: 00040EB7-0000-0000-0000-504944564944
+   282e     M 💬   Instance name: FANATEC ClubSport Wheel Base V2.5
+   282e     M 💬   Instance GUID: A5CB80C0-010F-11F0-8001-444553540000
+   2855     M 💬 New joystick found: FANATEC ClubSport Wheel Base V2.5
+   2855     M 💬   Device type: DRIVING DUALPEDALS,  usage page: 1, usage: 4
+   2855     M 💬   Product GUID: 00040EB7-0000-0000-0000-504944564944
+   2855     M 💬   Instance name: FANATEC ClubSport Wheel Base V2.5
+   2855     M 💬   Instance GUID: A5CBA7D0-010F-11F0-8002-444553540000
+   2877     M 💬 Trying to initialize: FANATEC ClubSport Wheel Base V2.5
+   2879     M 💬   Device created
+   2879     M 💬   Data format set
+   2879     M 💬   Trying to set cooperative level
+   2879     M 💬   Cooperative level set
+   2879     M 💬   Range set, device is ready
+   288b     M 💬 Trying to initialize: FANATEC ClubSport Wheel Base V2.5
+   288d     M 💬   Device created
+   288d     M 💬   Data format set
+   288d     M 💬   Trying to set cooperative level
+   288d     M 💬   Cooperative level set
+   288d     M 💬   Range set, device is ready
+   2893     M ✅ Controls order does not need fixing
+   2893     M 💬 DirectInput devices are ready
+   2897     M 💬 Car bounds L: 5.303366 W: 1.893977, front: 3.049226 rear: 2.254140
+   29cd     M ✅ Loading message: CSP car extensions
+   29cd     M ✅ collider constant friction read, mu: -1
+   29cd     M ✅ collider constant friction read, mu: -1
+   29d1     M ✅ Car rss_formula_hybrid_x_2026, skin 00_gsi_rss_26: shadow caster generated from last LOD, 13906 triangles, 13552 vertices
+   29d2     M ✅ Loading message: CSP shaders
+   29ed     M ✅ Loading message: Additional CSP features
+   2a20     M 🚀 Loading cached IMGUI fonts: 50719.40 μs
+   2a28     M ✅ Loading message: Miscellaneous preparation
+   2a41 11190 💬 New replay max size: 2000 MB
+   2bf9 11190 ✅ Replay manager is created, cars: 1, frames: 7352941
+   2bf9     M ✅ Loading message: Apps
+   2f18     M ✅ Lua: <CSP module> loaded and ready to run
+   2f18     M 🚀 Loading Lua script [CSP module]: 6923.00 μs
+   2f19     M 🚀 Reloading Lua script [CSP module]: 739.20 μs
+   2f19     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+   2fa3     M 💬 Running Python insert: ARG_LOGGING_ACTIVE = False
+                 
+                 try:
+                   import sys
+                   if True:
+                     sys.dont_write_bytecode = False
+                 except:
+                   pass
+                 
+   2fba     M 💬 Loading module: Chat
+   2fba     M 💬   Module Chat is loaded
+   2fc2     M 💬 Loading module: gMeter
+   2fc9     M 💬   Module gMeter is loaded
+   3023     M 💬 Loading module: SimHub
+   3024     M 💬   Module SimHub is loaded
+   3024     M 🚀 Initializing Python apps: 267833.80 μs
+   3071 12754 🚀 Collecting setup folders: 2682.30 μs
+   3088     M 🚨 Found setup item: DIFF_COAST
+   3088     M 🚨 Found setup item: DIFF_POWER
+   31c7     M ✅ Loading message: Pit stop and crew
+   31d3     M 💬 Applying movement to `groove1b`
+   31d3     M 💬   Moving to `FBX: Pit_indicator.fbx`, index: 1
+   31d3     M 💬 Applying movement to `groove1c`
+   31d3     M 💬   Moving to `FBX: Pit_indicator.fbx`, index: 2
+   31d3     M 💬 Applying movement to `groove1a`
+   31d3     M 💬   Moving to `FBX: Pit_indicator.fbx`, index: 3
+   31d3     M 💬 Applying movement to `groove2b`
+   31d3     M 💬   Moving to `FBX: Pit_indicator.fbx`, index: 4
+   31d3     M 💬 Applying movement to `groove2a`
+   31d3     M 💬   Moving to `FBX: Pit_indicator.fbx`, index: 5
+   32ef     M 💬 Applying movement to `groove1b`
+   32ef     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 1
+   32ef     M 💬 Applying movement to `groove1c`
+   32ef     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 2
+   32ef     M 💬 Applying movement to `groove1a`
+   32ef     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 3
+   32ef     M 💬 Applying movement to `groove2b`
+   32ef     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 4
+   32ef     M 💬 Applying movement to `groove2a`
+   32ef     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 5
+   32f9     M 💬 Applying movement to `groove1b`
+   32f9     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 1
+   32f9     M 💬 Applying movement to `groove1c`
+   32f9     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 2
+   32f9     M 💬 Applying movement to `groove1a`
+   32f9     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 3
+   32f9     M 💬 Applying movement to `groove2b`
+   32f9     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 4
+   32f9     M 💬 Applying movement to `groove2a`
+   32f9     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 5
+   32fa     M 💬 Applying movement to `groove1b`
+   32fa     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 1
+   32fa     M 💬 Applying movement to `groove1c`
+   32fa     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 2
+   32fa     M 💬 Applying movement to `groove1a`
+   32fa     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 3
+   32fa     M 💬 Applying movement to `groove2b`
+   32fa     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 4
+   32fa     M 💬 Applying movement to `groove2a`
+   32fa     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 5
+   32fb     M 💬 Applying movement to `groove1b`
+   32fb     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 1
+   32fb     M 💬 Applying movement to `groove1c`
+   32fb     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 2
+   32fb     M 💬 Applying movement to `groove1a`
+   32fb     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 3
+   32fb     M 💬 Applying movement to `groove2b`
+   32fb     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 4
+   32fb     M 💬 Applying movement to `groove2a`
+   32fb     M 💬   Moving to `FBX: Meccanico_GOMME.fbx`, index: 5
+   348d     M 💬 Delayed initialization: Chaser Camera impl.
+   349f     M ✅ Lua: <Chaser Camera impl.> loaded and ready to run
+   349f     M 🚀 Loading Lua script [Chaser Camera impl.]: 18350.80 μs
+   349f     M 💬 Delayed initialization: Chaser Camera impl. (2)
+   34ac     P ✅ Lua: <FFB PP> loaded and ready to run
+   34ac     P 🚀 Loading Lua script [FFB PP]: 28996.20 μs
+   34ad     M ✅ Lua: <Chaser Camera impl. (2)> loaded and ready to run
+   34ad     M 🚀 Loading Lua script [Chaser Camera impl. (2)]: 13505.00 μs
+   34ad     M 💬 Delayed initialization: PP filter
+   3500     M ✅ Lua: <PP filter> loaded and ready to run
+   3500     M 🚀 Loading Lua script [PP filter]: 83891.00 μs
+   3506     M ✅ [Lua: csp_module] Small Tweaks Lua module is here
+   3507     M ✅ [Lua: csp_module] Module src/ai_tweaks.lua
+   3507     M ✅ [Lua: csp_module] Module src/ambience_audio.lua
+   3507     M ✅ [Lua: csp_module] Module src/audio_spatial_fix.lua
+   3507     M ✅ [Lua: csp_module] Module src/audio_volume_buttons.lua
+   3507     M ✅ [Lua: csp_module] Module src/background_pause.lua
+   3507     M ✅ [Lua: csp_module] Module src/cef.lua
+   3507     M ✅ [Lua: csp_module] Module src/clear_cache.lua
+   3507     M ✅ [Lua: csp_module] Module src/custom_drivable_wheel_model.lua
+   3507     M ✅ [Lua: csp_module] Module src/custom_driver_models.lua
+   3507     M ✅ [Lua: csp_module] Module src/damaged_engine_audio.lua
+   3507     M ✅ [Lua: csp_module] Module src/dark_suit.lua
+   3507     M ✅ [Lua: csp_module] Module src/desaturated_collisions.lua
+   3507     M ✅ [Lua: csp_module] Module src/disable_damage_dirt.lua
+   3507     M ✅ [Lua: csp_module] Module src/driver_gloves.lua
+   3507     M ✅ [Lua: csp_module] Module src/driver_shift.lua
+   3507     M ✅ [Lua: csp_module] Module src/dualsense_lights.lua
+   3507     M ✅ [Lua: csp_module] Module src/extra_buttons.lua
+   3509     M ✅ [Lua: csp_module] Module src/extra_misc_buttons.lua
+   3509     M ✅ [Lua: csp_module] Module src/extra_physics_buttons.lua
+   3509     M ✅ [Lua: csp_module] Module src/ffb_adjustments.lua
+   3509     M ✅ [Lua: csp_module] Module src/fmod_limit.lua
+   3509     M ✅ [Lua: csp_module] Module src/fmod_logging.lua
+   3509     M ✅ [Lua: csp_module] Module src/hide_standing_spectators.lua
+   350b     M ✅ [Lua: csp_module] Module src/led_colors.lua
+   350b     M ✅ [Lua: csp_module] Module src/mumble_autoconnect.lua
+   350b     M ✅ [Lua: csp_module] Module src/nancheck.lua
+   350b     M ✅ [Lua: csp_module] Module src/obs_integration.lua
+   350b     M ✅ [Lua: csp_module] Module src/onboard_adjustments.lua
+   350b     M ✅ [Lua: csp_module] Module src/radio.lua
+   350c     M ✅ [Lua: csp_module] Module src/realmirror_adjustments.lua
+   350c     M ✅ [Lua: csp_module] Module src/reconnect_devices.lua
+   350c     M ✅ [Lua: csp_module] Module src/show_important_wheels.lua
+   350c     M ✅ [Lua: csp_module] Module src/showroom_previews.lua
+   350c     M ✅ [Lua: csp_module] Module src/showroom.lua
+   350c     M ✅ [Lua: csp_module] Module src/space_intro.lua
+   350c     M ✅ [Lua: csp_module] Module src/stalling.lua
+   350c     M ✅ [Lua: csp_module] Module src/tts_chat.lua
+   350c     M ✅ [Lua: csp_module] Module src/tts.lua
+   350c     M ✅ [Lua: csp_module] Module src/udpcheck.lua
+   350c     M ✅ [Lua: csp_module] Module src/ui_pits_limiter.lua
+   350c     M ✅ [Lua: csp_module] Module src/vr_mirror_adjustments.lua
+   350c     M ✅ [Lua: csp_module] Module src/vr_rig_base.lua
+   350c     M ✅ [Lua: csp_module] Module src/vr_rig_remote.lua
+   350c     M ✅ [Lua: csp_module] Module src/vr_rig.lua
+   350c     M ✅ Lua: <CSP module> loaded and ready to run
+   350c     M 🚀 Loading Lua script [CSP module]: 10795.90 μs
+   350c     M 💬 Delayed initialization: Weather FX impl.
+   3531     M ✅ Lua: <Weather FX impl.> loaded and ready to run
+   3531     M 🚀 Loading Lua script [Weather FX impl.]: 37288.60 μs
+   3531     M 💬 Delayed initialization: Weather FX controller
+   354f     M ✅ Lua: <Weather FX controller> loaded and ready to run
+   354f     M 🚀 Loading Lua script [Weather FX controller]: 29703.70 μs
+   354f     M ✅ Waiting for jobs to finish
+   354f     M ✅ All jobs finished
+   354f     M ✅ Sim initialized: 10.201 s, 0.194 s
+   3598     M 💬 Static reflections: not static, no need to do anything
+   3598     M ✅ Loading message: Lighting FX
+   35a5     M 🚀 Setting track lights: 9994.80 μs
+   35a5     M 🚨 Headlights are not found
+   35a5     M 🚨 Bound mesh not found: GEO_LED_GLASS
+   35a6     M ✅ Odometer is ready, current value: 16475.8
+   35a9     M 💬 Loading car script: SCRIPTABLE_DISPLAY_0, texture mode: 1
+   35a9     M 💬 Loading car script: SCRIPT_0, texture mode: 0
+   35a9     M 💬 Loading car script: SCRIPT_1, texture mode: 0
+   35ac     M ✅ Loading message: Final steps
+   35db     M 💬 ResourceStore stats: 565 textures
+   35db 12754 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\CspDebug'
+   35ea     M 💬 Looking for optional parts
+   35ea     M 💬   Candidate: wing 6
+   35ea     M 💬     Skip: setup values do not fit
+   35ea     M 💬   Candidate: wing 7
+   35ea     M 💬     Skip: setup values do not fit
+   35ea     M 💬   Candidate: wing 9
+   35ea     M 💬     Skip: setup values do not fit
+   35ea     M 💬   Candidate: wing 11
+   35eb     M 💬     Animation fits for optional part for node `HALO_SWITCH_A` (LOD:  )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.709012, 0.560433, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.709012, 0.560433, hidden=1
+                 )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.709012, 0.560433, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.709012, 0.560433, hidden=1
+   35eb     M 💬     Animation fits for optional part for node `HALO_SWITCH_A` (LOD: )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.709012, 0.560433, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.709012, 0.560433, hidden=1
+   35eb     M 💬     Animation fits for optional part for node `HALO_SWITCH_A` (LOD: )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.709012, 0.560433, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.709012, 0.560433, hidden=1
+   35eb     M 💬     Found: animation is fitting
+   35eb     M 💬   Candidate: wing 12
+   35eb     M 💬     Animation fits for optional part for node `STYLE_A_HALO` (LOD:  )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.743496, -0.404053, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.743496, -0.404053, hidden=1
+                 )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.743496, -0.404053, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.743496, -0.404053, hidden=1
+   35eb     M 💬     Animation fits for optional part for node `STYLE_A_HALO` (LOD: )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.743496, -0.404053, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.743496, -0.404053, hidden=1
+   35eb     M 💬     Animation fits for optional part for node `STYLE_A_HALO` (LOD: )
+   35eb     M 💬       Start: scale=1, 1, 1, other scale=1e-05, 1e-05, 1e-05, pos=0, 0.743496, -0.404053, hidden=0
+   35eb     M 💬       End: scale=1e-05, 1e-05, 1e-05, other scale=1, 1, 1, pos=0, 0.743496, -0.404053, hidden=1
+   35eb     M 💬     Found: animation is fitting
+   35eb     M 💬   Candidate: wing 13
+   35eb     M 💬     Skip: setup values do not fit
+   3614     M 💬 Chunking meshes list: 23 meshes, out of which 22 are fixed (range is 1000 m)
+   3614     M 💬 Chunking meshes list: 0 meshes, out of which 0 are fixed (range is 1000 m)
+   3614     M 💬 Chunking meshes list: 0 meshes, out of which 0 are fixed (range is 1000 m)
+   3614     M 💥 Failed to load adjustment `GRASS_FX_ADJUSTMENT_0`: no meshes found
+   3614     M 💥 Failed to load adjustment `GRASS_FX_ADJUSTMENT_1`: no meshes found
+   3632     M ✅ Lua: <Car display: rss_formula_hybrid_x_2026:0 [SCRIPTABLE_DISPLAY_0]> loaded and ready to run
+   3632     M 🚀 Loading Lua script [Car display: rss_formula_hybrid_x_2026:0 [SCRIPTABLE_DISPLAY_0]]: 21859.00 μs
+   3693     M ✅ Lua: <Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_0]> loaded and ready to run
+   3693     M 🚀 Loading Lua script [Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_0]]: 17215.10 μs
+   36bb     M ✅ Lua: <Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_1]> loaded and ready to run
+   36bb     M 🚀 Loading Lua script [Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_1]]: 40353.40 μs
+   3972     M 💬 FSR UAV: 0000000000000000
+   3a27     M 💬 FSR UAV: 0000000000000000
+   4ba3     M 💬 Loading shader: 
+   4bb1     M 💬 Loading shader: 
+   4bb8     M 💬 Loading shader: 
+   4bc4     M 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\PP/blur_prepare.fx
+   4bd1     M 💬 Loading shader: 
+   4bf2     M 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\PP/customPP.fx
+   4c28     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\CspDebug'
+   4c6f     M 💬 Clouds: loading cached
+   4ccc     M 🚀 Splitting `MIRROR_L`: 182 triangles, 1 pieces, 136 μs
+   4ccc     M 🚀 Splitting `MIRROR_R`: 182 triangles, 1 pieces, 102.9 μs
+   4cec     M 💬 Second mirror camera has been created
+   4d00 12550 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\world\clouds\2d\bottom.fx
+   4e20     M 💬 Loading shader: 
+   4e23  f88c 💬 HTTP2 enabled
+   4e23  f88c 💬 TLS1.3 has been asked for
+   4f72     M ✅ Lua: <Fireworks behaviour> loaded and ready to run
+   4f72     M 🚀 Loading Lua script [Fireworks behaviour]: 202689.00 μs
+   5002     M 🚀 Async loading Lua script [App: CSP Debug, p0]: 163.80 μs
+   5002     M 💬 ISS orbit: ISS (ZARYA)             
+                 1 25544U 98067A   26309.85320381  .00006629  00000+0  12749-3 0  9998
+                 2 25544  51.6327 319.0560 0007195 352.5747   7.5134 15.49194530593711
+   5008 12550 🚀 Async loading Lua script [App: CSP Debug, p1]: 5491.00 μs
+   5153     M ✅ Lua: <App: CSP Debug> loaded and ready to run
+   5153     M 🚀 Async loading Lua script [App: CSP Debug, p2]: 30095.20 μs
+   51a3  7198 💥 FSW: Failed to monitor 'C:\Users\Mike\Documents\Assetto Corsa\cfg\extension\state\lua\fireworks'
+   535a     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\CspDebug', impl.: 0000013E6CF577A0, windows: 2
+   535a     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PureConfig'
+   537a     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PureConfig'
+   5388     M 🚀 Async loading Lua script [App: Pure Config App, p0]: 156.80 μs
+   538d     M 💬 Setting chunks for: acu_cota_2021, nodes: 831
+   538d     M 💬   Max size: 2657.91
+   538d     M 💬   Max size without LOD out: 275.625
+   538d     M 💬   Avg LOD out: 682.34
+   538d     M 💬   Max LOD out: 5000
+   538d     M 💬   Chunks range: 1000
+   538d     M 💬 Setting chunks for: 100, nodes: 67
+   538d     M 💬   No suitable meshes
+   538d     M 💬 Setting chunks for: acu_cota_center, nodes: 9
+   538d     M 💬   Max size: 79.2135
+   538d     M 💬   Max size without LOD out: 0
+   538d     M 💬   Avg LOD out: 700
+   538d     M 💬   Max LOD out: 700
+   538d     M 💬   Chunks range: 700
+   538d     M 💬 Setting chunks for: acu_cota_physics, nodes: 184
+   538d     M 💬   No suitable meshes
+   538d     M 💬 Setting chunks for: acu_cota_lights, nodes: 30
+   538d     M 💬   Max size: 1038.9
+   538d     M 💬   Max size without LOD out: 0
+   538d     M 💬   Avg LOD out: 627.96
+   538d     M 💬   Max LOD out: 1038.9
+   538d     M 💬   Chunks range: 627.96
+   538e 12754 🚀 Async loading Lua script [App: Pure Config App, p1]: 5660.80 μs
+   538e     M 💬 Chunking meshes list: 26 meshes, out of which 22 are fixed (range is 1000 m)
+   538e     M 💬 Chunking meshes list: 1 meshes, out of which 0 are fixed (range is 1000 m)
+   5394     P ✅ Lua: <Car physics script: 0> loaded and ready to run
+   5394     P 🚀 Loading Lua script [Car physics script: 0]: 11641.40 μs
+   5437     M ✅ Lua: <App: Pure Config App> loaded and ready to run
+   5437     M 🚀 Async loading Lua script [App: Pure Config App, p2]: 86756.50 μs
+   544f     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PureConfig', impl.: 0000013E6C760530, windows: 1
+   544f     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePlanner'
+   546b     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePlanner'
+   547a     M 🚀 Async loading Lua script [App: Pure Planner, p0]: 161.00 μs
+   547f 12754 🚀 Async loading Lua script [App: Pure Planner, p1]: 5017.30 μs
+   5488     M 💬 Default font name: Roboto
+   5496     M 💬 Default font name: Roboto
+   54b4     M ✅ Lua: <App: Pure Planner> loaded and ready to run
+   54b4     M 🚀 Async loading Lua script [App: Pure Planner, p2]: 18986.40 μs
+   54c6     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePlanner', impl.: 0000013E6C766A30, windows: 1
+   54c6     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SimHubUDPConnector'
+   5617     M 💬 Loading finished in 22 seconds
+   561e     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SimHubUDPConnector'
+   562c     M 🚀 Async loading Lua script [App: SimHubUDPConnector, p0]: 221.00 μs
+   5631 12550 🚀 Async loading Lua script [App: SimHubUDPConnector, p1]: 5158.20 μs
+   566d     M 💬 Opening socket.core library
+   5759     M ✅ Lua: <App: SimHubUDPConnector> loaded and ready to run
+   5759     M 🚀 Async loading Lua script [App: SimHubUDPConnector, p2]: 283431.20 μs
+   5773     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SimHubUDPConnector', impl.: 0000013E6C7650F0, windows: 1
+   5773     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Unbound'
+   5777     M ✅ [Lua: app] no update. versions : repo 1.0.23 app 1.0.23
+   57a1     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Unbound'
+   57b7     M 🚀 Async loading Lua script [App: Unbound, p0]: 150.80 μs
+   57bc 12758 🚀 Async loading Lua script [App: Unbound, p1]: 5454.90 μs
+   57de     M ✅ Lua: <App: Unbound> loaded and ready to run
+   57de     M 🚀 Async loading Lua script [App: Unbound, p2]: 17883.80 μs
+   57f9     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Unbound', impl.: 0000013E6C767080, windows: 1
+   57f9     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\comfy_map'
+   57fe 12550 💬 Win10 listener: plugin running: 0000000000001984
+   5824     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\comfy_map'
+   583b     M 🚀 Async loading Lua script [App: comfy map, p0]: 207.80 μs
+   5841 12758 🚀 Async loading Lua script [App: comfy map, p1]: 5276.50 μs
+   5863     M ✅ Lua: <App: comfy map> loaded and ready to run
+   5863     M 🚀 Async loading Lua script [App: comfy map, p2]: 16884.30 μs
+   587e     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\comfy_map', impl.: 0000013E6C727E80, windows: 2
+   587e     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\AISplineEditor'
+   58ab     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\AISplineEditor'
+   58c2     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\AISplineEditor', impl.: 0000000000000000, windows: 1
+   58c2     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\AppShelf'
+   58ed     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\AppShelf'
+   5903     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\AppShelf', impl.: 0000000000000000, windows: 1
+   5903     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\CSPDataLogger'
+   5931     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\CSPDataLogger'
+   5947     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\CSPDataLogger', impl.: 0000000000000000, windows: 1
+   5947     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ControllerTweaks'
+   5972     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ControllerTweaks'
+   5989     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ControllerTweaks', impl.: 0000000000000000, windows: 2
+   5989     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\Mumble'
+   59b5     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\Mumble'
+   59c0 12758 🚨 App is not available: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\internal\lua-apps\Mumble'
+   59c0 12758 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PocketTechnician'
+   59e2     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PocketTechnician'
+   59f9     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PocketTechnician', impl.: 0000000000000000, windows: 1
+   59f9     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePP'
+   5a25     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePP'
+   5a3d     M 🚀 Async loading Lua script [App: Pure PP App, p0]: 166.60 μs
+   5a42 11190 🚀 Async loading Lua script [App: Pure PP App, p1]: 4792.50 μs
+   5a79     M ✅ Lua: <App: Pure PP App> loaded and ready to run
+   5a79     M 🚀 Async loading Lua script [App: Pure PP App, p2]: 38877.80 μs
+   5a95     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\PurePP', impl.: 0000013E6C729170, windows: 1
+   5a95     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\RSS_Settings'
+   5ac2     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\RSS_Settings'
+   5ad8     M 🚀 Async loading Lua script [App: RSS Settings, p0]: 181.60 μs
+   5ade 12758 🚀 Async loading Lua script [App: RSS Settings, p1]: 5744.10 μs
+   5afc     M 💬 Trying to uninstall app: RSS_Extended_Controls
+   5b19     M ✅ Lua: <App: RSS Settings> loaded and ready to run
+   5b19     M 🚀 Async loading Lua script [App: RSS Settings, p2]: 44001.20 μs
+   5b32     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\RSS_Settings', impl.: 0000013E6C72AAB0, windows: 2
+   5b32     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SetupExchange'
+   5b5e     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SetupExchange'
+   5b75     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\SetupExchange', impl.: 0000000000000000, windows: 2
+   5b75     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Skin_Companion'
+   5ba1     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Skin_Companion'
+   5bb7     M 🚀 Async loading Lua script [App: Skin Companion, p0]: 135.70 μs
+   5bbb 12758 🚀 Async loading Lua script [App: Skin Companion, p1]: 4760.90 μs
+   5c1d     M ✅ Lua: <App: Skin Companion> loaded and ready to run
+   5c1d     M 🚀 Async loading Lua script [App: Skin Companion, p2]: 80508.70 μs
+   5c3b     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\Skin_Companion', impl.: 0000013E6C764450, windows: 1
+   5c3b     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\TimeShift'
+   5c69     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\TimeShift'
+   5c7f     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\TimeShift', impl.: 0000000000000000, windows: 1
+   5c7f     M 💬 Loading app: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ext_controls'
+   5caa     M 💬 App is prepared for loading: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ext_controls'
+   5cc1     M 🚀 Async loading Lua script [App: Extended Controls, p0]: 133.90 μs
+   5cc6 12758 🚀 Async loading Lua script [App: Extended Controls, p1]: 5660.10 μs
+   5da5     M ✅ Lua: <App: Extended Controls> loaded and ready to run
+   5da5     M 🚀 Async loading Lua script [App: Extended Controls, p2]: 207246.10 μs
+   5db9     M 💬 App is loaded: 'C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\lua\ext_controls', impl.: 0000013E6C7637B0, windows: 1
+   5f45     M 💬 Enough time has passed, alerting welcome message listeners
+   5fd5 12550 💬 Win10 listener: plugin reader created
+   932b     M 💬 Event WM_DEVICECHANGE: 7
+   9525     M 💬 wnd_device_update.1
+   9921     M 💬 wnd_device_update.2
+   9d1a     M 💬 wnd_device_update.3
+   a056     M 💬 Event WM_DEVICECHANGE: 7
+   a060     M 💬 Event WM_DEVICECHANGE: 7
+   a06a     M 💬 Event WM_DEVICECHANGE: 7
+   a073     M 💬 Event WM_DEVICECHANGE: 7
+   a07a     M 💬 Event WM_DEVICECHANGE: 7
+   a07e     M 💬 Event WM_DEVICECHANGE: 7
+   a082     M 💬 Event WM_DEVICECHANGE: 7
+   a285     M 💬 wnd_device_update.1
+   a682     M 💬 wnd_device_update.2
+   aa48     M 💬 wnd_device_update.3
+   b740  754c ✅ [Lua: app_service] AppShelf: checking app updates
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry Unbound, installed: 0.9.5, available: 0.9.8
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry CarMirrorsConfigurator, installed: false, available: 1.4.0
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry DriftZonesEditor, installed: false, available: 1.0
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry DynamicReturn, installed: false, available: 0.8.1
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry Flashlight, installed: false, available: 1.2.3
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry InternetRadio, installed: false, available: 1.0.5
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry Paintshop, installed: false, available: 1.1.4
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry RGBControl, installed: false, available: 0.8.5
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry Radar, installed: false, available: 0.9.2
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry RallyCopilot, installed: false, available: 0.9.9
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry TrackCoordinatesHelper, installed: false, available: 0.9.0
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry WebBrowser, installed: false, available: 1.3.0
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry comfy_shifter, installed: false, available: 0.03
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry AISplineEditor, installed: 0.3, available: 0.3
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry CSPDataLogger, installed: 1.0.1, available: 1.0.1
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry ControllerTweaks, installed: 1.1, available: 1.1
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry ext_controls, installed: 3.0.0, available: 3.0.0
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry PocketTechnician, installed: 0.4.1, available: 0.4.1
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry SetupExchange, installed: 1.5.6, available: 1.5.6
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry Skin_Companion, installed: 1.019, available: 1.019
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry TimeShift, installed: 0.8, available: 0.8
+   b7aa  754c ✅ [Lua: app_service] AppShelf: entry comfy_map, installed: 0.09, available: 0.09
+   b7aa  754c ✅ [Lua: app_service] AppShelf: notify counter=1
+   b7ab  754c 🚀 Loading Lua script [App Shelf (service)]: 149090.70 μs
+   b7ab  754c 🚀 Reloading Lua script [App Shelf (service)]: 940.00 μs
+   b7ab  754c 🚀 Loading Lua script [unknown script]: 0.30 μs
+  160ea     M 💬 Loading position of AC_AUDIO: 1768, 93, 300, 284, display size: 3072, 1728
+  160f0     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 795, 13, 300, 243, display size: 3072, 1728
+  160f0     M 💬 Loading position of AC_CSPRSTATS: 912, 13, 600, 897, display size: 3072, 1728
+  160f0     M 💬 Loading position of CAR_DEBUG: 916, 89, 300, 400, display size: 3072, 1728
+  160f0     M 💬 Loading position of LIGHT_MAKER: 60, 60, 240, 400, display size: 3072, 1728
+  160f0     M 💬 Loading position of LUA_DEBUG: 96, 377, 2062, 491, display size: 3072, 1728
+  160f0     M 💬 Loading position of OBJECTS_INSPECTOR: 60, 60, 400, 320, display size: 3072, 1728
+  160f0     M 💬 Loading position of PYTHON_PROFILER: 60, 60, 554, 662, display size: 3072, 1728
+  160f0     M 💬 Loading position of REFLECTIONSFX_DEBUG: 84, 277, 279, 400, display size: 3072, 1728
+  160f0     M 💬 Loading position of WEATHERFX_DEBUG: 1094, 556, 240, 400, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 799, 101, 919, 369, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 794, 59, 240, 598, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 1185, 139, 592, 501, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 20, 23, 300, 600, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 359, 24, 294, 244, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_Unbound_main: 1829, 11, 200, 626, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_comfy map_main: 1281, 436, 308, 228, display size: 3072, 1728
+  160f0     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 2451, 244, 463, 583, display size: 3072, 1728
+  160f8     M 💬 New instance of truct cui::imgui_offscreen created
+  160f9     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 1207, 8, 600, 500, display size: 3072, 1728
+  160f9     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 284, 1232, 316, 238, display size: 3072, 1728
+  160f9     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 1562, 11, 927, 222, display size: 3072, 1728
+  160f9     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 314, 1450, 451, 601, display size: 3072, 1728
+  17d99     M ✅ Lua: Weather FX impl. is changed
+  17db2     M ✅ Lua: <Weather FX impl.> loaded and ready to run
+  17db2     M 🚀 Reloading Lua script [Weather FX impl.]: 24351.50 μs
+  17e4c     M 💬 Loading shader: 
+  17e4d     M 💬 Loading shader: 
+  17e4d     M 💬 Loading shader: 
+  17e4d     M 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\PP/blur_prepare.fx
+  17e4d     M 💬 Loading shader: 
+  17e4e     M 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\PP/customPP.fx
+  17e7b 12d40 💬 Loading shader: C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\extension\weather\pure\world\clouds\2d\bottom.fx
+  17e81     M 💬 Loading shader: 
+  24b40     M 💬 Loading position of AC_AUDIO: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of AC_CSPRSTATS: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of CAR_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of LIGHT_MAKER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of LUA_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of OBJECTS_INSPECTOR: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of PYTHON_PROFILER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of REFLECTIONSFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of WEATHERFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Unbound_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_comfy map_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  24b40     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25224     M 💬 Loading position of AC_AUDIO: 1768, 93, 300, 284, display size: 3072, 1728
+  25224     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 795, 13, 300, 243, display size: 3072, 1728
+  25224     M 💬 Loading position of AC_CSPRSTATS: 912, 13, 600, 897, display size: 3072, 1728
+  25224     M 💬 Loading position of CAR_DEBUG: 916, 89, 300, 400, display size: 3072, 1728
+  25224     M 💬 Loading position of LIGHT_MAKER: 60, 60, 240, 400, display size: 3072, 1728
+  25224     M 💬 Loading position of LUA_DEBUG: 96, 377, 2062, 491, display size: 3072, 1728
+  25224     M 💬 Loading position of OBJECTS_INSPECTOR: 60, 60, 400, 320, display size: 3072, 1728
+  25224     M 💬 Loading position of PYTHON_PROFILER: 60, 60, 554, 662, display size: 3072, 1728
+  25224     M 💬 Loading position of REFLECTIONSFX_DEBUG: 84, 277, 279, 400, display size: 3072, 1728
+  25224     M 💬 Loading position of WEATHERFX_DEBUG: 1094, 556, 240, 400, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 799, 101, 919, 369, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 794, 59, 240, 598, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 1185, 139, 592, 501, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 20, 23, 300, 600, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 359, 24, 294, 244, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_Unbound_main: 1829, 11, 200, 626, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_comfy map_main: 1281, 436, 308, 228, display size: 3072, 1728
+  25224     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 2451, 244, 463, 583, display size: 3072, 1728
+  25225     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 1207, 8, 600, 500, display size: 3072, 1728
+  25225     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 284, 1232, 316, 238, display size: 3072, 1728
+  25225     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 1562, 11, 927, 222, display size: 3072, 1728
+  25225     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 314, 1450, 451, 601, display size: 3072, 1728
+  25c39     M 💬 Loading position of AC_AUDIO: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of AC_CSPRSTATS: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of CAR_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of LIGHT_MAKER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of LUA_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of OBJECTS_INSPECTOR: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of PYTHON_PROFILER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of REFLECTIONSFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of WEATHERFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Unbound_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_comfy map_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  25c39     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  261e7     M 💬 Loading position of AC_AUDIO: 1768, 93, 300, 284, display size: 3072, 1728
+  261e7     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 795, 13, 300, 243, display size: 3072, 1728
+  261e7     M 💬 Loading position of AC_CSPRSTATS: 912, 13, 600, 897, display size: 3072, 1728
+  261e7     M 💬 Loading position of CAR_DEBUG: 916, 89, 300, 400, display size: 3072, 1728
+  261e7     M 💬 Loading position of LIGHT_MAKER: 60, 60, 240, 400, display size: 3072, 1728
+  261e7     M 💬 Loading position of LUA_DEBUG: 96, 377, 2062, 491, display size: 3072, 1728
+  261e7     M 💬 Loading position of OBJECTS_INSPECTOR: 60, 60, 400, 320, display size: 3072, 1728
+  261e7     M 💬 Loading position of PYTHON_PROFILER: 60, 60, 554, 662, display size: 3072, 1728
+  261e7     M 💬 Loading position of REFLECTIONSFX_DEBUG: 84, 277, 279, 400, display size: 3072, 1728
+  261e7     M 💬 Loading position of WEATHERFX_DEBUG: 1094, 556, 240, 400, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 799, 101, 919, 369, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 794, 59, 240, 598, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 1185, 139, 592, 501, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 20, 23, 300, 600, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 359, 24, 294, 244, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Unbound_main: 1829, 11, 200, 626, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_comfy map_main: 1281, 436, 308, 228, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 2451, 244, 463, 583, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 1207, 8, 600, 500, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 284, 1232, 316, 238, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 1562, 11, 927, 222, display size: 3072, 1728
+  261e7     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 314, 1450, 451, 601, display size: 3072, 1728
+  266c6     M 💬 Loading position of IMGUI_LUA_RSS Settings_extra_setup: 60, 64, 40, 32, display size: 3072, 1728
+  266f3     M ✅ Lua: <App: Setup Exchange> loaded and ready to run
+  266f3     M 🚀 Loading Lua script [App: Setup Exchange]: 35343.60 μs
+  2683e     M ✅ [Lua: app] New session: 1ggkuqt, user ID: 2vr5QnRTYsDNdUMk5m1A25iXadZrqVHJ2n7gbn9piCM=
+  27fb1     M ✅ Load setup: C:\Users\Mike\Documents\Assetto Corsa\setups\rss_formula_hybrid_x_2026\generic\Agile Maxed-out Beast.ini
+  285d6     M 💬 Loading position of IMGUI_LUA_Setup Exchange_main: 17, -3, 360, 400, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of AC_AUDIO: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of AC_CAMERA_PICTURE_MODE: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of AC_CSPRSTATS: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of CAR_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of LIGHT_MAKER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of LUA_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of OBJECTS_INSPECTOR: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of PYTHON_PROFILER: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of REFLECTIONSFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of WEATHERFX_DEBUG: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of IMGUI_CSP_LUA_CSP Debug_settings: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee6     M 💬 Loading position of IMGUI_LUA_Pure Config App_main_pure_config: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Pure Planner_main_pure_planner: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_SimHubUDPConnector_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Unbound_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_comfy map_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_comfy map_smol_map: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Pure PP App_main_pure_pp: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_RSS Settings_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Skin Companion_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Extended Controls_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+  d0ee7     M 💬 Loading position of IMGUI_LUA_Setup Exchange_main: 3.40282e+38, 3.40282e+38, 3.40282e+38, 3.40282e+38, display size: 3072, 1728
+ 11f410     M 💬 Shutdown through Lua interface
+ 11f484     M 🚀 Reloading Lua script [App: Setup Exchange]: 901.20 μs
+ 11f484     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f486     M 🚀 Reloading Lua script [App: Extended Controls]: 1619.60 μs
+ 11f486     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f487     M 🚀 Reloading Lua script [App: Skin Companion]: 1140.10 μs
+ 11f487     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f488     M 🚀 Reloading Lua script [App: RSS Settings]: 823.40 μs
+ 11f488     M 🚀 Loading Lua script [unknown script]: 0.10 μs
+ 11f489     M 🚀 Reloading Lua script [App: Pure PP App]: 1773.30 μs
+ 11f489     M 🚀 Loading Lua script [unknown script]: 0.10 μs
+ 11f48b     M 🚀 Reloading Lua script [App: comfy map]: 1275.50 μs
+ 11f48b     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f48c     M 🚀 Reloading Lua script [App: Unbound]: 897.00 μs
+ 11f48c     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f48f     M 🚀 Reloading Lua script [App: SimHubUDPConnector]: 3075.30 μs
+ 11f48f     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f494     M 🚀 Reloading Lua script [App: Pure Planner]: 4858.60 μs
+ 11f494     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f497     M 🚀 Reloading Lua script [App: Pure Config App]: 2953.80 μs
+ 11f497     M 🚀 Loading Lua script [unknown script]: 0.40 μs
+ 11f498     M 🚀 Reloading Lua script [App: CSP Debug]: 1075.60 μs
+ 11f498     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f49a     M 🚀 Reloading Lua script [Car display: rss_formula_hybrid_x_2026:0 [SCRIPTABLE_DISPLAY_0]]: 2662.80 μs
+ 11f49b     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f49b     M 🚀 Reloading Lua script [Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_0]]: 780.20 μs
+ 11f49b     M 🚀 Loading Lua script [unknown script]: 0.20 μs
+ 11f49d     M 🚀 Reloading Lua script [Car script: rss_formula_hybrid_x_2026:0 [SCRIPT_1]]: 2072.80 μs
+ 11f49d     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f4aa     M 🚀 Reloading Lua script [CSP module]: 1282.20 μs
+ 11f4aa     M 🚀 Loading Lua script [unknown script]: 0.30 μs
+ 11f4e5     M ✅ Save replay: AC_071126-030256_O_rss_formula_hybrid_x_2026_acu_cota_2021_, temporary: 1
+ 11f4e5     M ✅ ReplayManager: cut in=0, cut out=0, recorded frames=55933, current frame=0, current recording index=55933
+ 11f4ed     M ✅ ReplayRecorder: cut in=0, cut out=0, cut size=55933, pivot=55933, recorded frames=55933, current recording cue=55933, frames size=7352941
+ 11f54f     M ✅ Saved in: 'C:\Users\Mike\Documents\Assetto Corsa\replay\temp\AC_071126-030256_O_rss_formula_hybrid_x_2026_acu_cota_2021_.acreplay'
+ 11f54f     M ✅ Replay extra recorder: original size: 19241289
+ 11f54f     M ✅ Add text: WFX_IMPLEMENTATION, 4 symbols
+ 11f54f     M ✅ Add text: WFX_CONTROLLER, 4 symbols
+ 11f54f     M ✅ Add text: CONFIG_RACE, 1398 symbols
+ 11f54f     M ✅ Writing extra data: cut_in=0, cut_out=0, cut_size=55933, pivot=55933, recorded_frames=55933
+ 11f54f     M ✅ Add bytes: EXT_PERRACE_v1, 8 bytes
+ 11f54f     M ✅ Add bytes: EXT_PERRACE_v2, 16 bytes
+ 11f54f     M ✅ Add bytes: EXT_SESSIONDATA_v1, 38 bytes
+ 11f54f     M ✅ Add bytes: EXT_CONDITIONSVERSION_v1, 4 bytes
+ 11f586     M ✅ Add bytes: EXT_PERFRAME_v1, 433292 bytes
+ 11f587     M ✅ Extended replay: `EXT_PERFRAME_v1` compressed from 3058 KB to 423 KB, total frames: 55933
+ 11f59d     M ✅ Add bytes: EXT_PERRACEFRAME_v1, 278845 bytes
+ 11f59d     M ✅ Extended replay: `EXT_PERRACEFRAME_v1` compressed from 873 KB to 272 KB, total frames: 55933
+ 11f63b     M ✅ Add bytes: EXT_PERCAR_v7:0, 2000402 bytes
+ 11f63c     M ✅ Extended replay: `EXT_PERCAR_v7:0` compressed from 5899 KB to 1953 KB, total frames: 55933
+ 11f644     M ✅ Add bytes: EXT_EXTRASTREAM_v1, 196759 bytes
+ 11f644     M ✅ Add bytes: EXT_EXTRASTREAM_v1, 34 bytes
+ 11f644     M ✅ Replay extra recorder: closing
+ 11f697     M 🚀 Loading Lua script [App: CSP Debug]: 65.50 μs
+ 11f697     M 🚀 Loading Lua script [App: Pure Config App]: 37.10 μs
+ 11f697     M 🚀 Loading Lua script [App: Unbound]: 27.20 μs
+ 11f697     M 🚀 Loading Lua script [App: comfy map]: 27.80 μs
+ 11f697     M 🚀 Loading Lua script [App: Pure PP App]: 39.50 μs

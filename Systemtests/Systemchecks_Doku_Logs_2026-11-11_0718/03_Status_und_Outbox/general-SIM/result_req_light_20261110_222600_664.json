@@ -1,0 +1,13 @@
+﻿{
+    "task_id":  "req_light_20261110_222600_664",
+    "agent":  "general",
+    "sender":  "GeneralAgent_Laptop",
+    "requester":  "LightAgent",
+    "reply_to":  "light",
+    "action":  "ApprovalRequest",
+    "approved_by":  "GeneralAgent_Laptop",
+    "approved":  true,
+    "timestamp":  "2026-11-10T22:27:09.0307752+01:00",
+    "status":  "Approved",
+    "output":  "[GENERAL FREIGABE ERTEILT] Test-3B2 (Dark-\u003eLight) freigegeben."
+}

@@ -1,0 +1,14 @@
+﻿{
+    "task_id":  "pitwall_1794357228032",
+    "agent":  "dark",
+    "sender":  "DarkAgent",
+    "requester":  "StrikerPi Pitwall",
+    "reply_to":  "",
+    "action":  "Status",
+    "file":  "pitwall_1794357228032.json",
+    "timestamp":  "2026-11-11T00:33:53.7658715+01:00",
+    "status":  "Success",
+    "failed_stage":  null,
+    "exit_code":  0,
+    "output":  "[2026-11-11T00:33:48.4385819+01:00] [INFO] [Dark-InContainer] Action \u0027Status\u0027 gestartet...\r\n[2026-11-11T00:33:48.4385819+01:00] [SUCCESS] [Dark-InContainer] Statusbericht gespeichert unter \\\\host.lan\\Data\\agents\\dark\\dark-status.json\r\n\r\n\r\nName  : timestamp\r\nValue : 2026-11-11T00:33:48.4385819+01:00\r\n\r\nName  : agent\r\nValue : Dark Agent\r\n\r\nName  : role\r\nValue : In-Container Specialist (Guest Execution)\r\n\r\nName  : hostname\r\nValue : WIN-54U68T9T2FA\r\n\r\nName  : user\r\nValue : Docker\r\n\r\nName  : os\r\nValue : Microsoft Windows NT 10.0.26200.0\r\n\r\nName  : disk_c_free_gb\r\nValue : 75,18\r\n\r\nName  : disk_c_total_gb\r\nValue : 159,75\r\n\r\nName  : free_ram_mb\r\nValue : 8754\r\n\r\nName  : cm_running\r\nValue : False\r\n\r\nName  : acs_running\r\nValue : False\r\n\r\nName  : csp_dll_present\r\nValue : True\r\n\r\nName  : csp_version\r\nValue : 0.2.11.0\r\n\r\nName  : csp_enabled\r\nValue : True\r\n\r\nName  : current_car\r\nValue : rss_formula_hybrid_x_2026\r\n\r\nName  : current_track\r\nValue : acu_cota_2021\r\n\r\nName  : current_config\r\nValue : \r\n\r\nName  : host_lan_data_ok\r\nValue : True\r\n\r\nName  : ac_installed_path\r\nValue : C:\\AssettoCorsa\r\n\r\nName  : ac_documents_path\r\nValue : C:\\Users\\Docker\\Documents\\Assetto Corsa"
+}

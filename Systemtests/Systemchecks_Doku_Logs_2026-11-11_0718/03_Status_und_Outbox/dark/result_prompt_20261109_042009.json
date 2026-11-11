@@ -1,0 +1,8 @@
+﻿{
+    "task_id":  "prompt_20261109_042009",
+    "file":  "prompt_20261109_042009.json",
+    "timestamp":  "2026-11-09T04:20:10.2669391+01:00",
+    "status":  "Failed",
+    "exit_code":  1,
+    "output":  "In Zeile:1 Zeichen:285\r\n+ ... h voiceover and providing sarah coach with videos for her debriefings\r\n+                                                                          ~\nSchließende \")\" fehlt in einem Ausdruck."
+}
