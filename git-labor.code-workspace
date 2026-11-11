@@ -15,6 +15,10 @@
     {
       "name": "4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)",
       "path": "../assetto-corsa-content"
+    },
+    {
+      "name": "5_StrikerPi-Hub (strikerpi/simrig.git)",
+      "path": "../strikerpi-hub"
     }
   ],
   "mcp": {
@@ -69,11 +73,34 @@
           "Terminal: @general (Laptop Master)",
           "Terminal: @light (SimRacer Software/Sessions)",
           "Terminal: @rig (SimRacer Hardware/VR)",
-          "Terminal: @sarah (Archibald Pitwall)"
+          "Terminal: @dark (ac-win11-sandbox)",
+          "Terminal: @sarah (Archibald Pitwall)",
+          "Terminal: @rick (StrikerPi 24/7 Hub)"
         ],
         "dependsOrder": "parallel",
         "runOptions": {
           "runOn": "folderOpen"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "🧭 Agent-Terminals Menü (SSH-Launcher)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs\\Agent-Terminals.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
         },
         "problemMatcher": []
       },
@@ -150,6 +177,48 @@
           "Bypass",
           "-File",
           "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_sarah_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @dark (ac-win11-sandbox)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_dark_terminal.ps1"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @rick (StrikerPi 24/7 Hub)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoExit",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\shared\\scripts\\connect_rick_terminal.ps1"
         ],
         "options": {
           "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"

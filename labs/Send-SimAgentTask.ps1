@@ -15,7 +15,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position = 0)]
-    [ValidateSet("general", "light", "rig", "dark", "sarah")]
+    [ValidateSet("general", "light", "rig", "dark", "sarah", "rick")]
     [string]$TargetAgent = "dark",
 
     [Parameter(Position = 1)]
@@ -37,6 +37,9 @@ param(
     [string]$SimRacerHost = "192.168.178.68",
 
     [Parameter()]
+    [string]$StrikerPiHost = "strikerpi",
+
+    [Parameter()]
     [switch]$QueryStatus
 )
 
@@ -44,11 +47,11 @@ $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
 
 # Status-Abfrage aller Agenten
 if ($QueryStatus) {
-    Write-Host "`n=== SimRacer Agenten-Terminals Status ($SimRacerHost) ===" -ForegroundColor Cyan
+    Write-Host "`n=== SimRacer & Verbund Agenten-Terminals Status ===" -ForegroundColor Cyan
     $agents = @("general", "light", "rig", "dark", "sarah")
     foreach ($ag in $agents) {
-        $inbox = Join-Path $AgentsRoot "$ag\inbox"
-        $outbox = Join-Path $AgentsRoot "$ag\outbox"
+        $inbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$ag\inbox" }
+        $outbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$ag\outbox" }
         $connected = Test-Path $inbox
         $queueCount = 0
         if ($connected) {
@@ -58,14 +61,55 @@ if ($QueryStatus) {
         $color = if (-not $connected) { "DarkGray" } elseif ($queueCount -gt 0) { "Yellow" } else { "Green" }
         Write-Host ("  {0,-9} -> {1,-14} (Inbox: {2})" -f $ag.ToUpper(), $statusStr, $inbox) -ForegroundColor $color
     }
+    $rickCheck = ssh -o BatchMode=yes -o ConnectTimeout=3 $StrikerPiHost "systemctl is-active rick-agent.service 2>/dev/null; ls -1 /opt/rick-agent/inbox/*.json 2>/dev/null | wc -l" 2>$null
+    if ($rickCheck) {
+        $rLines = @($rickCheck -split "`r?`n")
+        $rState = if ($rLines[0] -eq "active") { "ONLINE" } else { $rLines[0] }
+        $rQueue = if ($rLines.Count -gt 1) { [int]$rLines[1] } else { 0 }
+        Write-Host ("  {0,-9} -> [{1}: Q={2}] (SSH: {3}:/opt/rick-agent/inbox)" -f "RICK", $rState, $rQueue, $StrikerPiHost) -ForegroundColor Green
+    } else {
+        Write-Host ("  {0,-9} -> [OFFLINE]      (SSH: {1}:/opt/rick-agent/inbox)" -f "RICK", $StrikerPiHost) -ForegroundColor DarkGray
+    }
     Write-Host ""
     return
 }
 
 $TargetAgent = $TargetAgent.ToLower()
-$TargetInbox = Join-Path $AgentsRoot "$TargetAgent\inbox"
-$TargetOutbox = Join-Path $AgentsRoot "$TargetAgent\outbox"
-$TargetLogs = Join-Path $AgentsRoot "$TargetAgent\logs"
+
+if ($TargetAgent -eq "rick") {
+    $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $randSuffix = [System.IO.Path]::GetRandomFileName().Replace(".", "").Substring(0, 4)
+    $taskId = "task_${timestamp}_${randSuffix}"
+    $taskData = [ordered]@{
+        task_id    = $taskId
+        sender     = "git-labor-powershell"
+        target     = "rick"
+        action     = if ($Prompt -ne "") { "note" } else { $Action }
+        prompt     = $Prompt
+        parameters = $Params
+        created_at = (Get-Date).ToUniversalTime().ToString("o")
+    }
+    $tmpJson = Join-Path $env:TEMP "$taskId.json"
+    $taskData | ConvertTo-Json -Depth 5 | Set-Content -Path $tmpJson -Encoding UTF8
+    scp -q $tmpJson "${StrikerPiHost}:/opt/rick-agent/inbox/${taskId}.json"
+    Remove-Item $tmpJson -Force -ErrorAction SilentlyContinue
+    Write-Host "`n[+] Task übermittelt: $taskId an Agent '@rick' via SSH ($StrikerPiHost)" -ForegroundColor Green
+    if (-not $Wait) { return }
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    while ($sw.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
+        $res = ssh -o BatchMode=yes $StrikerPiHost "cat /opt/rick-agent/outbox/result_${taskId}.json 2>/dev/null" 2>$null
+        if ($res) {
+            Write-Host "`n$res`n" -ForegroundColor Cyan
+            return
+        }
+        Start-Sleep -Seconds 1
+    }
+    Write-Warning "[-] Timeout nach ${TimeoutSeconds}s fuer Rick Task $taskId."
+    return
+}
+$TargetInbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$TargetAgent\inbox" }
+$TargetOutbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$TargetAgent\outbox" }
+$TargetLogs = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\logs" } else { Join-Path $AgentsRoot "$TargetAgent\logs" }
 
 if (-not (Test-Path $TargetInbox)) {
     try {

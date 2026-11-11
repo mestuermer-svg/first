@@ -9,6 +9,7 @@ import sys
 import json
 import time
 import uuid
+import subprocess
 import configparser
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,9 +22,10 @@ class SimAgentBridge:
     def __init__(self, repo_path: Optional[Path] = None, agents_base_path: Optional[Path] = None):
         self.repo_path = repo_path or AC_SANDBOX_REPO
         self.simracer_ip = "192.168.178.68"
+        self.strikerpi_host = "strikerpi"
         # Standard: Shared SMB-Pfad zum SimRacer
         self.agents_base_path = agents_base_path or Path(rf"\\{self.simracer_ip}\ac-sandbox\shared\agents")
-        self.known_agents = ["general", "light", "rig", "dark", "sarah"]
+        self.known_agents = ["general", "light", "rig", "dark", "sarah", "rick"]
         self.packages = {
             "setups": self.repo_path / "01_Documents_AC_Setups",
             "user_cfg": self.repo_path / "02_Documents_AC_Cfg",
@@ -103,7 +105,16 @@ class SimAgentBridge:
 
     def get_agent_paths(self, agent_name: str) -> Dict[str, Path]:
         """Ermittelt die Verzeichnisse (inbox, outbox, logs) eines Agenten."""
-        agent_dir = self.agents_base_path / agent_name.lower()
+        ag = agent_name.lower().lstrip("@")
+        if ag == "sarah":
+            sarah_dir = self.agents_base_path.parent / "telemetry"
+            return {
+                "root": sarah_dir,
+                "inbox": sarah_dir / "inbox",
+                "outbox": sarah_dir / "outbox",
+                "logs": sarah_dir / "logs",
+            }
+        agent_dir = self.agents_base_path / ag
         return {
             "root": agent_dir,
             "inbox": agent_dir / "inbox",
@@ -113,6 +124,24 @@ class SimAgentBridge:
 
     def get_agent_status(self, agent_name: str) -> Dict[str, Any]:
         """Gibt den aktuellen Queue-Status und die Verfügbarkeit eines Agenten zurück."""
+        if agent_name.lower().lstrip("@") == "rick":
+            try:
+                res = subprocess.run(
+                    ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=2", self.strikerpi_host, "cat /opt/rick-agent/status.json"],
+                    capture_output=True, text=True, timeout=4
+                )
+                connected = res.returncode == 0
+                return {
+                    "agent": "rick",
+                    "connected": connected,
+                    "queue_count": 0,
+                    "busy": False,
+                    "latest_results": [],
+                    "inbox_path": f"{self.strikerpi_host}:/opt/rick-agent/inbox"
+                }
+            except Exception:
+                return {"agent": "rick", "connected": False, "queue_count": 0, "busy": False, "latest_results": [], "inbox_path": f"{self.strikerpi_host}:/opt/rick-agent/inbox"}
+
         paths = self.get_agent_paths(agent_name)
         inbox_exists = paths["inbox"].exists()
         outbox_exists = paths["outbox"].exists()

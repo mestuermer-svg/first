@@ -1,14 +1,14 @@
 > **Thema:** Workspace-Schnittstelle: SimRacer-Verbund, Task-Queue & Agenten-Terminals
 > **Autor:** Michael Stürmer
-> **Datum:** 10.11.2026
+> **Datum:** 11.11.2026
 
 <details>
 <summary><b>Lernziele</b></summary>
 
-* Verstehen der **Multi-Workspace-Architektur** zwischen dem Labor-Workspace (`git-labor` auf Laptop `VanstrikeCyborg`) und dem Simulations-Workspace (`assetto-corsa-content` / SimRacer `192.168.178.68`).
-* Beherrschen der **dateibasierten Task-Queue (`inbox/` $\rightarrow$ Worker $\rightarrow$ `outbox/` & `logs/`)** für den bidirektionalen Datenaustausch mit den Agenten-Terminals (`@dark`, `@light`, `@rig`, `@sarah`, `@general`).
-* Nachvollziehen des **Prompt-Lebenszyklus**: Wo sieht man die Bearbeitung eines Prompts (Live-TUI-Header, Queue-Zähler, Ausführungslog) und wo/wie erhält man die Rückmeldung (`result_<taskId>.json`, `logs/<taskId>.log`, CLI-Handshake).
-* Praktische Integration in Python (`labs/03_python/sim_agent_bridge.py`) und PowerShell (`labs/Send-SimAgentTask.ps1`), um direkt aus `git-labor` heraus Aufträge an den SimRacer zu delegieren und Ergebnisse synchron oder asynchron abzurufen.
+* Verstehen der **Multi-Workspace-Architektur** zwischen dem Labor-Workspace (`git-labor` auf Laptop `VanstrikeCyborg`), dem Simulations-Workspace (`assetto-corsa-content` / SimRacer `192.168.178.68`) und dem 24/7-Edge-Hub (`strikerpi-hub` / StrikerPi `192.168.178.86`).
+* Beherrschen der **dateibasierten Task-Queue (`inbox/` $\rightarrow$ Worker $\rightarrow$ `outbox/` & `logs/`)** sowie der **SSH-Queue für `@rick`** (`/opt/rick-agent/inbox/`).
+* Sichere Trennung zwischen **lokalen Host-Terminals** (auf SimRacer, Sandbox, Archibald, StrikerPi) und den zentral über **`labs/Agent-Terminals.ps1`** gestarteten **SSH-Client-Terminals** vom `VanstrikeCyborg` (`-ClientMode`).
+* Nachvollziehen des **Prompt-Lebenszyklus** und der Integration in Python (`labs/03_python/sim_agent_bridge.py`) und PowerShell (`labs/Send-SimAgentTask.ps1`).
 
 </details>
 
@@ -24,13 +24,14 @@ Das Entwickler-Ökosystem ist strikt in zwei Rollenbereiche unterteilt:
 flowchart TB
     subgraph GITLABOR["Workspace: git-labor (Laptop VanstrikeCyborg)"]
         DEV["Entwickler / General Cyborg (Global) &amp; General Sim (Leitstand)"]
+        LAUNCHER["Agent-Terminals.ps1 (SSH-Launcher)"]
         BRIDGE_PY["sim_agent_bridge.py"]
         CLI_PS["Send-SimAgentTask.ps1 / @general Terminal"]
     end
 
     subgraph NETWORK["Netzwerk-Schnittstelle (SMB / SSH)"]
         SMB["\\192.168.178.68\ac-sandbox\shared\agents\"]
-        SSH["SSH :22 (Host) / :2222 (Sandbox)"]
+        SSH["SSH :22 (SimRacer/Archibald/StrikerPi) / :2222 (Sandbox)"]
     end
 
     subgraph SIMRACER["Workspace: assetto-corsa-content (SimRacer &amp; Sandbox)"]
@@ -44,10 +45,15 @@ flowchart TB
         subgraph PITWALL["Pitwall (IdeaPad 5 omARCHy 192.168.178.98)"]
             T_SARAH["@sarah Terminal (Telemetrie, Video)"]
         end
+        subgraph EDGE["24/7 Edge Hub (StrikerPi 192.168.178.86)"]
+            T_RICK["@rick (Relay :8080, MQTT :1883, Bare-Git)"]
+        end
     end
 
-    DEV --> BRIDGE_PY &amp; CLI_PS
+    DEV --> LAUNCHER &amp; BRIDGE_PY &amp; CLI_PS
+    LAUNCHER -->|SSH -ClientMode / Bash| SSH
     BRIDGE_PY &amp; CLI_PS -->|Schreibt Task-JSON in inbox| SMB
+    BRIDGE_PY &amp; CLI_PS -->|SCP/SSH fuer @rick| T_RICK
     SMB --> T_LIGHT &amp; T_RIG &amp; T_DARK &amp; T_SARAH
     T_LIGHT &amp; T_RIG &amp; T_DARK &amp; T_SARAH -->|Schreibt Result-JSON in outbox| SMB
     SMB -->|Liest Status &amp; Output| BRIDGE_PY &amp; CLI_PS
@@ -278,6 +284,63 @@ Alle vier aktiven PowerShell-Agenten-Terminals protokollieren ihre Kommunikation
 </details>
 
 <details>
+<summary>1.10 Lokale Host-Terminals vs. SSH-Client-Mode &amp; zentraler Git-Labor Launcher</summary>
+
+Damit sich **lokale Host-Terminals** (z. B. direkt am SimRacer-Desktop oder in der Sandbox) und **SSH-Sitzungen vom Laptop `VanstrikeCyborg`** nicht gegenseitig abschießen oder Tasks doppelt aus der Inbox ziehen, gilt eine strikte Modustrennung:
+
+| Agent | Host-Lokal (auf dem Zielgerät) | SSH-Aufruf von `VanstrikeCyborg` | Schutzmechanismus |
+| :--- | :--- | :--- | :--- |
+| **`@general`** | `start_general_terminal.ps1` (lokal auf `VanstrikeCyborg`) | *(Master – läuft direkt lokal)* | Singleton beendet nur doppelte lokale Instanzen |
+| **`@rig`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_rig_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostRigWorkerActive`: Client-Mode killt keinen Host-Worker und verarbeitet nur bei Bedarf |
+| **`@light`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_light_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostLightWorkerActive`: Client-Mode arbeitet als sicherer Monitor + Prompt-Sender |
+| **`@dark`** | `launch_guest_terminals.ps1` in `ac-win11-sandbox` (`AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_dark_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-GuestDarkWorkerActive`: kein Kill laufender In-Guest-Konsolen |
+| **`@sarah`** | `sarah-pitwall-telemetry.service` (`systemd`) + lokales Terminal | `connect_sarah_terminal.ps1` (`SSH-CLIENT`-Modus) | `telemetry` prüft aktiven UDP-9996-Dienst, kein Doppel-Bind |
+| **`@rick`** | `rick-agent.service` + `telemetry-relay.service` (`systemd`) | `connect_rick_terminal.ps1` (`SSH-CLIENT`-Modus) | `start_rick_terminal.sh` greift niemals den `systemd`-Worker an |
+
+#### Zentraler Terminal-Launcher im Git-Labor (`labs/Agent-Terminals.ps1`)
+Im Workspace `git-labor` steht eine zentrale Übersicht inkl. Live-Port-Check zur Verfügung (auch als VS-Code-Task **`🧭 Agent-Terminals Menü (SSH-Launcher)`**):
+```powershell
+# Interaktives Auswahlmenü mit Live-Online-Matrix aller 6 Agenten
+.\labs\Agent-Terminals.ps1
+
+# Nur Status-Matrix anzeigen
+.\labs\Agent-Terminals.ps1 -StatusOnly
+
+# Direkt per SSH im aktuellen Fenster zu @rick oder @rig verbinden
+.\labs\Agent-Terminals.ps1 -Agent rick -InCurrentWindow
+.\labs\Agent-Terminals.ps1 -Agent rig -InCurrentWindow
+
+# Alle 6 Agenten-Terminals parallel in eigenen Fenstern starten
+.\labs\Agent-Terminals.ps1 -Agent all
+```
+
+</details>
+
+<details>
+<summary>1.11 Agent <code>@rick</code> auf StrikerPi &amp; Git-Repo Integration (<code>simrig.git</code>)</summary>
+
+Der 6. Agent **`@rick`** (`.github/agents/rick.agent.md`) betreut den **Raspberry Pi 4 (`StrikerPi` @ `192.168.178.86`)**:
+
+1. **Komponenten auf StrikerPi (`/opt/rick-agent/` &amp; `/opt/telemetry-relay/`):**
+   - `rick-agent.service` (`rick_worker.py`): Aktualisiert alle 15 s `/opt/rick-agent/status.json` (Services, LAN-Ports, `/srv/git/simrig.git`, Relay-Snapshot) und verarbeitet Aufgaben aus `/opt/rick-agent/inbox/` nach `outbox/`.
+   - `start_rick_terminal.sh`: Interaktive Konsole mit Befehlen `status`, `relay`, `restart-relay`, `mqtt <MODE>`, `git`, `logs`, `inbox <TEXT>`, `help`, `exit`.
+   - `telemetry-relay.service` (`telemetry_relay.py` v1.3.0) &amp; `mosquitto.service`: 50 Hz-UDP (`50005` $\rightarrow$ `Archibald:9996`), Pitwall-Dashboard (`:8080`), MJPEG-Lobby-Stream (`/api/stream/mjpeg`) und MQTT (`:1883`/`:9001`).
+2. **Aufgaben aus `git-labor` an `@rick` senden:**
+   ```powershell
+   # Status inkl. StrikerPi abfragen
+   .\labs\Send-SimAgentTask.ps1 -QueryStatus
+
+   # Task direkt per SCP/SSH an @rick senden und Antwort abwarten
+   .\labs\Send-SimAgentTask.ps1 -TargetAgent rick -Action status -Wait
+   ```
+   Auch im `@general`-Terminal funktioniert `@rick status` oder `@rick restart_relay` direkt.
+3. **Git-Repository &amp; Multi-Root-Einbindung (`5_StrikerPi-Hub`):**
+   - Das Bare-Repository auf dem Pi liegt unter **`git@192.168.178.86:/srv/git/simrig.git`** (Key-Auth über `git-shell`).
+   - Der lokale Arbeitsklon **`c:\Users\strik\strikerpi-hub`** ist als 5. Ordner **`5_StrikerPi-Hub (strikerpi/simrig.git)`** in `git-labor.code-workspace` eingebunden und erzwingt über `.gitattributes` saubere LF-Zeilenenden für Linux-Skripte (`.sh`, `.service`, `.conf`, `.py`).
+
+</details>
+
+<details>
 <summary><b>Übungsaufgaben</b></summary>
 
 1. **Queue-Pfad-Verständnis:** Unter welchem Netzwerk-Pfad muss das Skript aus `git-labor` eine JSON-Datei ablegen, wenn es dem `@rig`-Agenten am SimRacer einen Auftrag erteilen will?
@@ -298,11 +361,12 @@ Alle vier aktiven PowerShell-Agenten-Terminals protokollieren ihre Kommunikation
 * [PowerShell Handshake Dispatcher (`Send-SimAgentTask.ps1`)](../../labs/Send-SimAgentTask.ps1)
 
 ### Agent-Definitionen, Skills &amp; Regeln (Direktlinks)
-* **Custom Agents (`.github/agents/`):** [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md)
+* **Custom Agents (`.github/agents/`):** [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md) · [`rick.agent.md`](../../.github/agents/rick.agent.md)
 * **Regeln &amp; Instructions:** [`AGENTS.md`](../../AGENTS.md) · [`gemini-api.instructions.md`](../../.github/instructions/gemini-api.instructions.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`01_agent-stilfibel-und-didaktik-ruler.md`](./01_agent-stilfibel-und-didaktik-ruler.md)
 * **Skills (`SKILL.md`):** [`live-transfer-status-monitor` (Workspace)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`live-transfer-status-monitor` (Gemini)](../../.gemini/skills/live-transfer-status-monitor/SKILL.md) · [`managing-python-dependencies`](../../../.copilot/skills/managing-python-dependencies/SKILL.md)
 
 ### Terminal-Skripte, VS Code Tasks &amp; Kommunikations-Historie
+* **SSH-Terminal-Launcher &amp; StrikerPi Hub:** [`Agent-Terminals.ps1`](../../labs/Agent-Terminals.ps1) · [`connect_rick_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/scripts/connect_rick_terminal.ps1) · [`strikerpi-hub/README.md`](../../../strikerpi-hub/README.md)
 * **Kommunikations-Historie (Markdown):** [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
 * **Terminal-Starter:** [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1)
 * **VS Code Tasks:** [`assetto-corsa-content/.vscode/tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json)
@@ -312,10 +376,11 @@ Alle vier aktiven PowerShell-Agenten-Terminals protokollieren ihre Kommunikation
 <details>
 <summary><b>Chips & Kernaussagen</b></summary>
 
-* **Entkoppelte Dateischnittstelle:** Aufträge laufen über `inbox/`, Ergebnisse über `outbox/` und Logs über `logs/` auf dem Shared SMB-Storage `\\192.168.178.68\ac-sandbox\shared\agents\`.
+* **Entkoppelte Dateischnittstelle:** Aufträge laufen über `inbox/`, Ergebnisse über `outbox/` und Logs über `logs/` auf dem Shared SMB-Storage `\\192.168.178.68\ac-sandbox\shared\agents\` (für `@rick` per SCP/SSH unter `strikerpi:/opt/rick-agent/`).
+* **Host-Lokal vs. SSH-Client-Mode:** Host-Terminals laufen persistent lokal (`ExecutionTimeLimit = 0` / `systemd`); `VanstrikeCyborg` greift über `labs/Agent-Terminals.ps1` im `-ClientMode` zu, ohne laufende Host-Worker zu beenden.
 * **Sichtbarer Bearbeitungsstatus:** Der TUI-Header springt auf `BUSY`, der Queue-Zähler zählt hoch und die Status-Matrix wechselt für den Ziel-Agenten auf `RUNNING`.
 * **Rückmeldung nach Maß:** Strukturierte Rückmeldungen liegen in `result_<taskId>.json`, lange Ausgaben in `logs/task_<taskId>.log` und CLI-Aufrufe (`Send-SimAgentTask.ps1`) geben das Ergebnis direkt farbig in die Konsole zurück.
-* **Saubere Trennung:** `git-labor` entwickelt, testet und analysiert – `assetto-corsa-content` und der SimRacer führen auf nativer Hardware und in der Sandbox sicher aus.
+* **Saubere Trennung:** `git-labor` entwickelt, testet und steuert – `assetto-corsa-content` und `strikerpi-hub` liefern die Produktions- und 24/7-Edge-Infrastruktur.
 
 </details>
 

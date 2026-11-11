@@ -1,14 +1,14 @@
 > **Thema:** Multi-Workspace & Multi-PC-Verbund: Standorte, MCP-Server, Ports & Agenten-Rollen
 > **Autor:** Michael Stürmer
-> **Datum:** 09.11.2026
+> **Datum:** 11.11.2026
 
 <details>
 <summary><b>Lernziele</b></summary>
 
-* Die **verteilte Multi-PC- & Multi-Workspace-Architektur** zwischen dem Entwicklungs-Laptop (`VanstrikeCyborg`), der SimRacing-Workstation (`SimRacer`), der Windows-11-Sandbox (`ac-win11-sandbox`) und dem Pitwall-Node (`Archibald` / Omarchy Linux) im Detail verstehen.
-* Die zentrale Konfigurationsdatei **`git-labor.code-workspace`** und deren 4 Repositories/Ordner (`Git-Labor`, `Local-Cyborg`, `AC-CM-CSP-Sandbox`, `Assetto-Corsa-Content`) sicher administrieren.
-* Die **Netzwerk- und Port-Matrix** aller beteiligten Dienste beherrschen (Port `8317` CLIProxyAPI, Port `8000` Antigravity, Port `13508` NVIDIA App MCP, Port `8006` VNC/Kasm, Port `22` Host-SSH, Port `2222` Sandbox-SSH).
-* Das **5-Rollen-Modell der KI-Agenten** (`@general`, `@rig`, `@light`, `@dark`, `@sarah`) mit der exakten Aufgabenteilung (Hardware-Hub vs. Software-/Session-Hub vs. In-Container-Worker) souverän orchestrieren.
+* Die **verteilte Multi-PC- & Multi-Workspace-Architektur** zwischen dem Entwicklungs-Laptop (`VanstrikeCyborg`), der SimRacing-Workstation (`SimRacer`), der Windows-11-Sandbox (`ac-win11-sandbox`), dem Pitwall-Node (`Archibald` / Omarchy Linux) und dem 24/7-Edge-Hub (`StrikerPi` / Arch Linux ARM) im Detail verstehen.
+* Die zentrale Konfigurationsdatei **`git-labor.code-workspace`** und deren **5 Repositories/Ordner** (`Git-Labor`, `Local-Cyborg`, `AC-CM-CSP-Sandbox`, `Assetto-Corsa-Content`, `StrikerPi-Hub`) sicher administrieren.
+* Die **Netzwerk- und Port-Matrix** aller beteiligten Dienste beherrschen (`8317` CLIProxyAPI, `8000` Antigravity, `13508` NVIDIA App MCP, `8006` VNC/Kasm, `8090` Lobby-Stream, `8080` StrikerPi Pitwall Hub, `1883`/`9001` Mosquitto MQTT, `22` Host-SSH, `2222` Sandbox-SSH).
+* Das **6-Rollen-Modell der KI-Agenten** (`@general`, `@rig`, `@light`, `@dark`, `@sarah`, `@rick`) sowie die **Trennung zwischen lokalem Host-Terminal und SSH-Client-Mode** (`Agent-Terminals.ps1`) souverän orchestrieren.
 * Den **Handshake- & Task-Queue-Mechanismus** (`inbox/` $\rightarrow$ Pre-Flight-Check $\rightarrow$ Execution $\rightarrow$ `outbox/`) über PowerShell und Python im laufenden Betrieb fehlerfrei einsetzen.
 
 </details>
@@ -50,8 +50,8 @@ flowchart TD
     end
 
     subgraph NODE5 ["5. Telemetrie-Hub: StrikerPi (192.168.178.86 / Raspberry Pi 4)"]
-        RELAY["telemetry_relay.py<br/>(UDP 50005 & WebSocket 8080)"]
-        CACHE["24/7 Buffer & Live Broker"]
+        RELAY["telemetry_relay.py<br/>(UDP 50005/9996 & WebSocket 8080)"]
+        CACHE["Mosquitto MQTT (:1883/:9001)<br/>& Bare-Git (/srv/git/simrig.git)"]
     end
 
     DEV_IDE <== "VS Code Remote-SSH (:22)" ==> NODE2
@@ -59,7 +59,7 @@ flowchart TD
     GEN_AGENT -->|"Delegiert Session & Content"| LIGHT_AGENT
     LIGHT_AGENT -->|"Pre-Flight Check & Handshake (:2222)"| DARK_AGENT
     HOST_AC -.->|"UDP 50005 Raw Telemetrie"| RELAY
-    RELAY -->|"Weiterleitung & WebSocket (:8080)"| SARAH_AGENT
+    RELAY -->|"UDP 9996 / WebSocket 8080 / MQTT"| SARAH_AGENT
 ```
 
 | Knoten | Hostname / IP | Betriebssystem | Primäre Aufgabe | Verwendete Tools & Ports |
@@ -68,7 +68,7 @@ flowchart TD
 | **Knoten 2** | `SimRacer`<br/>`192.168.178.68` | Windows 11 Pro | Simulation, Content Manager, CSP-Shader, High-FPS VR | RTX 5070 Ti, NVIDIA MCP (:13508), OpenSSH (:22), Docker Desktop |
 | **Knoten 3** | `ac-win11-sandbox`<br/>*(SimRacer Container)* | Windows 11 Ent. | Isoliertes Testlabor für fremde Mods, Setup-Validierung, CM-Tests | KasmVNC (:8006), RDP (:3390), Gast-SSH (:2222) |
 | **Knoten 4** | `Archibald`<br/>`192.168.178.98` | Omarchy Linux | Telemetrie-Auswertung, Fahrstilanalyse, automatisierter Videoschnitt | Python 3.14, FFmpeg, Jupyter Lab, SSH (:22), CLIProxyAPI (:8317) |
-| **Knoten 5** | `StrikerPi`<br/>`192.168.178.86` | Arch Linux ARM | 24/7 Telemetrie-Relay, UDP-Forwarding & WebSocket-Broadcast | Python 3.14 (`uv`), FastAPI/Uvicorn (:8080), UDP (:50005) |
+| **Knoten 5** | `StrikerPi`<br/>`192.168.178.86` | Arch Linux ARM | 24/7 Telemetrie-Relay, Mosquitto MQTT-Broker & Bare-Git-Hub (`/srv/git/simrig.git`) | Python 3.14 (`uv`), FastAPI/Uvicorn (:8080), Mosquitto (:1883/:9001), UDP (:50005/:9996) |
 
 </details>
 
@@ -95,6 +95,10 @@ In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Dat
     {
       "name": "4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)",
       "path": "../assetto-corsa-content"
+    },
+    {
+      "name": "5_StrikerPi-Hub (strikerpi/simrig.git)",
+      "path": "../strikerpi-hub"
     }
   ],
   "mcp": {
@@ -106,6 +110,7 @@ In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Dat
     }
   },
   "settings": {
+    "antigravity.serverPort": 8317,
     "python.defaultInterpreterPath": "C:\\Users\\strik\\AppData\\Roaming\\uv\\python\\cpython-3.12-windows-x86_64-none\\python.exe",
     "docker.context": "simracer",
     "chat.tools.terminal.autoApprove": {
@@ -120,8 +125,9 @@ In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Dat
 
 > [!TIP]
 > **Vorteil des Multi-Root-Ansatzes:**
-> - Du bearbeitest Python-Skripte in `git-labor`, steuerst Sandbox-Compose-Dateien in `ac-cm-csp-sandbox` und pflegst Mod-Strukturen in `assetto-corsa-content` – alles in **einem** Editor ohne Fensterwechsel.
-> - Agenten und MCP-Tools sehen den gesamten Projektkontext über Repository-Grenzen hinweg.
+> - Du bearbeitest Python-Skripte in `git-labor`, steuerst Sandbox-Compose-Dateien in `ac-cm-csp-sandbox`, pflegst Mod-Strukturen in `assetto-corsa-content` und entwickelst den 24/7-Edge-Hub in `strikerpi-hub` (`git@192.168.178.86:/srv/git/simrig.git`) – alles in **einem** Editor ohne Fensterwechsel.
+> - Alle lokalen VS-Code-Konfigurationen (`git-labor.code-workspace`, `git-labor/.vscode/settings.json`, `assetto-corsa-content.code-workspace`) sind einheitlich auf den aktiven `CLIProxyAPI`-Port **`8317`** abgestimmt.
+> - Über den Task **`🧭 Agent-Terminals Menü (SSH-Launcher)`** (`labs/Agent-Terminals.ps1`) lassen sich alle 6 Agenten-Terminals vom Laptop aus übersichtlich per SSH aufrufen.
 
 </details>
 
@@ -172,12 +178,18 @@ Zur reibungslosen Kommunikation ohne Portkonflikte gilt folgende feste Portbeleg
 | **`8000`** | HTTP / HTML | `127.0.0.1` (Laptop) | Google Antigravity Web-UI (`agy.exe`) | Grafische Web-Oberfläche für Agenten-Status & Sessions |
 | **`13508`** | HTTP / MCP | `127.0.0.1` (SimRacer) | NVIDIA App MCP (`NvAppMcpServer.exe`) | GPU-Telemetrie (Temperatur, VRAM, Auslastung) für den Rig-Agenten |
 | **`8006`** | HTTPS / Web | `192.168.178.68` | KasmVNC Web-Display | Browser-Zugriff auf die Windows-11-Sandbox-Oberfläche |
+| **`8090`** | HTTP / MJPEG | `192.168.178.68` | `sim_stream_server.py` (`SimRacer-Lobby-Stream`) | On-Demand-Stream der aktiven Sim-Perspektive (`acs.exe` / VR View) für Pitwall Lobby-Streams |
 | **`3390`** | RDP | `192.168.178.68` | Windows Remote Desktop | Direkte RDP-Verbindung in den virtuellen Windows-11-Gast |
 | **`22`** | SSH | `192.168.178.68` | Windows OpenSSH Server (Host) | Nativer Shell-Zugriff auf den SimRacer (`Mike@192.168.178.68`) |
 | **`2222`** | SSH | `192.168.178.68` | Gast OpenSSH Server (Sandbox) | Shell-Zugriff für den Dark Agent (`Docker@192.168.178.68`) |
-| **`50005`** | UDP | `192.168.178.86` | StrikerPi Telemetrie-Relay | Empfang der Roh-Telemetrie von Assetto Corsa & Weiterleitung |
-| **`8080`** | HTTP / WS | `192.168.178.86` | StrikerPi WebSocket & REST API | Live-Stream für Pitwall-Dashboards, Gast-Anzeigen & Apps |
-| **`22`** | SSH | `192.168.178.86` | Arch Linux ARM SSH | Administrationszugriff (`root@192.168.178.86`) |
+| **`22`** | SSH | `192.168.178.98` | OpenSSH Server (`Archibald`) | LAN-Freigabe `192.168.178.0/24` (ohne Rate-Limit) für Laptop & SimRacer |
+| **`8317`** | HTTP / REST | `127.0.0.1` (`Archibald`) | `CLIProxyAPI` (`cli-proxy-api.service`) | Lokaler Modell-Endpunkt (Antigravity OAuth, 21 Modelle) für `pitwall.code-workspace` |
+| **`9996`** | UDP | `192.168.178.98` | `sarah_telemetry_listener.py` | Direkter 50 Hz-AC-Telemetrie-Stream von `ac_telemetry_sender.py` (SimRacer → Pitwall) |
+| **`9` / `7`** | UDP (WoWLAN) | `192.168.178.98` | Intel AX201 (`14:18:c3:b4:3e:85`) | Magic-Packet-Broadcast (`255.255.255.255` & `192.168.178.255`) zum Wecken aus `s2idle` |
+| **`50005` / `9996`** | UDP | `192.168.178.86` | StrikerPi Telemetrie-Relay | Empfang der AC-Telemetrie, Weiterleitung an `Archibald:9996` & MQTT-Bridge |
+| **`1883` / `9001`** | TCP / WS | `192.168.178.86` | Mosquitto MQTT-Broker | Topics `simrig/mode` & `simrig/telemetry` (LAN & WebSockets) |
+| **`8080`** | HTTP / WS | `192.168.178.86` | StrikerPi Pitwall Hub & API | Fullscreen-Live-Dashboard (`/`), **Lobby-Streams** (`/api/streams`, `/api/stream/simracer.mjpeg`), `/health`, `/api/mode`, `/ws/telemetry` |
+| **`22`** | SSH / Git | `192.168.178.86` | Arch Linux ARM SSH & Bare-Git | Administration (`root`/`alarm`) & zentrales Repo `/srv/git/simrig.git` (`git`) |
 
 </details>
 
@@ -189,11 +201,12 @@ Um Missverständnisse und Kompetenzüberschneidungen zu vermeiden, ist jeder Age
 ```
 [Nutzer am Laptop VanstrikeCyborg (Core 7 240H / RTX 5060 / 16 GB DDR5)]
    ├──> [General Cyborg]  (Global: Laptop-Hardware, MSI/VIVE-VR, NVIDIA-MCP, VS Code & Workspaces)
-   └──> [General Sim]     (Workspace-Leitstand & @general-Terminal → steuert SimRacer per LAN)
+   └──> [General Sim]     (Workspace-Leitstand & @general-Terminal → steuert Verbund per LAN/SSH)
            ├──> [@rig]    (Nativ auf SimRacer 192.168.178.68: Ryzen 9, RTX 5070 Ti, SteamVR, Fanatec)
            ├──> [@light]  (Nativ auf SimRacer 192.168.178.68: Docker Desktop, Content, race.ini)
            │        └──> [@dark]   (Docker-Gast ac-win11-sandbox auf SimRacer: Isolierte Tests)
-           └──> [@sarah]  (Nativ auf IdeaPad 5 omARCHy: Telemetrie-Coaching & Videoschnitt)
+           ├──> [@sarah]  (Nativ auf IdeaPad 5 omARCHy: Telemetrie-Coaching & Videoschnitt)
+           └──> [@rick]   (Nativ auf StrikerPi 192.168.178.86: 24/7 Relay :8080, MQTT :1883, Bare-Git)
 ```
 
 1. **`General Cyborg` & `General Sim` (Ebene 1 – laufen physisch auf Laptop `VanstrikeCyborg`):**
@@ -210,8 +223,10 @@ Um Missverständnisse und Kompetenzüberschneidungen zu vermeiden, ist jeder Age
    - Läuft gekapselt im Windows-11-Container mit den von Docker zugeteilten Ressourcen des SimRacers.
    - Validiert fremde Mods, testet `.ini`-Setups auf Syntaxfehler und prüft Python-Apps im isolierten Umfeld, ohne den Host zu gefährden.
 5. **`@sarah` (Pitwall – läuft nativ auf IdeaPad 5 / `Archibald` `192.168.178.98`):**
-   - Liest Telemetriedaten (`acs.exe` Shared Memory via `ac_telemetry_sender.py`).
+   - Liest Telemetriedaten (`acs.exe` Shared Memory via `ac_telemetry_sender.py` bzw. StrikerPi-Relay).
    - Berechnet optimale Boxenstopp-Strategien (`Sarah_Opt_Stint.ini`) und steuert den automatisierten FFmpeg-Videoschnitt (`sarah_replay_cutter.py`).
+6. **`@rick` (24/7 Edge Hub – läuft nativ auf `StrikerPi` `192.168.178.86`):**
+   - Betreibt rund um die Uhr das Telemetrie-Relay (`telemetry-relay.service`, Port `8080`, UDP `50005`/`9996`), den Mosquitto-MQTT-Broker (`1883`/`9001`), den MJPEG-Lobby-Stream-Proxy (`/api/stream/mjpeg`) sowie den LAN-Watchdog (`rick-agent.service`) und das Bare-Git-Repository `/srv/git/simrig.git`.
 
 </details>
 
@@ -284,10 +299,28 @@ Da der Fahrer im Renncockpit eine geschlossene VR-Brille trägt, kann er das phy
 - **Phonetische Optimierung:** Mehrsprachige Aussprache für fehlerfreie Artikulation englischer SimRacing- und Ingenieurbegriffe (*Apex*, *Delta*, *Trail-Braking*, *Stint*, *Box-Box*, *Pit-Limiter*, *Throttle-Trace*).
 - **Audio-Backend:** PipeWire / WirePlumber (`wpctl`, Sink: Speaker/Headphones, Source: Digital Mic).
 
-#### 3. Intelligente Screensaver- &amp; Standby-Steuerung
-- **Screensaver (omARCHy / ttfx):** Im Ruhezustand läuft der Terminal-ASCII-Bildschirmschoner.
+#### 3. Basisbetrieb, Screensaver- &amp; WoWLAN-/Sleep-Steuerung
+- **Basisbetrieb ohne Auto-Suspend:** `/etc/systemd/logind.conf.d/disable-sleep.conf` (`HandleLidSwitch=ignore`, `IdleAction=ignore`) und `~/.config/omarchy/shell.json` (`screensaver: 150`, `lock: 300`) aktivieren im Leerlauf den Bildschirmschoner ohne automatischen Standby.
 - **Renneinsatz / Render-Betrieb:** Sobald eine Session oder ein FFmpeg-Replay-Schnitt gestartet wird, pausiert Sarah den Schoner automatisch via `omarchy-toggle screensaver-off on` und `pkill -f org.omarchy.screensaver`. Im Leerlauf wird er wieder scharfgeschaltet (`screensaver-off off`).
-- **Wake-on-WLAN:** Die Schnittstelle `wlp0s20f3` (`14:18:c3:b4:3e:85`) wacht per UDP Magic Packet auf Port 9 aus dem Standby auf.
+- **Remote-Suspend &amp; Wake-on-WLAN (`s2idle`):** `sleep.target`/`suspend.target` sind entmaskiert; über `/etc/sudoers.d/archibald-suspend` (`NOPASSWD: /usr/bin/systemctl suspend`) dürfen `VanstrikeCyborg` und `SimRacer` (`192.168.178.68`, eigener `ed25519`-Key) Archibald via `sleep_archibald.ps1` gezielt schlafen legen. Die Intel-AX201-Schnittstelle `wlp0s20f3` (`14:18:c3:b4:3e:85`, `nmcli wake-on-wlan=8`, `udev`-Regel `50-wowlan.rules`) wacht über `wake_archibald.ps1` (Dual-Broadcast `255.255.255.255` &amp; `192.168.178.255`, UDP `9`/`7`) wieder auf.
+- **UFW-Firewall &amp; `CLIProxyAPI` (`:8317`):** LAN-Ausnahmen (`192.168.178.0/24`) für `22/tcp` (vor `omarchy-sshd LIMIT IN`) und `9996/udp` (`sarah_telemetry_listener.py`); `cli-proxy-api.service` läuft lokal auf `127.0.0.1:8317` mit synchronisiertem Antigravity-OAuth (`m.e.stuermer@gmail.com`, 21 Modelle) für `pitwall.code-workspace`.
+
+</details>
+
+<details>
+<summary>1.8 Knoten 5 (StrikerPi / Arch Linux ARM): Agent <code>@rick</code>, Bare-Git &amp; Terminal-Trennung (Host-Lokal vs. SSH-Client-Mode)</summary>
+
+Der Raspberry Pi 4 (**`StrikerPi`**, `192.168.178.86`, Arch Linux ARM `aarch64`) bildet den dauerhaft laufenden **24/7-Infrastruktur-Anker** im Verbund:
+
+1. **Dienste &amp; Infrastruktur auf StrikerPi:**
+   - **`telemetry-relay.service` (`/opt/telemetry-relay/telemetry_relay.py`, v1.3.0):** Nimmt 50 Hz-UDP-Pakete von `SimRacer` (`SimRacer-Telemetry-Sender` $\rightarrow$ `192.168.178.86:50005`) entgegen, leitet sie an `Archibald:9996` weiter, liefert das Pitwall-Web-UI (`:8080`) und proxyt den Lobby-Stream (`http://192.168.178.68:8090` $\rightarrow$ `/api/stream/mjpeg`).
+   - **`mosquitto.service` (`:1883` / `:9001`):** Verwaltet Echtzeit-Status-Topics wie `simrig/mode`.
+   - **`rick-agent.service` (`/opt/rick-agent/rick_worker.py`):** Überwacht alle LAN-Endpunkte (`status.json` alle 15 s) und verarbeitet Aufgaben aus `/opt/rick-agent/inbox/` nach `outbox/`.
+   - **Bare-Git-Hub (`/srv/git/simrig.git`):** Erreichbar per `git@192.168.178.86:/srv/git/simrig.git` (`git-shell`) und als 5. Workspace-Ordner **`5_StrikerPi-Hub`** (`C:\Users\strik\strikerpi-hub`) direkt in `git-labor.code-workspace` eingebunden.
+
+2. **Saubere Terminal-Trennung: Host-Lokal vs. SSH-Client-Mode:**
+   - **Auf den Hostsystemen (`SimRacer`, `ac-sandbox`, `Archibald`, `StrikerPi`):** Die Agenten-Konsolen und Hintergrund-Worker laufen **lokal** (`launch_simracer_host_terminals.ps1` bzw. `launch_guest_terminals.ps1` als Scheduled Tasks mit `ExecutionTimeLimit = 0` &amp; `AtLogOn`, auf Linux als `systemd`-Services).
+   - **Vom Master-Laptop (`VanstrikeCyborg`) per SSH:** Alle `connect_*_terminal.ps1`-Skripte sowie das zentrale Auswahlmenü **`labs/Agent-Terminals.ps1`** öffnen eine **SSH-Client-Sitzung** (`-ClientMode` bei PowerShell-Agenten, `SSH-CLIENT`-Modus bei `@sarah` und `@rick`). Diese beendet **niemals** das auf dem Zielhost laufende Worker-Terminal, vermeidet doppelte Inbox-Abarbeitung und dient sicher als Live-Monitor und Prompt-Eingabe.
 
 </details>
 
@@ -329,7 +362,8 @@ Da der Fahrer im Renncockpit eine geschlossene VR-Brille trägt, kann er das phy
 * `Aufgabenteilung @rig vs. @light`: `@rig` steuert ausschließlich physische Hardware, GPU und VR; `@light` steuert Content Manager, native Sessions (`race.ini`), Presets und Docker von außen.
 * `Pre-Flight Check`: Verhindert hängende Skripte, indem vor jedem Dark-Agent-Task geprüft wird, ob `ac-win11-sandbox` läuft.
 * `Sarah Voice & Pitwall`: `de-DE-SeraphinaMultilingualNeural` spricht englische Fachbegriffe (*Apex*, *Delta*, *Stint*, *Trail-Braking*) akzentfrei aus; der omARCHy-Bildschirmschoner wird bei aktiver Session/Render automatisch pausiert.
-* `StrikerPi als Telemetrie-Relay`: 24/7 Raspberry Pi 4 (`192.168.178.86`) puffert AC-Rohdaten auf UDP Port `50005` und liefert echtzeitfähige WebSocket- & REST-Streams auf Port `8080` für Pitwall-Dashboards und Apps.
+* `StrikerPi als 24/7 Edge Hub & @rick`: Raspberry Pi 4 (`192.168.178.86`) bündelt Telemetrie-Relay (`:8080`, UDP `50005`), Mosquitto MQTT (`:1883`), `rick-agent.service` und das Bare-Git-Repo `/srv/git/simrig.git` (`5_StrikerPi-Hub`).
+* `Host-Lokal vs. SSH-Client-Mode`: Hostsysteme starten ihre Terminals lokal (`ExecutionTimeLimit = 0` / `systemd`); `VanstrikeCyborg` greift über `labs/Agent-Terminals.ps1` im SSH-Client-Mode zu, ohne Host-Worker abzuschießen.
 
 </details>
 

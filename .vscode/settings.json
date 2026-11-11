@@ -1,7 +1,7 @@
 {
     "antigravityCopilot.server.autoStart": true,
     "antigravityCopilot.server.enabled": true,
-    "antigravity.serverPort": 0,
+    "antigravity.serverPort": 8317,
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,
     "antigravityCopilot.rateLimit.cooldownMs": 15000,

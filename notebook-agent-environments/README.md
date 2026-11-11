@@ -5,8 +5,10 @@ Eine dedizierte Python-Notebook-Agent-Umgebung für Antigravity.
 ## Struktur & Setup
 - **Paketmanager:** `uv`
 - **Python-Version:** 3.14
-- **Kernkomponenten:** `ipykernel`, `ipywidgets`
-- **Beispiel-Notebook:** `agent_demo.ipynb`
+- **Kernkomponenten:** `ipykernel`, `ipywidgets`, `google-genai`, `matplotlib`
+- **Notebooks:**
+  - `agent_demo.ipynb` – Basis-Testnotebook
+  - `workspace_podcast_discussion.ipynb` – Podcast-Diskussion (Gemini Interactions API, `@antigravity`, Multi-Speaker TTS, 4-Geräte-Lastverteilung & Test-Roadmap)
 
 ## Schnellstart
 ```powershell
