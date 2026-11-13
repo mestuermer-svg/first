@@ -75,5 +75,6 @@
                 "agent-host-copilotcli:Google Agent/gpt-oss-120b-medium"
             ]
         }
-    }
+    },
+    "git.autofetch": true
 }
