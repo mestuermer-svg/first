@@ -63,13 +63,17 @@ flowchart LR
 <details>
 <summary>1.3 Multi-Root-Workspaces (<code>.code-workspace</code>) vs. Ordner-Settings</summary>
 
-In unserem zentralen Workspace `C:\Users\strik\git-labor\git-labor.code-workspace` sind mehrere eigenständige Git-Repositories unter einem Dach vereint. Dabei gilt folgende Hierarchie für Einstellungen:
+Unser zentrales Workspace `C:\Users\strik\git-labor\git-labor.code-workspace` wird mit dem Fenstertitel **Sim Werkstatt | General Cyborg** geöffnet. Es bündelt fünf eigenständige Git-Repositories. Das separate `assetto-corsa-content.code-workspace` behält den Anzeigenamen **Assetto Corsa Content** und enthält drei Workspace-Ordner: Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox. Beide Workspace-Dateien behalten ihre bestehenden Dateinamen, damit Links und VS-Code-Profilzuordnungen stabil bleiben.
+
+Dabei gilt folgende Hierarchie für Einstellungen:
 
 | Ebene | Datei / Speicherort | Wann verwenden? |
 | :--- | :--- | :--- |
 | **1. User / Global** | `%APPDATA%\Code\User\settings.json` | Einstellungen für **alle** Fenster und Profile auf dem Laptop (z. B. Theme, Font, `git.autofetch`, `applyToAllProfiles`). |
 | **2. Multi-Root Workspace** | `git-labor.code-workspace` | Einstellungen, die für **alle eingebundenen Projektordner gemeinsam** gelten (Ordner-Liste `folders`, gemeinsame MCP-Server, Cloud-Projekt). |
 | **3. Einzel-Ordner (Folder)** | `<repo>/.vscode/settings.json` | Einstellungen, die **nur ein einzelnes Repository** betreffen (z. B. ein spezieller Python-Interpreter nur für `git-labor`). |
+
+**GitHub-Push-Protection (`GH013`):** GitHub kann einen Push blockieren, wenn die zu übertragende Historie ein erkanntes Geheimnis enthält. Im GitHub-Repair dieses Workspaces wurden die offengelegten Schlüssel aus der Workspace-Konfiguration entfernt, die betroffene Branch-Historie bereinigt und der aktualisierte Branch kontrolliert mit `git push --force-with-lease` synchronisiert. Schlüsselwerte gehören weder in Dateien noch in Dokumentation. Ein Entfernen aus der Historie ersetzt keinen Widerruf: betroffene Schlüssel beim Anbieter sperren/rotieren und diesen Schritt separat verifizieren. Vor einem History-Rewrite Remote, Branch, Backup und Team-Auswirkungen prüfen; nicht blind auf gemeinsam genutzten Branches umschreiben.
 
 </details>
 

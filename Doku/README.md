@@ -4,6 +4,9 @@
 
 # Wissensdatenbank & Lern-Handbuch (`git-labor/Doku`)
 
+**Workspace-Zuordnung:** `git-labor.code-workspace` ist die **Sim Werkstatt | General Cyborg** mit fünf Repositories. `assetto-corsa-content.code-workspace` bleibt das separate **Assetto Corsa Content**-Workspace mit den drei Ordnern Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox.
+
+
 Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und Lern-Workspaces**. Nach der sauberen Ausgliederung der Assetto-Corsa-Spezifika in ihren eigenen Workspace sind hier alle allgemeinen Entwicklungs-, System- und KI-Themen in **5 klar getrennten Fachrubriken** gebÃ¼ndelt und nach den Vorgaben aus `agent_ruler.md` und `Agent-guidline.md` (mit standardmÃ¤ÃŸig geschlossenen `<details>`-Kapiteln) aufbereitet.
 
 <details>

@@ -1,8 +1,8 @@
 # Git-Labor – Test-, Lern- & KI-Agenten-Workspace (`mestuermer-svg/first`)
 
-Dieses Repository ist das zentrale **Test-, Lern- und Entwicklungs-Labor** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`) und steuert den gesamten Multi-Root-Workspace über [`git-labor.code-workspace`](./git-labor.code-workspace).
+Dieses Repository ist das zentrale **Test-, Lern- und Entwicklungs-Labor** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`). Die Workspace-Datei [`git-labor.code-workspace`](./git-labor.code-workspace) wird in VS Code als **Sim Werkstatt | General Cyborg** angezeigt und bündelt die fünf Arbeits-Repositories der Sim-Werkstatt.
 
-Nach der Ausgliederung der Assetto-Corsa-Spezifika in ihren eigenen Workspace gliedert sich das `git-labor` in **5 strukturierte Fachrubriken** mit vollständiger Wissensdatenbank unter **[`Doku/`](./Doku/README.md)** sowie praktischen Übungsumgebungen unter **`labs/`** und **`notebook-agent-environments/`**.
+Das Assetto-Corsa-Content-Projekt behält zusätzlich sein eigenes Workspace [`assetto-corsa-content.code-workspace`](../assetto-corsa-content/assetto-corsa-content.code-workspace), angezeigt als **Assetto Corsa Content**. Dieses Projekt-Workspace bleibt separat; die Sim-Werkstatt bindet das Content-Repository weiterhin als einen ihrer fünf Ordner ein. Das `git-labor` enthält **5 strukturierte Fachrubriken** mit vollständiger Wissensdatenbank unter **[`Doku/`](./Doku/README.md)** sowie praktischen Übungsumgebungen unter **`labs/`** und **`notebook-agent-environments/`**.
 
 ---
 
@@ -29,7 +29,7 @@ Nach der Ausgliederung der Assetto-Corsa-Spezifika in ihren eigenen Workspace gl
 
 ## 3. Verwendung des Multi-Root-Workspaces
 
-1. **Workspace öffnen:** Immer über `C:\Users\strik\git-labor\git-labor.code-workspace` starten.
+1. **Sim-Werkstatt öffnen:** `C:\Users\strik\git-labor\git-labor.code-workspace` starten; VS Code zeigt den Titel **Sim Werkstatt | General Cyborg**.
 2. **Git Source Control (`Strg + Shift + G`):** Alle eingebundenen Repositories werden getrennt angezeigt und können unabhängig voneinander über den 4-Stufen-Workflow (*Working Directory $\rightarrow$ Stage $\rightarrow$ Commit $\rightarrow$ Sync/Push*) verwaltet werden.
 
 <!-- DOKU-MINIMAP-START -->

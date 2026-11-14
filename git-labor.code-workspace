@@ -30,6 +30,7 @@
     }
   },
   "settings": {
+    "window.title": "${dirty}${activeEditorShort}${separator}Sim Werkstatt | General Cyborg${separator}${appName}",
     "antigravityCopilot.server.enabled": true,
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,

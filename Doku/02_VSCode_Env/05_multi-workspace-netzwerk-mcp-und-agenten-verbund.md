@@ -6,7 +6,7 @@
 <summary><b>Lernziele</b></summary>
 
 * Die **verteilte Multi-PC- & Multi-Workspace-Architektur** zwischen dem Entwicklungs-Laptop (`VanstrikeCyborg`), der SimRacing-Workstation (`SimRacer`), der Windows-11-Sandbox (`ac-win11-sandbox`), dem Pitwall-Node (`Archibald` / Omarchy Linux) und dem 24/7-Edge-Hub (`StrikerPi` / Arch Linux ARM) im Detail verstehen.
-* Die zentrale Konfigurationsdatei **`git-labor.code-workspace`** und deren **5 Repositories/Ordner** (`Git-Labor`, `Local-Cyborg`, `AC-CM-CSP-Sandbox`, `Assetto-Corsa-Content`, `StrikerPi-Hub`) sicher administrieren.
+* Die zentrale Sim-Werkstatt-Konfiguration **`git-labor.code-workspace`** (Anzeigename **Sim Werkstatt | General Cyborg**) und deren **5 Repositories/Ordner** (`Git-Labor`, `Local-Cyborg`, `AC-CM-CSP-Sandbox`, `Assetto-Corsa-Content`, `StrikerPi-Hub`) sicher administrieren.
 * Die **Netzwerk- und Port-Matrix** aller beteiligten Dienste beherrschen (`8317` CLIProxyAPI, `8000` Antigravity, `13508` NVIDIA App MCP, `8006` VNC/Kasm, `8090` Lobby-Stream, `8080` StrikerPi Pitwall Hub, `1883`/`9001` Mosquitto MQTT, `22` Host-SSH, `2222` Sandbox-SSH).
 * Das **6-Rollen-Modell der KI-Agenten** (`@general`, `@rig`, `@light`, `@dark`, `@sarah`, `@rick`) sowie die **Trennung zwischen lokalem Host-Terminal und SSH-Client-Mode** (`Agent-Terminals.ps1`) souverän orchestrieren.
 * Den **Handshake- & Task-Queue-Mechanismus** (`inbox/` $\rightarrow$ Pre-Flight-Check $\rightarrow$ Execution $\rightarrow$ `outbox/`) über PowerShell und Python im laufenden Betrieb fehlerfrei einsetzen.
@@ -75,7 +75,7 @@ flowchart TD
 <details>
 <summary>1.2 Die Multi-Root Workspace-Architektur (<code>git-labor.code-workspace</code>)</summary>
 
-In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Datei `c:\Users\strik\git-labor\git-labor.code-workspace` in einem einzigen Fenster gebündelt:
+In VS Code und Antigravity werden die fünf Sim-Werkstatt-Repositories über `c:\Users\strik\git-labor\git-labor.code-workspace` in einem Fenster mit dem Titel **Sim Werkstatt | General Cyborg** gebündelt. Zusätzlich bleibt `assetto-corsa-content.code-workspace` als eigenes Workspace mit dem Anzeigenamen **Assetto Corsa Content** erhalten; es enthält die drei Ordner Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox.
 
 ```json
 {
@@ -345,8 +345,8 @@ Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abg
 
 | Workspace | Aktives Profil | Proxy / Port &amp; Auth | Agent- &amp; Sandbox-Settings | MCP-Server &amp; Besonderheiten |
 | :--- | :--- | :--- | :--- | :--- |
-| **`assetto-corsa-content.code-workspace`** *(Laptop)* | **`General SIM`** (`-4f926864`) | `antigravity.serverPort: 8317`, `llm-gateway.serverUrl: http://localhost:8317`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `allowLocalNetwork: true`, `docker.context: "simracer"` | `geminiDocs`; `.vscode/settings.json` lädt `doku-minimap.css` |
-| **`git-labor.code-workspace`** *(Laptop)* | **`General Cyborg`** (`-37467b98`) | `antigravity.serverPort: 8317`, `inlineChat.defaultModel: "Gemini 3.8 Flash (gemini)"`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "on"` (`.vscode/settings.json`) | `geminiDocs`, `chat.mcp.serverSampling`, `python-envs.pythonProjects` (`pip`), 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
+| **`assetto-corsa-content.code-workspace`** *(Laptop; Anzeigename: Assetto Corsa Content)* | **`General SIM`** (`-4f926864`) | `antigravity.serverPort: 8317`, `llm-gateway.serverUrl: http://localhost:8317`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `allowLocalNetwork: true`, `docker.context: "simracer"` | Eigenes Multi-Root-Workspace mit Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox; `geminiDocs`; `.vscode/settings.json` lädt `doku-minimap.css` |
+| **`git-labor.code-workspace`** *(Laptop; Anzeigename: Sim Werkstatt - General Cyborg)* | **`General Cyborg`** (`-37467b98`) | `antigravity.serverPort: 8317`, `inlineChat.defaultModel: "Gemini 3.8 Flash (gemini)"`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "on"` (`.vscode/settings.json`) | 5 Repositories; `geminiDocs`, `chat.mcp.serverSampling`, `python-envs.pythonProjects` (`pip`), 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
 | **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` | `antigravity.serverPort: 0`, `llm-gateway.serverUrl: http://127.0.0.1:8420`, `geminiCode.authMethod: "apikey"` | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `python.defaultInterpreterPath: Python311\python.exe` | `geminiDocs`, `nvidia-app` (`:13508/mcp`), `local-workspace-filesystem`, `sequential-thinking` |
 | **`pitwall.code-workspace`** *(Archibald `192.168.178.98`)* | Linux `archibald` | `cli-proxy-api.service` auf `127.0.0.1:8317` (OAuth, 21 Modelle) | `~/ac-pitwall/.venv` für `@sarah` | AC-UDP `9996`, StrikerPi-Anbindung (`192.168.178.86`) |
 
