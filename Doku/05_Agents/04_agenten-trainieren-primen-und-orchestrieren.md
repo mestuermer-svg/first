@@ -60,7 +60,7 @@ flowchart TB
     subgraph Ebene1 ["Ebene 1: Laptop VanstrikeCyborg (MSI Cyborg 15 B2RWFKG – Core 7 240H / RTX 5060 / 16 GB)"]
         USER["Entwickler (Michael Stürmer)"]
         GC["<b>General Cyborg</b> (Global)<br/><i>~/.copilot/agents/general.agent.md</i><br/>• Laptop-System, BIOS, MSI Center &amp; VIVE VR<br/>• NVIDIA App MCP (:13508) &amp; VS Code Profile<br/>• Workspaces, Tasks, MCP &amp; KI-Modelle"]
-        GS["<b>General Sim</b> (Workspace-Leitstand)<br/><i>git-labor/.github/agents/general.agent.md</i><br/>• Steuert SimRacer (192.168.178.68) per LAN/SSH<br/>• Freigabe-Gate (@general Terminal)<br/>• Koordiniert AC, Sandbox &amp; Sync"]
+        GS["<b>General Sim</b> (AC-Workspace-Leitstand)<br/><i>assetto-corsa-content/.github/agents/general.agent.md</i><br/>• Steuert SimRacer (192.168.178.68) per LAN/SSH<br/>• Freigabe-Gate (@general Terminal)<br/>• Koordiniert AC, Sandbox &amp; Sync"]
         USER <--> GC
         USER <--> GS
     end
@@ -82,11 +82,11 @@ flowchart TB
 ```
 
 ### Hardware-Zuordnung &amp; klare Differenzierung:
-* **`General Cyborg`** (`C:\Users\strik\.copilot\agents\general.agent.md`, global): Läuft auf **`VanstrikeCyborg`**, nutzt dessen Ressourcen und besitzt das hinterlegte Systemwissen aus `C:\local_Cyborg\Gemini\VanstrikeCyborg\` (Core 7 240H, 16 GB DDR5-5600 / max. 96 GB, RTX 5060 Laptop 8 GB @ 55 W ohne MUX-Switch, 3-Monitor-Setup, `MSI Center`, `F3`-Recovery, `NVIDIA App` MCP `http://127.0.0.1:13508/mcp` und `VIVE Hub` / Fehlercode `337`).
-* **`General Sim`** (`git-labor\.github\agents\general.agent.md`, Workspace): Läuft physisch **ebenfalls auf `VanstrikeCyborg`** (VS Code & `@general`-PowerShell-Terminal), steuert aber über LAN/SSH/SMB die **SimRacer-Workstation (`192.168.178.68`)** und bildet das Freigabe-Gate (`ok`/`nein`/`reply`) für `@rig` und `@light`.
-* **SimRacer-Agenten (`@rig`, `@light`, `@dark`):** Laufen **nicht** auf dem Laptop, sondern direkt auf der **Hardware des `SimRacer` (`192.168.178.68`)** (`@rig` & `@light` nativ auf dem Host; `@dark` gekapselt in der Docker-VM `ac-win11-sandbox`).
+* **`General Cyborg`** (`C:\Users\strik\.copilot\agents\general.agent.md`, global): Läuft auf **`VanstrikeCyborg`**, nutzt dessen Ressourcen und besitzt das hinterlegte Systemwissen aus `C:\local_Cyborg\Gemini\VanstrikeCyborg\` (Core 7 240H, 16 GB DDR5-5600 / max. 96 GB, RTX 5060 Laptop 8 GB @ 55 W ohne MUX-Switch, 3-Monitor-Setup, `MSI Center`, `F3`-Recovery, `NVIDIA App` MCP `http://127.0.0.1:13508/mcp` und `VIVE Hub` / Fehlercode `337`). Im Workspace `git-labor` ist `General Cyborg` der einzige aktive General-Agent und steuert die Remote-Agenten (`@light`, `@rig`, `@dark`, `@sarah`, `@rick`) über **SSH & Bridge-Skripte**.
+* **`General Sim`** (`assetto-corsa-content/.github/agents/general.agent.md`, AC-Workspace): Läuft physisch **ebenfalls auf `VanstrikeCyborg`** (eigenständiger AC-Workspace & `@general`-PowerShell-Terminal), steuert über LAN/SSH/SMB die **SimRacer-Workstation (`192.168.178.68`)** und bildet das Freigabe-Gate (`ok`/`nein`/`reply`) für `@rig` und `@light`.
+* **SimRacer-Agenten (`@rig`, `@light`, `@dark`):** Laufen **nicht** auf dem Laptop, sondern direkt auf der **Hardware des `SimRacer` (`192.168.178.68`)** (`@rig` & `@light` nativ auf dem Host; `@dark` gekapselt in der Docker-VM `ac-win11-sandbox`). Aus `git-labor` werden sie per SSH/Bridge (`labs/Agent-Terminals.ps1`, `labs/Send-SimAgentTask.ps1`) angesprochen.
 * **Pitwall (`@sarah`):** Läuft dediziert auf dem **IdeaPad 5 (`omARCHy` / `192.168.178.98`)**, um die SimRacer-CPU beim Videoschnitt zu entlasten.
-* **Verbindliche Rückversicherung &amp; Freigabe-Gate:** Die SimRacer-Agenten ([`rig.agent.md`](../../.github/agents/rig.agent.md) und [`light.agent.md`](../../.github/agents/light.agent.md)) sichern sich vor jeder System-, Container- oder Weiterleitungs-Aktion beim `@general`-Leitstand (`General Sim`) ab (`ApprovalRequest` in `agents/general/inbox/`), sofern kein direkter General-Auftrag (`approved_by: GeneralAgent_Laptop`) vorliegt. Details siehe [Modul 5.5](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md).
+* **Verbindliche Rückversicherung &amp; Freigabe-Gate:** Die SimRacer-Agenten ([`rig.agent.md`](../../.github/agents/rig.agent.md) und [`light.agent.md`](../../.github/agents/light.agent.md)) sichern sich vor jeder System-, Container- oder Weiterleitungs-Aktion beim `@general`-Leitstand (`General Sim`) ab (`ApprovalRequest` in `agents/general-SIM/inbox/`), sofern kein direkter General-Auftrag (`approved_by: GeneralAgent_Laptop`) vorliegt. Details siehe [Modul 5.5](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md).
 
 </details>
 
@@ -186,8 +186,8 @@ Wenn Agenten autonom mit Webdiensten, internen APIs und Dokumentationen interagi
 * [Modul 5.2: Agenten erstellen (Instructions, Rules & Custom Agents)](./02_agenten-erstellen-instructions-rules-und-prompts.md)
 * [Modul 5.3: Agenten ausrüsten (Skills & MCP-Tools)](./03_agenten-ausruesten-skills-und-mcp-tools.md)
 * [Modul 5.5: Workspace-Schnittstelle, Freigabe-Gate & Agenten-Terminals](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md)
-* **Agent-Definitionen &amp; Regeln:** [`AGENTS.md`](../../AGENTS.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md)
-* **Skills &amp; Historie:** [`live-transfer-status-monitor` (`SKILL.md`)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
+* **Agent-Definitionen &amp; Regeln:** [`AGENTS.md`](../../AGENTS.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`General Cyborg` (Global)](../../../.copilot/agents/general.agent.md) · [`General Sim` (AC-Workspace)](../../../assetto-corsa-content/.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md) · [`rick.agent.md`](../../.github/agents/rick.agent.md)
+* **Skills &amp; Historie:** [`live-transfer-status-monitor` (`SKILL.md`)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
 * [Matomo Web Analytics – On-Premise & Privacy-First](https://matomo.org/)
 * [VS Code Remote Development Architektur](https://code.visualstudio.com/docs/remote/remote-overview)
 

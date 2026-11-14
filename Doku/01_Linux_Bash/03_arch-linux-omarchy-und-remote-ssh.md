@@ -8,9 +8,9 @@
 <summary><b>Lernziele</b></summary>
 
 * Paketverwaltung unter **Arch Linux (`pacman`)** und Rolling-Release-Wartung fehlerfrei beherrschen.
-* Die Vorzüge von **Linux Omarchy (Hyprland Wayland Compositor)** und **Arch Linux ARM auf dem Raspberry Pi 4** als hochperformante Entwickler- und Server-Umgebungen verstehen.
+* Die Vorzüge von **Linux Omarchy (Hyprland Wayland Compositor)** (inkl. `idle_inhibit` für Kiosk-Displays) und **Arch Linux ARM auf dem Raspberry Pi 4** als hochperformante Entwickler- und Server-Umgebungen verstehen.
 * Sichere **SSH-Schlüssel (`ed25519`)**, `~/.ssh/config` und den **VS Code Remote-SSH Workflow** einrichten.
-* Einen produktionsreifen **Nginx-Webserver** auf Arch Linux / Raspberry Pi 4 bereitstellen, als systemd-Dienst aktivieren und für Web-Apps und Reverse-Proxy-Aufgaben konfigurieren.
+* Produktive Webserver (**Nginx** und **Caddy** als Reverse Proxy) sowie gehärtete **Node.js `systemd`-Livedienste** auf Arch Linux / Raspberry Pi 4 bereitstellen und verifizieren.
 
 </details>
 
@@ -65,6 +65,7 @@ journalctl -u nginx -n 50 -f
 **Omarchy** kombiniert Arch Linux mit dem modernen Wayland-Tiling-Window-Manager **Hyprland**:
 * **Minimaler Overhead:** Kein schwerer Desktop-Unterbau (wie GNOME oder KDE) – ideal für Arbeitsplatz-Laptops, damit maximal viel Arbeitsspeicher für Sprachmodelle, Container und Compiler frei bleibt.
 * **Tiling-Prinzip:** Fenster ordnen sich automatisch kachelförmig auf virtuellen Desktops (*Workspaces 1–9*) an.
+* **Kiosk- & Dauerbetrieb (`idle_inhibit` / Screensaver-Schutz & `Pitwall.desktop`):** Für dauerhaft laufende Monitore (z. B. das Pitwall-Dashboard auf **Archibald** `192.168.178.98`) verhindert Hyprland über Fensterregeln in `~/.config/hypr/hyprland.lua` (`idle_inhibit = "always"`) sowie `omarchy-toggle-idle stay-awake` und `omarchy-toggle screensaver-off on` zuverlässig das Abdunkeln durch `hypridle` oder den Screensaver. Zusätzlich stellt `~/ac-pitwall/launch_pitwall.sh` samt `~/.local/share/applications/Pitwall.desktop` (mit eigenem Icon `pitwall.png`/`pitwall.svg`) sicher, dass die Pitwall jederzeit über den Omarchy App-Launcher (`SUPER + SPACE` $\rightarrow$ *Pitwall*) oder automatisch nach dem Aufwecken via `wake_archibald.ps1` im Vollbild auf Workspace 1 eingeblendet wird.
 * **Linux-Workspace-Einstellungen in VS Code:**
   Unter Linux ist darauf zu achten, dass Zeilenenden auf **`LF` (`\n`)** statt `CRLF` (`\r\n`) stehen, damit Bash-Skripte nicht mit `bad interpreter: ^M` abbrechen:
   ```json
@@ -186,15 +187,93 @@ sudo systemctl enable --now nginx
 
 </details>
 
+<details>
+<summary>1.7 Praxis-Setup: Caddy-Webserver, Reverse Proxy &amp; gehärtete Node.js systemd-Dienste (StrikerPi)</summary>
+
+Auf unserem produktiven Edge-Hub **StrikerPi (`192.168.178.86`, Arch Linux ARM)** läuft statt Nginx der moderne Go-Webserver **Caddy (`:80`)** zusammen mit einem eigenen Node.js-Systemd-Livedienst (`gitlabor-api.service` auf `127.0.0.1:8085`). Die vollständigen Konfigurations- und Quell-Dateien liegen im Workspace unter [`labs/01_linux_bash/strikerpi-services/`](../../labs/01_linux_bash/strikerpi-services/).
+
+#### 1. Warum Caddy als Edge-Webserver & Reverse Proxy?
+* **Modulare Konfiguration:** `/etc/caddy/Caddyfile` bindet über `import /etc/caddy/conf.d/*.caddy` gezielt Teilkonfigurationen (z. B. `git-labor.caddy`) ein und nutzt den Admin-Socket `unix//run/caddy/admin.socket`.
+* **Eingebauter Reverse Proxy & WebSockets:** Anfragen an `/api/linux/*` gehen intern an `127.0.0.1:8085` (Node.js-API) und `/mqtt*` an `127.0.0.1:9001` (Mosquitto WebSockets), während statische Webseiten aus `/srv/git-labor/web` mit `gzip`/`zstd` ausgeliefert werden.
+* **Strukturierte Access-Logs:** Caddy schreibt jeden HTTP-Request im JSON-Format nach `/var/log/caddy/gitlabor-access.log` (mit automatischer Log-Rotation: `roll_size 5MiB`, `roll_keep 3`).
+
+```caddyfile
+:80 {
+    root * /srv/git-labor/web
+    encode gzip zstd
+
+    log {
+        output file /var/log/caddy/gitlabor-access.log {
+            roll_size 5MiB
+            roll_keep 3
+        }
+        format json
+    }
+
+    handle /api/linux/* {
+        reverse_proxy 127.0.0.1:8085
+    }
+
+    handle /mqtt* {
+        reverse_proxy 127.0.0.1:9001
+    }
+
+    handle {
+        file_server {
+            browse
+        }
+    }
+}
+```
+
+```bash
+# Caddy-Konfiguration formatieren, prüfen und ohne Verbindungsabbruch neu laden
+sudo caddy fmt --overwrite /etc/caddy/Caddyfile
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy.service
+```
+
+#### 2. Gehärteter Node.js-Livedienst (`gitlabor-api.service`)
+Das Backend [`gitlabor-api.mjs`](../../labs/01_linux_bash/strikerpi-services/gitlabor-api.mjs) läuft ausschließlich auf Loopback (`127.0.0.1:8085`) und ist von außen nur über den Caddy Reverse Proxy erreichbar. Die zugehörige Unit [`gitlabor-api.service`](../../labs/01_linux_bash/strikerpi-services/gitlabor-api.service) demonstriert zentrale **Systemd-Sandboxing-Direktiven**:
+
+```ini
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /srv/git-labor/apps/linux-monitor-api/server.mjs
+WorkingDirectory=/srv/git-labor/apps/linux-monitor-api
+Restart=always
+RestartSec=3
+
+# Linux-Service-Isolation (minimale Rechte)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadOnlyPaths=/var/log/caddy /sys/class/thermal
+```
+
+| Direktive | Sicherheitswirkung |
+| :--- | :--- |
+| **`NoNewPrivileges=true`** | Verhindert Privilege Escalation durch Kindprozesse. |
+| **`PrivateTmp=true`** | Isoliert `/tmp` und `/var/tmp` pro Dienst. |
+| **`ProtectHome=true`** | Sperrt jeglichen Zugriff auf `/home` und `/root`. |
+| **`ProtectSystem=strict`** | Setzt das gesamte Dateisystem auf Read-Only (außer explizite Ausnahmen). |
+| **`ReadOnlyPaths=...`** | Erlaubt gezielten Lesezugriff auf Caddy-Logs und CPU-Temperatursensor (`/sys/class/thermal`). |
+
+* **Bereitgestellte Live-Endpunkte (via `http://192.168.178.86/api/linux/...`):** `GET /health`, `GET /status` (Systemd-Units, RAM, CPU-Temp, Load), `GET /ports` (`ss -tulpnH`), `GET /logs?unit=...` (`journalctl` + Caddy Access-Log) und `POST /echo` (Proxy-Header-Roundtrip).
+* **Automatisierung über `@rick`:** Der Worker [`rick_worker.py`](../../labs/01_linux_bash/strikerpi-services/rick_worker.py) verwaltet Caddy & Dienst-Neustarts über die Inbox-Actions `setup_caddy_gitlabor`, `caddy_validate`, `caddy_reload`, `caddy_status`, `build_ts_labs` und `restart_gitlabor_api`.
+
+</details>
+
 </details>
 
 <details>
 <summary><b>Übungsaufgaben</b></summary>
 
-1. **Pacman-Diagnose:** Führe auf einem Arch-System `pacman -Qi nginx` aus und identifiziere die Konfigurationsdatei sowie die Abhängigkeiten des Webservers.
-2. **Nginx Syntax-Check:** Ändere absichtlich ein Zeichen in einer Nginx-Konfiguration und führe `sudo nginx -t` aus. Welchen Fehlercode meldet der Parser?
+1. **Pacman-Diagnose:** Führe auf einem Arch-System `pacman -Qi nginx` oder `pacman -Qi caddy` aus und identifiziere Konfigurationsdateien sowie Abhängigkeiten.
+2. **Konfigurations-Syntaxcheck:** Prüfe die Webserver-Konfiguration vor einem Reload mit `sudo nginx -t` bzw. `sudo caddy validate --config /etc/caddy/Caddyfile`. Welchen Exit-Code liefert ein absichtlicher Syntaxfehler?
 3. **SSH Keep-Alive:** Warum bricht eine SSH-Sitzung ab, wenn der Laptop für 15 Minuten zugeklappt wird, und wie verhindert der Parameter `ServerAliveInterval 60` in `~/.ssh/config` diesen Abbruch?
-4. **Remote-Entwicklung einrichten:** Verbinde dich über VS Code Remote-SSH mit einem Zielsystem und öffne dort ein Terminal. Prüfe mit `uname -a`, ob die Shell wirklich auf dem Remote-Kernel läuft.
+4. **Systemd-Härtung prüfen:** Vergleiche die Direktiven in [`gitlabor-api.service`](../../labs/01_linux_bash/strikerpi-services/gitlabor-api.service) und prüfe auf StrikerPi mit `systemd-analyze security gitlabor-api.service`, wie die Isolation bewertet wird.
 
 </details>
 
@@ -203,6 +282,8 @@ sudo systemctl enable --now nginx
 
 * [ArchWiki – Pacman Paketmanager](https://wiki.archlinux.org/title/Pacman)
 * [ArchWiki – Nginx Webserver Setup & Tuning](https://wiki.archlinux.org/title/Nginx)
+* [Offizielle Caddy Dokumentation – Caddyfile & Reverse Proxy](https://caddyserver.com/docs/caddyfile)
+* [Systemd Exec Sandboxing (ProtectSystem, ProtectHome)](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html)
 * [VS Code Remote Development via SSH](https://code.visualstudio.com/docs/remote/ssh)
 * [Hyprland Wayland Compositor Wiki](https://wiki.hyprland.org/)
 
@@ -212,7 +293,8 @@ sudo systemctl enable --now nginx
 <summary><b>Chips & Kernaussagen</b></summary>
 
 * **`pacman -Syu` vor Neuinstallationen:** Halte Rolling-Release-Systeme stets synchron, um Bibliotheksinkonsistenzen zu vermeiden.
-* **Syntaxcheck mit `nginx -t`:** Lade Webserver-Dienste niemals blind mit `systemctl reload`, sondern prüfe die Konfiguration immer zuerst mit `nginx -t`.
+* **Syntaxcheck vor Reload:** Lade Webserver niemals blind neu – nutze `nginx -t` bzw. `caddy validate --config /etc/caddy/Caddyfile`.
+* **Reverse Proxy + Loopback-API:** Binde interne Backend-Dienste (wie `gitlabor-api.service` auf `127.0.0.1:8085`) nur an `127.0.0.1` und veröffentliche sie kontrolliert über Caddy (`:80`) inkl. `ProtectSystem=strict` und `ProtectHome=true`.
 * **Entkoppelte Entwicklung:** Mit VS Code Remote-SSH programmierst du mit gewohntem Komfort auf dem Laptop, während Build, Tests und Webserver direkt auf dem Linux-Host (Pi 4 / Omarchy) laufen.
 * **Keep-Alive im SSH-Tunnel:** `ServerAliveInterval 60` in `~/.ssh/config` schützt langlebige Remote-Sitzungen vor NAT-Timeouts im Heimnetzwerk.
 

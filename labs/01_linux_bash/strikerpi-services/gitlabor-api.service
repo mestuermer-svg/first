@@ -1,0 +1,21 @@
+[Unit]
+Description=Git-Labor Node.js Live-API Service (hinter Caddy Reverse Proxy)
+After=network-online.target caddy.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /srv/git-labor/apps/linux-monitor-api/gitlabor-api.mjs
+WorkingDirectory=/srv/git-labor/apps/linux-monitor-api
+Restart=always
+RestartSec=3
+
+# Lern-Beispiel fuer Linux-Service-Isolation (ohne Zugriff auf /home)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadOnlyPaths=/var/log/caddy /sys/class/thermal
+
+[Install]
+WantedBy=multi-user.target

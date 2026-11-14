@@ -111,7 +111,7 @@ In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Dat
   },
   "settings": {
     "antigravity.serverPort": 8317,
-    "python.defaultInterpreterPath": "C:\\Users\\strik\\AppData\\Roaming\\uv\\python\\cpython-3.12-windows-x86_64-none\\python.exe",
+    "python.defaultInterpreterPath": "C:\\Users\\strik\\.local\\python-env\\Scripts\\python.exe",
     "docker.context": "simracer",
     "chat.tools.terminal.autoApprove": {
       "/^ssh -o BatchMode=yes -o ConnectTimeout=5 Mike@192\\.168\\.178\\.68 \".*\"$/": {
@@ -187,7 +187,9 @@ Zur reibungslosen Kommunikation ohne Portkonflikte gilt folgende feste Portbeleg
 | **`9996`** | UDP | `192.168.178.98` | `sarah_telemetry_listener.py` | Direkter 50 Hz-AC-Telemetrie-Stream von `ac_telemetry_sender.py` (SimRacer → Pitwall) |
 | **`9` / `7`** | UDP (WoWLAN) | `192.168.178.98` | Intel AX201 (`14:18:c3:b4:3e:85`) | Magic-Packet-Broadcast (`255.255.255.255` & `192.168.178.255`) zum Wecken aus `s2idle` |
 | **`50005` / `9996`** | UDP | `192.168.178.86` | StrikerPi Telemetrie-Relay | Empfang der AC-Telemetrie, Weiterleitung an `Archibald:9996` & MQTT-Bridge |
-| **`1883` / `9001`** | TCP / WS | `192.168.178.86` | Mosquitto MQTT-Broker | Topics `simrig/mode` & `simrig/telemetry` (LAN & WebSockets) |
+| **`1883` / `9001`** | TCP / WS | `192.168.178.86` | Mosquitto MQTT-Broker | Topics `simrig/mode` &amp; `simrig/telemetry` (LAN &amp; WebSockets, via Caddy `/mqtt*`) |
+| **`80`** | HTTP | `192.168.178.86` | Caddy Webserver &amp; Reverse Proxy | Hosting `/srv/git-labor/web` (`ts-linux-lab`), Proxy `/api/linux/*` $\rightarrow$ `:8085`, `/mqtt*` $\rightarrow$ `:9001` |
+| **`8085`** | HTTP / REST | `127.0.0.1` (`StrikerPi`) | `gitlabor-api.service` (Node.js v26) | Gehärteter Linux-Livedienst (`/api/linux/health|status|ports|logs|echo`) hinter Caddy |
 | **`8080`** | HTTP / WS | `192.168.178.86` | StrikerPi Pitwall Hub & API | Fullscreen-Live-Dashboard (`/`), **Lobby-Streams** (`/api/streams`, `/api/stream/simracer.mjpeg`), `/health`, `/api/mode`, `/ws/telemetry` |
 | **`22`** | SSH / Git | `192.168.178.86` | Arch Linux ARM SSH & Bare-Git | Administration (`root`/`alarm`) & zentrales Repo `/srv/git/simrig.git` (`git`) |
 
@@ -211,8 +213,8 @@ Um Missverständnisse und Kompetenzüberschneidungen zu vermeiden, ist jeder Age
 
 1. **`General Cyborg` & `General Sim` (Ebene 1 – laufen physisch auf Laptop `VanstrikeCyborg`):**
    - Beide nutzen ausschließlich die **Hardware-Ressourcen von `VanstrikeCyborg`**, unterscheiden sich aber in ihrer Aufgabe:
-     - **`General Cyborg`** (`C:\Users\strik\.copilot\agents\general.agent.md`): Globaler Experte für das lokale Laptop-System (`MSI Cyborg 15 B2RWFKG`), Treiber/BIOS/MSI Center, VIVE VR, lokalen NVIDIA App MCP (`127.0.0.1:13508`), VS Code Profile & Workspaces.
-     - **`General Sim`** (`git-labor\.github\agents\general.agent.md`): Leitstand für den **SimRacer (`192.168.178.68`)**, pflegt die Verbund-Doku, erteilt Aufträge per SSH/SMB und betreibt das Freigabe-Gate (`ok`/`nein`/`reply`).
+     - **`General Cyborg`** (`C:\Users\strik\.copilot\agents\general.agent.md`): Globaler Experte für das lokale Laptop-System (`MSI Cyborg 15 B2RWFKG`), Treiber/BIOS/MSI Center, VIVE VR, lokalen NVIDIA App MCP (`127.0.0.1:13508`), VS Code Profile & Workspaces (Standard-General-Agent im `git-labor`).
+     - **`General Sim`** (`assetto-corsa-content/.github/agents/general.agent.md`): Leitstand für den **SimRacer (`192.168.178.68`)**, pflegt die eigenständige AC-Doku, erteilt Aufträge per SSH/SMB und betreibt das Freigabe-Gate (`ok`/`nein`/`reply`). Aus `git-labor` erfolgt die Zusammenarbeit über **SSH & Bridge-Skripte**.
 2. **`@rig` (Ebene 2 – läuft nativ auf der SimRacer-Hardware `192.168.178.68`):**
    - Überwacht RTX 5070 Ti (Taktraten, VRAM, Temperaturen via Port `13508` auf dem SimRacer).
    - Zuständig für SteamVR (120 Hz Frametimes), Fanatec Direct-Drive Force Feedback und Peripherie.
@@ -302,7 +304,8 @@ Da der Fahrer im Renncockpit eine geschlossene VR-Brille trägt, kann er das phy
 #### 3. Basisbetrieb, Screensaver- &amp; WoWLAN-/Sleep-Steuerung
 - **Basisbetrieb ohne Auto-Suspend:** `/etc/systemd/logind.conf.d/disable-sleep.conf` (`HandleLidSwitch=ignore`, `IdleAction=ignore`) und `~/.config/omarchy/shell.json` (`screensaver: 150`, `lock: 300`) aktivieren im Leerlauf den Bildschirmschoner ohne automatischen Standby.
 - **Renneinsatz / Render-Betrieb:** Sobald eine Session oder ein FFmpeg-Replay-Schnitt gestartet wird, pausiert Sarah den Schoner automatisch via `omarchy-toggle screensaver-off on` und `pkill -f org.omarchy.screensaver`. Im Leerlauf wird er wieder scharfgeschaltet (`screensaver-off off`).
-- **Remote-Suspend &amp; Wake-on-WLAN (`s2idle`):** `sleep.target`/`suspend.target` sind entmaskiert; über `/etc/sudoers.d/archibald-suspend` (`NOPASSWD: /usr/bin/systemctl suspend`) dürfen `VanstrikeCyborg` und `SimRacer` (`192.168.178.68`, eigener `ed25519`-Key) Archibald via `sleep_archibald.ps1` gezielt schlafen legen. Die Intel-AX201-Schnittstelle `wlp0s20f3` (`14:18:c3:b4:3e:85`, `nmcli wake-on-wlan=8`, `udev`-Regel `50-wowlan.rules`) wacht über `wake_archibald.ps1` (Dual-Broadcast `255.255.255.255` &amp; `192.168.178.255`, UDP `9`/`7`) wieder auf.
+- **Remote-Suspend &amp; Wake-on-WLAN (`s2idle`) inkl. Pitwall-Autostart:** `sleep.target`/`suspend.target` sind entmaskiert; über `/etc/sudoers.d/archibald-suspend` (`NOPASSWD: /usr/bin/systemctl suspend`) dürfen `VanstrikeCyborg` und `SimRacer` (`192.168.178.68`, eigener `ed25519`-Key) Archibald via `sleep_archibald.ps1` gezielt schlafen legen. Die Intel-AX201-Schnittstelle `wlp0s20f3` (`14:18:c3:b4:3e:85`, `nmcli wake-on-wlan=8`, `udev`-Regel `50-wowlan.rules`) wacht über `wake_archibald.ps1` (Dual-Broadcast `255.255.255.255` &amp; `192.168.178.255`, UDP `9`/`7`) wieder auf und blendet danach über `~/ac-pitwall/launch_pitwall.sh` automatisch das **StrikerPi Pitwall Hub (`http://192.168.178.86:8080/`)** im Vollbild auf Hyprland **Workspace 1** ein (während die `sarah-pitwall`-Konsole auf **Workspace 2** läuft).
+- **Omarchy Desktop-App (`Pitwall`):** Auf Archibald ist unter `~/.local/share/applications/Pitwall.desktop` (mit eigenem Icon `pitwall.png` / `pitwall.svg`) die App **Pitwall** installiert. Sie lässt sich jederzeit im Omarchy App-Launcher (`SUPER + SPACE` $\rightarrow$ *Pitwall*), im Sarah-Terminal (`pitwall`) oder per SSH-Prompt an `@sarah` starten.
 - **UFW-Firewall &amp; `CLIProxyAPI` (`:8317`):** LAN-Ausnahmen (`192.168.178.0/24`) für `22/tcp` (vor `omarchy-sshd LIMIT IN`) und `9996/udp` (`sarah_telemetry_listener.py`); `cli-proxy-api.service` läuft lokal auf `127.0.0.1:8317` mit synchronisiertem Antigravity-OAuth (`m.e.stuermer@gmail.com`, 21 Modelle) für `pitwall.code-workspace`.
 
 </details>
@@ -321,13 +324,52 @@ Der Raspberry Pi 4 (**`StrikerPi`**, `192.168.178.86`, Arch Linux ARM `aarch64`)
 2. **Saubere Terminal-Trennung: Host-Lokal vs. SSH-Client-Mode:**
    - **Auf den Hostsystemen (`SimRacer`, `ac-sandbox`, `Archibald`, `StrikerPi`):** Die Agenten-Konsolen und Hintergrund-Worker laufen **lokal** (`launch_simracer_host_terminals.ps1` bzw. `launch_guest_terminals.ps1` als Scheduled Tasks mit `ExecutionTimeLimit = 0` &amp; `AtLogOn`, auf Linux als `systemd`-Services).
    - **Vom Master-Laptop (`VanstrikeCyborg`) per SSH:** Alle `connect_*_terminal.ps1`-Skripte sowie das zentrale Auswahlmenü **`labs/Agent-Terminals.ps1`** öffnen eine **SSH-Client-Sitzung** (`-ClientMode` bei PowerShell-Agenten, `SSH-CLIENT`-Modus bei `@sarah` und `@rick`). Diese beendet **niemals** das auf dem Zielhost laufende Worker-Terminal, vermeidet doppelte Inbox-Abarbeitung und dient sicher als Live-Monitor und Prompt-Eingabe.
-   - **SSH-Terminalprofile in VS Code (`git-labor.code-workspace`):** `SSH: @rig`, `@light` (beide Host `simracer`), `@dark` (Host `ac-sandbox`), `@sarah` (Host `archibald`) und `@rick` (Host `strikerpi`). `@general` läuft lokal über den Task `Terminal: @general (Laptop Master)`. Ein `folderOpen`-Autostart ist nicht mehr konfiguriert.
+   - **SSH-Terminalprofile in VS Code (`git-labor.code-workspace`):** Alle 6 Agenten sind als SSH-Profile hinterlegt: `SSH: @general-sim (Leitstand)` (Host `general-sim` $\rightarrow$ `127.0.0.1:22`), `SSH: @rig`, `SSH: @light` (beide Host `simracer`), `SSH: @dark` (Host `ac-sandbox`), `SSH: @sarah` (Host `archibald`) und `SSH: @rick` (Host `strikerpi`). Zusätzlich steuert `labs/Invoke-SimAgentSsh.ps1` alle 6 Agenten nicht-interaktiv per SSH inkl. Audit-Log (`ssh_audit_YYYYMMDD.log`) und Leitstand-Prüfung (`Test-LeitstandExecution.ps1`). Ein `folderOpen`-Autostart ist nicht mehr konfiguriert.
 
 3. **Telemetrie-Zustandslogik des Relays (Stand 11.11.2026):**
    - Der **auf StrikerPi deployte** Relay meldet `relay_status = live_on_track` nur bei `(ac_status == 2 und rpm > 0)` oder `(speed > 3,0 km/h und rpm > 500)`. In der Box oder im Standby bleibt der Status damit nicht fälschlich auf „live“.
    - **Repo-Hinweis:** Die Arbeitskopie `strikerpi-hub/telemetry-relay/telemetry_relay.py` wurde am 11.11.2026 vom Pi (`/opt/telemetry-relay/telemetry_relay.py`) uebernommen und ist hash-identisch zum Deployment und als Commit `7db7657` in `simrig.git` gepusht. Zusaetzlich unterscheidet der Relay jetzt `live_on_track`, `replay` (AC-Status 1) und `pitbox_standby`, die Web-UI zeigt „Live auf Strecke“, „Replay“, „Box / Standby“ oder „Offline“.
 
-4. **Roadmap Web-Terminals & Lernserver:** Auf StrikerPi ist das Binary `/usr/bin/caddy` vorhanden. Geplant ist, darüber Web-Terminals (MQTT über WebSockets `:9001`) und die `git-labor`-Lerninhalte im LAN bereitzustellen. Dienststatus und Routing sind noch nicht eingerichtet bzw. nicht verifiziert. Details: [`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md`](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md).
+4. **Caddy Webserver, Node.js-API &amp; JS/TS-Lernserver (Stand 12.11.2026):** Auf StrikerPi laufen `caddy.service` (`:80`, `/etc/caddy/conf.d/git-labor.caddy`, Webroot `/srv/git-labor/web`) und der gehärtete Node.js-Dienst `gitlabor-api.service` (`127.0.0.1:8085`, Reverse Proxy unter `/api/linux/*`, MQTT-WS unter `/mqtt*`). `@rick` unterstützt `setup_caddy_gitlabor`, `build_ts_labs`, `caddy_validate`, `caddy_reload`, `caddy_status` und `restart_gitlabor_api`; das Live-Deployment erfolgt über [`labs/04_js_ts_web/Deploy-ToStrikerPi.ps1`](../../labs/04_js_ts_web/Deploy-ToStrikerPi.ps1). Details: [`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md`](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md).
+
+</details>
+
+<details>
+<summary>1.9 VS Code User-Profile, Python-Umgebung &amp; Agenten-Settings pro Workspace (Stand: 12.11.2026)</summary>
+
+Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abgeleitet, vollständig synchronisiert (`55` Extensions, `mcp.json`, `chatLanguageModels.json` mit 6 Modell-Anbietern, `snippets\javascript.json`) und in `%APPDATA%\Code\User\globalStorage\storage.json` fest mit ihren Workspaces verknüpft:
+
+| Profil | Profil-ID (`User\profiles\`) | Theme &amp; Layout | Zugeordneter Workspace | Synchronisierte Kern-Settings |
+| :--- | :--- | :--- | :--- | :--- |
+| **`Default`** | `__default__profile__` | `Default High Contrast`, `compact` | Fallback | Basis-Profil; `applyToAllProfiles` für `geminiCode.useDirectAPI`, `geminiMcp.taskCwd`, `chat.mcp.discovery.enabled`, `antigravity.serverPort` |
+| **`General SIM`** | `-4f926864` | `Abyss`, `compact` | `assetto-corsa-content.code-workspace` | `antigravityCopilot.server.executablePath` (`cli-proxy-api.exe`), `containers.containerClient`/`orchestratorClient`, `python.defaultInterpreterPath` (`\.local\python-env\Scripts\python.exe`), `mcp.json`, `chatLanguageModels.json` |
+| **`General Cyborg`** | `-37467b98` | `Default High Contrast`, `compact` | `git-labor.code-workspace` | Identisch zu `General SIM` + `github.copilot.llm-gateway.showReplyTokenUsage: true` (fehlerhafter Key unter `additionalTrustedCertificates` entfernt) |
+
+#### Python-Standardumgebung auf `VanstrikeCyborg`
+- **Systemweiter User-`PATH` (Position 1):** `C:\Users\strik\.local\python-env\Scripts\` (`Python 3.14.7`, `pip 26.3`, eingerichtet via `uv venv --seed --python 3.14`), inkl. **`google-antigravity 0.1.23`**, **`google-genai 3.2.0`** und **`mcp 2.3.0`**.
+- **Projekt-`.venv` (`uv 0.12.10`):** `notebook-agent-environments\.venv` enthält `google-genai 3.1.0`, `google-antigravity 0.1.23`, `ipykernel`, `ipywidgets`, `matplotlib`.
+
+#### Agenten- &amp; Workspace-Settings pro Workspace
+
+| Workspace | Aktives Profil | Proxy / Port &amp; Auth | Agent- &amp; Sandbox-Settings | MCP-Server &amp; Besonderheiten |
+| :--- | :--- | :--- | :--- | :--- |
+| **`assetto-corsa-content.code-workspace`** *(Laptop)* | **`General SIM`** (`-4f926864`) | `antigravity.serverPort: 8317`, `llm-gateway.serverUrl: http://localhost:8317`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `allowLocalNetwork: true`, `docker.context: "simracer"` | `geminiDocs`; `.vscode/settings.json` lädt `doku-minimap.css` |
+| **`git-labor.code-workspace`** *(Laptop)* | **`General Cyborg`** (`-37467b98`) | `antigravity.serverPort: 8317`, `inlineChat.defaultModel: "Gemini 3.8 Flash (gemini)"`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "on"` (`.vscode/settings.json`) | `geminiDocs`, `chat.mcp.serverSampling`, `python-envs.pythonProjects` (`pip`), 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
+| **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` | `antigravity.serverPort: 0`, `llm-gateway.serverUrl: http://127.0.0.1:8420`, `geminiCode.authMethod: "apikey"` | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `python.defaultInterpreterPath: Python311\python.exe` | `geminiDocs`, `nvidia-app` (`:13508/mcp`), `local-workspace-filesystem`, `sequential-thinking` |
+| **`pitwall.code-workspace`** *(Archibald `192.168.178.98`)* | Linux `archibald` | `cli-proxy-api.service` auf `127.0.0.1:8317` (OAuth, 21 Modelle) | `~/ac-pitwall/.venv` für `@sarah` | AC-UDP `9996`, StrikerPi-Anbindung (`192.168.178.86`) |
+
+</details>
+
+<details>
+<summary>1.10 End-to-End-Stabilisierung: Behobene Schein-Erfolge, SMB-Cache &amp; Dienste (Stand: 12.11.2026)</summary>
+
+| Komponente | Behobenes Problem | Lösung &amp; Verifizierter Live-Stand |
+| :--- | :--- | :--- |
+| **Dark Agent (`runner.ps1`, `worker.ps1`, `start_dark_terminal.ps1`)** | Generische Prompts terminierten mit Exit-Code `0` (`Success`); `prompt` übersteuerte `action`. | Intent-Parser (`LaunchCM`, `StopCM`, `Status`, `SetTimezone`, `SyncCoreAssets`), `action` vor `prompt`, Exit-Code `2` $\rightarrow$ `status: "Ignored"`. |
+| **Light Agent (`start_light_terminal.ps1`)** | `action: "Status"` fehlte und meldete falschen `Success`. | Nativer Status-Handler + `Ignored` bei unbekannten Aktionen; synchroner `Light -> Dark` Handshake in **~2,1 s**. |
+| **Sarah Coach (`start_sarah_terminal.ps1`)** | Kein Inbox-Polling / Outbox-Result (`telemetry\inbox` staute Tasks auf). | Polling + Outbox implementiert, Ordner `telemetry\clips\analysis` &amp; `promotion` angelegt, `telemetry\inbox` bereinigt (`0` Tasks). |
+| **VM SMB-Cache &amp; Headless-Konsolen** | SMB-Cache (`10s`/`5s`) verzögerte Dateien um bis zu 30s; 0-Byte-JSON-Race-Conditions; `[Console]::KeyAvailable`-Crashes. | Registry `LanmanWorkstation\Parameters` (`DirectoryCacheLifetime`, `FileNotFoundCacheLifetime`, `FileInfoCacheLifetime`) in der VM auf **`0`**; 10× atomares JSON-Read-Retry; `try/catch`-Wrapper. |
+| **Approval-Policy &amp; StrikerPi Caddy (`:80`)** | Veraltete Laptop-Instanz blockierte Freigaben; Caddy auf StrikerPi `failed` durch `Caddyfile`-Syntaxfehler. | `approval_policy.json` auf `mode: "AUTO"`; sauberes `Caddyfile` mit `unix//run/caddy/admin.socket` &amp; `import /etc/caddy/conf.d/*.caddy`. Alle 4 StrikerPi-Dienste (`mosquitto`, `telemetry-relay`, `rick-agent`, `caddy`) und alle 4 Windows-Agent-Tasks (`Light`, `Rig`, `Dark`, `Sarah`) sind aktiv. |
 
 </details>
 

@@ -49,7 +49,7 @@ Seit dem Brainstorming wurde das Gesamtsystem von einer fehleranfälligen SMB-/D
   - Eintrag für `Host strikerpi` (`HostName 192.168.178.86`, `User root`, `IdentityFile C:/Users/Mike/.ssh/id_ed25519`) hinterlegt.
   - Remote-SCP und SSH-Push zu Archibald und StrikerPi laufen jetzt schlüssellos und fehlerfrei.
 - **General Sim Gatekeeper:**
-  - Konfigurationsdatei `shared/agents/general/approval_policy.json` mit Statusflag `{"mode": "AUTO", "auto_approve": true}`.
+  - Konfigurationsdatei `shared/agents/general-SIM/approval_policy.json` mit Statusflag `{"mode": "AUTO", "auto_approve": true}`.
   - `start_general_terminal.ps1` wertet die Policy dynamisch aus.
 
 ### C. StrikerPi (`192.168.178.86`) & Archibald (`192.168.178.98`)
@@ -118,16 +118,16 @@ Die Aussagen dieses Dokuments wurden gegen Workspace-Dateien, Skripte, die Polic
 | `folderOpen`-Autostart entfernt | `git-labor.code-workspace` enthält keinen `folderOpen`-Eintrag | ✅ bestätigt |
 | 6 SSH-Terminalprofile | Vorhanden sind **5** SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) plus `PowerShell (Git-Labor)`. `@general` läuft lokal (Task `Terminal: @general`), nicht als SSH-Profil. `@rig` und `@light` nutzen beide den SSH-Host `simracer`. | ⚠️ abweichend |
 | `Agent-Terminals.ps1 -StatusOnly` mit Port-Sockets | Vorhanden (`Test-TcpPortFast`, Parameter `-StatusOnly`) | ✅ bestätigt |
-| `Send-SimAgentTask.ps1 -SetApprovalMode <AUTO\|MANUAL>` | Vorhanden, schreibt `general\approval_policy.json`. Ein MQTT-Publikationstest ist im Skript **nicht** enthalten. | ⚠️ teilweise |
+| `Send-SimAgentTask.ps1 -SetApprovalMode <AUTO\|MANUAL>` | Vorhanden, schreibt `general-SIM\approval_policy.json`. Ein MQTT-Publikationstest ist im Skript **nicht** enthalten. | ⚠️ teilweise |
 | `sim_agent_bridge.py`: `get_/set_approval_policy()` | Vorhanden | ✅ bestätigt |
 | MQTT via `paho-mqtt`, Topics `sim/tasks/...` | Die Bridge nutzt **kein** `paho-mqtt`. `publish_mqtt_task()` ruft per SSH `mosquitto_pub` auf StrikerPi auf, Topic `agents/<agent>/inbox`. Echte Topics im Relay: `simrig/mode`, `simrig/telemetry`. | ⚠️ abweichend |
 | `approval_policy.json` mit `{"mode": "AUTO", "auto_approve": true}` | Datei existiert, Felder: `mode`, `description`, `updated_at`. Ein Feld `auto_approve` gibt es nicht. Aktueller Wert: `AUTO` (Stand 11.11.2026 09:00). | ⚠️ Feldname abweichend |
 | Relay-Zustandslogik (Status `2` nur bei Bewegung) | **Deployt auf StrikerPi:** `live_on_track` bei `(ac_status == 2 und rpm > 0)` oder `(speed > 3.0 und rpm > 500)`. Die Arbeitskopie `C:\Users\strik\strikerpi-hub\telemetry-relay\telemetry_relay.py` war zuerst im Rueckstand (bedingungsloses `live_on_track`). Sie wurde am 11.11.2026 vom Pi uebernommen, SHA-256 identisch (`1B2F9044…`). Sie wurde als Commit `7db7657` nach `simrig.git` (`origin/main`) gepusht. | ✅ angeglichen & committet |
 | Mosquitto 24/7 (`1883`/`9001`) | `mosquitto`, `telemetry-relay`, `rick-agent` aktiv, Ports `1883`, `9001`, `8080` lauschen | ✅ bestätigt |
-| Caddy auf StrikerPi (Roadmap) | Binary `/usr/bin/caddy` vorhanden. Dienststatus, Webroot und Routing wurden nicht geprüft. | 🔜 offen |
+| Caddy auf StrikerPi (Roadmap) | **Umgesetzt am 12.11.2026:** `caddy.service` (`:80`, `/etc/caddy/conf.d/git-labor.caddy`, Webroot `/srv/git-labor/web`), `gitlabor-api.service` (`127.0.0.1:8085`, `node v26.13.0`), `tsc 7.0.2` und `/mqtt*` $\rightarrow$ `127.0.0.1:9001` aktiv und verifiziert. | ✅ umgesetzt &amp; verifiziert |
 
 > [!NOTE]
-> **Offene Punkte aus dem Abgleich:** (1) Relay-Kopie ist erledigt (Commit `7db7657` in `simrig.git`). (2) Topic-Schema für Task-Events festlegen. Zurzeit gilt `agents/<agent>/inbox`, im Konzept stand `sim/tasks/...`. (3) Entscheiden, ob ein `@general`-SSH-Profil nötig ist.
+> **Offene Punkte aus dem Abgleich:** (1) Relay-Kopie ist erledigt (Commit `7db7657` in `simrig.git`). (2) Topic-Schema für Task-Events festlegen. Zurzeit gilt `agents/<agent>/inbox`, im Konzept stand `sim/tasks/...`. (3) Entscheiden, ob ein `@general`-SSH-Profil nötig ist. (4) Caddy + Node.js-API + TypeScript-Lab-Hosting sind am 12.11.2026 produktiv geschaltet worden (siehe Abschnitt 7).
 
 </details>
 
@@ -153,4 +153,42 @@ Die Aussagen dieses Dokuments wurden gegen Workspace-Dateien, Skripte, die Polic
 </details>
 
 ---
-*Dokumentation abgelegt unter `Doku/05_Agents/` zur Referenz für anstehende VR- und Telemetrietests.*
+
+<details>
+<summary><b>7. Nachtrag 12.11.2026: Caddy, Node.js-API, TypeScript-Labs &amp; Pitwall-Display</b></summary>
+
+1. **Archibald (`192.168.178.98`) &amp; StrikerPi Pitwall Hub (`:8080`):**
+   - Auf Archibald wurden der laufende Screensaver (`org.omarchy.screensaver`) beendet, `omarchy-toggle-idle stay-awake` sowie `omarchy-toggle screensaver-off on` aktiviert und `~/.config/hypr/hyprland.lua` um `idle_inhibit = "always"` ergänzt.
+   - `telemetry_relay.py` (`:8080`) öffnet das Bildschirm-Panel standardmäßig beim Start (`lobbyOpen = true`, `manualForceWatch = true`), zeigt ohne aktive Fahrt/Sandbox direkt den **SimRacer-Desktop (`/api/stream/simracer.mjpeg`)** und schaltet automatisch auf **Sandbox noVNC (`:8006`)** bzw. **SimRacer Live-Fahrt** um.
+
+2. **Caddy-Webserver (`:80`), Node.js-API (`:8085`) &amp; TypeScript-Toolchain über `@rick`:**
+   - Auf StrikerPi wurden **`nodejs v26.13.0`**, **`npm 12.2.2`** und **`typescript (tsc) 7.0.2`** installiert.
+   - `rick_worker.py` (inkl. UTF-8-BOM-Fix `utf-8-sig`) und `start_rick_terminal.sh` (gespiegelt unter [`labs/01_linux_bash/strikerpi-services/`](../../labs/01_linux_bash/strikerpi-services/)) wurden um `setup_caddy_gitlabor`, `caddy_validate`, `caddy_reload`, `caddy_status`, `build_ts_labs` und `restart_gitlabor_api` erweitert.
+   - `/etc/caddy/Caddyfile` + `/etc/caddy/conf.d/git-labor.caddy`: Statischer Webroot `/srv/git-labor/web`, Reverse Proxy `/api/linux/*` $\rightarrow$ `127.0.0.1:8085`, `/mqtt*` $\rightarrow$ `127.0.0.1:9001`, JSON-Access-Log unter `/var/log/caddy/gitlabor-access.log`.
+   - Gehärteter Systemd-Dienst `gitlabor-api.service` (`/srv/git-labor/apps/linux-monitor-api/gitlabor-api.mjs`, `NoNewPrivileges=true`, `PrivateTmp=true`, `ProtectHome=true`, `ProtectSystem=strict`) liefert `/api/linux/health`, `/status`, `/ports`, `/logs` und `POST /echo`.
+   - Live-Deployment-Pipeline vom Laptop: [`labs/04_js_ts_web/Deploy-ToStrikerPi.ps1`](../../labs/04_js_ts_web/Deploy-ToStrikerPi.ps1) überträgt [`labs/04_js_ts_web/index.html`](../../labs/04_js_ts_web/index.html), `rechner.html` und [`ts-linux-lab/`](../../labs/04_js_ts_web/ts-linux-lab/) und triggert per `@rick` Remote-Kompilierung (`tsc -p .`) + `caddy_reload`.
+
+</details>
+
+---
+<details>
+<summary><b>8. Nachtrag 14.11.2026: SSH-Simwerkstatt, Leitstand-Verifikation, Wake Archibald &amp; Omarchy Pitwall-App</b></summary>
+
+1. **Saubere Rollen- &amp; Namenstrennung zwischen `git-labor` und `assetto-corsa-content`:**
+   - **`git-labor` (Simwerkstatt unter `General Cyborg`):** Alle `.github/agents/*.agent.md`-Profile sind als dedizierte SSH-Brücken (`Simwerkstatt: General Sim (SSH)`, `Simwerkstatt: @rig (SSH)`, `Simwerkstatt: @light (SSH)`, `Simwerkstatt: @dark (SSH)`, `Simwerkstatt: @sarah (SSH)`, `Simwerkstatt: @rick (SSH)`) konfiguriert.
+   - **`assetto-corsa-content` (Leitstand unter `General Sim`):** Führt die Simulations-Agenten (`General Sim`, `Rig Agent`, `SimRacer Light`, `Dark Agent`, `Sarah Coach`, `Rick Agent`).
+   - **6 SSH-Profile in `git-labor.code-workspace`:** Ergänzt um `SSH: @general-sim (Leitstand)` (OpenSSH-Alias `general-sim` $\rightarrow$ `127.0.0.1:22`) sowie die Tasks `Terminal: @general-sim (SSH Client)` und `Simwerkstatt: Leitstand Verifikation (Exec + Log)`.
+
+2. **Direkte SSH-Steuerung (`Invoke-SimAgentSsh.ps1`), Audit-Logging &amp; Autonome Persistenz:**
+   - [`labs/Invoke-SimAgentSsh.ps1`](../../labs/Invoke-SimAgentSsh.ps1) steuert und promptet alle 6 Agenten inkl. `General Sim` direkt über SSH (`-EncodedCommand` für Windows-Ziele, Base64-Bash für Linux-Ziele).
+   - **Sichtbarkeit &amp; Audit-Trail („im Namen von …“):** `ssh_audit_helper.ps1` (mit Double-Hop-SMB-Schutz `Test-AuditPathSafe`) sowie `sarah_ssh_exec.sh` und `rick_worker.py` protokollieren jeden SSH-Aufruf sichtbar im Ziel-Terminal, in `ssh_audit_YYYYMMDD.log`/`.jsonl` und im Gesamtlog `AGENT_KOMMUNIKATION_HISTORIE.md`.
+   - **Autonome Worker-Persistenz &amp; Leitstand-Prüfung (`Test-LeitstandExecution.ps1`):** Alle 6 Hintergrund-Worker (`AgentTerminal_General`, `AgentTerminal_Light`, `AgentTerminal_Rig`, Sandbox `worker.ps1`, `sarah-agent.service`, `rick-agent.service`) laufen autonom weiter, auch wenn `General Sim` getrennt wird. `Test-LeitstandExecution.ps1 -AllRecent -RunLiveHealthTest` verifiziert sowohl die Ausführung als auch den zugehörigen Log-Eintrag (`VERIFIED`).
+
+3. **Wake Archibald mit automatischem Pitwall-Fullscreen &amp; Omarchy Desktop-App (`Pitwall`):**
+   - **Erweiterter Task `Wake Archibald (Pitwall IdeaPad 5 WoL)` (`wake_archibald.ps1`):** Sendet das WoL/WoWLAN-Magic-Packet (`14:18:c3:b4:3e:85`), wartet auf SSH-Port `22` (`192.168.178.98`) und führt anschließend automatisch `~/ac-pitwall/launch_pitwall.sh` auf Archibald aus (plus eigenständiger Task `Show Pitwall on Archibald (Omarchy Fullscreen)` in `assetto-corsa-content/.vscode/tasks.json`).
+   - **`~/ac-pitwall/launch_pitwall.sh`:** Weckt das Display (`hyprctl dispatch dpms on`), beendet einen aktiven Omarchy-Screensaver (`ttfx` / `org.omarchy.screensaver`), hält die `sarah-pitwall`-Konsole auf **Workspace 2** und startet bzw. fokussiert das **StrikerPi Pitwall Hub (`http://192.168.178.86:8080/`)** im Vollbildmodus (`fullscreen: 2`) auf **Workspace 1**.
+   - **Omarchy App (`Pitwall.desktop`):** Unter `~/.local/share/applications/Pitwall.desktop` mit eigenem Tacho-Icon (`~/.local/share/icons/hicolor/256x256/apps/pitwall.png` &amp; `scalable/apps/pitwall.svg`) installiert – direkt über den Omarchy App-Launcher (`SUPER + SPACE` $\rightarrow$ **Pitwall**), im Sarah-Terminal (`pitwall`) oder per SSH-Prompt an `@sarah` startbar.
+
+</details>
+
+---*Dokumentation abgelegt unter `Doku/05_Agents/` zur Referenz für anstehende VR- und Telemetrietests.*

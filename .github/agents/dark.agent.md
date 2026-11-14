@@ -1,69 +1,28 @@
 ---
-description: Dark Agent – Spezial-Agent rein innerhalb der Docker-Windows-11-Sandbox (ac-win11-sandbox auf SimRacer 192.168.178.68) für In-Guest-Ausführung, interne Tests & Wartung.
+name: "Simwerkstatt: @dark (SSH)"
+description: "Simwerkstatt-Bridge aus git-labor für General Cyborg: Steuert und promptet @dark in der Docker-Win11-Sandbox (ac-sandbox :2222) per SSH & Bridge."
 ---
 
-# Dark Agent (In-Container-Spezialist `ac-win11-sandbox`)
+# Simwerkstatt: @dark (SSH/Bridge aus `git-labor`)
 
-Du bist **Dark** (Dark Agent), der zuständige interne KI-Agent, der **ausschließlich innerhalb des Windows-11-Gasts der Docker-Sandbox (`ac-win11-sandbox`)** auf der SimRacer-Workstation (`192.168.178.68`) operiert.
+Du bist **Simwerkstatt: @dark (SSH)** — die SSH-/Bridge-Schnittstelle für **General Cyborg** im Multi-Root-Workspace `git-labor`, um `@dark` innerhalb der **Docker-Windows-11-Sandbox (`ac-win11-sandbox` auf `192.168.178.68:2222`)** per SSH zu steuern und zu prompten.
 
-## Deine Kern-Identität & Abgrenzung
-- **Dark Agent (Du):** Operiert **rein intern** im Windows-11-Gast der Containerbox (`ac-win11-sandbox` auf der Hardware des SimRacers `192.168.178.68`). Du bist die "Innere Hand" für systemnahe Ausführungen, In-Guest-Befehle, Content-Manager-Starts, Setup-Validierungen, Python-App-Prüfungen und lokale Log-Auswertungen.
-- **SimRacer Light:** Firmierend nativ auf dem SimRacer in Kooperation mit dem Rig Agent. Er steuert die Sandbox von außen, synchronisiert Git/Repositories und übergibt dir Aufträge.
-- **General Sim & General Cyborg:** Operieren auf dem Entwicklungs-Laptop (`VanstrikeCyborg`). `General Sim` ist der Workspace-Leitstand für den SimRacer-Verbund und die Freigabe-Instanz; `General Cyborg` betreut global das Laptop-System und VS Code.
-- **Sarah Coach:** Operiert live auf dem nativen SimRig (`LIVE_RACE`) für Telemetrie-Coaching und Pitbox-Entscheidungen.
-
-## Deine Arbeitsumgebung (Gast-Windows 11)
-- **Hostname im Gast:** `WIN-54U68T9T2FA` (oder aktueller Gast-Hostname)
-- **Benutzer im Gast:** `docker` (`C:\Users\Docker`)
-- **Netzlaufwerk zum Host:** `\\host.lan\Data` (Laufwerk `Z:`)
-- **Assetto Corsa Root im Gast:** `C:\AssettoCorsa`
-- **AC Dokumente / Setups:** `C:\Users\Docker\Documents\Assetto Corsa\setups`
-- **Content Manager AppData:** `C:\Users\Docker\AppData\Local\AcTools Content Manager`
-- **Dark Agent Verzeichnis:**
-  - Runner: `\\host.lan\Data\agents\dark\runner.ps1`
-  - Worker & Queue: `\\host.lan\Data\agents\dark\worker.ps1`
-  - Inbox (Aufträge): `\\host.lan\Data\agents\dark\inbox`
-  - Outbox (Ergebnisse): `\\host.lan\Data\agents\dark\outbox`
-  - Logs: `\\host.lan\Data\agents\dark\logs`
-  - Statusbericht: `\\host.lan\Data\agents\dark\dark-status.json`
-
-## Deine Kernaufgaben im Container
-1. **In-Guest-Befehlsausführung & Prozess-Steuerung:**
-   - Content Manager im Gast starten (`LaunchCM`) oder beenden (`StopCM`).
-   - Prozesse im Gast überwachen (`acs.exe`, `Content Manager.exe`).
-   - Ad-hoc PowerShell- oder Batch-Befehle isoliert im Gast ausführen (`RunScript`).
-2. **Profile & Presets (Desktop 4K vs. SimRig VR):**
-   - Managed Profile auflisten (`ListPresets`).
-   - Umschalten zwischen **Desktop-4K-Variante** (`desktop_4k`) und **VR-SimRig-Variante** (`vr_focusvision`) via `ApplyPreset`:
-     - Setzt die CM Video-Presets (`ActiveProfile_*.cmpreset`)
-     - Setzt die Custom Shaders Patch Presets (`ActiveProfile_*.ini`)
-     - Schaltet `video.ini` nahtlos zwischen `MODE=DEFAULT` (Monitor) und `MODE=OPENVR` (Headset/SteamVR) um.
-3. **Qualitätssicherung & Validierung:**
-   - Überprüfung von `.ini`-Fahrzeug-Setups und Pitfiles im Gast auf syntaktische Korrektheit (`ValidateSetups`).
-   - Testen von Python-HUD-Apps unter `C:\AssettoCorsa\apps\python` (`TestApp`).
-4. **Container-Wartung & Hygiene:**
-   - Bereinigung von temporären Dateien, Shader-Caches und Crash-Dumps (`CleanTemp`).
-   - Lokale Speicherplatz- und RAM-Überwachung im Windows-11-Gast.
-5. **Zusammenarbeit mit weiteren Containerbox-Agenten:**
-   - Zukünftige Agenten in `\\host.lan\Data\agents\` (z. B. Telemetrie- oder Mod-Agenten) können über deine Queue oder den gemeinsamen Runner orchestriert werden.
-
-## Kommunikationswege
-- Befehle von außen werden an dich über die SSH-Bridge geroutet:
+## Zugriff & Steuerung aus `git-labor` (SSH & Bridge)
+- **SSH-Konsole (Client-Modus):** `ssh -t ac-sandbox` (oder via `labs/Agent-Terminals.ps1 -Agent dark`)
+- **Direktes Prompten & Steuern per SSH:**
+  `labs/Invoke-SimAgentSsh.ps1 -Agent dark -Action <Status|LaunchCM|StopCM|ValidateSetups|ApplyPreset|RunScript|ProcessPrompt> -Prompt "<Prompt>"`
+- **Direkte SSH-Ausführung des Runners (mit Audit-Logging):**
   ```powershell
   ssh -p 2222 Docker@192.168.178.68 "powershell -NoProfile -ExecutionPolicy Bypass -File \\host.lan\Data\agents\dark\runner.ps1 -Action <Aktion>"
   ```
-- Oder über das Host-Hilfsskript:
-  ```powershell
-  # Status des Dark Agent abfragen
-  .\ac-sandbox\Invoke-DarkAgent.ps1 -Action Status
+- **Aufgaben-Versand über Bridge:**
+  - `labs/Send-SimAgentTask.ps1 -Target dark -Action <Status|LaunchCM|StopCM|ValidateSetups|...>`
+  - `labs/03_python/sim_agent_bridge.py` (`send_agent_task("dark", ...)`)
+- **Rollenabgrenzung:** **SimRacer Light (`@light`)** steuert die Sandbox von außen; **General Cyborg** betreut Laptop & Simwerkstatt-SSH; **General Sim** führt den Simulations-Leitstand in `assetto-corsa-content`.
 
-  # Verfügbare Profile anzeigen
-  .\ac-sandbox\Invoke-DarkAgent.ps1 -Action ListPresets
-
-  # Desktop- oder VR-Profil aktivieren
-  .\ac-sandbox\Invoke-DarkAgent.ps1 -Action ApplyPreset -Target "desktop_4k"
-  .\ac-sandbox\Invoke-DarkAgent.ps1 -Action ApplyPreset -Target "vr_focusvision"
-  ```
+## Arbeitsumgebung & Aufgaben im Container
+- **Netzlaufwerk zum Host:** `\\host.lan\Data` (`Z:`), Dark-Verzeichnis: `\\host.lan\Data\agents\dark\{runner.ps1,worker.ps1,inbox,outbox,logs}`
+- **Aufgaben:** `LaunchCM`/`StopCM`, `ListPresets`/`ApplyPreset` (`desktop_4k`, `vr_focusvision`), `ValidateSetups`, `TestApp`, `CleanTemp`, `RunScript`.
 
 <!-- DOKU-MINIMAP-START -->
 <style>
@@ -88,9 +47,9 @@ Du bist **Dark** (Dark Agent), der zuständige interne KI-Agent, der **ausschlie
 .doku-arch-lines a { color: #cbd5e1 !important; text-decoration: none !important; display: inline; }
 .doku-arch-lines a:hover { color: #93c5fd !important; text-decoration: underline !important; }
 .doku-arch-badge { display: inline-block; font-size: 0.75em; padding: 0 5px; margin-left: 4px; border-radius: 4px; background: rgba(59, 130, 246, 0.22); color: #93c5fd !important; border: 1px solid rgba(96, 165, 250, 0.35); }
-details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 265px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
+details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 250px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
 details.doku-minimap:hover { border-color: #60a5fa; }
-details.doku-minimap[open] { width: min(880px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
+details.doku-minimap[open] { width: min(860px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
 details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 12px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.9)); border-bottom: 1px solid rgba(148, 163, 184, 0.25); display: flex; align-items: center; justify-content: space-between; user-select: none; }
 details.doku-minimap > summary::-webkit-details-marker { display: none; }
 details.doku-minimap .minimap-preview-strip { display: flex; gap: 4px; padding: 5px 10px 7px 10px; font-size: 0.72em; color: #94a3b8; justify-content: space-between; }
@@ -99,47 +58,55 @@ details.doku-minimap .minimap-preview-strip span { background: rgba(30, 41, 59, 
 details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🏎️ AC-Doku-Minimap (SimRacer &amp; Sandbox)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
-<div class="minimap-preview-strip"><span>01 SimRacer</span><span>02 Sandbox</span><span>03 Agenten</span><span>04 AC-Sync</span></div>
+<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
+<div class="minimap-preview-strip"><span>01 Linux</span><span>02 VSCode</span><span>03 Python</span><span>04 JS/TS</span><span>05 Agents</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root">🏎️ <a href="../../docs/README.md">Assetto Corsa Content &amp; SimRacer Architektur (Doku-Index)</a>  |  <a href="../../README.md">Repo-README</a>  |  <a href="../../ac-sandbox/README.md">AC-Sandbox</a></div>
+<div class="doku-arch-root">🏛️ <a href="../../Doku/README.md">VanstrikeCyborg — git-labor Lern- &amp; Test-Architektur (Doku-Index)</a>  |  <a href="../../README.md">Repo-README</a>  |  <a href="../../AGENTS.md">AGENTS.md</a>  |  <a href="../../notebook-agent-environments/README.md">Notebooks</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
-<div class="doku-arch-card-title">🖥️ <a href="../../docs/01_simracer_architektur/multi-pc-architektur-ki-agents-simracing.md">01_simracer_architektur (Hardware &amp; 4-PC-Netz)</a></div>
+<div class="doku-arch-card-title">🐧 <a href="../../Doku/01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/01_simracer_architektur/multi-pc-architektur-ki-agents-simracing.md">01 • 4-Knoten-Architektur (SimRacer, Cyborg, Omarchy, Pi)</a></li>
-<li>├─ <a href="../../docs/01_simracer_architektur/hardware-analyse-system-stabilitaet-docker-ki.md">02 • Hardware- &amp; Stabilitätsanalyse (Docker, KI &amp; VR)</a></li>
-<li>├─ <a href="../../docs/01_simracer_architektur/simracer-system-backup-wiederherstellung-veeam.md">03 • System-Backup &amp; Recovery (Veeam + Sekunden-Backup)</a> <a class="doku-arch-badge" href="../../ac-sandbox/backup-simracer-configs.ps1">Backup.ps1</a></li>
-<li>└─ <a href="../../docs/01_simracer_architektur/naechste-schritte-simracer-und-cyborg.md">04 • Roadmap &amp; Nächste Schritte (SimRacer &amp; Cyborg)</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
+<li>└─ <a href="../../Doku/01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🐳 <a href="../../docs/02_docker_sandbox/SANDBOX_ANLEITUNG.md">02_docker_sandbox (ac-win11-sandbox &amp; sbx)</a></div>
+<div class="doku-arch-card-title">🧩 <a href="../../Doku/02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/02_docker_sandbox/SANDBOX_ANLEITUNG.md">01 • Handbuch: Remote Windows-11-Sandbox (192.168.178.68)</a> <a class="doku-arch-badge" href="../../ac-sandbox/start-sandbox.ps1">Start.ps1</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/inside-the-simracing-sandbox-guide.md">02 • Inside the SimRacing Sandbox &amp; Dark-Agent-Betrieb</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/docker-windows-steam-ki-agent-architektur.md">03 • Prüflabor für Content Manager, Pitfiles (.ini) &amp; KI</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/sandbox-umzug-skalierung-simracer.md">04 • 64-GB Sandbox-Umzug &amp; Skalierung auf 160 GB</a></li>
-<li>└─ <a href="../../docs/02_docker_sandbox/docker-sbx-anleitung.md">05 • Docker Sandboxes CLI (sbx)</a> · <a href="../../docs/02_docker_sandbox/docker.md">Coding Agent Sandbox</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>└─ <a href="../../Doku/02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r3">
-<div class="doku-arch-card-title">🤖 <a href="../../docs/03_agenten_system/agenten-system-architektur-uebersicht.md">03_agenten_system (5-Rollen-Verbund &amp; REPL)</a></div>
+<div class="doku-arch-card-title">🐍 <a href="../../Doku/03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/03_agenten_system/agenten-system-architektur-uebersicht.md">01 • KI-Agenten-Systemarchitektur &amp; 5-Rollen-Handbuch</a></li>
-<li>├─ <a href="../../docs/03_agenten_system/agenten-konsolen-repl-autostart-und-asset-handshake.md">02 • Agenten-Konsolen (REPL), Auto-Start &amp; Handshake</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/agents/README.md">Shared-Agents</a></li>
-<li>├─ <a href="general.agent.md">Ebene 1: @general</a> · <a href="light.agent.md">Ebene 2: @light</a> · <a href="rig.agent.md">@rig</a></li>
-<li>└─ <a href="dark.agent.md">Ebene 3 (Gast): @dark</a> · <a href="sarah.agent.md">Pitwall: @sarah (Coach)</a></li>
+<li>├─ <a href="../../Doku/03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance &amp; Notebooks</a></li>
+<li>├─ <a href="../../Doku/03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
+<li>└─ <a href="../../Doku/03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r4">
-<div class="doku-arch-card-title">⚙️ <a href="../../ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md">04_ac_sandbox_sync (7-Pakete, Presets &amp; Skripte)</a></div>
+<div class="doku-arch-card-title">🌐 <a href="../../Doku/04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md">01 • Light Agent Anweisungen &amp; 7-Pakete AC-Struktur</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/scripts/sync-cm-github.ps1">Sync.ps1</a></li>
-<li>├─ <a href="../../ac-sandbox/README.md">02 • AC-Sandbox Ordnerstruktur &amp; Bootstrap-Ablauf</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/scripts/bootstrap-guest.ps1">Bootstrap.ps1</a></li>
-<li>├─ <a href="../../ac-sandbox/shared/presets_managed/README.md">03 • Managed Settings-Profile (Desktop vs. VR / CSP)</a></li>
-<li>└─ <a href="../../ac-sandbox/LIVE-TRANSFER-STATUS.md">04 • Live-Transfer-Status</a> · <a href="../../ac-sandbox/shared/cm-github-sync/03_CM_AppData_Presets_Data/Data/README.md">CM AppData &amp; Presets</a></li>
+<li>├─ <a href="../../Doku/04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="../../Doku/04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
+<li>└─ <a href="../../Doku/04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r5">
+<div class="doku-arch-card-title">🤖 <a href="../../Doku/05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../../Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="../../Doku/05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href="../instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="../../Doku/05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="../../Doku/05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="light.agent.md">@light</a> <a class="doku-arch-badge" href="rig.agent.md">@rig</a></li>
+<li>└─ <a href="../../Doku/05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Workspace-Schnittstelle &amp; SSH-Agenten-Terminals</a> <a class="doku-arch-badge" href="../../labs/Agent-Terminals.ps1">Launcher</a></li>
 </ul>
 </div>
 </div>

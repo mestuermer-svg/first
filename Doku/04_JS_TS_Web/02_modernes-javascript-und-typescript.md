@@ -7,7 +7,7 @@
 
 * Den Unterschied zwischen **Browser-JavaScript** und **Node.js (Server-/CLI-Laufzeit)** sowie moderne Sprachfunktionen (`const`/`let`, Arrow Functions, `async/await`, ES-Module) sicher beherrschen.
 * Verstehen, warum **TypeScript (`.ts`)** als statisch typisierter Aufsatz über JavaScript entwickelt wurde und wie `interface`, `type` und `tsconfig.json` Laufzeitfehler verhindern.
-* Ein sauberes TypeScript-Projekt mit `package.json` und strikter Typprüfung aufsetzen und aktualisieren können.
+* Ein sauberes TypeScript-Projekt mit `package.json`, `tsc` und strikter Typprüfung aufsetzen, gegen ein echtes Node.js-Linux-Backend testen und via `Deploy-ToStrikerPi.ps1` auf den StrikerPi deployen.
 
 </details>
 
@@ -111,6 +111,52 @@ Eine saubere `tsconfig.json` aktiviert den **`strict`-Modus**, damit `null`/`und
 
 </details>
 
+<details>
+<summary>1.5 Praxisprojekt: TypeScript Live-Dashboard gegen Linux-Serverdienste (<code>ts-linux-lab</code>)</summary>
+
+Unter [`labs/04_js_ts_web/ts-linux-lab/`](../../labs/04_js_ts_web/ts-linux-lab/) liegt ein vollständiges Praxisprojekt, das **Browser-TypeScript** direkt mit dem **Node.js-Backend** auf StrikerPi (`gitlabor-api.service`) verbindet:
+
+```mermaid
+flowchart LR
+    DEV["Laptop VanstrikeCyborg<br/>src/main.ts + Deploy-ToStrikerPi.ps1"] -->|"1. SCP nach /srv/git-labor/web/"| RICK["@rick Worker (StrikerPi)<br/>build_ts_labs (tsc 7.0.2) + caddy_reload"]
+    BROWSER["Browser im LAN<br/>http://192.168.178.86/labs/04_js_ts_web/ts-linux-lab/"] -->|"2. Lädt index.html + dist/main.js"| CADDY["Caddy Webserver (:80)<br/>File-Server & Reverse Proxy"]
+    BROWSER -->|"3. fetch('/api/linux/status|ports|logs|echo')"| CADDY
+    CADDY -->|"4. reverse_proxy 127.0.0.1:8085"| API["gitlabor-api.service<br/>Node.js v26.13.0 (127.0.0.1:8085)"]
+    API -->|"5. systemctl / journalctl / ss"| LINUX["Arch Linux ARM Kernel & Systemd"]
+```
+
+#### 1. Projektstruktur & Compiler-Konfiguration
+| Datei | Aufgabe |
+| :--- | :--- |
+| [`package.json`](../../labs/04_js_ts_web/ts-linux-lab/package.json) | Definiert `"build": "tsc -p ."` für die Remote- oder Lokal-Kompilierung. |
+| [`tsconfig.json`](../../labs/04_js_ts_web/ts-linux-lab/tsconfig.json) | Kompiliert `src/**/*.ts` als `ES2022`-ES-Module nach `dist/` (`"strict": true`, `"noEmitOnError": true`, `"sourceMap": true`). |
+| [`src/main.ts`](../../labs/04_js_ts_web/ts-linux-lab/src/main.ts) | Typisierte API-Aufrufe (`fetchJson<T>`), DOM-Helfer (`byId<T>`), Auto-Refresh alle 5 s und `POST /api/linux/echo`-Test. |
+| [`index.html`](../../labs/04_js_ts_web/ts-linux-lab/index.html) & [`styles.css`](../../labs/04_js_ts_web/ts-linux-lab/styles.css) | Lädt `<script type="module" src="./dist/main.js"></script>` und rendert Services, Sockets, Journald- & Caddy-Logs. |
+| [`Deploy-ToStrikerPi.ps1`](../../labs/04_js_ts_web/Deploy-ToStrikerPi.ps1) | Überträgt Portal + Lab per `scp` auf StrikerPi und triggert über `@rick` automatisch `build_ts_labs` (`tsc`) und `caddy_reload`. |
+
+#### 2. Generisches Fetch-Pattern in TypeScript (`src/main.ts`)
+Statt unsicherer `any`-Objekte erzwingt eine generische Hilfsfunktion feste Antwort-Interfaces (`LinuxStatusResponse`, `LogsResponse`, `PortsResponse`, `EchoResponse`):
+
+```typescript
+async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(url, init);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} bei ${url}`);
+  }
+  return (await res.json()) as T;
+}
+
+const data = await fetchJson<LinuxStatusResponse>("/api/linux/status");
+```
+
+**Deployment & Live-Test vom Laptop (`PowerShell`):**
+```powershell
+.\labs\04_js_ts_web\Deploy-ToStrikerPi.ps1
+```
+Danach erreichbar unter `http://192.168.178.86/` (Portal) bzw. `http://192.168.178.86/labs/04_js_ts_web/ts-linux-lab/`.
+
+</details>
+
 </details>
 
 <details>
@@ -119,6 +165,7 @@ Eine saubere `tsconfig.json` aktiviert den **`strict`-Modus**, damit `null`/`und
 1. **Union Types verstehen:** Im obigen `interface MaschinenStatus` ist `status: "BEREIT" | "LAEUFT" | "STOERUNG"` definiert. Was passiert in VS Code, wenn du versuchst, `status: "WARTUNG"` zuzuweisen, und warum ist das sicherer als ein beliebiger `string`?
 2. **`const` vs. `let`:** Warum verwendet man in modernem JavaScript/TypeScript standardmäßig `const` für Variablen und greift nur dann zu `let`, wenn sich der zugewiesene Wert später wirklich ändert (und niemals zum veralteten `var`)?
 3. **Asynchronität:** Was gibt eine `async function` immer als Rückgabetyp zurück, selbst wenn im Code `return true;` steht?
+4. **Live-Deployment:** Ergänze in [`ts-linux-lab/src/main.ts`](../../labs/04_js_ts_web/ts-linux-lab/src/main.ts) ein zusätzliches Feld aus `/api/linux/status` und deploye den Stand via [`Deploy-ToStrikerPi.ps1`](../../labs/04_js_ts_web/Deploy-ToStrikerPi.ps1) auf StrikerPi. Prüfe, ob `noEmitOnError: true` bei einem absichtlichen Typfehler das Überschreiben von `dist/main.js` verhindert.
 
 </details>
 
@@ -128,16 +175,19 @@ Eine saubere `tsconfig.json` aktiviert den **`strict`-Modus**, damit `null`/`und
 * [Offizielles TypeScript Handbuch](https://www.typescriptlang.org/docs/handbook/intro.html)
 * [MDN Web Docs – Modernes JavaScript (`async/await`)](https://developer.mozilla.org/de/docs/Learn/JavaScript/Asynchronous/Promises)
 * [Node.js Offizielle Dokumentation](https://nodejs.org/en/docs)
+* [Praxis-Lab: TypeScript & Linux Serverdienste (`ts-linux-lab`)](../../labs/04_js_ts_web/ts-linux-lab/index.html)
+* [Node.js Live-API Backend (`gitlabor-api.mjs`)](../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md)
 
 </details>
 
 <details>
 <summary><b>Chips & Kernaussagen</b></summary>
 
-* **TypeScript = JavaScript mit Sicherheitsnetz:** `interface`, Union Types (`"A" | "B"`) und `"strict": true` in der `tsconfig.json` fangen Fehler bereits vor dem Programmstart ab.
-* **Browser $\neq$ Node.js:** Im Browser steuerst du das `document` (DOM); in Node.js steuerst du Dateien, Ports, CLI-Skripte und MCP-Server.
+* **TypeScript = JavaScript mit Sicherheitsnetz:** `interface`, Union Types (`"A" | "B"`) und `"strict": true` in der `tsconfig.json` fangen Fehler bereits vor dem Programmstart ab (`noEmitOnError: true`).
+* **Browser $\neq$ Node.js:** Im Browser steuerst du das `document` (DOM); in Node.js steuerst du Dateien, Ports, CLI-Skripte, HTTP-Backends (`gitlabor-api.mjs`) und MCP-Server.
 * **Immer `const` bevorzugen:** Macht Code berechenbar und verhindert versehentliches Überschreiben von Referenzen.
-* **`async/await` + `try/catch`:** Das Standardmuster für alle API-, Datei- und KI-Aufrufe in JS/TS.
+* **`async/await` + `try/catch`:** Das Standardmuster für alle API-, Datei- und KI-Aufrufe in JS/TS (`fetchJson<T>`).
+* **End-to-End im LAN:** Browser-TypeScript (`ts-linux-lab`) + Caddy Reverse Proxy (`:80`) + Node.js-Systemd-API (`127.0.0.1:8085`) lassen sich per [`Deploy-ToStrikerPi.ps1`](../../labs/04_js_ts_web/Deploy-ToStrikerPi.ps1) und `@rick` direkt auf StrikerPi bauen und live testen.
 
 </details>
 
@@ -187,9 +237,11 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <div class="doku-arch-card r1">
 <div class="doku-arch-card-title">🐧 <a href="../01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash-Grundlagen, Skripting, Pipes &amp; Exit-Codes</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
-<li>├─ <a href="../01_Linux_Bash/02_arch-linux-omarchy-und-remote-ssh.md">02 • Arch Linux, Omarchy, systemd &amp; Remote-SSH</a></li>
-<li>└─ <a href="../01_Linux_Bash/03_docker-und-sbx-micro-vms.md">03 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
+<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
+<li>├─ <a href="../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
+<li>├─ <a href="../01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
+<li>└─ <a href="../01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">

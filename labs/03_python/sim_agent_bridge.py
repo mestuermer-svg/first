@@ -26,7 +26,7 @@ class SimAgentBridge:
         # Standard: Shared SMB-Pfad zum SimRacer
         self.agents_base_path = agents_base_path or Path(rf"\\{self.simracer_ip}\ac-sandbox\shared\agents")
         self.known_agents = ["general", "light", "rig", "dark", "sarah", "rick"]
-        self.policy_file = self.agents_base_path / "general" / "approval_policy.json"
+        self.policy_file = self.agents_base_path / "general-SIM" / "approval_policy.json"
         self.mqtt_broker_ip = "192.168.178.86"
         self.mqtt_broker_port = 1883
         self.packages = {
@@ -164,7 +164,8 @@ class SimAgentBridge:
                 "outbox": sarah_dir / "outbox",
                 "logs": sarah_dir / "logs",
             }
-        agent_dir = self.agents_base_path / ag
+        folder = "general-SIM" if ag == "general" else ag
+        agent_dir = self.agents_base_path / folder
         return {
             "root": agent_dir,
             "inbox": agent_dir / "inbox",
@@ -228,22 +229,70 @@ class SimAgentBridge:
         Falls wait_for_result=True, blockiert die Methode und wartet auf result_<taskId>.json in outbox/.
         """
         target = target_agent.lower().lstrip("@")
-        paths = self.get_agent_paths(target)
-        paths["inbox"].mkdir(parents=True, exist_ok=True)
-        paths["outbox"].mkdir(parents=True, exist_ok=True)
-
         now = datetime.now(timezone.utc)
         task_id = f"task_{now.strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
-        effective_action = "ProcessPrompt" if prompt else action
+        effective_action = ("note" if target == "rick" else "ProcessPrompt") if prompt else action
         task_payload = {
             "task_id": task_id,
+            "target": target,
             "target_agent": target,
+            "sender": source,
             "source": source,
             "action": effective_action,
             "prompt": prompt,
             "parameters": params or {},
             "created_at": now.isoformat()
         }
+
+        if target == "rick":
+            import tempfile
+            payload_str = json.dumps(task_payload, indent=2, ensure_ascii=False)
+            with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False) as tf:
+                tf.write(payload_str)
+                tmp_path = Path(tf.name)
+            try:
+                scp_res = subprocess.run(
+                    ["scp", "-q", str(tmp_path), f"{self.strikerpi_host}:/opt/rick-agent/inbox/{task_id}.json"],
+                    capture_output=True, text=True, timeout=10
+                )
+            finally:
+                tmp_path.unlink(missing_ok=True)
+            if scp_res.returncode != 0:
+                return {
+                    "task_id": task_id,
+                    "target_agent": "rick",
+                    "action": effective_action,
+                    "status": "Failed",
+                    "error": scp_res.stderr.strip() or f"SCP exit {scp_res.returncode}",
+                }
+            response = {
+                "task_id": task_id,
+                "target_agent": "rick",
+                "action": effective_action,
+                "status": "Submitted",
+                "task_file": f"{self.strikerpi_host}:/opt/rick-agent/inbox/{task_id}.json",
+            }
+            if not wait_for_result:
+                return response
+            start_time = time.time()
+            while time.time() - start_time < timeout_seconds:
+                chk = subprocess.run(
+                    ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", self.strikerpi_host, f"cat /opt/rick-agent/outbox/result_{task_id}.json 2>/dev/null"],
+                    capture_output=True, text=True, timeout=6
+                )
+                if chk.returncode == 0 and chk.stdout.strip():
+                    try:
+                        return json.loads(chk.stdout)
+                    except json.JSONDecodeError:
+                        pass
+                time.sleep(1.0)
+            response["status"] = "Timeout"
+            response["error"] = f"Keine Rückmeldung nach {timeout_seconds}s auf {self.strikerpi_host}"
+            return response
+
+        paths = self.get_agent_paths(target)
+        paths["inbox"].mkdir(parents=True, exist_ok=True)
+        paths["outbox"].mkdir(parents=True, exist_ok=True)
 
         task_file = paths["inbox"] / f"{task_id}.json"
         task_file.write_text(json.dumps(task_payload, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -282,6 +331,107 @@ class SimAgentBridge:
         response["status"] = "Timeout"
         response["error"] = f"Keine Rückmeldung nach {timeout_seconds}s in {result_file}"
         return response
+
+    def invoke_agent_ssh(
+        self,
+        target_agent: str,
+        prompt: str = "",
+        action: str = "",
+        target: str = "",
+        timeout_seconds: int = 30,
+    ) -> Dict[str, Any]:
+        """Steuert oder promptet einen Agenten (inkl. general) direkt per SSH ueber Invoke-SimAgentSsh.ps1."""
+        script = WORKSPACE_ROOT / "labs" / "Invoke-SimAgentSsh.ps1"
+        if not script.exists():
+            return {"status": "Failed", "error": f"Skript nicht gefunden: {script}"}
+
+        cmd = [
+            "powershell.exe",
+            "-NoProfile",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(script),
+            "-Agent",
+            target_agent.lower().lstrip("@"),
+            "-TimeoutSeconds",
+            str(timeout_seconds),
+        ]
+        if prompt:
+            cmd.extend(["-Prompt", prompt])
+        if action:
+            cmd.extend(["-Action", action])
+        if target:
+            cmd.extend(["-Target", target])
+
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_seconds + 15)
+            return {
+                "agent": target_agent.lower().lstrip("@"),
+                "status": "Success" if proc.returncode == 0 else "Failed",
+                "exit_code": proc.returncode,
+                "output": proc.stdout.strip(),
+                "error": proc.stderr.strip(),
+            }
+        except Exception as exc:
+            return {"agent": target_agent, "status": "Failed", "error": str(exc)}
+
+    def verify_task_execution(self, target_agent: str, task_id: str) -> Dict[str, Any]:
+        """Prueft aktiv, ob ein Auftrag ausgefuehrt (outbox) UND geloggt (logs/audit) wurde."""
+        ag = target_agent.lower().lstrip("@")
+        if ag == "rick":
+            cmd = [
+                "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=4", self.strikerpi_host,
+                f"test -f /opt/rick-agent/outbox/result_{task_id}.json && echo OUTBOX_OK; "
+                f"(test -f /opt/rick-agent/logs/task_{task_id}.log || grep -q '{task_id}' /opt/rick-agent/logs/rick-worker.log 2>/dev/null) && echo LOG_OK"
+            ]
+            try:
+                res = subprocess.run(cmd, capture_output=True, text=True, timeout=8)
+                has_out = "OUTBOX_OK" in res.stdout
+                has_log = "LOG_OK" in res.stdout
+                state = "VERIFIED" if (has_out and has_log) else ("EXEC_ONLY_LOG_MISSING" if has_out else "PENDING_OR_MISSING")
+                return {"agent": ag, "task_id": task_id, "verification": state, "outbox_ok": has_out, "log_ok": has_log}
+            except Exception as exc:
+                return {"agent": ag, "task_id": task_id, "verification": "ERROR", "error": str(exc)}
+
+        paths = self.get_agent_paths(ag)
+        out_file = paths["outbox"] / f"result_{task_id}.json"
+        has_out = out_file.exists()
+        task_log = paths["logs"] / f"task_{task_id}.log"
+        has_log = task_log.exists()
+        if not has_log and paths["logs"].exists():
+            date_tag = datetime.now().strftime("%Y%m%d")
+            for cand in [paths["logs"] / f"{ag}_{date_tag}.log", paths["logs"] / f"ssh_audit_{date_tag}.jsonl"]:
+                if cand.exists() and task_id in cand.read_text(encoding="utf-8", errors="ignore"):
+                    has_log = True
+                    break
+
+        exec_status = None
+        if has_out:
+            try:
+                exec_status = json.loads(out_file.read_text(encoding="utf-8", errors="ignore")).get("status")
+            except Exception:
+                exec_status = "InvalidJson"
+
+        if has_out and has_log and exec_status not in ("Failed", "InvalidJson", "error"):
+            state = "VERIFIED"
+        elif has_out and not has_log:
+            state = "EXEC_ONLY_LOG_MISSING"
+        elif not has_out and has_log:
+            state = "LOG_ONLY_EXEC_MISSING"
+        elif exec_status in ("Failed", "InvalidJson", "error"):
+            state = "FAILED"
+        else:
+            state = "PENDING_OR_MISSING"
+
+        return {
+            "agent": ag,
+            "task_id": task_id,
+            "verification": state,
+            "exec_status": exec_status,
+            "outbox_ok": has_out,
+            "log_ok": has_log,
+        }
 
 
 if __name__ == "__main__":

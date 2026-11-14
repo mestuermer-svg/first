@@ -48,7 +48,9 @@ param(
 )
 
 $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
-$PolicyFile = Join-Path $AgentsRoot "general\approval_policy.json"
+$PolicyFile = Join-Path $AgentsRoot "general-SIM\approval_policy.json"
+$AuditHelper = Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) "assetto-corsa-content\ac-sandbox\shared\scripts\ssh_audit_helper.ps1"
+if (Test-Path $AuditHelper) { . $AuditHelper }
 
 if ($SetApprovalMode -ne "") {
     $mode = $SetApprovalMode.ToUpper()
@@ -81,8 +83,9 @@ if ($QueryStatus) {
     Write-Host ""
     $agents = @("general", "light", "rig", "dark", "sarah")
     foreach ($ag in $agents) {
-        $inbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$ag\inbox" }
-        $outbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$ag\outbox" }
+        $agDir = if ($ag -eq "general") { "general-SIM" } else { $ag }
+        $inbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$agDir\inbox" }
+        $outbox = if ($ag -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$agDir\outbox" }
         $connected = Test-Path $inbox
         $queueCount = 0
         if ($connected) {
@@ -122,6 +125,9 @@ if ($TargetAgent -eq "rick") {
     }
     $tmpJson = Join-Path $env:TEMP "$taskId.json"
     $taskData | ConvertTo-Json -Depth 5 | Set-Content -Path $tmpJson -Encoding UTF8
+    if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
+        [void](Write-AgentSshAudit -AgentName "rick" -Action "SendSimAgentTask:$($taskData.action)" -Status "Dispatched" -Details ("Prompt='$Prompt'") -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
+    }
     scp -q $tmpJson "${StrikerPiHost}:/opt/rick-agent/inbox/${taskId}.json"
     Remove-Item $tmpJson -Force -ErrorAction SilentlyContinue
     Write-Host "`n[+] Task übermittelt: $taskId an Agent '@rick' via SSH ($StrikerPiHost)" -ForegroundColor Green
@@ -130,6 +136,9 @@ if ($TargetAgent -eq "rick") {
     while ($sw.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
         $res = ssh -o BatchMode=yes $StrikerPiHost "cat /opt/rick-agent/outbox/result_${taskId}.json 2>/dev/null" 2>$null
         if ($res) {
+            if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
+                [void](Write-AgentSshAudit -AgentName "rick" -Action "SendSimAgentTask:Result" -Status "Success" -Details $res -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
+            }
             Write-Host "`n$res`n" -ForegroundColor Cyan
             return
         }
@@ -138,9 +147,10 @@ if ($TargetAgent -eq "rick") {
     Write-Warning "[-] Timeout nach ${TimeoutSeconds}s fuer Rick Task $taskId."
     return
 }
-$TargetInbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$TargetAgent\inbox" }
-$TargetOutbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$TargetAgent\outbox" }
-$TargetLogs = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\logs" } else { Join-Path $AgentsRoot "$TargetAgent\logs" }
+$TargetDir = if ($TargetAgent -eq "general") { "general-SIM" } else { $TargetAgent }
+$TargetInbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\inbox" } else { Join-Path $AgentsRoot "$TargetDir\inbox" }
+$TargetOutbox = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\outbox" } else { Join-Path $AgentsRoot "$TargetDir\outbox" }
+$TargetLogs = if ($TargetAgent -eq "sarah") { "\\$SimRacerHost\ac-sandbox\shared\telemetry\logs" } else { Join-Path $AgentsRoot "$TargetDir\logs" }
 
 if (-not (Test-Path $TargetInbox)) {
     try {
@@ -160,7 +170,9 @@ $taskId = "task_${timestamp}_${randSuffix}"
 
 $taskData = [ordered]@{
     task_id      = $taskId
+    target       = $TargetAgent
     target_agent = $TargetAgent
+    sender       = "git-labor-powershell"
     source       = "git-labor-powershell"
     action       = if ($Prompt -ne "") { "ProcessPrompt" } else { $Action }
     prompt       = $Prompt
@@ -170,6 +182,9 @@ $taskData = [ordered]@{
 
 $taskFile = Join-Path $TargetInbox "$taskId.json"
 $taskData | ConvertTo-Json -Depth 5 | Set-Content -Path $taskFile -Encoding UTF8
+if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
+    [void](Write-AgentSshAudit -AgentName $TargetAgent -Action "SendSimAgentTask:$($taskData.action)" -Status "Dispatched" -Details ("Prompt='$Prompt'") -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
+}
 
 Write-Host "`n[+] Task übermittelt: $taskId an Agent '@$TargetAgent' ($Action)" -ForegroundColor Green
 Write-Host "    Datei: $taskFile" -ForegroundColor Gray

@@ -237,9 +237,9 @@ Um sicherzustellen, dass die SimRacer-Agenten (`@rig` und `@light` auf `192.168.
 sequenceDiagram
     autonumber
     participant S as @rig / @light (SimRacer)
-    participant GI as general/inbox/
+    participant GI as general-SIM/inbox/
     participant G as @general Terminal (Laptop)
-    participant GO as general/outbox/ (Lokal & SMB)
+    participant GO as general-SIM/outbox/ (Lokal & SMB)
 
     alt Auftrag kommt NICHT als General-Order (kein approved_by: GeneralAgent_Laptop)
         S->>S: Parkt Payload in agents/{rig|light}/approvals/req_*.json
@@ -257,9 +257,9 @@ sequenceDiagram
 #### 1. Befehle für Rückfragen & Freigaben in den Terminals:
 | Terminal | Befehl / Eingabe | Wirkung |
 | :--- | :--- | :--- |
-| **`@rig` / `@light`** | `@general <Frage>`, `frag general <Text>`, `freigabe <Vorhaben>` | Sendet direkt ein `ApprovalRequest` an `agents/general/inbox/` und wartet auf Rückmeldung. |
+| **`@rig` / `@light`** | `@general <Frage>`, `frag general <Text>`, `freigabe <Vorhaben>` | Sendet direkt ein `ApprovalRequest` an `agents/general-SIM/inbox/` und wartet auf Rückmeldung. |
 | **`@rig` / `@light`** | Jeder andere Task (außer `status`/`help` und direkten General-Orders) | Wird automatisch in `agents/{rig\|light}/approvals/` geparkt (`Gen-Wait: N`) und wartet auf `Approved`. |
-| **`@general`** | `ok [Nr/ID] [Hinweis]` / `ja` / `approve` / `freigeben` | Erteilt die Freigabe (`status: "Approved"`, `approved: true`) und schreibt in die lokale und Remote-Outbox (`\\192.168.178.68\ac-sandbox\shared\agents\general\outbox`). |
+| **`@general`** | `ok [Nr/ID] [Hinweis]` / `ja` / `approve` / `freigeben` | Erteilt die Freigabe (`status: "Approved"`, `approved: true`) und schreibt in die lokale und Remote-Outbox (`\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\outbox`). |
 | **`@general`** | `nein [Nr/ID] [Grund]` / `reject` / `ablehnen` | Lehnt die Anfrage ab (`status: "Rejected"`, `approved: false`). |
 | **`@general`** | `reply [Nr/ID] <Antwort>` / `antwort <Text>` | Sendet eine freie Text-Antwort inklusive Freigabe zurück. |
 
@@ -271,8 +271,8 @@ sequenceDiagram
 Alle vier aktiven PowerShell-Agenten-Terminals protokollieren ihre Kommunikation vollständig auf Disk und verlinken die Dateien direkt in der Terminal-Ansicht:
 
 1. **Zentrale Markdown- &amp; JSONL-Historie (General Terminal):**
-   * **[AGENT_KOMMUNIKATION_HISTORIE.md](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md):** Vollständige, ungekürzte Übergaben, Antworten und Rückfragen in eingeklappten `<details>`-Blöcken mit Zeitstempel, Quelle (`source_file`) und Direktlinks zu den Tages-Logfiles.
-   * **`agent_comm_history.jsonl` &amp; `agent_comm_YYYYMMDD.log`:** Maschinenlesbare Historie sowie rohes Gesamt-Kommunikationslog unter `ac-sandbox/shared/agents/general/logs/`.
+   * **[AGENT_KOMMUNIKATION_HISTORIE.md](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md):** Vollständige, ungekürzte Übergaben, Antworten und Rückfragen in eingeklappten `<details>`-Blöcken mit Zeitstempel, Quelle (`source_file`) und Direktlinks zu den Tages-Logfiles.
+   * **`agent_comm_history.jsonl` &amp; `agent_comm_YYYYMMDD.log`:** Maschinenlesbare Historie sowie rohes Gesamt-Kommunikationslog unter `ac-sandbox/shared/agents/general-SIM/logs/`.
 2. **Vollständige Agenten-Einzellogs (`[COMM]`):**
    * Jedes Terminal (`general`, `rig`, `light`, `dark`) schreibt eigene Tages-Logs (`<agent>_YYYYMMDD.log`) inklusive `[COMM][ANTWORT]`- und `[COMM][RUECKFRAGE]`-Einträgen.
 3. **Klickbare OSC-8 Terminal-Hyperlinks &amp; Kurzbefehle:**
@@ -290,11 +290,11 @@ Damit sich **lokale Host-Terminals** (z. B. direkt am SimRacer-Desktop oder in d
 
 | Agent | Host-Lokal (auf dem Zielgerät) | SSH-Aufruf von `VanstrikeCyborg` | Schutzmechanismus |
 | :--- | :--- | :--- | :--- |
-| **`@general`** | `start_general_terminal.ps1` (lokal auf `VanstrikeCyborg`) | *(Master – läuft direkt lokal)* | Singleton beendet nur doppelte lokale Instanzen |
+| **`@general` (`General Sim`)** | `launch_general_host_terminal.ps1` (`AgentTerminal_General` auf `VanstrikeCyborg`) | `connect_general_terminal.ps1` via `ssh general-sim` (`-ClientMode`) oder `Invoke-SimAgentSsh.ps1 -Agent general` | `Test-HostGeneralWorkerActive`: SSH-Client killt keinen Host-Worker; Audit-Log mit Caller-Kennung |
 | **`@rig`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_rig_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostRigWorkerActive`: Client-Mode killt keinen Host-Worker und verarbeitet nur bei Bedarf |
 | **`@light`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_light_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostLightWorkerActive`: Client-Mode arbeitet als sicherer Monitor + Prompt-Sender |
 | **`@dark`** | `launch_guest_terminals.ps1` in `ac-win11-sandbox` (`AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_dark_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-GuestDarkWorkerActive`: kein Kill laufender In-Guest-Konsolen |
-| **`@sarah`** | `sarah-pitwall-telemetry.service` (`systemd`) + lokales Terminal | `connect_sarah_terminal.ps1` (`SSH-CLIENT`-Modus) | `telemetry` prüft aktiven UDP-9996-Dienst, kein Doppel-Bind |
+| **`@sarah`** | `sarah-agent.service` + `sarah-pitwall-telemetry.service` (`systemd --user`) + lokales Terminal | `connect_sarah_terminal.ps1` (`SSH-CLIENT`-Modus) &amp; `launch_pitwall.sh` (via `wake_archibald.ps1` / Omarchy App `Pitwall`) | `telemetry` prüft aktiven UDP-9996-Dienst; `launch_pitwall.sh` weckt DPMS und fokussiert Pitwall auf Workspace 1 |
 | **`@rick`** | `rick-agent.service` + `telemetry-relay.service` (`systemd`) | `connect_rick_terminal.ps1` (`SSH-CLIENT`-Modus) | `start_rick_terminal.sh` greift niemals den `systemd`-Worker an |
 
 #### Zentraler Terminal-Launcher im Git-Labor (`labs/Agent-Terminals.ps1`)
@@ -344,7 +344,7 @@ Der 6. Agent **`@rick`** (`.github/agents/rick.agent.md`) betreut den **Raspberr
 <summary>1.12 Freigabe-Policy <code>AUTO</code>/<code>MANUAL</code> &amp; MQTT-Anbindung (Stand 11.11.2026)</summary>
 
 #### 1. Freigabe-Policy des General-Sim-Gates
-Das Freigabe-Gate aus 1.8 ist über die Datei `\\192.168.178.68\ac-sandbox\shared\agents\general\approval_policy.json` umschaltbar:
+Das Freigabe-Gate aus 1.8 ist über die Datei `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\approval_policy.json` umschaltbar:
 
 | Modus | Wirkung |
 | :--- | :--- |
@@ -409,14 +409,14 @@ bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zu
 * [PowerShell Handshake Dispatcher (`Send-SimAgentTask.ps1`)](../../labs/Send-SimAgentTask.ps1)
 
 ### Agent-Definitionen, Skills &amp; Regeln (Direktlinks)
-* **Custom Agents (`.github/agents/`):** [`general.agent.md`](../../.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md) · [`rick.agent.md`](../../.github/agents/rick.agent.md)
+* **Custom Agents:** [`General Cyborg` (Global)](../../../.copilot/agents/general.agent.md) · [`General Sim` (AC-Workspace)](../../../assetto-corsa-content/.github/agents/general.agent.md) · [`rig.agent.md`](../../.github/agents/rig.agent.md) · [`light.agent.md`](../../.github/agents/light.agent.md) · [`dark.agent.md`](../../.github/agents/dark.agent.md) · [`sarah.agent.md`](../../.github/agents/sarah.agent.md) · [`rick.agent.md`](../../.github/agents/rick.agent.md)
 * **Regeln &amp; Instructions:** [`AGENTS.md`](../../AGENTS.md) · [`gemini-api.instructions.md`](../../.github/instructions/gemini-api.instructions.md) · [`vscode-experte.instructions.md`](../../../.copilot/instructions/vscode-experte.instructions.md) · [`01_agent-stilfibel-und-didaktik-ruler.md`](./01_agent-stilfibel-und-didaktik-ruler.md)
 * **Skills (`SKILL.md`):** [`live-transfer-status-monitor` (Workspace)](../../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`live-transfer-status-monitor` (Gemini)](../../.gemini/skills/live-transfer-status-monitor/SKILL.md) · [`managing-python-dependencies`](../../../.copilot/skills/managing-python-dependencies/SKILL.md)
 
 ### Terminal-Skripte, VS Code Tasks &amp; Kommunikations-Historie
 * **SSH-Terminal-Launcher &amp; StrikerPi Hub:** [`Agent-Terminals.ps1`](../../labs/Agent-Terminals.ps1) · [`connect_rick_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/scripts/connect_rick_terminal.ps1) · [`strikerpi-hub/README.md`](../../../strikerpi-hub/README.md)
-* **Kommunikations-Historie (Markdown):** [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
-* **Terminal-Starter:** [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1)
+* **Kommunikations-Historie (Markdown):** [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md)
+* **Terminal-Starter:** [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1)
 * **VS Code Tasks:** [`assetto-corsa-content/.vscode/tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json)
 
 </details>

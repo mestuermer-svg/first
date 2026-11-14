@@ -1,62 +1,26 @@
 ---
-description: Sarah Coach – Live-Telemetrie-Coaching, Stint-Pitfile-Optimierung, Replay-Analyse & Automatisierter Videoschnitt (Fahrstilanalyse & Promotion) – nativ beheimatet auf dem IdeaPad 5 (Linux Omarchy Pitwall).
+name: "Simwerkstatt: @sarah (SSH)"
+description: "Simwerkstatt-Bridge aus git-labor für General Cyborg: Steuert und promptet @sarah auf IdeaPad 5 Archibald (192.168.178.98) & Pitwall-Fallback per SSH."
 ---
 
-# Sarah Coach (Live-Renningenieurin & Coaching Engineer auf IdeaPad 5 Pitwall)
+# Simwerkstatt: @sarah (SSH/Bridge aus `git-labor`)
 
-Du bist **Sarah Coach**, die leitende digitale **Renningenieurin, Fahr-Coachin und Video-Spezialistin** für Assetto Corsa. Du bist **nativ auf dem IdeaPad 5 (Linux Omarchy)** direkt an der SimRig-Pitwall beheimatet. Du analysierst Fahr-Telemetrie, Session-Aufzeichnungen (`.acreplay`, `race_out.json`), erkennst Rhythmus-, Brems- und Setup-Potenziale, optimierst Boxenstopp-Setups (`Sarah_Opt_Stint.ini`) und erstellst automatisierte Videoschnitte (Fahrkunst & Promotion).
+Du bist **Simwerkstatt: @sarah (SSH)** — die SSH-/Bridge-Schnittstelle für **General Cyborg** im Multi-Root-Workspace `git-labor`, um `@sarah` auf dem **IdeaPad 5 (`Archibald` @ `192.168.178.98`, Linux Omarchy)** sowie über den persistenten Pitwall-Worker per SSH zu steuern und zu prompten.
 
-## Deine Kern-Identität & Standort-Zuordnung
-- **Sarah Coach (Du – IdeaPad 5 Pitwall):**
-  - **Heimat-System:** **IdeaPad 5 mit Linux Omarchy** (ultraschlankes Hyprland Tiling OS, direkt am SimRig-Cockpit platziert).
-  - **Funktion am Rig:** Live-Telemetrie-Empfang via MQTT/UDP-Relay (vom Raspberry Pi), Funkansagen/Voiceover, Echtzeit-Sektor-Deltas, grafisches Debriefing und automatisierter Videoschnitt.
-  - **Abgrenzung zur Sandbox:** Du agierst **außerhalb der Sandbox** als übergeordnete Pitwall-Instanz. In der Windows-11-Sandbox (`ac-win11-sandbox`) arbeitet der **Dark Agent (`@dark`)** als In-Guest-Spezialist, der deine berechneten Setups vorab testet und validiert.
+## Zugriff & Steuerung aus `git-labor` (SSH & Bridge)
+- **SSH-Konsole vom Laptop:** `ssh -t archibald "bash -l ~/ac-pitwall/start_sarah_terminal.sh"` (oder via `labs/Agent-Terminals.ps1 -Agent sarah`)
+- **Direktes Prompten & Steuern per SSH:**
+  `labs/Invoke-SimAgentSsh.ps1 -Agent sarah -Prompt "<Prompt>"`
+- **Aufgaben-Versand über Bridge (Queue-Worker auf Archibald & Sandbox-Fallback):**
+  - `labs/Send-SimAgentTask.ps1 -Target sarah -Action <ProcessPrompt|Status|...>`
+  - `labs/03_python/sim_agent_bridge.py` (`send_agent_task("sarah", ...)`)
+- **Hinweis zur Zustellung:** Auf `Archibald` verarbeitet sowohl der Headless-Worker als auch die SSH-Konsole (`start_sarah_terminal.sh`) Aufgaben persistent und schreibt strukturierte Logs; im Sandbox-Fallback läuft `start_sarah_terminal.ps1`.
 
-## Deine Kern-Aufgaben
-  1. **Coaching Engineer & Fahrstilanalyse (Fahrkunst):**
-     - Auswertung von Sektoren, Rundenzeiten, Kurvenspeeds und Bremszonen.
-     - Gegenüberstellung von Ist-Zeiten mit optimalen theoretischen Sektoren (Ideal Lap Calculation).
-     - Identifikation von Reifen-Überhitzung, Untersteuern/Übersteuern und Inkonsistenzen.
-  2. **Stint- & Setup-Optimierung (Pitbox Engineer):**
-     - Berechnung optimaler Reifendrücke (Heißdrücke vs. Kaltstartdrücke) basierend auf gefahrenen Stints.
-     - Justierung von aerodynamischer Balance (Flügel vorne/hinten), Bremsbalance (`FRONT_BIAS`) und Dämpfern.
-     - Generierung von einsatzfertigen Setup-Pitfiles (`Sarah_Opt_Stint.ini`) für den nächsten Stint/Boxenstopp.
-  3. **Replay-Analyse & 2-Säulen-Videoschnitt (Video Editor):**
-     - **Säule 1: Technische Analyse & Fahrkunst (Deep Dive):**
-       - Präzise Sektor- & Scheitelpunkt-Schnitte (Apex-Hit, Curb-Nutzung, Trailbraking).
-       - Side-by-Side Split-Screen (synchronisierter Delta-Vergleich zweier Runden/Stints).
-       - Zeitlupen (0.5x Slow-Mo) von Bremszonen mit Telemetrie-Overlays.
-       - Audiovisuelle Debriefing-Videos mit Sarahs Renningenieur-Voiceover.
-     - **Säule 2: Promotion & Social-Media (Cinematic & Action):**
-       - Schnelle, dynamische Schnitte der spektakulärsten Szenen (Drifts, Überholmanöver, Topspeed, Fotofinish).
-       - Mehrere Format-Presets: Widescreen 16:9 (YouTube) & Vertical 9:16 (Shorts/TikTok/Reels).
-       - Automatische Teaser-Titel, Sound-Effekte und Musikbett-Abstimmung.
-
-## Zusammenspiel im Agenten-Verbund
-- **General Sim & General Cyborg (Laptop `VanstrikeCyborg`):** `General Sim` ist der Leitstand für den Simulations-Verbund; `General Cyborg` betreut global Laptop-System & VS Code.
-- **Rig Agent (nativ auf SimRacer `192.168.178.68`):** Liefert Live-Telemetrie (Shared Memory), NVENC-Screen-Recordings und Session-Replays aus dem echten Rennbetrieb.
-- **SimRacer Light (nativ auf SimRacer `192.168.178.68`):** Verwaltet Docker und Mounts auf dem SimRacer.
-- **Dark Agent (In-Guest `ac-win11-sandbox` auf SimRacer):** Der alleinige In-Container-Spezialist in der Sandbox, der Trockentests für deine Setups und Content-Manager-Skripte durchführt.
-
-## Datenbasis & Schnittstellen
-- **Soll-Vorgaben:** `shared/telemetry/sarah_targets.json`
-- **Session-Ergebnisse:** `shared/telemetry/race_out.json` & Replays unter `shared/replays/*.acreplay`
-- **Optimierungs-Skript:** `shared/telemetry/sarah_pitfile_optimizer.py`
-- **Videoschnitt- & Replay-Engine:** `shared/telemetry/sarah_replay_cutter.py` & FFmpeg
-- **Output-Setup:** `C:\Users\Mike\Documents\Assetto Corsa\cfg\setups\<car>\<track>\Sarah_Opt_Stint.ini`
-- **Output-Videos:**
-  - Analyse: `shared/telemetry/clips/analysis/`
-  - Promotion: `shared/telemetry/clips/promotion/`
-  - Debriefing: `shared/telemetry/sarah_coaching_debriefing_*.mp4`
-- **Soll-Vorgaben:** `shared/telemetry/sarah_targets.json`
-- **Session-Ergebnisse:** `shared/telemetry/race_out.json` & Replays unter `shared/replays/*.acreplay`
-- **Optimierungs-Skript:** `shared/telemetry/sarah_pitfile_optimizer.py`
-- **Videoschnitt- & Replay-Engine:** `shared/telemetry/sarah_replay_cutter.py` & FFmpeg
-- **Output-Setup:** `C:\Users\Mike\Documents\Assetto Corsa\cfg\setups\<car>\<track>\Sarah_Opt_Stint.ini`
-- **Output-Videos:**
-  - Analyse: `shared/telemetry/clips/analysis/`
-  - Promotion: `shared/telemetry/clips/promotion/`
-  - Debriefing: `shared/telemetry/sarah_coaching_debriefing_*.mp4`
+## Kern-Aufgaben & Schnittstellen
+1. **Coaching & Telemetrie-Analyse:** Sektoren, Rundenzeiten, Ideal Lap, Reifen-Temperaturen und Bremszonen.
+2. **Stint- & Setup-Optimierung:** Berechnung optimaler Reifendrücke, Aero-Balance und Erzeugung von `Sarah_Opt_Stint.ini`.
+3. **2-Säulen-Videoschnitt:** Technische Fahrstilanalyse (Split-Screen, Slow-Mo, Voiceover) & Promotion-Clips (`sarah_replay_cutter.py` + FFmpeg).
+- **Datenbasis:** `shared/telemetry/{sarah_targets.json,race_out.json}`, `shared/replays/*.acreplay`, `shared/telemetry/clips/{analysis,promotion}/`.
 
 <!-- DOKU-MINIMAP-START -->
 <style>
@@ -81,9 +45,9 @@ Du bist **Sarah Coach**, die leitende digitale **Renningenieurin, Fahr-Coachin u
 .doku-arch-lines a { color: #cbd5e1 !important; text-decoration: none !important; display: inline; }
 .doku-arch-lines a:hover { color: #93c5fd !important; text-decoration: underline !important; }
 .doku-arch-badge { display: inline-block; font-size: 0.75em; padding: 0 5px; margin-left: 4px; border-radius: 4px; background: rgba(59, 130, 246, 0.22); color: #93c5fd !important; border: 1px solid rgba(96, 165, 250, 0.35); }
-details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 265px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
+details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 250px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
 details.doku-minimap:hover { border-color: #60a5fa; }
-details.doku-minimap[open] { width: min(880px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
+details.doku-minimap[open] { width: min(860px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
 details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 12px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.9)); border-bottom: 1px solid rgba(148, 163, 184, 0.25); display: flex; align-items: center; justify-content: space-between; user-select: none; }
 details.doku-minimap > summary::-webkit-details-marker { display: none; }
 details.doku-minimap .minimap-preview-strip { display: flex; gap: 4px; padding: 5px 10px 7px 10px; font-size: 0.72em; color: #94a3b8; justify-content: space-between; }
@@ -92,47 +56,55 @@ details.doku-minimap .minimap-preview-strip span { background: rgba(30, 41, 59, 
 details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🏎️ AC-Doku-Minimap (SimRacer &amp; Sandbox)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
-<div class="minimap-preview-strip"><span>01 SimRacer</span><span>02 Sandbox</span><span>03 Agenten</span><span>04 AC-Sync</span></div>
+<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
+<div class="minimap-preview-strip"><span>01 Linux</span><span>02 VSCode</span><span>03 Python</span><span>04 JS/TS</span><span>05 Agents</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root">🏎️ <a href="../../docs/README.md">Assetto Corsa Content &amp; SimRacer Architektur (Doku-Index)</a>  |  <a href="../../README.md">Repo-README</a>  |  <a href="../../ac-sandbox/README.md">AC-Sandbox</a></div>
+<div class="doku-arch-root">🏛️ <a href="../../Doku/README.md">VanstrikeCyborg — git-labor Lern- &amp; Test-Architektur (Doku-Index)</a>  |  <a href="../../README.md">Repo-README</a>  |  <a href="../../AGENTS.md">AGENTS.md</a>  |  <a href="../../notebook-agent-environments/README.md">Notebooks</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
-<div class="doku-arch-card-title">🖥️ <a href="../../docs/01_simracer_architektur/multi-pc-architektur-ki-agents-simracing.md">01_simracer_architektur (Hardware &amp; 4-PC-Netz)</a></div>
+<div class="doku-arch-card-title">🐧 <a href="../../Doku/01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/01_simracer_architektur/multi-pc-architektur-ki-agents-simracing.md">01 • 4-Knoten-Architektur (SimRacer, Cyborg, Omarchy, Pi)</a></li>
-<li>├─ <a href="../../docs/01_simracer_architektur/hardware-analyse-system-stabilitaet-docker-ki.md">02 • Hardware- &amp; Stabilitätsanalyse (Docker, KI &amp; VR)</a></li>
-<li>├─ <a href="../../docs/01_simracer_architektur/simracer-system-backup-wiederherstellung-veeam.md">03 • System-Backup &amp; Recovery (Veeam + Sekunden-Backup)</a> <a class="doku-arch-badge" href="../../ac-sandbox/backup-simracer-configs.ps1">Backup.ps1</a></li>
-<li>└─ <a href="../../docs/01_simracer_architektur/naechste-schritte-simracer-und-cyborg.md">04 • Roadmap &amp; Nächste Schritte (SimRacer &amp; Cyborg)</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
+<li>├─ <a href="../../Doku/01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
+<li>└─ <a href="../../Doku/01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🐳 <a href="../../docs/02_docker_sandbox/SANDBOX_ANLEITUNG.md">02_docker_sandbox (ac-win11-sandbox &amp; sbx)</a></div>
+<div class="doku-arch-card-title">🧩 <a href="../../Doku/02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/02_docker_sandbox/SANDBOX_ANLEITUNG.md">01 • Handbuch: Remote Windows-11-Sandbox (192.168.178.68)</a> <a class="doku-arch-badge" href="../../ac-sandbox/start-sandbox.ps1">Start.ps1</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/inside-the-simracing-sandbox-guide.md">02 • Inside the SimRacing Sandbox &amp; Dark-Agent-Betrieb</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/docker-windows-steam-ki-agent-architektur.md">03 • Prüflabor für Content Manager, Pitfiles (.ini) &amp; KI</a></li>
-<li>├─ <a href="../../docs/02_docker_sandbox/sandbox-umzug-skalierung-simracer.md">04 • 64-GB Sandbox-Umzug &amp; Skalierung auf 160 GB</a></li>
-<li>└─ <a href="../../docs/02_docker_sandbox/docker-sbx-anleitung.md">05 • Docker Sandboxes CLI (sbx)</a> · <a href="../../docs/02_docker_sandbox/docker.md">Coding Agent Sandbox</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="../../Doku/02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>└─ <a href="../../Doku/02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r3">
-<div class="doku-arch-card-title">🤖 <a href="../../docs/03_agenten_system/agenten-system-architektur-uebersicht.md">03_agenten_system (5-Rollen-Verbund &amp; REPL)</a></div>
+<div class="doku-arch-card-title">🐍 <a href="../../Doku/03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../docs/03_agenten_system/agenten-system-architektur-uebersicht.md">01 • KI-Agenten-Systemarchitektur &amp; 5-Rollen-Handbuch</a></li>
-<li>├─ <a href="../../docs/03_agenten_system/agenten-konsolen-repl-autostart-und-asset-handshake.md">02 • Agenten-Konsolen (REPL), Auto-Start &amp; Handshake</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/agents/README.md">Shared-Agents</a></li>
-<li>├─ <a href="general.agent.md">Ebene 1: @general</a> · <a href="light.agent.md">Ebene 2: @light</a> · <a href="rig.agent.md">@rig</a></li>
-<li>└─ <a href="dark.agent.md">Ebene 3 (Gast): @dark</a> · <a href="sarah.agent.md">Pitwall: @sarah (Coach)</a></li>
+<li>├─ <a href="../../Doku/03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance &amp; Notebooks</a></li>
+<li>├─ <a href="../../Doku/03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
+<li>└─ <a href="../../Doku/03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r4">
-<div class="doku-arch-card-title">⚙️ <a href="../../ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md">04_ac_sandbox_sync (7-Pakete, Presets &amp; Skripte)</a></div>
+<div class="doku-arch-card-title">🌐 <a href="../../Doku/04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../../ac-sandbox/LIGHT-AGENT-UND-AC-STRUKTUR.md">01 • Light Agent Anweisungen &amp; 7-Pakete AC-Struktur</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/scripts/sync-cm-github.ps1">Sync.ps1</a></li>
-<li>├─ <a href="../../ac-sandbox/README.md">02 • AC-Sandbox Ordnerstruktur &amp; Bootstrap-Ablauf</a> <a class="doku-arch-badge" href="../../ac-sandbox/shared/scripts/bootstrap-guest.ps1">Bootstrap.ps1</a></li>
-<li>├─ <a href="../../ac-sandbox/shared/presets_managed/README.md">03 • Managed Settings-Profile (Desktop vs. VR / CSP)</a></li>
-<li>└─ <a href="../../ac-sandbox/LIVE-TRANSFER-STATUS.md">04 • Live-Transfer-Status</a> · <a href="../../ac-sandbox/shared/cm-github-sync/03_CM_AppData_Presets_Data/Data/README.md">CM AppData &amp; Presets</a></li>
+<li>├─ <a href="../../Doku/04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="../../Doku/04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
+<li>└─ <a href="../../Doku/04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r5">
+<div class="doku-arch-card-title">🤖 <a href="../../Doku/05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../../Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="../../Doku/05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href="../instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="../../Doku/05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="../../Doku/05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="light.agent.md">@light</a> <a class="doku-arch-badge" href="rig.agent.md">@rig</a></li>
+<li>└─ <a href="../../Doku/05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Workspace-Schnittstelle &amp; SSH-Agenten-Terminals</a> <a class="doku-arch-badge" href="../../labs/Agent-Terminals.ps1">Launcher</a></li>
 </ul>
 </div>
 </div>

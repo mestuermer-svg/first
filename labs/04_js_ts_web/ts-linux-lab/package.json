@@ -1,0 +1,9 @@
+{
+  "name": "ts-linux-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Git-Labor TypeScript Lernprojekt gegen echte Linux-Serverdienste hinter Caddy auf StrikerPi",
+  "scripts": {
+    "build": "tsc -p ."
+  }
+}

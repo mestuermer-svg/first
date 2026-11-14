@@ -32,6 +32,216 @@
 		"geminiDocs": {
 			"type": "http",
 			"url": "https://gemini-api-docs-mcp.dev"
+		},
+		"chrome-devtools": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"chrome-devtools-mcp@latest"
+			],
+			"tools": [
+				"*"
+			]
+		},
+		"datacloud_alloydb_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://alloydb.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_bigquery_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://bigquery.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_bigtable-admin_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://bigtableadmin.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_bigtable-data_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://bigtable.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_cloud-sql_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://sqladmin.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\",\"X-Goog-User-Project\":\"gen-lang-client-0668043276\"}"
+			}
+		},
+		"datacloud_composer_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://composer.europe-west3.rep.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_dataproc_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://dataproc.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_dflow_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://dataflow.europe-west3.rep.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_dform_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://dataform.europe-west3.rep.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_gcs_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://storage.googleapis.com/storage/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_knowledge_catalog_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://dataplex.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
+			}
+		},
+		"datacloud_spanner_remote": {
+			"type": "stdio",
+			"command": "node",
+			"args": [
+				"C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
+				"https://spanner.googleapis.com/mcp"
+			],
+			"tools": [
+				"*"
+			],
+			"env": {
+				"X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\",\"X-Goog-User-Project\":\"gen-lang-client-0668043276\"}"
+			}
+		},
+		"github": {
+			"type": "http",
+			"url": "https://api.githubcopilot.com/mcp/",
+			"tools": [
+				"*"
+			]
+		},
+		"markitdown": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"markitdown-mcp"
+			],
+			"tools": [
+				"*"
+			]
+		},
+		"microsoft-learn": {
+			"type": "http",
+			"url": "https://learn.microsoft.com/api/mcp",
+			"tools": [
+				"*"
+			]
+		},
+		"nvidia-app": {
+			"type": "http",
+			"url": "http://127.0.0.1:13508/mcp",
+			"tools": [
+				"*"
+			]
 		}
 	}
 }

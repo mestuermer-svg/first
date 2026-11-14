@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TypeScript &amp; Linux Serverdienste – StrikerPi Lab</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <div>
+        <h1>TypeScript &amp; Linux Serverdienste (StrikerPi Live-Lab)</h1>
+        <p class="subtitle">Frontend in <strong>TypeScript</strong> (<code>tsc</code>) · Ausgeliefert via <strong>Caddy :80</strong> · Live-Backend <code>gitlabor-api.service</code> (<code>127.0.0.1:8085</code>)</p>
+      </div>
+      <div class="actions">
+        <a class="btn secondary" href="/">← Startseite</a>
+        <button id="btnRefresh" type="button" class="btn">↻ Jetzt aktualisieren</button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="label">Host &amp; Architektur</span>
+        <strong id="valHost">-</strong>
+        <small id="valKernel">-</small>
+      </div>
+      <div class="stat-card">
+        <span class="label">Uptime &amp; Load</span>
+        <strong id="valUptime">-</strong>
+        <small id="valLoad">-</small>
+      </div>
+      <div class="stat-card">
+        <span class="label">RAM &amp; CPU-Temp</span>
+        <strong id="valMem">-</strong>
+        <small id="valTemp">-</small>
+      </div>
+      <div class="stat-card">
+        <span class="label">Node.js Runtime</span>
+        <strong id="valNode">-</strong>
+        <small id="valTime">-</small>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>1. Systemd-Serverdienste (klicken fuer Live-Logs)</h2>
+        <span class="hint">Quelle: <code>GET /api/linux/status</code></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Unit</th>
+            <th>Status</th>
+            <th>SubState</th>
+            <th>PID</th>
+            <th>RAM (MB)</th>
+            <th>Gestartet</th>
+          </tr>
+        </thead>
+        <tbody id="servicesBody"></tbody>
+      </table>
+    </section>
+
+    <div class="split-grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>2. Journald &amp; Caddy Access-Log (<span id="selectedUnit">caddy.service</span>)</h2>
+          <span class="hint">Quelle: <code>GET /api/linux/logs</code></span>
+        </div>
+        <pre id="logsBox" class="code-box">Lade Logs...</pre>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>3. Offene TCP/UDP Sockets (<code>ss -tulpnH</code>)</h2>
+          <span class="hint">Quelle: <code>GET /api/linux/ports</code></span>
+        </div>
+        <pre id="portsBox" class="code-box">Lade Ports...</pre>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>4. Caddy Reverse-Proxy &amp; POST-Test (<code>POST /api/linux/echo</code>)</h2>
+        <span class="hint">Testet Header-Forwarding (<code>X-Forwarded-For</code>) &amp; JSON-Roundtrip</span>
+      </div>
+      <div class="echo-row">
+        <input id="echoInput" type="text" value="Hallo StrikerPi Linux-Server!" placeholder="Nachricht an gitlabor-api.service senden..." />
+        <button id="btnEcho" type="button" class="btn">POST senden</button>
+      </div>
+      <pre id="echoBox" class="code-box">Noch kein Test gesendet.</pre>
+    </section>
+  </div>
+
+  <script type="module" src="./dist/main.js"></script>
+</body>
+</html>
