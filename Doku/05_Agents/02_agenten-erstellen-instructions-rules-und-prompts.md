@@ -129,7 +129,7 @@ In modernen Entwicklungsumgebungen agiert der Editor nicht mehr als starrer Chat
   Je nach Komplexität der Aufgabe wählt der Entwickler das passende Modell und Reasoning-Level:
   * **Low-Latency / Flash-Modelle:** Für Inline-Autovervollständigung, schnelle Erklärungen und kleine Syntax-Korrekturen.
   * **High-Reasoning / Thinking-Modelle:** Für Architektur-Entscheidungen, Multi-Root-Refactorings und tiefgehende Ursachenanalysen (RCA). Hier formuliert das Modell vor der Code-Änderung eine interne Denk-Kette (Chain-of-Thought).
-  * **Lokale Modelle (100 % Datensouveränität):** Über den Localhost-Proxy (`http://127.0.0.1:8317`) oder lokale Ollama-Instanzen können sensible Projekte komplett ohne Datenabfluss zu externen Cloud-Servern bearbeitet werden.
+  * **Lokale Modelle (100 % Datensouveränität):** Über native lokale Ollama-Instanzen (`http://127.0.0.1:11434` auf Cyborg bzw. `http://192.168.178.68:11434` auf SimRacer) können sensible Projekte komplett ohne Datenabfluss zu externen Cloud-Servern bearbeitet werden *(der frühere Localhost-Proxy `:8317` wurde am 23.11.2026 entfernt)*.
 
 </details>
 
@@ -164,7 +164,7 @@ In modernen Entwicklungsumgebungen agiert der Editor nicht mehr als starrer Chat
 * **Model Harness als Dirigent:** Der Agent Harness verbindet UI, Sprachmodell, Language Server (LSP) und Werkzeuge (MCP) zu einem reaktionsschnellen System.
 * **LSP garantiert Fakten:** Der Agent stützt sich bei Diagnosen auf Sprachserver-Fakten (`get_errors`), nicht auf Halluzinationen.
 * **Reasoning nach Bedarf:** Nutze schnelle Modelle für repetitive Routineaufgaben und High-Reasoning-Modelle für Systemarchitektur und Fehlersuche.
-* **Datensouveränität möglich:** Lokale Endpoints (`localhost:8317`) erlauben den Einsatz privater Modelle ohne Cloud-Leakage.
+* **Datensouveränität möglich:** Lokale Ollama-Endpoints (`127.0.0.1:11434` / `192.168.178.68:11434`) erlauben den Einsatz lokaler Modelle ohne Cloud-Leakage.
 * **`AGENTS.md` = Projekt-Grundgesetz:** Wird sowohl von VS Code Copilot als auch von Google Antigravity im Projektstamm automatisch gelesen.
 * **`applyTo` spart Kontext-Token:** Dateispezifische Regeln unter `.github/instructions/*.instructions.md` werden nur geladen, wenn passende Dateien betroffen sind.
 * **Custom Agents (`*.agent.md`) schaffen klare Zuständigkeiten:** Jeder Agent hat eine eindeutige Rolle, feste Grenzen und eine prägnante `description`.
@@ -230,7 +230,7 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <ul class="doku-arch-lines">
 <li>├─ <a href="../02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
 <li>├─ <a href="../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 &bull; MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
 <li>└─ <a href="../02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>

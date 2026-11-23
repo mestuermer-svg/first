@@ -33,6 +33,10 @@ Dieses Repository dient als zentraler **Test- und Lern-Workspace** auf dem Haupt
 - **Python-Umgebungen:** Verwende niemals globales `pip install`, sondern immer die lokale `.venv` oder `uv` (`uv add`, `uv run`).
 - **Geheimnisschutz:** Schreibe niemals echte API-Keys oder PasswÃ¶rter in versionierte Dateien; nutze Umgebungsvariablen (`GEMINI_API_KEY`) oder `sbx secret`.
 
+## 4. Verbindlicher Selbstschutz der Agenten (Change-Freeze)
+- **Normale Projektarbeit bleibt erlaubt:** Agenten dürfen im Rahmen konkreter Aufträge weiterhin Code, Skripte, Setups/Pitfiles (`.ini`), Logs und Doku bearbeiten.
+- **Selbständerungs-Sperre für Konfigurationen:** Kein Agent darf ohne ausdrückliche vorherige Nutzer-Freigabe (nach Diff-Vorschau) seine eigene oder fremde Agenten- und System-Konfigurationen ändern, überschreiben oder löschen (`*.agent.md`, `AGENTS.md`, `*.instructions.md`, `SKILL.md`, `approval_policy.json`, `*.code-workspace`, `settings.json`, `mcp.json`, `tasks.json`).
+
 <!-- DOKU-MINIMAP-START -->
 <style>
 .doku-arch-flow { font-family: var(--vscode-editor-font-family, Consolas, monospace); background: rgba(20, 24, 33, 0.92); border: 1px solid rgba(100, 140, 220, 0.35); border-radius: 10px; padding: 14px 16px; margin: 10px 0; color: #e2e8f0; }

@@ -31,7 +31,10 @@ param(
     [string]$Command = "",
 
     [Parameter()]
-    [int]$TimeoutSeconds = 30
+    [int]$TimeoutSeconds = 30,
+
+    [Parameter()]
+    [switch]$DirectBypass
 )
 
 $ErrorActionPreference = "Stop"
@@ -79,23 +82,28 @@ switch ($Agent.ToLower()) {
         Invoke-SshCmd -SshAlias "general-sim" -RemoteCmd (New-EncodedPsCommand $psInner)
     }
     "rig" {
-        if (-not $Prompt -and $EffectiveAction -in @("Status", "Watchdog", "PauseSandbox", "ResumeSandbox", "ListContent", "ProvisionContent", "AutoProvisionFromRaceIni", "DeployPitfile", "GetTelemetry")) {
+        if ($DirectBypass -and -not $Prompt -and $EffectiveAction -in @("Status", "Watchdog", "PauseSandbox", "ResumeSandbox", "ListContent", "ProvisionContent", "AutoProvisionFromRaceIni", "DeployPitfile", "GetTelemetry", "UnloadOllama")) {
             $tB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Target))
             $psInner = "`$t=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$tB64')); `$p=@{Action='$EffectiveAction';Caller='$CallerId';TaskId='$TaskId'}; if(`$t){`$p['CarName']=`$t}; & 'C:\ac-sandbox\shared\scripts\rig-hub.ps1' @p"
             Invoke-SshCmd -SshAlias "simracer" -RemoteCmd (New-EncodedPsCommand $psInner)
         } else {
             $pText = if ($Prompt) { $Prompt } else { $EffectiveAction }
-            $payload = ([ordered]@{
+            $payloadObj = [ordered]@{
                 task_id           = $TaskId
                 sender            = $CallerId
                 target            = "rig"
-                action            = if ($Action -and $Action -ne "ProcessPrompt") { $Action } else { "ProcessPrompt" }
+                action            = if ($Action -and $Action -ne "ProcessPrompt") { $Action } elseif (-not $Prompt -and $EffectiveAction -ne "ProcessPrompt") { $EffectiveAction } else { "ProcessPrompt" }
                 prompt            = $pText
+                priority          = 2
+                origin            = "ssh_cyborg"
+                hop_count         = 0
                 approved_by       = "GeneralCyborg_SSH"
                 requires_approval = $false
                 reply_to          = "general"
                 timestamp         = (Get-Date -Format "o")
-            }) | ConvertTo-Json -Depth 4 -Compress
+            }
+            if ($Target) { $payloadObj["target_arg"] = $Target; $payloadObj["car"] = $Target }
+            $payload = $payloadObj | ConvertTo-Json -Depth 4 -Compress
             $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($payload))
             $psInner = "`$j=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$b64')); `$in='C:\ac-sandbox\shared\agents\rig\inbox\$TaskId.json'; `$out='C:\ac-sandbox\shared\agents\rig\outbox\result_$TaskId.json'; Set-Content -Path `$in -Value `$j -Encoding UTF8; `$sw=[Diagnostics.Stopwatch]::StartNew(); while(`$sw.Elapsed.TotalSeconds -lt $TimeoutSeconds){ if(Test-Path `$out){ Start-Sleep -Milliseconds 150; Get-Content `$out -Raw -Encoding UTF8; exit 0 }; Start-Sleep -Milliseconds 400 }; Write-Output ('TIMEOUT:' + `$in); exit 1"
             Invoke-SshCmd -SshAlias "simracer" -RemoteCmd (New-EncodedPsCommand $psInner)
@@ -109,6 +117,9 @@ switch ($Agent.ToLower()) {
             target            = "light"
             action            = if ($Action -and $Action -ne "ProcessPrompt") { $Action } else { "ProcessPrompt" }
             prompt            = $pText
+            priority          = 2
+            origin            = "ssh_cyborg"
+            hop_count         = 0
             approved_by       = "GeneralCyborg_SSH"
             requires_approval = $false
             reply_to          = "general"
@@ -119,12 +130,36 @@ switch ($Agent.ToLower()) {
         Invoke-SshCmd -SshAlias "simracer" -RemoteCmd (New-EncodedPsCommand $psInner)
     }
     "dark" {
-        $pB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($(if ($Prompt) { $Prompt } else { "" })))
-        $tB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Target))
-        $cB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Command))
         $actName = if (-not $Prompt -and $EffectiveAction -in @("Status", "RunScript", "TestApp", "ValidateSetups", "LaunchCM", "StopCM", "CleanTemp", "ApplyPreset", "ListPresets", "SetSession", "LaunchSession", "StopSession", "DiagnoseAndHandoff", "SyncCoreAssets", "OpenExplorer", "SetTimezone")) { $EffectiveAction } else { "ProcessPrompt" }
-        $psInner = "`$pr=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$pB64')); `$tg=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$tB64')); `$cm=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$cB64')); `$p=@{Action='$actName';Caller='$CallerId';TaskId='$TaskId'}; if(`$pr){`$p['Prompt']=`$pr}; if(`$tg){`$p['Target']=`$tg}; if(`$cm){`$p['Command']=`$cm}; & '\\host.lan\Data\agents\dark\runner.ps1' @p"
-        Invoke-SshCmd -SshAlias "ac-sandbox" -RemoteCmd (New-EncodedPsCommand $psInner)
+        if ($DirectBypass) {
+            $pB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($(if ($Prompt) { $Prompt } else { "" })))
+            $tB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Target))
+            $cB64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Command))
+            $psInner = "`$pr=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$pB64')); `$tg=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$tB64')); `$cm=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$cB64')); `$p=@{Action='$actName';Caller='$CallerId';TaskId='$TaskId'}; if(`$pr){`$p['Prompt']=`$pr}; if(`$tg){`$p['Target']=`$tg}; if(`$cm){`$p['Command']=`$cm}; & '\\host.lan\Data\agents\dark\runner.ps1' @p"
+            Invoke-SshCmd -SshAlias "ac-sandbox" -RemoteCmd (New-EncodedPsCommand $psInner)
+        } else {
+            $pText = if ($Prompt) { $Prompt } else { $actName }
+            $payloadObj = [ordered]@{
+                task_id           = $TaskId
+                sender            = $CallerId
+                target            = "dark"
+                action            = $actName
+                prompt            = $pText
+                priority          = 2
+                origin            = "ssh_cyborg"
+                hop_count         = 0
+                approved_by       = "GeneralCyborg_SSH"
+                requires_approval = $false
+                reply_to          = "general"
+                timestamp         = (Get-Date -Format "o")
+            }
+            if ($Target)  { $payloadObj["target_arg"] = $Target }
+            if ($Command) { $payloadObj["command"]    = $Command }
+            $payload = $payloadObj | ConvertTo-Json -Depth 4 -Compress
+            $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($payload))
+            $psInner = "`$j=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$b64')); `$in='\\host.lan\Data\agents\dark\inbox\$TaskId.json'; `$out='\\host.lan\Data\agents\dark\outbox\result_$TaskId.json'; Set-Content -Path `$in -Value `$j -Encoding UTF8; `$sw=[Diagnostics.Stopwatch]::StartNew(); while(`$sw.Elapsed.TotalSeconds -lt $TimeoutSeconds){ if(Test-Path `$out){ Start-Sleep -Milliseconds 150; Get-Content `$out -Raw -Encoding UTF8; exit 0 }; Start-Sleep -Milliseconds 400 }; Write-Output ('TIMEOUT:' + `$in); exit 1"
+            Invoke-SshCmd -SshAlias "ac-sandbox" -RemoteCmd (New-EncodedPsCommand $psInner)
+        }
     }
     "sarah" {
         $pText = if ($Prompt) { $Prompt } elseif ($Action) { $Action } else { "status" }
@@ -141,6 +176,9 @@ switch ($Agent.ToLower()) {
             target    = "rick"
             action    = $act
             prompt    = $pText
+            priority  = 2
+            origin    = "ssh_cyborg"
+            hop_count = 0
             timestamp = (Get-Date -Format "o")
         }) | ConvertTo-Json -Depth 4 -Compress
         $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($payload))

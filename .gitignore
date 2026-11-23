@@ -85,3 +85,6 @@ ac-sandbox/shared/cm-github-sync/**/GPUCache/
 ac-sandbox/screen_now.png
 ac-sandbox/shared/screen.png
 ac-sandbox/shared/screen_now.png
+
+# Temporäre lokale Analysen
+analyse.pdf

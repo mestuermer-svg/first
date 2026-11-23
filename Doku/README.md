@@ -4,9 +4,6 @@
 
 # Wissensdatenbank & Lern-Handbuch (`git-labor/Doku`)
 
-**Workspace-Zuordnung:** `git-labor.code-workspace` ist die **Sim Werkstatt | General Cyborg** mit fünf Repositories. `assetto-corsa-content.code-workspace` bleibt das separate **Assetto Corsa Content**-Workspace mit den drei Ordnern Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox.
-
-
 Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und Lern-Workspaces**. Nach der sauberen Ausgliederung der Assetto-Corsa-Spezifika in ihren eigenen Workspace sind hier alle allgemeinen Entwicklungs-, System- und KI-Themen in **5 klar getrennten Fachrubriken** gebÃ¼ndelt und nach den Vorgaben aus `agent_ruler.md` und `Agent-guidline.md` (mit standardmÃ¤ÃŸig geschlossenen `<details>`-Kapiteln) aufbereitet.
 
 <details>
@@ -43,7 +40,7 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 <div class="doku-arch-rows">
 <div class="doku-arch-row"><a href="./02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md" style="color:inherit;text-decoration:none;flex:1;" title="02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">â€¢ VS Code Multi-Prozess & LSP</a><a class="doku-arch-badge" href="./02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md" title="Direktlink: 02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">LSP</a></div>
 <div class="doku-arch-row"><a href="./02_VSCode_Env/02_git-github-und-multi-root-workspaces.md" style="color:inherit;text-decoration:none;flex:1;" title="02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">â€¢ Git 4-Stufen-Workflow & Multi-Root</a><a class="doku-arch-badge" href="../git-labor.code-workspace" title="Direktlink: git-labor.code-workspace">Workspace</a></div>
-<div class="doku-arch-row"><a href="./02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md" style="color:inherit;text-decoration:none;flex:1;" title="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">â€¢ MCP-Server & Localhost-Proxy (:8317)</a><a class="doku-arch-badge" href="../.vscode/mcp.json" title="Direktlink: .vscode/mcp.json">mcp.json</a></div>
+<div class="doku-arch-row"><a href="./02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md" style="color:inherit;text-decoration:none;flex:1;" title="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">• MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a><a class="doku-arch-badge" href="../.vscode/mcp.json" title="Direktlink: .vscode/mcp.json">mcp.json</a></div>
 <div class="doku-arch-row"><a href="./02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md" style="color:inherit;text-decoration:none;flex:1;" title="02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">â€¢ Gemini Ã–kosystem, API-Keys & Hardware</a><a class="doku-arch-badge" href="./02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md" title="Direktlink: 02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">AI Studio</a></div>
 </div>
 </div>
@@ -97,7 +94,7 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 * **[Ãœbersicht der Rubrik 02](./02_VSCode_Env/README.md)**
 * **[01_vscode-architektur-lsp-und-remote.md](./02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md)** â€“ Projekt Monaco, Electron, Prozesstrennung (Renderer vs. Extension Host), Language Server Protocol (LSP) und Dev Containers.
 * **[02_git-github-und-multi-root-workspaces.md](./02_VSCode_Env/02_git-github-und-multi-root-workspaces.md)** â€“ Der 4-Stufen-Workflow in Git (`Strg+Shift+G`), `.git`-Interna, `.gitignore` gegen das 100-MB-Limit, `.code-workspace` vs. Codespaces.
-* **[03_mcp-server-localhost-proxy-und-ports.md](./02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md)** â€“ Hybride Localhost-Bridge, Port-Trennung (`8317` CLIProxyAPI vs. `8000` Antigravity Web-UI), natives `github-mcp-server.exe`, NVIDIA App MCP (`13508`) und `geminiDocs`.
+* **[03_mcp-server-localhost-proxy-und-ports.md](./02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md)** – Konsolidierte MCP-Server (`4` global + `2` Workspace), Dual-Node **Ollama (`:11434`)**, legitimer Antigravity Hub (`agy.exe` `:8317`), StrikerPi Pitwall (`:8080`), NVIDIA App MCP (`13508`), `geminiDocs` &amp; Archiv der entfernten Proxy-Altlasten.
 * **[04_gemini-oekosystem-ai-studio-und-api-keys.md](./02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md)** â€“ Google AI Pro Abo vs. Gemini API, Google AI Studio Playground, Authorization API Keys, Umgebungsvariablen und RAM-Management auf dem MSI Cyborg 15 (16 GB DDR5).
 
 </details>
@@ -198,7 +195,7 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <ul class="doku-arch-lines">
 <li>â”œâ”€ <a href="02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 â€¢ VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
 <li>â”œâ”€ <a href="02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 â€¢ Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../git-labor.code-workspace">Workspace</a></li>
-<li>â”œâ”€ <a href="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 â€¢ MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>â”œâ”€ <a href="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 &bull; MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
 <li>â””â”€ <a href="02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 â€¢ Gemini Ã–kosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>

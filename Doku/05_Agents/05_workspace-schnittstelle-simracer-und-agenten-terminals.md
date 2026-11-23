@@ -290,11 +290,11 @@ Damit sich **lokale Host-Terminals** (z. B. direkt am SimRacer-Desktop oder in d
 
 | Agent | Host-Lokal (auf dem Zielgerät) | SSH-Aufruf von `VanstrikeCyborg` | Schutzmechanismus |
 | :--- | :--- | :--- | :--- |
-| **`@general` (`General Sim`)** | `launch_general_host_terminal.ps1` (`AgentTerminal_General` auf `VanstrikeCyborg`) | `connect_general_terminal.ps1` via `ssh general-sim` (`-ClientMode`) oder `Invoke-SimAgentSsh.ps1 -Agent general` | `Test-HostGeneralWorkerActive`: SSH-Client killt keinen Host-Worker; Audit-Log mit Caller-Kennung |
+| **`@general`** | `start_general_terminal.ps1` (lokal auf `VanstrikeCyborg`) | *(Master – läuft direkt lokal)* | Singleton beendet nur doppelte lokale Instanzen |
 | **`@rig`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_rig_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostRigWorkerActive`: Client-Mode killt keinen Host-Worker und verarbeitet nur bei Bedarf |
 | **`@light`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_light_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostLightWorkerActive`: Client-Mode arbeitet als sicherer Monitor + Prompt-Sender |
 | **`@dark`** | `launch_guest_terminals.ps1` in `ac-win11-sandbox` (`AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_dark_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-GuestDarkWorkerActive`: kein Kill laufender In-Guest-Konsolen |
-| **`@sarah`** | `sarah-agent.service` + `sarah-pitwall-telemetry.service` (`systemd --user`) + lokales Terminal | `connect_sarah_terminal.ps1` (`SSH-CLIENT`-Modus) &amp; `launch_pitwall.sh` (via `wake_archibald.ps1` / Omarchy App `Pitwall`) | `telemetry` prüft aktiven UDP-9996-Dienst; `launch_pitwall.sh` weckt DPMS und fokussiert Pitwall auf Workspace 1 |
+| **`@sarah`** | `sarah-pitwall-telemetry.service` (`systemd`) + lokales Terminal | `connect_sarah_terminal.ps1` (`SSH-CLIENT`-Modus) | `telemetry` prüft aktiven UDP-9996-Dienst, kein Doppel-Bind |
 | **`@rick`** | `rick-agent.service` + `telemetry-relay.service` (`systemd`) | `connect_rick_terminal.ps1` (`SSH-CLIENT`-Modus) | `start_rick_terminal.sh` greift niemals den `systemd`-Worker an |
 
 #### Zentraler Terminal-Launcher im Git-Labor (`labs/Agent-Terminals.ps1`)
@@ -341,47 +341,39 @@ Der 6. Agent **`@rick`** (`.github/agents/rick.agent.md`) betreut den **Raspberr
 </details>
 
 <details>
-<summary>1.12 Freigabe-Policy <code>AUTO</code>/<code>MANUAL</code> &amp; MQTT-Anbindung (Stand 11.11.2026)</summary>
+<summary>1.12 Freigabe-Policy (`pitwall_control_policy.json` &amp; `approval_policy.json`), Light-Mandat &amp; MQTT-Anbindung (Stand 23.11.2026)</summary>
 
-#### 1. Freigabe-Policy des General-Sim-Gates
-Das Freigabe-Gate aus 1.8 ist über die Datei `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\approval_policy.json` umschaltbar:
+#### 1. Feingliedrige Freigabe-Policy (`pitwall_control_policy.json`) &amp; Pitwall-Steuerungskonsole
+Seit dem **23.11.2026** ergänzt die Live-Steuerdatei `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\pitwall_control_policy.json` (mit Abwärtskompatibilität zu `approval_policy.json` als unverändert geschütztem Change-Freeze-Fallback) das General-Sim-Gate um:
+- **Globalen Modus (`MANUAL` | `DELEGATED` | `AUTO`)** inkl. optionalem Zeit-Mandat (`mandate_expires_at`),
+- **Globaler Pause-Schalter (`agents_paused`)** und **GPU-/Hintergrund-Schranke (`gpu_background_allowed`)** für die RTX 5070 Ti (`LIVE_RACE`-Schutz),
+- **5 delegierbare Kategorien für `@light`** (`LIGHT_AUTO` | `ASK_USER` | `LOCKED`): `session_presets`, `sandbox_dark_tasks`, `sandbox_lifecycle`, `content_sync`, `rig_actions` (Change-Freeze auf `*.agent.md`, `AGENTS.md`, `settings.json`, `mcp.json`, `approval_policy.json` bleibt immer fest gesperrt).
+- **Web-Steuerung auf StrikerPi (`http://192.168.178.86:8080/`):** Seitenumschaltung **`🛡️ Agenten & Light`** + Not-Aus-Button + Topbar-Button **`🎙️ Antigravity Sprachchat`**.
 
 | Modus | Wirkung |
 | :--- | :--- |
-| `MANUAL` | Rückfragen von `@rig`/`@light` warten im `@general`-Terminal auf `ok` / `nein` / `reply` (Fallback, wenn die Datei fehlt) |
-| `AUTO` | Dauerfreigabe, geeignet für autonome Ketten und CI/CD-ähnliche Abläufe |
+| `MANUAL` | Rückfragen von `@rig`/`@light` warten in der Pitwall-Konsole / im `@general`-Terminal auf `ok` / `nein` / `reply` (Fallback, wenn Datei fehlt) |
+| `DELEGATED` | Empfohlener Verbund-Betrieb: `@light` darf die freigegebenen Kategorien (`LIGHT_AUTO`) eigenständig ausführen (`approved_by: "LightAgent_Delegated"`), kritische Kategorien (`ASK_USER`) fragen weiterhin über die Pitwall / `@general` an |
+| `AUTO` | Dauerfreigabe für autonome Testketten |
 
-Dateiformat (Felder: `mode`, `description`, `updated_at`):
-```json
-{ "mode": "AUTO", "description": "...", "updated_at": "2026-11-11T09:00:53+01:00" }
-```
+> [!WARNING]
+> `AUTO` und dauerhafte `LIGHT_AUTO`-Freigaben sollten vor Wartungs-/Löschaktionen oder aktiven VR-Rennen in der Pitwall-Konsole auf `MANUAL` bzw. Pause geschaltet werden (ein Klick auf **Not-Aus** entzieht sofort alle Light-Vollmachten und pausiert den Verbund).
+
+#### 2. Legacy-/Bridge-Steuerung (`approval_policy.json` Fallback)
+`Send-SimAgentTask.ps1 -SetApprovalMode AUTO|MANUAL` und `SimAgentBridge` nutzen weiterhin `approval_policy.json` als Basiskompatibilität, während `start_light_terminal.ps1` und `start_general_terminal.ps1` vorrangig `pitwall_control_policy.json` auswerten.
 
 ```powershell
-# Modus setzen (schreibt approval_policy.json auf dem SimRacer)
-.\labs\Send-SimAgentTask.ps1 -SetApprovalMode AUTO
-.\labs\Send-SimAgentTask.ps1 -SetApprovalMode MANUAL
-
-# Aktuellen Modus samt Queue-Status aller Agenten anzeigen
+# Aktuellen Queue-Status aller Agenten anzeigen
 .\labs\Send-SimAgentTask.ps1 -QueryStatus
 ```
 
-```python
-from sim_agent_bridge import SimAgentBridge
-bridge = SimAgentBridge()
-print(bridge.get_approval_policy())      # {'mode': 'AUTO', ...}
-bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zurück
-```
-
-> [!WARNING]
-> `AUTO` hebelt die Rückversicherungspflicht aus 1.8 praktisch aus. Vor Aktionen mit Datenverlust-Risiko (Löschen, Docker-Prune, Container-Reset) auf `MANUAL` zurückschalten.
-
-#### 2. MQTT-Anbindung (StrikerPi `192.168.178.86:1883`)
+#### 3. MQTT-Anbindung (StrikerPi `192.168.178.86:1883`)
 - **Broker:** `mosquitto.service` (`:1883` TCP, `:9001` WebSockets), 24/7 aktiv.
 - **Task-Events aus Python:** `SimAgentBridge.publish_mqtt_task(agent, payload)` ruft per SSH `mosquitto_pub` auf StrikerPi auf. Topic-Schema: `agents/<agent>/inbox`. Eine zusätzliche Python-Abhängigkeit wie `paho-mqtt` ist dafür nicht nötig.
-- **Relay-Topics:** `simrig/mode` (Betriebsmodus) und `simrig/telemetry` (max. 10 Hz).
+- **Relay-Topics:** `simrig/mode` (Betriebsmodus), `simrig/agent_control` (Pitwall-Policy/Pause-Events) und `simrig/telemetry` (max. 10 Hz).
 - **Weiterhin gültig:** Die Dateischnittstelle (`inbox/` → `outbox/`) bleibt der Standardweg. MQTT ergänzt sie.
 
-#### 3. Statusprüfung aller Agenten
+#### 4. Statusprüfung aller Agenten
 ```powershell
 .\labs\Agent-Terminals.ps1 -StatusOnly   # schneller TCP-Port-Check der Agenten-Endpunkte, ohne Terminal zu öffnen
 ```

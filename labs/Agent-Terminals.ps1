@@ -18,7 +18,7 @@
 
 [CmdletBinding()]
 param(
-    [ValidateSet("menu", "general", "general-ssh", "rig", "light", "dark", "sarah", "rick", "all")]
+    [ValidateSet("menu", "general", "rig", "light", "dark", "sarah", "rick", "all")]
     [string]$Agent = "menu",
 
     [switch]$InCurrentWindow,
@@ -50,23 +50,11 @@ $AgentCatalog = @(
         Name        = "@general"
         HostName    = "VanstrikeCyborg (Lokal)"
         HostIp      = "127.0.0.1"
-        Port        = 22
-        Mode        = "LOKAL / SSH"
+        Port        = 11434
+        Mode        = "LOKAL (Master)"
         Script      = Join-Path $SharedAgentsRoot "general-SIM\start_general_terminal.ps1"
-        SshCommand  = "ssh -t general-sim `"powershell -ExecutionPolicy Bypass -File C:\Users\strik\assetto-corsa-content\ac-sandbox\shared\scripts\connect_general_terminal.ps1`""
-        Description = "Leitstand, Freigabe-Gate, Test-Pruefung & Gesamtlog"
-    },
-    [ordered]@{
-        Key         = "7"
-        Id          = "general-ssh"
-        Name        = "@general"
-        HostName    = "VanstrikeCyborg (SSH)"
-        HostIp      = "127.0.0.1"
-        Port        = 22
-        Mode        = "SSH -ClientMode"
-        Script      = Join-Path $SharedScriptsRoot "connect_general_terminal.ps1"
-        SshCommand  = "ssh -t general-sim `"powershell -ExecutionPolicy Bypass -File C:\Users\strik\assetto-corsa-content\ac-sandbox\shared\agents\general-SIM\start_general_terminal.ps1 -ClientMode`""
-        Description = "SSH-Client auf aktiven General Sim Leitstand"
+        SshCommand  = ""
+        Description = "Workspace-, Git-Labor- & Multi-Agent-Orchestrator"
     },
     [ordered]@{
         Key         = "2"
@@ -203,9 +191,9 @@ if ($Agent -ne "menu") {
 
 while ($true) {
     Show-AgentMatrix
-    Write-Host "  [1-7] Einzelnes Terminal im aktuellen Fenster oeffnen" -ForegroundColor White
-    Write-Host "  [W1-W7] Einzelnes Terminal in neuem PowerShell-Fenster oeffnen" -ForegroundColor White
-    Write-Host "  [A]   Alle 6 Haupt-Terminals parallel in separaten Fenstern starten" -ForegroundColor Yellow
+    Write-Host "  [1-6] Einzelnes Terminal im aktuellen Fenster oeffnen" -ForegroundColor White
+    Write-Host "  [W1-W6] Einzelnes Terminal in neuem PowerShell-Fenster oeffnen" -ForegroundColor White
+    Write-Host "  [A]   Alle 6 Terminals parallel in separaten Fenstern starten" -ForegroundColor Yellow
     Write-Host "  [R]   Status aktualisieren   |   [Q] Beenden" -ForegroundColor Gray
     Write-Host ""
     $choice = (Read-Host "Auswahl").Trim().ToLower()
@@ -213,14 +201,14 @@ while ($true) {
     if ($choice -eq "q" -or $choice -eq "exit") { break }
     if ($choice -eq "r" -or $choice -eq "") { continue }
     if ($choice -eq "a" -or $choice -eq "all") {
-        foreach ($ag in ($AgentCatalog | Where-Object { $_.Id -ne "general-ssh" })) {
+        foreach ($ag in $AgentCatalog) {
             Start-AgentEntry -Entry $ag
             Start-Sleep -Milliseconds 250
         }
         continue
     }
 
-    if ($choice -match "^w([1-7])$") {
+    if ($choice -match "^w([1-6])$") {
         $k = $Matches[1]
         $entry = $AgentCatalog | Where-Object { $_.Key -eq $k } | Select-Object -First 1
         if ($entry) { Start-AgentEntry -Entry $entry }

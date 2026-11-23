@@ -63,17 +63,13 @@ flowchart LR
 <details>
 <summary>1.3 Multi-Root-Workspaces (<code>.code-workspace</code>) vs. Ordner-Settings</summary>
 
-Unser zentrales Workspace `C:\Users\strik\git-labor\git-labor.code-workspace` wird mit dem Fenstertitel **Sim Werkstatt | General Cyborg** geöffnet. Es bündelt fünf eigenständige Git-Repositories. Das separate `assetto-corsa-content.code-workspace` behält den Anzeigenamen **Assetto Corsa Content** und enthält drei Workspace-Ordner: Assetto Corsa Content, Git-Labor und AC-CM-CSP-Sandbox. Beide Workspace-Dateien behalten ihre bestehenden Dateinamen, damit Links und VS-Code-Profilzuordnungen stabil bleiben.
-
-Dabei gilt folgende Hierarchie für Einstellungen:
+In unserem zentralen Workspace `C:\Users\strik\git-labor\git-labor.code-workspace` sind mehrere eigenständige Git-Repositories unter einem Dach vereint. Dabei gilt folgende Hierarchie für Einstellungen:
 
 | Ebene | Datei / Speicherort | Wann verwenden? |
 | :--- | :--- | :--- |
 | **1. User / Global** | `%APPDATA%\Code\User\settings.json` | Einstellungen für **alle** Fenster und Profile auf dem Laptop (z. B. Theme, Font, `git.autofetch`, `applyToAllProfiles`). |
 | **2. Multi-Root Workspace** | `git-labor.code-workspace` | Einstellungen, die für **alle eingebundenen Projektordner gemeinsam** gelten (Ordner-Liste `folders`, gemeinsame MCP-Server, Cloud-Projekt). |
 | **3. Einzel-Ordner (Folder)** | `<repo>/.vscode/settings.json` | Einstellungen, die **nur ein einzelnes Repository** betreffen (z. B. ein spezieller Python-Interpreter nur für `git-labor`). |
-
-**GitHub-Push-Protection (`GH013`):** GitHub kann einen Push blockieren, wenn die zu übertragende Historie ein erkanntes Geheimnis enthält. Im GitHub-Repair dieses Workspaces wurden die offengelegten Schlüssel aus der Workspace-Konfiguration entfernt, die betroffene Branch-Historie bereinigt und der aktualisierte Branch kontrolliert mit `git push --force-with-lease` synchronisiert. Schlüsselwerte gehören weder in Dateien noch in Dokumentation. Ein Entfernen aus der Historie ersetzt keinen Widerruf: betroffene Schlüssel beim Anbieter sperren/rotieren und diesen Schritt separat verifizieren. Vor einem History-Rewrite Remote, Branch, Backup und Team-Auswirkungen prüfen; nicht blind auf gemeinsam genutzten Branches umschreiben.
 
 </details>
 
@@ -83,7 +79,7 @@ Dabei gilt folgende Hierarchie für Einstellungen:
 | Merkmal | Lokaler Multi-Root-Workspace (`git-labor.code-workspace`) | GitHub Codespaces (Cloud-Container) |
 | :--- | :--- | :--- |
 | **Wo läuft VS Code?** | Direkt lokal auf deinem PC (`VanstrikeCyborg`). | Auf einer virtuellen Linux-Maschine in der GitHub-Cloud. |
-| **Zugriff auf lokale Hardware & LAN** | **Vollständig:** Zugriff auf lokale Laufwerke (`C:\`), Localhost-Proxys (`:8317`) und Heimnetzwerk. | **Isoliert in der Cloud:** Kein Zugriff auf dein lokales LAN oder lokale Hardware. |
+| **Zugriff auf lokale Hardware & LAN** | **Vollständig:** Zugriff auf lokale Laufwerke (`C:\`), lokales Ollama (`:11434`) und Heimnetzwerk. | **Isoliert in der Cloud:** Kein Zugriff auf dein lokales LAN oder lokale Hardware. |
 | **Typischer Einsatzzweck** | **Standard-Arbeitsplatz (95 %):** Volle Performance, alle Repos gleichzeitig geöffnet. | **Unterwegs / Mobil:** Schnelles Bearbeiten eines einzelnen Repos im Browser oder auf Fremdgeräten. |
 
 </details>
@@ -403,7 +399,7 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <ul class="doku-arch-lines">
 <li>├─ <a href="01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
 <li>├─ <a href="02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>├─ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 &bull; MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
 <li>└─ <a href="04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>

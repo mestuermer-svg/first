@@ -49,8 +49,6 @@ param(
 
 $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
 $PolicyFile = Join-Path $AgentsRoot "general-SIM\approval_policy.json"
-$AuditHelper = Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) "assetto-corsa-content\ac-sandbox\shared\scripts\ssh_audit_helper.ps1"
-if (Test-Path $AuditHelper) { . $AuditHelper }
 
 if ($SetApprovalMode -ne "") {
     $mode = $SetApprovalMode.ToUpper()
@@ -125,9 +123,6 @@ if ($TargetAgent -eq "rick") {
     }
     $tmpJson = Join-Path $env:TEMP "$taskId.json"
     $taskData | ConvertTo-Json -Depth 5 | Set-Content -Path $tmpJson -Encoding UTF8
-    if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
-        [void](Write-AgentSshAudit -AgentName "rick" -Action "SendSimAgentTask:$($taskData.action)" -Status "Dispatched" -Details ("Prompt='$Prompt'") -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
-    }
     scp -q $tmpJson "${StrikerPiHost}:/opt/rick-agent/inbox/${taskId}.json"
     Remove-Item $tmpJson -Force -ErrorAction SilentlyContinue
     Write-Host "`n[+] Task übermittelt: $taskId an Agent '@rick' via SSH ($StrikerPiHost)" -ForegroundColor Green
@@ -136,9 +131,6 @@ if ($TargetAgent -eq "rick") {
     while ($sw.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
         $res = ssh -o BatchMode=yes $StrikerPiHost "cat /opt/rick-agent/outbox/result_${taskId}.json 2>/dev/null" 2>$null
         if ($res) {
-            if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
-                [void](Write-AgentSshAudit -AgentName "rick" -Action "SendSimAgentTask:Result" -Status "Success" -Details $res -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
-            }
             Write-Host "`n$res`n" -ForegroundColor Cyan
             return
         }
@@ -182,9 +174,6 @@ $taskData = [ordered]@{
 
 $taskFile = Join-Path $TargetInbox "$taskId.json"
 $taskData | ConvertTo-Json -Depth 5 | Set-Content -Path $taskFile -Encoding UTF8
-if (Get-Command Write-AgentSshAudit -ErrorAction SilentlyContinue) {
-    [void](Write-AgentSshAudit -AgentName $TargetAgent -Action "SendSimAgentTask:$($taskData.action)" -Status "Dispatched" -Details ("Prompt='$Prompt'") -Caller "GeneralCyborg@$env:COMPUTERNAME" -TaskId $taskId)
-}
 
 Write-Host "`n[+] Task übermittelt: $taskId an Agent '@$TargetAgent' ($Action)" -ForegroundColor Green
 Write-Host "    Datei: $taskFile" -ForegroundColor Gray

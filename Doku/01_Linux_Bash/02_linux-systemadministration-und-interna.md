@@ -296,7 +296,7 @@ ip r                              # Routing-Tabelle (Default Gateway)
 
 # Layer 4: Offene Ports & lauschende Dienste prüfen
 ss -tulpn                         # t=TCP, u=UDP, l=Listening, p=Prozess, n=Numerisch
-# Findet schnell heraus, welcher Dienst Port 80, 443 oder 8317 belegt!
+# Findet schnell heraus, welcher Dienst Port 80, 1883 (MQTT), 8080 (Pitwall) oder 11434 (Ollama) belegt!
 
 # Layer 7: DNS-Auflösung & HTTP-Verbindung
 cat /etc/resolv.conf              # Aktive Nameserver (DNS)
@@ -320,7 +320,7 @@ Ein Linux-Server darf niemals ungeschützt ins Netz gestellt werden:
 sudo firewall-cmd --state
 sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
-sudo firewall-cmd --permanent --add-port=8317/tcp
+sudo firewall-cmd --permanent --add-port=11434/tcp   # z. B. Ollama LAN-Zugriff (Altlast Proxy :8317 entfernt)
 sudo firewall-cmd --reload
 
 # 2. Firewall mit ufw steuern (Ubuntu/Debian)
@@ -351,7 +351,7 @@ sudo restorecon -Rv /var/www/html/
 1. **Inodes & Hardlinks analysieren:** Erstelle eine Datei `test.txt`, notiere deren Inode (`ls -i test.txt`), erstelle einen Hardlink `test_hl.txt` und einen Softlink `test_sl.txt`. Vergleiche die Inodes und lösche anschließend `test.txt`. Was passiert beim Lesen von `test_hl.txt` und `test_sl.txt`?
 2. **Rechte & Spezial-Bits:** Erstelle ein Verzeichnis `/tmp/team_share`, setze das Sticky-Bit (`chmod 1777`) und teste mit zwei unterschiedlichen Benutzern, ob ein Benutzer die Datei des anderen löschen kann.
 3. **LVM-Simulation:** Erstelle mit `dd if=/dev/zero of=loop_disk.img bs=1M count=200` eine 200 MB Imagedatei, richte sie als Loop-Device ein (`sudo losetup -fP loop_disk.img`), initialisiere darauf ein LVM PV (`pvcreate`), eine VG (`vgcreate`) und ein LV (`lvcreate`) und binde es mit `ext4` ein.
-4. **Port- & Prozess-Diagnose:** Ermittle mit `ss -tulpn`, welcher Prozess Port `8317` oder `22` belegt, und visualisiere dessen Abstammung im Prozessbaum mit `pstree -p <PID>`.
+4. **Port- & Prozess-Diagnose:** Ermittle mit `ss -tulpn`, welcher Prozess Port `8080`, `11434` oder `22` belegt, und visualisiere dessen Abstammung im Prozessbaum mit `pstree -p <PID>`.
 5. **Systemd-Timer:** Erstelle eine simple systemd-Service- und Timer-Unit, die alle 5 Minuten einen Zeitstempel in `/tmp/timer_test.log` schreibt, und überprüfe ihren Status mit `systemctl list-timers`.
 
 </details>

@@ -1,21 +1,21 @@
-﻿> **Thema:** Rubrik 02 â€“ VS Code Environment (Architektur, Git, MCP-Server, LLM-Proxys & Gemini Ã–kosystem)
-> **Autor:** Michael StÃ¼rmer
-> **Datum:** 07.11.2026
+﻿> **Thema:** Rubrik 02 – VS Code Environment (Architektur, Git, MCP-Server, Ollama `:11434` & Gemini Ökosystem)
+> **Autor:** Michael Stürmer
+> **Datum:** 23.11.2026 *(Altlasten-Abgleich)*
 
-# 02 â€“ VS Code Environment, Git, MCP & LLM-Infrastruktur
+# 02 – VS Code Environment, Git, MCP & LLM-Infrastruktur
 
-Diese Rubrik bÃ¼ndelt das gesamte Wissen rund um deine **Visual Studio Code Entwicklungsumgebung** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`), die **Git/GitHub-Synchronisation**, die **MCP-Server-Architektur (Model Context Protocol)** sowie die **LLM-Anbindung (Copilot, Gemini, Antigravity & Localhost-Proxy)**.
+Diese Rubrik bündelt das gesamte Wissen rund um deine **Visual Studio Code Entwicklungsumgebung** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`) und dem **SimRacer (`192.168.178.68`)**, die **Git/GitHub-Synchronisation**, die **bereinigte MCP-Server-Architektur (Model Context Protocol)** sowie die **ToS-konforme LLM-Anbindung (Ollama `:11434`, offizielles Google GenAI / Gemini SDK & Antigravity Hub)**. Inoffizielle Proxy-Altlasten (`CLIProxyAPI` als LLM-Proxy, `llm-gateway`) wurden am **23.11.2026** entfernt und in die Archiv-Sektionen der Einzelmodule verschoben.
 
 <details>
-<summary><b>Ãœbersicht der Module in dieser Rubrik</b></summary>
+<summary><b>Übersicht der Module in dieser Rubrik</b></summary>
 
 | Modul | Datei | Inhalt & Fokus |
 | :--- | :--- | :--- |
 | **Modul 2.1** | [01_vscode-architektur-lsp-und-remote.md](./01_vscode-architektur-lsp-und-remote.md) | Entstehung (Monaco & Electron), Multi-Prozess-Trennung (Renderer vs. Extension Host), Language Server Protocol (LSP) und Dev Containers. |
 | **Modul 2.2** | [02_git-github-und-multi-root-workspaces.md](./02_git-github-und-multi-root-workspaces.md) | Der 4-Stufen-Workflow, `.gitignore`, Multi-Root-Workspaces, `git stash`, essenzielle Git-Funktionen (`switch`, `diff`, `reset`/`revert`) & Feature-Branch-Workflows (GitHub Flow & 3-Way-Merge). |
-| **Modul 2.3** | [03_mcp-server-localhost-proxy-und-ports.md](./03_mcp-server-localhost-proxy-und-ports.md) | Hybride Localhost-Bridge, Port-Architektur (`8317` CLIProxyAPI vs. `8000` Antigravity UI), GitHub MCP Binary, NVIDIA App MCP (`13508`) und `geminiDocs`. |
+| **Modul 2.3** | [03_mcp-server-localhost-proxy-und-ports.md](./03_mcp-server-localhost-proxy-und-ports.md) | Konsolidierte MCP-Architektur (`4` global + `2` Workspace), **Ollama (`11434`)**, legitimer Antigravity Hub (`8317`, `agy.exe`), StrikerPi Pitwall (`8080`), NVIDIA App MCP (`13508`), `geminiDocs` + **Archiv entfernter Proxy-Altlasten**. |
 | **Modul 2.4** | [04_gemini-oekosystem-ai-studio-und-api-keys.md](./04_gemini-oekosystem-ai-studio-und-api-keys.md) | Unterschied AI Pro Abo vs. API, Google AI Studio, Standard- vs. Auth-API-Keys, Umgebungsvariablen und Hardware-Dimensionierung (MSI Cyborg 15). |
-| **Modul 2.5** | [05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md) | Multi-Workspace Verbund, 4-Knoten-Topologie (Laptop, SimRacer, Sandbox, Archibald), Port-Matrix, 5-Rollen-Agentenmodell & Handshake. |
+| **Modul 2.5** | [05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md) | Multi-Workspace Verbund, 5-Knoten-Topologie (Laptop, SimRacer, Sandbox, Archibald, StrikerPi), Port-Matrix, Dual-Node Ollama, SimRacer 1-zu-1-Sync, Pitwall-Steuerungskonsole & 6-Rollen-Agentenmodell. |
 
 </details>
 
@@ -77,7 +77,7 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <ul class="doku-arch-lines">
 <li>â”œâ”€ <a href="01_vscode-architektur-lsp-und-remote.md">01 â€¢ VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
 <li>â”œâ”€ <a href="02_git-github-und-multi-root-workspaces.md">02 â€¢ Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
-<li>â”œâ”€ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 â€¢ MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>â”œâ”€ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 &bull; MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
 <li>â””â”€ <a href="04_gemini-oekosystem-ai-studio-und-api-keys.md">04 â€¢ Gemini Ã–kosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>

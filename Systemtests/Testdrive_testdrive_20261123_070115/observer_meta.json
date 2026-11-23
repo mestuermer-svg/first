@@ -1,0 +1,10 @@
+{
+  "session_id": "testdrive_20261123_070115",
+  "observer_pid": 34616,
+  "started_at": "2026-11-23T07:02:32.942+01:00",
+  "simracer_smb_dir": "\\\\192.168.178.68\\ac-sandbox\\shared\\telemetry\\testdrive_20261123_070115",
+  "local_dir": "C:\\Users\\strik\\git-labor\\Systemtests\\Testdrive_testdrive_20261123_070115",
+  "interval_sec": 5.0,
+  "ended_at": "2026-11-23T07:36:40.002+01:00",
+  "ticks": 409
+}

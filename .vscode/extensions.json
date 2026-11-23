@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "ms-vscode.vscode-chat-customizations-evaluations",
-        "printfn.gemini-improved"
+        "ms-vscode.vscode-chat-customizations-evaluations"
     ]
 }

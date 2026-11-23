@@ -1,13 +1,13 @@
-> **Thema:** MCP-Server, Localhost-Proxy (`CLIProxyAPI`) & Port-Architektur in VS Code
+> **Thema:** Konsolidierte MCP-Server, Ollama (`:11434`), Port-Architektur &amp; Archiv entfernter Proxy-Altlasten in VS Code
 > **Autor:** Michael Stürmer
-> **Datum:** 07.11.2026
+> **Datum:** 23.11.2026 *(Altlasten-Abgleich &amp; Konsolidierung)*
 
 <details>
 <summary><b>Lernziele</b></summary>
 
-* Die **hybride Localhost-Bridge-Architektur** verstehen: Warum das Sprachmodell (LLM) in der Cloud rechnet, während alle Werkzeuge (**MCP-Server**) lokal auf `127.0.0.1` ausgeführt werden.
-* Die **Port-Zuordnung** auf dem System beherrschen (insbesondere **Port `8317`** für `CLIProxyAPI` vs. **Port `8000`** für die Antigravity Web-UI und **Port `13508`** für den NVIDIA App MCP-Server).
-* Typische Fehlerbilder bei MCP-Servern (`github-mcp-server`, `geminiDocs`, NVIDIA Watchdog) diagnostizieren und im Handumdrehen beheben können.
+* Die **ToS-konforme Hybrid-Architektur** verstehen: Lokale LLM-Inferenz über **Ollama (`:11434`)** auf `VanstrikeCyborg` und `SimRacer` sowie offizielle Cloud-SDKs (`google-genai`, `@google/genai`, Vertex AI ADC) und lokale/remote **MCP-Server**.
+* Die **aktuelle Port-Zuordnung** sicher beherrschen (**`11434`** Ollama, **`8317`** legitimer Google Antigravity IDE Hub `agy.exe`, **`13508`** NVIDIA App MCP, **`8080`** StrikerPi Pitwall Hub).
+* Die **bereinigte MCP-Single-Source-of-Truth** (`4` globale Server in `User/mcp.json` + `2` exklusive Workspace-Server in `.vscode/mcp.json`) von den am **23.11.2026 entfernten Proxy-Altlasten** (`CLIProxyAPI`, `llm-gateway` `:8420`, `mcp_proxy.js`) abgrenzen und typische MCP-Fehler diagnostizieren können.
 
 </details>
 
@@ -15,114 +15,104 @@
 <summary><b>Kernkonzepte</b></summary>
 
 <details>
-<summary>1.1 Hybride Localhost-Bridge: Zusammenspiel von VS Code, Proxy & MCP</summary>
+<summary>1.1 Aktuelle Architektur: Ollama (:11434), offizielle SDKs &amp; konsolidierte MCP-Server (Stand: 23.11.2026)</summary>
 
-In unserer Entwicklungsumgebung auf dem `VanstrikeCyborg` greifen lokale Werkzeuge und Cloud-Sprachmodelle nahtlos ineinander:
+In der bereinigten Entwicklungsumgebung auf `VanstrikeCyborg` und `SimRacer` greifen lokale GPUs, offizielle Cloud-APIs und verschlankte MCP-Werkzeuge direkt ohne inoffizielle Drittanbieter-Proxys ineinander:
 
 ```mermaid
 flowchart TD
-    subgraph Cloud ["Cloud / KI-Backends"]
-        GEM["Google Gemini / Antigravity API"]
-        COP["GitHub Copilot Cloud"]
+    subgraph Cloud ["Offizielle Cloud / KI-Backends"]
+        GEM["Google Vertex AI / Gemini API<br/>(Projekt: gen-lang-client-0668043276, europe-west3)"]
+        COP["GitHub Copilot (nativ / integrierter GitHub-MCP)"]
         GDOCS["Gemini Docs MCP (https://gemini-api-docs-mcp.dev)"]
+        MSDOCS["Microsoft Learn MCP (https://learn.microsoft.com/api/mcp)"]
     end
 
-    subgraph Localhost ["Dein PC: Windows 11 Host (127.0.0.1)"]
-        VSC["VS Code + Copilot / Antigravity Agent UI"]
-        PROXY["CLIProxyAPI (cli-proxy-api.exe)<br/>Port 8317 (/v1/models, /v1/chat/completions)"]
-        AGY_UI["Google Antigravity Web-UI (agy.exe)<br/>Port 8000 (HTML Oberfläche)"]
+    subgraph Localhost ["Lokale Knoten (Cyborg 127.0.0.1 &amp; SimRacer 192.168.178.68)"]
+        VSC["VS Code + Google Antigravity + Gemini Code Assist"]
+        OLL_L["Ollama Laptop (127.0.0.1:11434)<br/>gemma4:e4b (RTX 5060 8 GB)"]
+        OLL_S["Ollama SimRacer (192.168.178.68:11434)<br/>gemma4:12b, qwen2.5-coder:14b (RTX 5070 Ti 16 GB)"]
+        AGY["Antigravity IDE Hub (agy.exe)<br/>Port 8317 (Cyborg) / 0 (SimRacer)"]
 
-        subgraph MCP ["Lokale MCP-Server (stdio & HTTP)"]
-            FS["Filesystem MCP (npx server-filesystem)"]
-            GH["GitHub MCP (github-mcp-server.exe stdio)"]
-            NV["NVIDIA App MCP (http://127.0.0.1:13508/mcp)"]
+        subgraph MCP ["Konsolidierte MCP-Server (4 Global + 2 Workspace)"]
+            CDT["chrome-devtools-mcp (npx stdio)"]
+            MKD["markitdown-mcp (uvx stdio, Cyborg)"]
+            FS["local-workspace-filesystem (Workspace)"]
+            GSEARCH["google-ai-search-mcp (Workspace, Cyborg)"]
+            NV["NVIDIA App MCP (http://127.0.0.1:13508/mcp, SimRacer)"]
         end
     end
 
-    VSC <-->|"OpenAI-kompatibler JSON-Call"| PROXY
-    VSC <-->|"Direkte SDK-Verbindung"| COP
+    VSC <-->|"Native Ollama API"| OLL_L
+    VSC <-->|"LAN Ollama API"| OLL_S
+    VSC <-->|"Offizielles SDK / OAuth"| GEM
     VSC <-->|"HTTP MCP"| GDOCS
-    PROXY <-->|"HTTPS / OAuth"| GEM
-
+    VSC <-->|"HTTP MCP"| MSDOCS
+    VSC -->|"stdio"| CDT
     VSC -->|"stdio"| FS
-    VSC -->|"stdio"| GH
-    VSC -->|"HTTP :13508"| NV
+    VSC -->|"stdio"| GSEARCH
 ```
 
 </details>
 
 <details>
-<summary>1.2 Die wichtigsten Ports & Konfigurationsdateien im Überblick</summary>
+<summary>1.2 Aktuelle Ports &amp; bereinigte MCP-Konfigurationsdateien (Single Source of Truth)</summary>
 
-| Port / Typ | Dienst / Komponente | Protokoll / Format | Zweck & Wichtiger Hinweis |
+| Port / Typ | Dienst / Komponente | Host / Protokoll | Zweck &amp; Aktueller Status (23.11.2026) |
 | :--- | :--- | :--- | :--- |
-| **Port `8317`** | **`CLIProxyAPI` (`cli-proxy-api.exe`)** | HTTP (REST / JSON) | **Modell-Endpunkt** (`/v1/models`, `/v1/chat/completions`) für `github.copilot.llm-gateway.serverUrl`. |
-| **Port `8000`** | **Google Antigravity Web-UI (`agy.exe`)** | HTTP (HTML SPA) | Reine **Web-Oberfläche** von Antigravity. Darf **nicht** als LLM-Gateway-URL eingetragen werden (liefert `<!doctype html>` statt JSON)! |
-| **Port `13508`** | **NVIDIA App MCP (`NvAppMcpServer.exe`)** | HTTP (`/mcp`) & Named Pipe | Lokaler MCP-Server zur Abfrage und Steuerung der NVIDIA GPU/App (`http://127.0.0.1:13508/mcp`). |
-| **HTTPS Remote** | **Gemini Docs MCP (`geminiDocs`)** | Streamable HTTP | Offizieller Live-Dokumentationsserver (`https://gemini-api-docs-mcp.dev`) mit `gemini_search_docs` und `gemini_get_doc`. |
-| **`stdio` Lokal** | **GitHub MCP (`github-mcp-server.exe`)** | Standard I/O | Natives Go-Binary unter `C:\Users\strik\.local\bin\github-mcp-server.exe` (< 50 ms Startzeit, kein Docker nötig). |
+| **Port `11434`** | **Ollama Server (`ollama.exe`)** | `127.0.0.1` (Cyborg) &amp; `0.0.0.0` (SimRacer) | Primärer lokaler &amp; LAN-LLM-Endpunkt (`gemma4:e4b`, `gemma4:12b`, `qwen2.5-coder:14b`) als Ersatz für alle entfernten Proxy-Gateways. |
+| **Port `8317`** | **Google Antigravity Hub (`agy.exe`)** | `127.0.0.1` (Cyborg; `0` = dynamisch auf SimRacer) | Legitimer `antigravity.serverPort` der offiziellen `google.google-antigravity` Extension (**nicht** mehr `CLIProxyAPI`). |
+| **Port `13508`** | **NVIDIA App MCP (`NvAppMcpServer.exe`)** | `127.0.0.1` HTTP (`/mcp`) | Auf SimRacer aktiv in Global `mcp.json`; auf Cyborg entfernt (dort `0` aktive Tools). |
+| **Port `8080`** | **StrikerPi Pitwall Hub (`telemetry_relay.py`)** | `192.168.178.86` HTTP / WS | Live-Telemetrie, Lobby-Streams, Sandbox-Steuerung, **Agenten &amp; Light Steuerungskonsole** + **Antigravity Sprachchat-Button**. |
+| **HTTPS Remote** | **Gemini Docs (`geminiDocs`) &amp; Microsoft Learn** | Streamable HTTP | Globale Referenz-MCP-Server in `User\mcp.json` auf beiden Knoten. |
+| **`stdio` Lokal** | **`chrome-devtools`, `markitdown`, `local-workspace-filesystem`, `google-ai-search-mcp`** | Standard I/O (`npx` / `uvx`) | `chrome-devtools` (+ `markitdown` auf Cyborg) global; `local-workspace-filesystem` &amp; `google-ai-search-mcp` exklusiv im Workspace. |
 
-### Zentrale Speicherorte der MCP-Konfigurationen:
-1. **Multi-Root Workspace:** `C:\Users\strik\git-labor\git-labor.code-workspace` (Sektion `"mcp": { "servers": { ... } }`)
-2. **VS Code Projekt-MCP:** `C:\Users\strik\git-labor\.vscode\mcp.json`
-3. **Projekt-MCP (`.mcp.json`):** `C:\Users\strik\git-labor\.mcp.json`
-4. **VS Code Global User-MCP:** `C:\Users\strik\AppData\Roaming\Code\User\mcp.json`
-5. **Copilot / Gemini Global:** `C:\Users\strik\.copilot\mcp-config.json` & `C:\Users\strik\.gemini\config\mcp_config.json`
-
-</details>
-
-<details>
-<summary>1.3 Fallstudie 1: Port-Kollision 8000 vs. 8317 (<code>Unexpected token '&lt;'</code>)</summary>
-
-* **Symptom:** Im Output-Log erscheint `Failed to fetch models: Unexpected token '<', "<!doctype "... is not valid JSON` oder `Antigravity: OFF`.
-* **Ursache:**
-  1. Das LLM-Gateway fragte fälschlicherweise `http://localhost:8000` (HTML-Web-UI) statt `http://localhost:8317` (`CLIProxyAPI` JSON-API) ab.
-  2. Ein extern gestarteter Hintergrundprozess von `cli-proxy-api.exe` belegte bereits Port `8317`, sodass die VS-Code-Extension den Server nicht selbst starten konnte.
-* **Lösung & Diagnose-Befehle:**
-  ```powershell
-  # 1. Prüfen, welcher Prozess Port 8317 belegt
-  Get-NetTCPConnection -LocalPort 8317 -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
-
-  # 2. Hängende Proxy-Instanz sauber beenden
-  Get-Process -Name *cli-proxy* -ErrorAction SilentlyContinue | Stop-Process -Force
-
-  # 3. Funktionstest gegen Port 8317 ausführen
-  Invoke-RestMethod -Uri "http://127.0.0.1:8317/v1/models"
-  ```
+### Konsolidierte Speicherorte der MCP-Konfigurationen (Stand: 23.11.2026):
+1. **VS Code Global User-MCP (`VanstrikeCyborg`):** `C:\Users\strik\AppData\Roaming\Code\User\mcp.json` (`4` Server: `geminiDocs`, `microsoft-learn`, `chrome-devtools`, `markitdown`)
+2. **VS Code Global User-MCP (`SimRacer`):** `C:\Users\Mike\AppData\Roaming\Code\User\mcp.json` (`4` Server: `geminiDocs`, `microsoft-learn`, `chrome-devtools`, `nvidia-app`)
+3. **VS Code Workspace-MCP (`git-labor`):** `C:\Users\strik\git-labor\.vscode\mcp.json` (`2` Server: `local-workspace-filesystem`, `io.github.shariqriazz/google-ai-search-mcp`)
+4. **VS Code Workspace-MCP (`ac-sandbox` auf SimRacer):** `C:\ac-sandbox\.vscode\mcp.json` (`1` exklusiver Server: `local-workspace-filesystem`)
+5. **Bereinigte / geleerte Alt-Dateien:** `git-labor\.mcp.json` (`{ "mcpServers": {} }`), `assetto-corsa-content\.vscode\mcp.json` (`{ "servers": {} }`), keine `"mcp"`-Dubletten mehr in `git-labor.code-workspace`, `assetto-corsa-content.code-workspace` oder `simracer.code-workspace`.
 
 </details>
 
 <details>
-<summary>1.4 Fallstudie 2: <code>github-mcp-server</code> nativ statt über Docker betreiben</summary>
-
-* **Symptom:** `open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.`
-* **Ursache:** Der `github-mcp-server` war als Docker-Container (`docker run ... ghcr.io/github/github-mcp-server`) konfiguriert. Wenn Docker Desktop nicht läuft, schlägt der Start sofort fehl.
-* **Best Practice (Natives Binary):**
-  Das statische Windows-Binary `C:\Users\strik\.local\bin\github-mcp-server.exe` benötigt nur ~25 MB RAM (statt 2–4 GB für WSL2/Docker) und startet in unter 50 Millisekunden über `stdio`:
-  ```json
-  "github-mcp-server": {
-    "command": "C:\\Users\\strik\\.local\\bin\\github-mcp-server.exe",
-    "args": ["stdio"],
-    "env": {
-      "GITHUB_PERSONAL_ACCESS_TOKEN": "<DEIN_GITHUB_PAT>"
-    }
-  }
-  ```
-
-</details>
-
-<details>
-<summary>1.5 Fallstudie 3: NVIDIA App MCP-Server Timeout (Fehlercode <code>-2147467259</code>)</summary>
+<summary>1.3 Fallstudie: NVIDIA App MCP-Server Timeout (Fehlercode <code>-2147467259</code>)</summary>
 
 * **Symptom:** Beim Aktivieren von *„Agent-Zugriff“* in der NVIDIA App springt der Schalter nach ~10 Sekunden mit `MCP server did not become ready in time` zurück.
 * **Ursache:** Der Dienst `NvContainerLocalSystem` hatte wegen eines verwaisten Plugin-Ordners aufgehört, das Verzeichnis `C:\Program Files\NVIDIA Corporation\NvContainer\plugins\AIUser` zu überwachen. Dadurch wurde `McpServerPlugin.dll` nicht geladen und die Named Pipe `\\.\pipe\nvidia-nvapp-mcp-server-...` fehlte.
-* **Schnellbehebung & Prüfung:**
+* **Schnellbehebung &amp; Prüfung:**
   ```powershell
   # 1. NVIDIA Container-Dienst neu starten
   Restart-Service NvContainerLocalSystem
 
-  # 2. Prüfen, ob die Named Pipe aktiv ist
+  # 2. Prüfen, ob die Named Pipe aktiv ist oder Port 13508 lauscht
   [System.IO.Directory]::GetFiles("\\.\\pipe\\") | Where-Object { $_ -match "nvapp-mcp" }
+  Get-NetTCPConnection -LocalPort 13508 -State Listen -ErrorAction SilentlyContinue
+  ```
+
+</details>
+
+<details>
+<summary>1.4 Fallstudie: <code>github-mcp-server</code> nativ / Copilot-integriert statt über Docker betreiben</summary>
+
+* **Symptom:** `open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.`
+* **Ursache:** Der `github-mcp-server` war früher als Docker-Container (`docker run ... ghcr.io/github/github-mcp-server`) konfiguriert. Wenn Docker Desktop nicht läuft, schlägt der Start sofort fehl.
+* **Aktuelle Lösung:** In VS Code läuft GitHub MCP direkt integriert über `github.copilot.chat.githubMcpServer.enabled: true` (`lockdown: true`, `readonly: true`); für externe CLI-Clients startet `C:\Users\strik\.local\bin\github-mcp-server.exe` nativ über `stdio` mit ~25 MB RAM statt 2–4 GB für Docker Desktop.
+
+</details>
+
+<details>
+<summary>1.5 🗄️ Archiv: Entfernte Altlasten – <code>CLIProxyAPI</code>, <code>llm-gateway</code> &amp; Port-8000-Kollision ([ENTFERNT am 23.11.2026])</summary>
+
+> [!NOTE]
+> **Status: `[ENTFERNT / ARCHIVIERT – 23.11.2026]`** — Die folgenden Komponenten wurden vollständig aus VS Code, Workspaces und Startskripten entfernt (ToS-Compliance &amp; Übergang zu nativem Ollama `:11434`). Dieser Abschnitt dient nur noch der historischen Fehler-Referenz.
+
+* **`CLIProxyAPI` (`cli-proxy-api.exe`) auf `:8317` und `github.copilot.llm-gateway.serverUrl` (`:8317` / `:8420`):** Durch Ollama (`:11434`) sowie offizielle Cloud-Provider (`google-genai`, Vertex AI ADC, offizielle Extensions) ersetzt. Alle zugehörigen Keys (`antigravityCopilot.*`, `llm-gateway.*`, `acpHub.*`, `oaicopilot.models`, `customLlm.models`) sowie **`mcp_proxy.js`** und insgesamt **26** Proxy-/Wrapper-Extensions (`settingsSync.ignoredExtensions`) wurden entfernt und blockiert.
+* **Historische Fallstudie (`Unexpected token '&lt;'` bei Port `8000` vs. `8317`):** Tratt auf, wenn ein früheres LLM-Gateway fälschlicherweise `http://localhost:8000` (HTML-UI) statt einer JSON-REST-API abfragte. Prüfbefehl für Portkonflikte heute:
+  ```powershell
+  Get-NetTCPConnection -LocalPort 11434,8317,13508 -State Listen -ErrorAction SilentlyContinue | Format-Table LocalAddress, LocalPort, State, OwningProcess
+  Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags"
   ```
 
 </details>
@@ -132,27 +122,28 @@ flowchart TD
 <details>
 <summary><b>Übungsaufgaben</b></summary>
 
-1. **JSON-Fehler verstehen:** Warum führt die Fehlermeldung `Unexpected token '<', "<!doctype "... is not valid JSON` sofort zu dem Schluss, dass eine REST-API versehentlich mit einem Webserver-Frontend-Port verbunden wurde?
-2. **Ressourcen-Vergleich:** Nenne drei technische Gründe, warum für lokale MCP-Server wie `github-mcp-server` ein natives Binary (`stdio`) oder ein direkter HTTP-Endpunkt (`geminiDocs`) einem schweren Docker-Container auf einem 16-GB-Laptop vorzuziehen ist.
-3. **MCP-Neustart:** Über welchen Befehl in der VS Code Befehlspalette (`Strg + Shift + P`) kannst du alle aktiven MCP-Server auflisten, deren Logs einsehen und einen Server gezielt neu starten?
+1. **Ollama vs. Cloud-Endpunkt prüfen:** Verifiziere mit `Invoke-RestMethod http://127.0.0.1:11434/api/tags` und `http://192.168.178.68:11434/api/tags`, welche Modelle lokal vs. im LAN aktiv sind.
+2. **Single Source of Truth prüfen:** Kontrolliere, warum alle globalen MCP-Server zentral in `AppData\Roaming\Code\User\mcp.json` liegen und nicht mehr in jeder `.code-workspace`-Datei dupliziert werden.
+3. **MCP-Neustart:** Über welchen Befehl in der VS Code Befehlspalette (`Strg + Shift + P`) kannst du alle aktiven MCP-Server auflisten, deren Logs einsehen und einen Server gezielt neu starten (`MCP: List Servers`)?
 
 </details>
 
 <details>
-<summary><b>Weiterführende Links & Quellen</b></summary>
+<summary><b>Weiterführende Links &amp; Quellen</b></summary>
 
 * [Model Context Protocol (MCP) Offizielle Spezifikation](https://modelcontextprotocol.io/)
 * [VS Code Copilot MCP Server Dokumentation](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 * [Gemini Docs MCP Server (`gemini-api-docs-mcp.dev`)](https://aistudio.google.com/docs/coding-agents#mcp-setup)
+* [Ollama REST API Dokumentation](https://github.com/ollama/ollama/blob/main/docs/api.md)
 
 </details>
 
 <details>
-<summary><b>Chips & Kernaussagen</b></summary>
+<summary><b>Chips &amp; Kernaussagen</b></summary>
 
-* **Port `8317` = Modell-JSON-API (`CLIProxyAPI`):** Niemals mit Port `8000` (Antigravity HTML-UI) verwechseln.
-* **`geminiDocs` liefert Live-Wissen:** Über `https://gemini-api-docs-mcp.dev` prüft der Agent aktuelle Gemini-SDKs und Schemata direkt zur Laufzeit.
-* **Natives Binary schlägt Docker-Container für MCP:** `github-mcp-server.exe` spart mehrere Gigabyte RAM und funktioniert auch ohne gestartetes Docker Desktop.
+* **Ollama `:11434` statt Proxy `:8317`/`llm-gateway`:** Inoffizielle OAuth-/LLM-Gateways sind seit dem **23.11.2026** entfernt und archiviert; lokal rechnet Ollama, in der Cloud das offizielle Google SDK (`Vertex AI ADC`).
+* **Single Source of Truth (`4 + 2` MCP-Server):** `4` globale Server in `User/mcp.json`, exklusive Repo-Server in `.vscode/mcp.json` — keine Dubletten in `.code-workspace` oder `.mcp.json`.
+* **Port `8317` gehört `agy.exe` (`antigravity.serverPort`):** Auf Cyborg fest auf `8317`, auf SimRacer dynamisch (`0`), auf beiden als legitimer Antigravity IDE Hub.
 * **NVIDIA MCP läuft über `AIUser`-Container:** Fehlt die Named Pipe oder Port `13508`, behebt `Restart-Service NvContainerLocalSystem` den blockierten Watchdog.
 
 </details>
@@ -215,7 +206,7 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <ul class="doku-arch-lines">
 <li>├─ <a href="01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
 <li>├─ <a href="02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Localhost-Proxy &amp; Port-Diagnose (8317)</a></li>
+<li>├─ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 &bull; MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
 <li>└─ <a href="04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
 </ul>
 </div>

@@ -9,7 +9,7 @@
       "path": "../../../local_Cyborg"
     },
     {
-      "name": "3_AC-CM-CSP-Sandbox (mestuermer-svg/ac-cm-csp-sandbox)",
+      "name": "3_AC-CM-CSP-Lab (mestuermer-svg/ac-cm-csp-sandbox)",
       "path": "../ac-cm-csp-sandbox"
     },
     {
@@ -21,30 +21,16 @@
       "path": "../strikerpi-hub"
     }
   ],
-  "mcp": {
-    "servers": {
-      "geminiDocs": {
-        "type": "http",
-        "url": "https://gemini-api-docs-mcp.dev"
-      }
-    }
-  },
   "settings": {
-    "window.title": "${dirty}${activeEditorShort}${separator}Sim Werkstatt | General Cyborg${separator}${appName}",
-    "antigravityCopilot.server.enabled": true,
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,
-    "antigravityCopilot.rateLimit.cooldownMs": 15000,
     "chat.agent.sandbox.enabled": "off",
     "chat.agent.sandbox.network.allowLocalNetwork": true,
     "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
     "docker.context": "simracer",
-    "acpHub.agents.google.authPreference": "oauth",
     "google.cloud.project": "gen-lang-client-0668043276",
     "google.cloud.region": "europe-west3",
     "powershell.cwd": "1_Git-Labor (mestuermer-svg/first)",
-    "github.copilot.llm-gateway.enableInlineCompletion": true,
-    "github.copilot.llm-gateway.replayReasoning": true,
     "markdown.styles": [
       ".vscode/doku-minimap.css"
     ],
@@ -60,8 +46,7 @@
     "github.copilot.chat.githubMcpServer.readonly": true,
     "google.datacloud.executeCellToolForNotebookMCP": false,
     "antigravity.serverPort": 8317,
-    "antigravityCopilot.server.autoStart": true,
-    "inlineChat.defaultModel": "Gemini 3.8 Flash (gemini)",
+    "inlineChat.defaultModel": "gemma4:e4b (ollama-models)",
     "accessibility.voice.autoSynthesize": "on",
     "accessibility.voice.keywordActivation": "inlineChat",
     "terminal.integrated.defaultProfile.windows": "PowerShell (Git-Labor)",
@@ -78,7 +63,7 @@
         ],
         "icon": "server"
       },
-      "SSH: @light (SimRacer Docker)": {
+      "SSH: @light (SimRacer Docker Host)": {
         "path": "ssh.exe",
         "args": [
           "-t",
@@ -86,7 +71,7 @@
         ],
         "icon": "symbol-event"
       },
-      "SSH: @dark (Docker Sandbox)": {
+      "SSH: @dark (Docker Guest Sandbox)": {
         "path": "ssh.exe",
         "args": [
           "-t",
@@ -110,7 +95,8 @@
         ],
         "icon": "chip"
       }
-    }
+    },
+    "remote.SSH.remoteServerListenOnSocket": true
   },
   "tasks": {
     "version": "2.0.0",
@@ -313,10 +299,15 @@
   },
   "extensions": {
     "recommendations": [
-      "printfn.gemini-improved",
+      "ollama.ollama",
       "google.google-antigravity",
+      "google.geminicodeassist",
       "ms-vscode-remote.remote-ssh",
-      "ms-azuretools.vscode-docker"
+      "ms-azuretools.vscode-docker",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "ms-vscode.powershell",
+      "eamodio.gitlens"
     ]
   }
 }

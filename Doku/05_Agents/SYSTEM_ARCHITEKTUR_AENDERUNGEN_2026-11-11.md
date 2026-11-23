@@ -171,24 +171,4 @@ Die Aussagen dieses Dokuments wurden gegen Workspace-Dateien, Skripte, die Polic
 </details>
 
 ---
-<details>
-<summary><b>8. Nachtrag 14.11.2026: SSH-Simwerkstatt, Leitstand-Verifikation, Wake Archibald &amp; Omarchy Pitwall-App</b></summary>
-
-1. **Saubere Rollen- &amp; Namenstrennung zwischen `git-labor` und `assetto-corsa-content`:**
-   - **`git-labor` (Simwerkstatt unter `General Cyborg`):** Alle `.github/agents/*.agent.md`-Profile sind als dedizierte SSH-Brücken (`Simwerkstatt: General Sim (SSH)`, `Simwerkstatt: @rig (SSH)`, `Simwerkstatt: @light (SSH)`, `Simwerkstatt: @dark (SSH)`, `Simwerkstatt: @sarah (SSH)`, `Simwerkstatt: @rick (SSH)`) konfiguriert.
-   - **`assetto-corsa-content` (Leitstand unter `General Sim`):** Führt die Simulations-Agenten (`General Sim`, `Rig Agent`, `SimRacer Light`, `Dark Agent`, `Sarah Coach`, `Rick Agent`).
-   - **6 SSH-Profile in `git-labor.code-workspace`:** Ergänzt um `SSH: @general-sim (Leitstand)` (OpenSSH-Alias `general-sim` $\rightarrow$ `127.0.0.1:22`) sowie die Tasks `Terminal: @general-sim (SSH Client)` und `Simwerkstatt: Leitstand Verifikation (Exec + Log)`.
-
-2. **Direkte SSH-Steuerung (`Invoke-SimAgentSsh.ps1`), Audit-Logging &amp; Autonome Persistenz:**
-   - [`labs/Invoke-SimAgentSsh.ps1`](../../labs/Invoke-SimAgentSsh.ps1) steuert und promptet alle 6 Agenten inkl. `General Sim` direkt über SSH (`-EncodedCommand` für Windows-Ziele, Base64-Bash für Linux-Ziele).
-   - **Sichtbarkeit &amp; Audit-Trail („im Namen von …“):** `ssh_audit_helper.ps1` (mit Double-Hop-SMB-Schutz `Test-AuditPathSafe`) sowie `sarah_ssh_exec.sh` und `rick_worker.py` protokollieren jeden SSH-Aufruf sichtbar im Ziel-Terminal, in `ssh_audit_YYYYMMDD.log`/`.jsonl` und im Gesamtlog `AGENT_KOMMUNIKATION_HISTORIE.md`.
-   - **Autonome Worker-Persistenz &amp; Leitstand-Prüfung (`Test-LeitstandExecution.ps1`):** Alle 6 Hintergrund-Worker (`AgentTerminal_General`, `AgentTerminal_Light`, `AgentTerminal_Rig`, Sandbox `worker.ps1`, `sarah-agent.service`, `rick-agent.service`) laufen autonom weiter, auch wenn `General Sim` getrennt wird. `Test-LeitstandExecution.ps1 -AllRecent -RunLiveHealthTest` verifiziert sowohl die Ausführung als auch den zugehörigen Log-Eintrag (`VERIFIED`).
-
-3. **Wake Archibald mit automatischem Pitwall-Fullscreen &amp; Omarchy Desktop-App (`Pitwall`):**
-   - **Erweiterter Task `Wake Archibald (Pitwall IdeaPad 5 WoL)` (`wake_archibald.ps1`):** Sendet das WoL/WoWLAN-Magic-Packet (`14:18:c3:b4:3e:85`), wartet auf SSH-Port `22` (`192.168.178.98`) und führt anschließend automatisch `~/ac-pitwall/launch_pitwall.sh` auf Archibald aus (plus eigenständiger Task `Show Pitwall on Archibald (Omarchy Fullscreen)` in `assetto-corsa-content/.vscode/tasks.json`).
-   - **`~/ac-pitwall/launch_pitwall.sh`:** Weckt das Display (`hyprctl dispatch dpms on`), beendet einen aktiven Omarchy-Screensaver (`ttfx` / `org.omarchy.screensaver`), hält die `sarah-pitwall`-Konsole auf **Workspace 2** und startet bzw. fokussiert das **StrikerPi Pitwall Hub (`http://192.168.178.86:8080/`)** im Vollbildmodus (`fullscreen: 2`) auf **Workspace 1**.
-   - **Omarchy App (`Pitwall.desktop`):** Unter `~/.local/share/applications/Pitwall.desktop` mit eigenem Tacho-Icon (`~/.local/share/icons/hicolor/256x256/apps/pitwall.png` &amp; `scalable/apps/pitwall.svg`) installiert – direkt über den Omarchy App-Launcher (`SUPER + SPACE` $\rightarrow$ **Pitwall**), im Sarah-Terminal (`pitwall`) oder per SSH-Prompt an `@sarah` startbar.
-
-</details>
-
----*Dokumentation abgelegt unter `Doku/05_Agents/` zur Referenz für anstehende VR- und Telemetrietests.*
+*Dokumentation abgelegt unter `Doku/05_Agents/` zur Referenz für anstehende VR- und Telemetrietests.*
