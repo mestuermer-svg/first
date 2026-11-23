@@ -45,7 +45,7 @@
     "github.copilot.chat.githubMcpServer.lockdown": true,
     "github.copilot.chat.githubMcpServer.readonly": true,
     "google.datacloud.executeCellToolForNotebookMCP": false,
-    "antigravity.serverPort": 8317,
+    "antigravity.serverPort": 0,
     "inlineChat.defaultModel": "gemma4:e4b (ollama-models)",
     "accessibility.voice.autoSynthesize": "on",
     "accessibility.voice.keywordActivation": "inlineChat",

@@ -48,20 +48,31 @@ param(
 )
 
 $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
-$PolicyFile = Join-Path $AgentsRoot "general-SIM\approval_policy.json"
+$PolicyFile = Join-Path $AgentsRoot "general-SIM\pitwall_control_policy.json"
+
+# Verbindlicher Change-Freeze & Cross-Agent-Schreibschutz
+$ChangeFreezeRegex = "(?i)(\.agent\.md|AGENTS\.md|\.instructions\.md|SKILL\.md|approval_policy\.json|pitwall_control_policy\.json|settings\.json|mcp\.json|tasks\.json|\.code-workspace|start_general_terminal\.ps1|start_light_terminal\.ps1|start_rig_terminal\.ps1|start_dark_terminal\.ps1|start_sarah_terminal\.ps1|worker\.ps1|runner\.ps1|rick_worker\.py)"
+$combinedPayloadCheck = "$Action $Prompt $($Params | ConvertTo-Json -Compress -ErrorAction SilentlyContinue)"
+if ($combinedPayloadCheck -match $ChangeFreezeRegex) {
+    Write-Error "[CHANGE-FREEZE BLOCK] Sicherheitsverstoß: Kein Agent darf eigene oder fremde Agenten-Profile (.agent.md), Skills (SKILL.md), System-Configs oder Worker-Skripte ohne manuelle Nutzer-Freigabe ändern!"
+    return
+}
 
 if ($SetApprovalMode -ne "") {
     $mode = $SetApprovalMode.ToUpper()
-    $p = [ordered]@{
-        mode = $mode
-        description = "Steuert das General Sim Freigabe-Gate: MANUAL = Warten auf Bestaetigung; AUTO = Dauerfreigabe"
-        updated_at = (Get-Date -Format "o")
-    }
-    if (Test-Path (Split-Path -Parent $PolicyFile)) {
-        $p | ConvertTo-Json -Depth 3 | Set-Content -Path $PolicyFile -Encoding UTF8
-        Write-Host "`n[+] Freigabemodus für General Sim erfolgreich auf '$mode' gesetzt!`n" -ForegroundColor Green
+    if (Test-Path $PolicyFile) {
+        try {
+            $pol = Get-Content -Path $PolicyFile -Raw -Encoding UTF8 | ConvertFrom-Json
+            $pol | Add-Member -NotePropertyName "mode" -NotePropertyValue $mode -Force
+            $pol | Add-Member -NotePropertyName "updated_at" -NotePropertyValue (Get-Date -Format "o") -Force
+            $pol | Add-Member -NotePropertyName "updated_by" -NotePropertyValue "Send-SimAgentTask" -Force
+            [System.IO.File]::WriteAllText($PolicyFile, ($pol | ConvertTo-Json -Depth 10), ([System.Text.UTF8Encoding]::new($false)))
+            Write-Host "`n[+] Freigabemodus in pitwall_control_policy.json erfolgreich auf '$mode' gesetzt!`n" -ForegroundColor Green
+        } catch {
+            Write-Warning "Fehler beim Aktualisieren von $PolicyFile : $_"
+        }
     } else {
-        Write-Warning "Kann Policy-Datei nicht schreiben ($PolicyFile nicht erreichbar)."
+        Write-Warning "Kann pitwall_control_policy.json nicht erreichen ($PolicyFile). approval_policy.json bleibt per Change-Freeze unangetastet!"
     }
     return
 }
@@ -160,16 +171,46 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $randSuffix = [System.IO.Path]::GetRandomFileName().Replace(".", "").Substring(0, 4)
 $taskId = "task_${timestamp}_${randSuffix}"
 
+function Get-TaskContextSubset {
+    param([string]$Target, [string]$Act, [string]$Prm)
+    $txt = "$Act $Prm".ToLowerInvariant()
+    $subsets = [System.Collections.Generic.List[string]]::new()
+    if ($txt -match "(race\.ini|video\.ini|csp|preset|setup|\.ini)") { $subsets.Add("Assetto_Corsa_Config"); $subsets.Add("ini_parsing") }
+    if ($txt -match "(vr|steamvr|focus|vive|ffb|fanatec|gpu|vram|5070)") { $subsets.Add("Hardware_VR_Telemetry") }
+    if ($txt -match "(docker|sandbox|container|novnc|8006|2222)") { $subsets.Add("Docker_Sandbox_Guest") }
+    if ($txt -match "(replay|video|cut|mp4|stint|lap|sector|telemetr)") { $subsets.Add("Telemetry_Coaching_Media") }
+    if ($txt -match "(mqtt|relay|mosquitto|8080|1883|git)") { $subsets.Add("Edge_Relay_MQTT") }
+    if ($subsets.Count -eq 0) {
+        switch ($Target) {
+            "dark"  { $subsets.Add("Docker_Sandbox_Guest"); $subsets.Add("ini_parsing") }
+            "light" { $subsets.Add("Assetto_Corsa_Config"); $subsets.Add("Docker_Sandbox_Guest") }
+            "rig"   { $subsets.Add("Hardware_VR_Telemetry") }
+            "sarah" { $subsets.Add("Telemetry_Coaching_Media") }
+            "rick"  { $subsets.Add("Edge_Relay_MQTT") }
+            default { $subsets.Add("Workspace_Orchestration") }
+        }
+    }
+    return ,($subsets | Select-Object -Unique)
+}
+
+$ctxSubset = Get-TaskContextSubset -Target $TargetAgent -Act $Action -Prm $Prompt
+$memScope  = if ($TargetAgent -eq "dark") { "memories/sandbox" } else { "memories/host/$TargetAgent" }
+
 $taskData = [ordered]@{
-    task_id      = $taskId
-    target       = $TargetAgent
-    target_agent = $TargetAgent
-    sender       = "git-labor-powershell"
-    source       = "git-labor-powershell"
-    action       = if ($Prompt -ne "") { "ProcessPrompt" } else { $Action }
-    prompt       = $Prompt
-    parameters   = $Params
-    created_at   = (Get-Date).ToUniversalTime().ToString("o")
+    task_id        = $taskId
+    target         = $TargetAgent
+    target_agent   = $TargetAgent
+    sender         = "git-labor-powershell"
+    source         = "git-labor-powershell"
+    priority       = 2
+    origin         = "ssh_cyborg"
+    hop_count      = 0
+    action         = if ($Prompt -ne "") { "ProcessPrompt" } else { $Action }
+    prompt         = $Prompt
+    context_subset = $ctxSubset
+    memory_scope   = $memScope
+    parameters     = $Params
+    created_at     = (Get-Date).ToUniversalTime().ToString("o")
 }
 
 $taskFile = Join-Path $TargetInbox "$taskId.json"

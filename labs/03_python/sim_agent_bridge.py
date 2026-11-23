@@ -26,9 +26,18 @@ class SimAgentBridge:
         # Standard: Shared SMB-Pfad zum SimRacer
         self.agents_base_path = agents_base_path or Path(rf"\\{self.simracer_ip}\ac-sandbox\shared\agents")
         self.known_agents = ["general", "light", "rig", "dark", "sarah", "rick"]
-        self.policy_file = self.agents_base_path / "general-SIM" / "approval_policy.json"
+        self.policy_file = self.agents_base_path / "general-SIM" / "pitwall_control_policy.json"
+        self.frozen_policy_file = self.agents_base_path / "general-SIM" / "approval_policy.json"
         self.mqtt_broker_ip = "192.168.178.86"
         self.mqtt_broker_port = 1883
+        self.protected_patterns = (
+            ".agent.md", "agents.md", ".instructions.md", "skill.md",
+            "approval_policy.json", "pitwall_control_policy.json",
+            "settings.json", "mcp.json", "tasks.json", ".code-workspace",
+            "start_general_terminal.ps1", "start_light_terminal.ps1",
+            "start_rig_terminal.ps1", "start_dark_terminal.ps1",
+            "start_sarah_terminal.ps1", "worker.ps1", "runner.ps1", "rick_worker.py",
+        )
         self.packages = {
             "setups": self.repo_path / "01_Documents_AC_Setups",
             "user_cfg": self.repo_path / "02_Documents_AC_Cfg",
@@ -116,21 +125,57 @@ class SimAgentBridge:
         return {"mode": "MANUAL", "description": "Standard Fallback"}
 
     def set_approval_policy(self, mode: str) -> bool:
-        """Setzt die Freigabepolicy auf 'AUTO' (Dauerfreigabe) oder 'MANUAL' (Warten)."""
+        """Setzt die operative Freigabepolicy in pitwall_control_policy.json (approval_policy.json bleibt per Change-Freeze gesperrt)."""
         m = mode.upper().strip()
-        if m not in ["AUTO", "MANUAL"]:
+        if m not in ["AUTO", "DELEGATED", "MANUAL"]:
             m = "MANUAL"
-        data = {
-            "mode": m,
-            "description": "Steuert das General Sim Freigabe-Gate: MANUAL = Warten auf Bestaetigung; AUTO = Dauerfreigabe",
-            "updated_at": datetime.now(timezone.utc).isoformat()
-        }
         try:
+            existing: Dict[str, Any] = {}
+            if self.policy_file.exists():
+                existing = json.loads(self.policy_file.read_text(encoding="utf-8"))
+            existing["mode"] = m
+            existing["updated_at"] = datetime.now(timezone.utc).isoformat()
+            existing["updated_by"] = "SimAgentBridge"
             self.policy_file.parent.mkdir(parents=True, exist_ok=True)
-            self.policy_file.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+            self.policy_file.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
             return True
         except Exception:
             return False
+
+    def validate_no_cross_agent_tampering(self, action: str, prompt: str, params: Optional[Dict[str, Any]] = None) -> None:
+        """Verhindert, dass ein Agent eigene oder fremde .agent.md, Skills, System-Configs oder Worker-Skripte modifiziert."""
+        blob = f"{action} {prompt} {json.dumps(params or {}, ensure_ascii=False)}".lower()
+        for pat in self.protected_patterns:
+            if pat in blob:
+                raise PermissionError(
+                    f"[CHANGE-FREEZE & CROSS-AGENT-SCHUTZ] Zugriff verweigert: '{pat}' ist schreibgeschützt. "
+                    "Kein Agent darf eigene oder fremde Agenten-Konfigurationen oder Skills ohne Nutzer-Freigabe ändern."
+                )
+
+    def infer_context_subset(self, target_agent: str, action: str, prompt: str) -> List[str]:
+        """Berechnet das Need-to-Know Context_Subset zur Vermeidung von Halluzinationen auf lokalen GPUs."""
+        txt = f"{action} {prompt}".lower()
+        subsets: List[str] = []
+        if any(k in txt for k in ("race.ini", "video.ini", "csp", "preset", "setup", ".ini")):
+            subsets.extend(["Assetto_Corsa_Config", "ini_parsing"])
+        if any(k in txt for k in ("vr", "steamvr", "focus", "vive", "ffb", "fanatec", "gpu", "vram")):
+            subsets.append("Hardware_VR_Telemetry")
+        if any(k in txt for k in ("docker", "sandbox", "container", "novnc", "8006", "2222")):
+            subsets.append("Docker_Sandbox_Guest")
+        if any(k in txt for k in ("replay", "video", "cut", "mp4", "stint", "lap", "sector", "telemetr")):
+            subsets.append("Telemetry_Coaching_Media")
+        if any(k in txt for k in ("mqtt", "relay", "mosquitto", "8080", "1883", "git")):
+            subsets.append("Edge_Relay_MQTT")
+        if not subsets:
+            defaults = {
+                "dark": ["Docker_Sandbox_Guest", "ini_parsing"],
+                "light": ["Assetto_Corsa_Config", "Docker_Sandbox_Guest"],
+                "rig": ["Hardware_VR_Telemetry"],
+                "sarah": ["Telemetry_Coaching_Media"],
+                "rick": ["Edge_Relay_MQTT"],
+            }
+            subsets = defaults.get(target_agent, ["Workspace_Orchestration"])
+        return list(dict.fromkeys(subsets))
 
     def publish_mqtt_task(self, target_agent: str, payload: Dict[str, Any]) -> bool:
         """Publiziert eine Aufgabe als MQTT-Event direkt an den Broker auf StrikerPi."""
@@ -229,20 +274,36 @@ class SimAgentBridge:
         Falls wait_for_result=True, blockiert die Methode und wartet auf result_<taskId>.json in outbox/.
         """
         target = target_agent.lower().lstrip("@")
+        self.validate_no_cross_agent_tampering(action=action, prompt=prompt, params=params)
         now = datetime.now(timezone.utc)
         task_id = f"task_{now.strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:6]}"
         effective_action = ("note" if target == "rick" else "ProcessPrompt") if prompt else action
+        ctx_subset = self.infer_context_subset(target, effective_action, prompt)
+        mem_scope = "memories/sandbox" if target == "dark" else f"memories/host/{target}"
         task_payload = {
             "task_id": task_id,
             "target": target,
             "target_agent": target,
             "sender": source,
             "source": source,
+            "priority": 2,
+            "origin": "ssh_cyborg",
+            "hop_count": 0,
             "action": effective_action,
             "prompt": prompt,
+            "context_subset": ctx_subset,
+            "memory_scope": mem_scope,
             "parameters": params or {},
             "created_at": now.isoformat()
         }
+        # Parallel als Echtzeit-Wakeup an Mosquitto MQTT (:1883) publizieren
+        self.publish_mqtt_task(target, {
+            "task_id": task_id,
+            "target": target,
+            "action": effective_action,
+            "context_subset": ctx_subset,
+            "timestamp": now.isoformat(),
+        })
 
         if target == "rick":
             import tempfile

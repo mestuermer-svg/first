@@ -51,8 +51,8 @@ $AgentCatalog = @(
         HostName    = "VanstrikeCyborg (Lokal)"
         HostIp      = "127.0.0.1"
         Port        = 11434
-        Mode        = "LOKAL (Master)"
-        Script      = Join-Path $SharedAgentsRoot "general-SIM\start_general_terminal.ps1"
+        Mode        = "SSH -ClientMode (Persistenz)"
+        Script      = Join-Path $SharedScriptsRoot "connect_general_terminal.ps1"
         SshCommand  = ""
         Description = "Workspace-, Git-Labor- & Multi-Agent-Orchestrator"
     },

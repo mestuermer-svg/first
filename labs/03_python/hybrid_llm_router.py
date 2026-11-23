@@ -53,11 +53,25 @@ LAPTOP_CODE_MODEL = os.getenv("LAPTOP_CODE_MODEL", "qwen2.5-coder:7b")
 
 TaskTier = Literal["auto", "local", "cloud"]
 WorkloadType = Literal["general", "code"]
+WeightClass = Literal["low", "medium", "high"]
+
+HIGH_WEIGHT_QUEUE_DIR = Path(__file__).resolve().parents[2] / "Systemtests" / "high_weight_queue"
+CLOUD_BUDGET_LIMIT_PER_DAY = int(os.getenv("HYBRID_CLOUD_DAILY_BUDGET", "50"))
+
+
+@dataclass
+class WeightAssessment:
+    weight_score: int
+    weight_class: WeightClass
+    attached_files: int
+    line_count: int
+    json_depth: int
+    estimated_tokens: int
 
 
 @dataclass
 class RouteDecision:
-    target: Literal["simracer_ollama", "laptop_ollama", "vertex_adc", "gemini_api_env", "offline"]
+    target: Literal["simracer_ollama", "laptop_ollama", "vertex_adc", "gemini_api_env", "high_weight_queue", "offline"]
     model: str | None
     base_url: str | None
     project: str | None
@@ -66,6 +80,73 @@ class RouteDecision:
     workload: WorkloadType
     reason: str
     warning: str | None = None
+    weight_score: int = 0
+    weight_class: WeightClass = "low"
+
+
+def _calc_json_depth(obj: Any, current: int = 0) -> int:
+    if isinstance(obj, dict):
+        if not obj:
+            return current + 1
+        return max(_calc_json_depth(v, current + 1) for v in obj.values())
+    if isinstance(obj, list):
+        if not obj:
+            return current + 1
+        return max(_calc_json_depth(v, current + 1) for v in obj)
+    return current
+
+
+def assess_payload_weight(prompt: str = "", files_count: int = 0) -> WeightAssessment:
+    """Deterministische Complexity & Token Assessment Heuristik (< 1 ms, ohne LLM-Call)."""
+    import re
+
+    text = prompt or ""
+    lines = text.count("\n") + (1 if text else 0)
+    inferred_files = len(re.findall(r"\b[\w\-/\\]+\.(?:py|ps1|sh|ini|json|md|ts|js|yml|yaml)\b", text))
+    total_files = max(files_count, inferred_files)
+    depth = 1
+    if text.strip().startswith("{") and text.strip().endswith("}"):
+        try:
+            depth = _calc_json_depth(json.loads(text))
+        except Exception:
+            depth = 2
+    est_tokens = max(1, len(text) // 4)
+    score = (total_files * 18) + (lines // 8) + (depth * 5) + (est_tokens // 120)
+    if score >= 75 or total_files >= 4 or lines >= 250:
+        w_class: WeightClass = "high"
+    elif score >= 22 or total_files >= 2 or lines >= 40:
+        w_class = "medium"
+    else:
+        w_class = "low"
+    return WeightAssessment(
+        weight_score=score,
+        weight_class=w_class,
+        attached_files=total_files,
+        line_count=lines,
+        json_depth=depth,
+        estimated_tokens=est_tokens,
+    )
+
+
+def enqueue_high_weight_task(prompt: str, workload: WorkloadType, assessment: WeightAssessment) -> Path:
+    """Parkt einen schweren Auftrag in der High-Weight Queue, wenn LIVE_RACE aktiv und Cloud-Budget erschöpft ist."""
+    from datetime import datetime, timezone
+
+    HIGH_WEIGHT_QUEUE_DIR.mkdir(parents=True, exist_ok=True)
+    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    q_file = HIGH_WEIGHT_QUEUE_DIR / f"hwq_{ts}_score{assessment.weight_score}.json"
+    payload = {
+        "queued_at": datetime.now(timezone.utc).isoformat(),
+        "workload": workload,
+        "weight_score": assessment.weight_score,
+        "weight_class": assessment.weight_class,
+        "attached_files": assessment.attached_files,
+        "line_count": assessment.line_count,
+        "prompt": prompt,
+        "status": "queued_for_post_race",
+    }
+    q_file.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    return q_file
 
 
 def _http_get_json(url: str, timeout: float = 1.5) -> dict[str, Any] | None:
@@ -172,10 +253,61 @@ def select_route(
     simrig_mode: str | None = None,
     prefer_vertex: bool = True,
     timeout: float = 1.5,
+    prompt: str = "",
+    files_count: int = 0,
+    cloud_budget_exhausted: bool = False,
 ) -> RouteDecision:
     mode = (simrig_mode or fetch_simrig_mode(timeout=timeout)).strip().upper()
     adc_ok = has_vertex_adc()
     key_ok = has_gemini_api_key()
+    weight = assess_payload_weight(prompt=prompt, files_count=files_count)
+
+    # Praediktives Ressourcen-Dispatching bei High-Weight Tasks im Auto-Modus:
+    if task_tier == "auto" and weight.weight_class == "high" and mode == "LIVE_RACE":
+        if cloud_budget_exhausted or (not adc_ok and not key_ok):
+            q_path = enqueue_high_weight_task(prompt=prompt, workload=workload, assessment=weight)
+            return RouteDecision(
+                target="high_weight_queue",
+                model=None,
+                base_url=None,
+                project=None,
+                location=None,
+                simrig_mode=mode,
+                workload=workload,
+                reason=f"LIVE_RACE aktiv + High-Weight Task (Score={weight.weight_score}) + Cloud-Budget erschöpft -> in High-Weight Queue geparkt ({q_path.name}).",
+                weight_score=weight.weight_score,
+                weight_class=weight.weight_class,
+            )
+        cloud_dec = select_route(
+            task_tier="cloud",
+            workload=workload,
+            simrig_mode=mode,
+            prefer_vertex=prefer_vertex,
+            timeout=timeout,
+        )
+        cloud_dec.reason = f"High-Weight Task (Score={weight.weight_score}, Dateien={weight.attached_files}) waehrend LIVE_RACE -> Eskalation an Cloud ({cloud_dec.target}) zum Schutz der Laptop-GPU."
+        cloud_dec.weight_score = weight.weight_score
+        cloud_dec.weight_class = weight.weight_class
+        return cloud_dec
+
+    # Low-Weight Telemetrie/Coaching-Tasks (z. B. Sarah Sektordeltas) direkt auf Laptop-Ollama halten, um 5070 Ti zu schonen
+    if task_tier == "auto" and weight.weight_class == "low" and prompt and len(prompt) < 180 and workload == "general":
+        laptop_fast = probe_ollama(LAPTOP_OLLAMA_BASE, timeout=timeout)
+        if laptop_fast["online"]:
+            chosen, warn = _pick_ollama_model(laptop_fast["installed_models"], LAPTOP_CHAT_MODEL)
+            return RouteDecision(
+                target="laptop_ollama",
+                model=chosen,
+                base_url=LAPTOP_OLLAMA_BASE,
+                project=None,
+                location=None,
+                simrig_mode=mode,
+                workload=workload,
+                reason=f"Low-Weight Micro-Task (Score={weight.weight_score}) -> direkt auf Laptop Ollama ({chosen}), schont RTX 5070 Ti.",
+                warning=warn,
+                weight_score=weight.weight_score,
+                weight_class=weight.weight_class,
+            )
 
     if task_tier == "cloud":
         if prefer_vertex and (adc_ok or not key_ok):
@@ -230,8 +362,10 @@ def select_route(
             location=None,
             simrig_mode=mode,
             workload=workload,
-            reason=f"SimRacer Ollama (:11434) im Modus {mode} verfuegbar (RTX 5070 Ti 16 GB).",
+            reason=f"SimRacer Ollama (:11434) im Modus {mode} verfuegbar (RTX 5070 Ti 16 GB, Score={weight.weight_score}/{weight.weight_class}).",
             warning=warn,
+            weight_score=weight.weight_score,
+            weight_class=weight.weight_class,
         )
 
     laptop_probe = probe_ollama(LAPTOP_OLLAMA_BASE, timeout=timeout)
@@ -244,9 +378,9 @@ def select_route(
         )
         chosen, warn = _pick_ollama_model(installed_laptop, pref)
         why = (
-            "LIVE_RACE aktiv -> RTX 5070 Ti fuer VR reserviert, weiche auf Laptop Ollama aus."
+            f"LIVE_RACE aktiv -> RTX 5070 Ti fuer VR reserviert, weiche auf Laptop Ollama aus (Score={weight.weight_score}/{weight.weight_class})."
             if mode == "LIVE_RACE"
-            else "SimRacer Ollama nicht erreichbar -> lokaler Laptop-Ollama Fallback aktiv."
+            else f"SimRacer Ollama nicht erreichbar -> lokaler Laptop-Ollama Fallback aktiv (Score={weight.weight_score}/{weight.weight_class})."
         )
         return RouteDecision(
             target="laptop_ollama",
@@ -258,6 +392,8 @@ def select_route(
             workload=workload,
             reason=why,
             warning=warn,
+            weight_score=weight.weight_score,
+            weight_class=weight.weight_class,
         )
 
     if task_tier == "auto":
