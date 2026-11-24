@@ -1,6 +1,6 @@
 > **Thema:** Konsolidierte MCP-Server, Ollama (`:11434`), Port-Architektur &amp; Archiv entfernter Proxy-Altlasten in VS Code
 > **Autor:** Michael Stürmer
-> **Datum:** 23.11.2026 *(Altlasten-Abgleich &amp; Konsolidierung)*
+> **Datum:** 24.11.2026 *(Altlasten-Abgleich, Qwen 3.5 &amp; Single-Source-of-Truth)*
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -15,7 +15,7 @@
 <summary><b>Kernkonzepte</b></summary>
 
 <details>
-<summary>1.1 Aktuelle Architektur: Ollama (:11434), offizielle SDKs &amp; konsolidierte MCP-Server (Stand: 23.11.2026)</summary>
+<summary>1.1 Aktuelle Architektur: Ollama (:11434), offizielle SDKs &amp; konsolidierte MCP-Server (Stand: 24.11.2026)</summary>
 
 In der bereinigten Entwicklungsumgebung auf `VanstrikeCyborg` und `SimRacer` greifen lokale GPUs, offizielle Cloud-APIs und verschlankte MCP-Werkzeuge direkt ohne inoffizielle Drittanbieter-Proxys ineinander:
 
@@ -30,13 +30,13 @@ flowchart TD
 
     subgraph Localhost ["Lokale Knoten (Cyborg 127.0.0.1 &amp; SimRacer 192.168.178.68)"]
         VSC["VS Code + Google Antigravity + Gemini Code Assist"]
-        OLL_L["Ollama Laptop (127.0.0.1:11434)<br/>gemma4:e4b (RTX 5060 8 GB)"]
-        OLL_S["Ollama SimRacer (192.168.178.68:11434)<br/>gemma4:12b, qwen2.5-coder:14b (RTX 5070 Ti 16 GB)"]
+        OLL_L["Ollama Laptop (127.0.0.1:11434)<br/>qwen3.5:4b, gemma4:e4b (RTX 5060 8 GB)"]
+        OLL_S["Ollama SimRacer (192.168.178.68:11434)<br/>qwen3.5:9b, gemma4:12b, qwen2.5-coder:14b (RTX 5070 Ti 16 GB)"]
         AGY["Antigravity IDE Hub (agy.exe)<br/>Port 8317 (Cyborg) / 0 (SimRacer)"]
 
-        subgraph MCP ["Konsolidierte MCP-Server (4 Global + 2 Workspace)"]
+        subgraph MCP ["Konsolidierte MCP-Server (4 Global Cyborg / 5 Global SimRacer + 2 Workspace)"]
             CDT["chrome-devtools-mcp (npx stdio)"]
-            MKD["markitdown-mcp (uvx stdio, Cyborg)"]
+            MKD["markitdown-mcp (uvx stdio, Cyborg &amp; SimRacer)"]
             FS["local-workspace-filesystem (Workspace)"]
             GSEARCH["google-ai-search-mcp (Workspace, Cyborg)"]
             NV["NVIDIA App MCP (http://127.0.0.1:13508/mcp, SimRacer)"]
@@ -58,21 +58,21 @@ flowchart TD
 <details>
 <summary>1.2 Aktuelle Ports &amp; bereinigte MCP-Konfigurationsdateien (Single Source of Truth)</summary>
 
-| Port / Typ | Dienst / Komponente | Host / Protokoll | Zweck &amp; Aktueller Status (23.11.2026) |
+| Port / Typ | Dienst / Komponente | Host / Protokoll | Zweck &amp; Aktueller Status (24.11.2026) |
 | :--- | :--- | :--- | :--- |
-| **Port `11434`** | **Ollama Server (`ollama.exe`)** | `127.0.0.1` (Cyborg) &amp; `0.0.0.0` (SimRacer) | Primärer lokaler &amp; LAN-LLM-Endpunkt (`gemma4:e4b`, `gemma4:12b`, `qwen2.5-coder:14b`) als Ersatz für alle entfernten Proxy-Gateways. |
+| **Port `11434`** | **Ollama Server (`ollama.exe`)** | `127.0.0.1` (Cyborg) &amp; `0.0.0.0` (SimRacer) | Primärer lokaler &amp; LAN-LLM-Endpunkt (`qwen3.5:4b`, `gemma4:e4b` bzw. `qwen3.5:9b`, `gemma4:12b`, Legacy `qwen2.5-coder:14b`) als Ersatz für alle entfernten Proxy-Gateways. |
 | **Port `8317`** | **Google Antigravity Hub (`agy.exe`)** | `127.0.0.1` (Cyborg; `0` = dynamisch auf SimRacer) | Legitimer `antigravity.serverPort` der offiziellen `google.google-antigravity` Extension (**nicht** mehr `CLIProxyAPI`). |
 | **Port `13508`** | **NVIDIA App MCP (`NvAppMcpServer.exe`)** | `127.0.0.1` HTTP (`/mcp`) | Auf SimRacer aktiv in Global `mcp.json`; auf Cyborg entfernt (dort `0` aktive Tools). |
 | **Port `8080`** | **StrikerPi Pitwall Hub (`telemetry_relay.py`)** | `192.168.178.86` HTTP / WS | Live-Telemetrie, Lobby-Streams, Sandbox-Steuerung, **Agenten &amp; Light Steuerungskonsole** + **Antigravity Sprachchat-Button**. |
 | **HTTPS Remote** | **Gemini Docs (`geminiDocs`) &amp; Microsoft Learn** | Streamable HTTP | Globale Referenz-MCP-Server in `User\mcp.json` auf beiden Knoten. |
-| **`stdio` Lokal** | **`chrome-devtools`, `markitdown`, `local-workspace-filesystem`, `google-ai-search-mcp`** | Standard I/O (`npx` / `uvx`) | `chrome-devtools` (+ `markitdown` auf Cyborg) global; `local-workspace-filesystem` &amp; `google-ai-search-mcp` exklusiv im Workspace. |
+| **`stdio` Lokal** | **`chrome-devtools`, `markitdown`, `local-workspace-filesystem`, `google-ai-search-mcp`** | Standard I/O (`npx` / `uvx`) | `chrome-devtools` &amp; `markitdown` global auf beiden PCs (`uvx 0.13.9` auf SimRacer nachgezogen); `local-workspace-filesystem` &amp; `google-ai-search-mcp` exklusiv im Workspace. |
 
-### Konsolidierte Speicherorte der MCP-Konfigurationen (Stand: 23.11.2026):
+### Konsolidierte Speicherorte der MCP- &amp; Provider-Konfigurationen (Stand: 24.11.2026):
 1. **VS Code Global User-MCP (`VanstrikeCyborg`):** `C:\Users\strik\AppData\Roaming\Code\User\mcp.json` (`4` Server: `geminiDocs`, `microsoft-learn`, `chrome-devtools`, `markitdown`)
-2. **VS Code Global User-MCP (`SimRacer`):** `C:\Users\Mike\AppData\Roaming\Code\User\mcp.json` (`4` Server: `geminiDocs`, `microsoft-learn`, `chrome-devtools`, `nvidia-app`)
+2. **VS Code Global User-MCP (`SimRacer`):** `C:\Users\Mike\AppData\Roaming\Code\User\mcp.json` (`5` Server: `geminiDocs`, `nvidia-app`, `microsoft-learn`, `chrome-devtools`, `markitdown` via `uvx 0.13.9`)
 3. **VS Code Workspace-MCP (`git-labor`):** `C:\Users\strik\git-labor\.vscode\mcp.json` (`2` Server: `local-workspace-filesystem`, `io.github.shariqriazz/google-ai-search-mcp`)
 4. **VS Code Workspace-MCP (`ac-sandbox` auf SimRacer):** `C:\ac-sandbox\.vscode\mcp.json` (`1` exklusiver Server: `local-workspace-filesystem`)
-5. **Bereinigte / geleerte Alt-Dateien:** `git-labor\.mcp.json` (`{ "mcpServers": {} }`), `assetto-corsa-content\.vscode\mcp.json` (`{ "servers": {} }`), keine `"mcp"`-Dubletten mehr in `git-labor.code-workspace`, `assetto-corsa-content.code-workspace` oder `simracer.code-workspace`.
+5. **Bereinigte Alt-Dateien &amp; Ollama Single-Source-of-Truth (`chatLanguageModels.json`):** `git-labor\.mcp.json` (`{ "mcpServers": {} }`), `assetto-corsa-content\.vscode\mcp.json` (`{ "servers": {} }`). In `C:\Users\strik\AppData\Roaming\Code\User\chatLanguageModels.json` bleibt ausschließlich **`Ollama (SimRacer RTX 5070 Ti)`** (`http://192.168.178.68:11434`) eingetragen — `127.0.0.1:11434` kommt einmalig über `"ollama.endpoint"` in `settings.json`, um doppelte Modelleinträge im Dropdown zu vermeiden.
 
 </details>
 

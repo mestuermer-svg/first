@@ -1,5 +1,6 @@
 ---
 name: Rick Agent
+user-invocable: false
 description: Rick Agent – 24/7 Infrastructure-, Telemetry-Relay-, MQTT-Broker-, Bare-Git- & LAN-Watchdog-Agent auf dem StrikerPi (192.168.178.86). Erreichbar aus git-labor über SSH/SCP (strikerpi) und Bridge-Skripte.
 ---
 

@@ -1,6 +1,6 @@
 > **Thema:** Multi-Workspace &amp; Multi-PC-Verbund: Standorte, MCP-Server, Ports, Ollama, Pitwall-Steuerung &amp; Agenten-Rollen
 > **Autor:** Michael Stürmer
-> **Datum:** 23.11.2026 *(ToS-, Ollama- &amp; 1-zu-1-Sync-Abgleich)*
+> **Datum:** 24.11.2026 *(Qwen 3.5, 76-Ext-Parity &amp; Parallel-Ressourcenlimits)*
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -25,14 +25,14 @@ Um maximale Rechenleistung für Simulation und KI bereitzustellen und den Entwic
 flowchart TD
     subgraph NODE1 ["1. Dev-Station: VanstrikeCyborg (MSI Laptop / Windows 11)"]
         DEV_IDE["VS Code &amp; Google Antigravity Hub (:8317)"]
-        OLL_LAP["Ollama Laptop (127.0.0.1:11434)<br/>gemma4:e4b (RTX 5060 8 GB)"]
+        OLL_LAP["Ollama Laptop (127.0.0.1:11434)<br/>qwen3.5:4b &amp; gemma4:e4b (RTX 5060 8 GB)"]
         GEN_AGENT["@general Agent (General Cyborg &amp; General Sim)"]
         WS_CORE["Workspace: git-labor (Single-Writer Master)"]
     end
 
     subgraph NODE2 ["2. Gaming-Rig: SimRacer (192.168.178.68 / Windows 11)"]
         HW["Ryzen 9 &amp; RTX 5070 Ti (16 GB)<br/>Fanatec DD &amp; SteamVR (90/120 Hz)"]
-        OLL_SIM["Ollama SimRacer (0.0.0.0:11434)<br/>gemma4:12b &amp; qwen2.5-coder:14b"]
+        OLL_SIM["Ollama SimRacer (0.0.0.0:11434)<br/>qwen3.5:9b, gemma4:12b &amp; qwen2.5-coder:14b"]
         NV_MCP["NVIDIA App MCP (Port 13508)"]
         RIG_AGENT["@rig Agent (Hardware &amp; VR Mechaniker)"]
         LIGHT_AGENT["@light Agent (Docker, Content &amp; Light-Mandat)"]
@@ -109,28 +109,33 @@ In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Dat
 <details>
 <summary>1.3 SimRacer-Gegenstück: Der Host-Workspace (<code>simracer.code-workspace</code>) &amp; 1-zu-1-Synchronisation</summary>
 
-Auf der SimRacing-Workstation (`SimRacer` / `192.168.178.68`) wird das bereinigte Host-Workspace **`C:\ac-sandbox\simracer.code-workspace`** (via NTFS-Junction identisch unter `D:\ac-sandbox\simracer.code-workspace`) betrieben — als **1-zu-1-Parität zu `VanstrikeCyborg` ohne SQLite-Konflikte**:
+Auf der SimRacing-Workstation (`SimRacer` / `192.168.178.68`) wird das bereinigte Host-Workspace **`C:\ac-sandbox\simracer.code-workspace`** *(die riskante NTFS-Junction `D:\ac-sandbox` wurde am 24.11.2026 sauber entfernt; `C:` hat nach Archivierung `176,54 GB` frei)* betrieben — als **1-zu-1-Parität zu `VanstrikeCyborg` ohne SQLite-Konflikte**:
 
-#### 1. Warum Settings Sync + GitHub statt geteiltem SMB-Profil?
+#### 1. Warum Settings Sync + Read-Only SMB-Shares statt geteiltem `.vscode`-Profil?
 - VS Code schreibt laufend in lokale SQLite-Datenbanken (`globalStorage\state.vscdb`). Ein direkter SMB-Zugriff von zwei PCs auf dasselbe `AppData\Roaming\Code\User\` würde zu DB-Locks und Korruption führen.
 - **Sauberes Single-Writer-Modell:**
   1. **IDE-Einstellungen &amp; Extensions:** Beide PCs nutzen eine **identische 26-ID-Sperrliste** (`settingsSync.ignoredExtensions`) und **17 geschützte Maschinen-Keys** (`settingsSync.ignoredSettings` für `python.defaultInterpreterPath`, `ollama.endpoint`, lokale `chat.*Model`-Defaults). Über **VS Code Settings Sync** bleiben UI, Themes und saubere Extensions automatisch 1-zu-1 synchron.
-  2. **Code-Repositories (`D:\git-labor`):** `VanstrikeCyborg` ist führender Schreiber (`git push`); der `SimRacer` übernimmt Änderungen per **`git pull`** (bzw. Live-Zugriff vom Laptop über Remote-SSH `ssh simracer`).
+  2. **Code-Repositories &amp; Cyborg Read-Only Shares:** `VanstrikeCyborg` ist führender Schreiber (`git push`); `SimRacer` greift auf die aktiven Cyborg-Repos schreibgeschützt über **`Cyborg-GitLabor-RO`** und **`Cyborg-AC-Content-RO`** (`VANSTRIKECYBORG\strik | Allow | Read` + `files.readonlyInclude`) zu bzw. synchronisiert `D:\git-labor` per **`git pull`**.
 
-#### 2. Bereinigter SimRacer-Stand (23.11.2026)
-- **Extensions:** Alle `19` Proxy-/Wrapper-Altlasten deinstalliert (`0` verblieben); `6` fehlende offizielle Kern-Extensions (`google.geminicodeassist`, `google.google-antigravity`, `google.gemini-cli-vscode-ide-companion`, `openai.chatgpt`, `eamodio.gitlens`, `vscode-icons-team.vscode-icons`) neben `ollama.ollama` installiert (**27 saubere Extensions**).
-- **Lokale RTX 5070 Ti Defaults:** `chatLanguageModels.json` definiert `"Ollama"` (`http://127.0.0.1:11434`), `chat.defaultModel` = `"gemma4:12b"`, `inlineChat.defaultModel` / Agent-Defaults = `"gemma4:12b (ollama-models)"`, `task.allowAutomaticTasks` = `"off"`, **`0` Klartext-API-Keys** in Settings.
+#### 2. Bereinigter SimRacer-Stand (24.11.2026)
+- **Extensions &amp; Tooling:** Alle `19` Proxy-/Wrapper-Altlasten deinstalliert; am 24.11.2026 weitere `50` fehlende Extensions (`OK=50, FAIL=0`) auf volle **`76` identische Extensions** nachgezogen sowie **`uv 0.13.9` / `uvx 0.13.9`** für `markitdown` (`5` globale MCP-Server in `User\mcp.json`) installiert.
+- **Lokale RTX 5070 Ti Defaults:** `chatLanguageModels.json` definiert `"Ollama"` (`http://127.0.0.1:11434`), installiert sind **`qwen3.5:9b`** (`6,6 GB`), `gemma4:12b` und Legacy `qwen2.5-coder:14b` unter `D:\OllamaModels` (`21,94 GB`), `task.allowAutomaticTasks` = `"off"`, **`0` Klartext-API-Keys** in Settings.
 
-#### 3. Verzeichnis-Bündelung auf dem SimRacer (5 Ordner)
+#### 3. Verzeichnis-Bündelung auf dem SimRacer (`simracer.code-workspace`, `[HOST]` + `[CYBORG RO]`)
 ```json
 {
   "folders": [
-    { "name": "AC Sandbox &amp; Docker Host", "path": "." },
-    { "name": "Native Assetto Corsa (Steam)", "path": "C:/Program Files (x86)/Steam/steamapps/common/assettocorsa" },
-    { "name": "Assetto Corsa User Documents", "path": "C:/Users/Mike/Documents/Assetto Corsa" },
-    { "name": "Git-Labor (mestuermer-svg/first)", "path": "D:/git-labor" },
-    { "name": "Local-Simracer (Doku &amp; Configs)", "path": "C:/local_Simracer" }
-  ]
+    { "name": "[HOST] AC Sandbox & Docker", "path": "." },
+    { "name": "[HOST] Native Assetto Corsa (Steam)", "path": "C:/Program Files (x86)/Steam/steamapps/common/assettocorsa" },
+    { "name": "[HOST] Assetto Corsa Documents", "path": "C:/Users/Mike/Documents/Assetto Corsa" },
+    { "name": "[HOST] Git-Labor (Lokal-Klon D:)", "path": "D:/git-labor" },
+    { "name": "[HOST] Local-Simracer (Doku & Configs)", "path": "C:/local_Simracer" },
+    { "name": "[CYBORG RO] Git-Labor (Read-Only)", "path": "//VanstrikeCyborg/Cyborg-GitLabor-RO" },
+    { "name": "[CYBORG RO] Assetto-Corsa-Content (Read-Only)", "path": "//VanstrikeCyborg/Cyborg-AC-Content-RO" }
+  ],
+  "settings": {
+    "files.readonlyInclude": { "//VanstrikeCyborg/**": true, "D:/git-labor/**": true }
+  }
 }
 ```
 
@@ -143,7 +148,7 @@ Zur reibungslosen Kommunikation ohne Portkonflikte gilt folgende aktive Portbele
 
 | Port | Protokoll | Host | Dienst / Komponente | Funktion |
 | :--- | :--- | :--- | :--- | :--- |
-| **`11434`** | HTTP / REST | `127.0.0.1` (Laptop) &amp; `0.0.0.0` (SimRacer) | **Ollama Server (`ollama.exe`)** | Lokale (`gemma4:e4b`) &amp; LAN-Inferenz (`gemma4:12b`, `qwen2.5-coder:14b`) |
+| **`11434`** | HTTP / REST | `127.0.0.1` (Laptop) &amp; `0.0.0.0` (SimRacer) | **Ollama Server (`ollama.exe`)** | Lokale (`qwen3.5:4b`, `gemma4:e4b`) &amp; LAN-Inferenz (`qwen3.5:9b`, `gemma4:12b`, `qwen2.5-coder:14b`) |
 | **`8317` / `0`** | TCP | `127.0.0.1` (Cyborg `8317`, SimRacer `0`) | **Google Antigravity Hub (`agy.exe`)** | Offizieller IDE-Extension-Hub (`antigravity.serverPort`) |
 | **`13508`** | HTTP / MCP | `127.0.0.1` (SimRacer) | NVIDIA App MCP (`NvAppMcpServer.exe`) | GPU-Telemetrie &amp; App-Steuerung für den SimRacer |
 | **`8006`** | HTTPS / Web | `192.168.178.68` | KasmVNC Web-Display | Browser-Zugriff auf die Windows-11-Sandbox-Oberfläche |
@@ -293,14 +298,16 @@ Der Raspberry Pi 4 (**`StrikerPi`**, WLAN `192.168.178.86`, LAN `end0` `.125`, A
 </details>
 
 <details>
-<summary>1.9 VS Code Parity Sync, Python-Umgebung &amp; bereinigte Workspace-Settings (Stand: 23.11.2026)</summary>
+<summary>1.9 VS Code Parity Sync, Parallel-Ressourcenlimits &amp; bereinigte Workspace-Settings (Stand: 24.11.2026)</summary>
 
-Um SQLite-Datenbankkorruption in `%APPDATA%\Code\User\globalStorage\state.vscdb` auszuschließen, teilen `VanstrikeCyborg` und `SimRacer` **keinen** gemeinsamen SMB-Profilordner. Stattdessen laufen beide Windows-Knoten im **1-zu-1-Parity-Sync** (identische offizielle **`27`** Extensions via VS Code Settings Sync + Single-Writer-Git-Hub: `VanstrikeCyborg` pusht, `SimRacer` pullt) mit symmetrischem Maschinenschutz:
+Um SQLite-Datenbankkorruption in `%APPDATA%\Code\User\globalStorage\state.vscdb` auszuschließen, teilen `VanstrikeCyborg` und `SimRacer` **keinen** gemeinsamen SMB-Profilordner. Stattdessen laufen beide Windows-Knoten im **1-zu-1-Parity-Sync** (identische **`76`** Extensions am 24.11.2026 nachgezogen, `uvx 0.13.9` + `5` MCP-Server auf SimRacer, Single-Writer-GitHub + Read-Only-SMB-Shares) mit symmetrischem Maschinenschutz:
 
 - **Identische Sync-Sperrliste auf beiden PCs (`User\settings.json`):**
   - `settingsSync.ignoredExtensions` (**`26`** entfernte Proxy-/Gateway-/Wrapper-IDs, damit gelöschte Extensions nicht zurücksynchronisiert werden).
   - `settingsSync.ignoredSettings` (**`17`** maschinenlokale Keys inkl. `python.defaultInterpreterPath`, `whispering.pythonPath`, `ollama.endpoint`, `antigravity.serverPort`, `chat.agent.sandbox.fileSystem.userConfiguredPaths`, damit sich Windows-Pfade und lokale GPU-Endpoints nicht überschreiben).
-- **Bereinigte LLM- &amp; MCP-Basis:** Lokaler Zugriff direkt auf **`Ollama`** (`http://127.0.0.1:11434`, `gemma4:e4b` auf Laptop; `gemma4:12b` &amp; `qwen2.5-coder:14b` auf `SimRacer`) sowie offizielles **Vertex ADC** (`gen-lang-client-0668043276` / `europe-west3`) und BYOK (`GEMINI_API_KEY`); globale `User\mcp.json` auf **`4`** eindeutige Server reduziert.
+- **Bereinigte LLM-, Agenten- &amp; Parallel-Ressourcen-Basis (24.11.2026):**
+  - **Ollama Single-Source-of-Truth (`chatLanguageModels.json`):** Laptop (`http://127.0.0.1:11434`, `qwen3.5:4b` &amp; `gemma4:e4b`) kommt einmalig über `settings.json`; `chatLanguageModels.json` hält für den SimRacer ausschließlich **`Ollama (SimRacer RTX 5070 Ti)`** (`192.168.178.68:11434`, `qwen3.5:9b`, `gemma4:12b`, Legacy `qwen2.5-coder:14b`).
+  - **Parallel-Schutz auf `SimRacer` (Host + Ollama + AC-Sandbox):** `.wslconfig` auf `memory=14GB` / `processors=6` (`autoMemoryReclaim=gradual`), beide `docker-compose*.yml` auf `RAM_SIZE: "10G"` / `CPU_CORES: "6"` (`cpus: 6.0`, `mem_limit: 12g`), `start-ollama-simracer.ps1` auf `OLLAMA_KEEP_ALIVE=30m` &amp; `OLLAMA_NUM_PARALLEL=1` *(offener Admin-Fix auf SimRacer: `bcdedit /deletevalue "{current}" numproc` hebt den 6-Kern-/12-Thread-Deckel auf alle 12 Kerne / 24 Threads)*.
 
 #### Python-Standardumgebung auf `VanstrikeCyborg`
 - **Systemweiter User-`PATH` (Position 1):** `C:\Users\strik\.local\python-env\Scripts\` (`Python 3.14.7`, `pip 26.3`, eingerichtet via `uv venv --seed --python 3.14`), inkl. **`google-antigravity 0.1.23`**, **`google-genai 3.2.0`** und **`mcp 2.3.0`**.
@@ -310,8 +317,8 @@ Um SQLite-Datenbankkorruption in `%APPDATA%\Code\User\globalStorage\state.vscdb`
 
 | Workspace | Aktives Profil / Knoten | KI-Endpunkt &amp; Auth | Agent- &amp; Sandbox-Settings | MCP-Server &amp; Besonderheiten |
 | :--- | :--- | :--- | :--- | :--- |
-| **`git-labor.code-workspace`** *(Laptop)* | `VanstrikeCyborg` (`Default`) | Ollama lokal (`http://127.0.0.1:11434`) + Vertex ADC (`gen-lang-client-0668043276`) / BYOK; `ollama.ollama` empfohlen | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "off"` | `4` globale MCP + `2` Workspace-MCP (`git-labor/.vscode/mcp.json`); `0` `mcp_proxy.js`; 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
-| **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` (`27` offizielle Extensions) | `ollama.endpoint: "http://127.0.0.1:11434"` (`gemma4:12b`, `qwen2.5-coder:14b` unter `D:\OllamaModels`) | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "off"`, `python.defaultInterpreterPath` ignoriert | `geminiDocs`, `microsoft-learn`, `chrome-devtools`, `nvidia-app` (`User\mcp.json`) + `local-workspace-filesystem` (`C:\ac-sandbox\.vscode\mcp.json`); `C:\local_Simracer\.vscode\settings.json` bereinigt (`{}`) |
+| **`git-labor.code-workspace`** *(Laptop)* | `VanstrikeCyborg` (`Default`) | Ollama lokal (`http://127.0.0.1:11434`, `qwen3.5:4b`/`gemma4:e4b`) + SimRacer (`192.168.178.68:11434`, `qwen3.5:9b`) + Vertex ADC | `chat.agentFilesLocations` (filtert fremde Agents), `user-invocable: false` auf SSH-Workern, XOR-Mutex, `task.allowAutomaticTasks: "off"` | `4` globale MCP + `2` Workspace-MCP (`git-labor/.vscode/mcp.json`); 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
+| **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` (`76` offizielle Extensions) | `ollama.endpoint: "http://127.0.0.1:11434"` (`qwen3.5:9b`, `gemma4:12b`, `qwen2.5-coder:14b` unter `D:\OllamaModels`) | `[HOST]` + `[CYBORG RO]` SMB-Shares (`files.readonlyInclude`), `.wslconfig` `14GB`/`6`, Compose `10G`/`6` | `geminiDocs`, `nvidia-app`, `microsoft-learn`, `chrome-devtools`, `markitdown` (`User\mcp.json`) + `local-workspace-filesystem` (`C:\ac-sandbox\.vscode\mcp.json`) |
 | **`pitwall.code-workspace`** *(Archibald `192.168.178.98`)* | Linux `archibald` *(Sleep / ausstehender Abgleich)* | Legacy `:8317` bei nächster Aktivierung auf Ollama / Google SDK umzustellen | `~/ac-pitwall/.venv` für `@sarah` | AC-UDP `9996`, StrikerPi-Anbindung (`192.168.178.86`) |
 
 </details>
@@ -362,6 +369,8 @@ Um SQLite-Datenbankkorruption in `%APPDATA%\Code\User\globalStorage\state.vscdb`
 <details>
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
+* [Letztstand 24.11.2026 &amp; Nacharbeiten-Register (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`)](../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
+* [Letztstand 23.11.2026 (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md`)](../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md)
 * [02 – Git, GitHub & Multi-Root Workspaces](./02_git-github-und-multi-root-workspaces.md)
 * [03 – MCP-Server, Localhost-Proxy & Port-Diagnose](./03_mcp-server-localhost-proxy-und-ports.md)
 * [05 – Workspace-Schnittstelle SimRacer & Agenten-Terminals](../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md)

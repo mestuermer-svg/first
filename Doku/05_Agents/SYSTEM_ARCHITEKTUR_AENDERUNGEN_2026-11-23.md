@@ -6,6 +6,9 @@
 
 Dieses Dokument hält den verbindlichen Architektur- und Konfigurationsstand vom **23.11.2026** fest: den vollständigen Rückbau inoffizieller OAuth-/Gateway-Proxys, die wiederhergestellte Agenten-Trennung mit verbindlichem Selbstschutz (`Change-Freeze`), die Host-vor-SSH-Priorisierung, das 2-Knoten-Ollama-GPU-Setup samt VR-Schutz sowie die am 23.11.2026 live gemessene Netz-, SMB-, Mosquitto- und Pitwall-Kommunikation zwischen `VanstrikeCyborg`, `SimRacer`, `StrikerPi` und `Archibald`.
 
+> [!NOTE]
+> **Anschluss-Protokoll (24.11.2026):** Alle nachfolgenden Änderungen (`C: -> D:`-Archivierung `+110,71 GB`, `76` Extensions Sync, `Cyborg-*-RO`-Shares, `qwen3.5:9b`/`4b`, RTX-5070-Ti-Lastbeweis, Workspace-Agenten-Filter, XOR-Mutex, Parallel-Ressourcenlimits &amp; `bcdedit numproc 12`-Befund) sowie das **Register der Nacharbeiten** stehen in [`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md).
+
 <details>
 <summary><b>Lernziele</b></summary>
 
@@ -238,6 +241,7 @@ Die erste Testfahrt wurde im 2-Ebenen-Verbund ([`record-simracer-testdrive.ps1`]
 <details>
 <summary><b>Weiterführende Links &amp; Quellen</b></summary>
 
+- **Nachfolge-Protokoll (24.11.2026 &amp; Nacharbeiten-Register):** [`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
 - **Testfahrt-Auswertung (`testdrive_20261123_070115`):** [`AUSWERTUNG_testdrive_20261123_070115.md`](../../Systemtests/Testdrive_testdrive_20261123_070115/AUSWERTUNG_testdrive_20261123_070115.md)
 - **Testfahrt-Recorder &amp; Observer:** [`record-simracer-testdrive.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/scripts/record-simracer-testdrive.ps1) · [`monitor_testdrive_cyborg.py`](../../labs/03_python/monitor_testdrive_cyborg.py)
 - **AC-Workspace-Letztstand &amp; Testfahrt-Checkliste (Abschnitt 6):** [`system-letztstand-ollama-leitstand-2026-11-23.md`](../../../assetto-corsa-content/docs/03_agenten_system/system-letztstand-ollama-leitstand-2026-11-23.md)

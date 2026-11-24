@@ -47,9 +47,9 @@ GCP_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT", "gen-lang-client-0668043276")
 GCP_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "europe-west3")
 
 SIMRACER_CHAT_MODEL = os.getenv("SIMRACER_CHAT_MODEL", "gemma4:12b")
-SIMRACER_CODE_MODEL = os.getenv("SIMRACER_CODE_MODEL", "qwen2.5-coder:14b")
+SIMRACER_CODE_MODEL = os.getenv("SIMRACER_CODE_MODEL", "qwen3.5:9b")
 LAPTOP_CHAT_MODEL = os.getenv("LAPTOP_CHAT_MODEL", "gemma4:e4b")
-LAPTOP_CODE_MODEL = os.getenv("LAPTOP_CODE_MODEL", "qwen2.5-coder:7b")
+LAPTOP_CODE_MODEL = os.getenv("LAPTOP_CODE_MODEL", "qwen3.5:4b")
 
 TaskTier = Literal["auto", "local", "cloud"]
 WorkloadType = Literal["general", "code"]

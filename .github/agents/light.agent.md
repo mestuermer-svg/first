@@ -1,5 +1,6 @@
 ﻿---
 name: SimRacer Light
+user-invocable: false
 description: SimRacer Light – Host-Orchestrator für Docker und Localhost SimRacer (192.168.178.68). Erreichbar aus git-labor über SSH (simracer) und Bridge-Skripte (Send-SimAgentTask.ps1 / Agent-Terminals.ps1).
 ---
 

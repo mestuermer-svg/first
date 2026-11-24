@@ -1,6 +1,6 @@
 > **Thema:** Workspace-Schnittstelle: SimRacer-Verbund, Task-Queue & Agenten-Terminals
 > **Autor:** Michael Stürmer
-> **Datum:** 11.11.2026
+> **Datum:** 24.11.2026 *(Workspace-Agenten-Isolation & XOR-Mutex)*
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -381,6 +381,21 @@ Seit dem **23.11.2026** ergänzt die Live-Steuerdatei `\\192.168.178.68\ac-sandb
 </details>
 
 <details>
+<summary>1.13 Workspace-Agenten-Isolation, Hierarchie-Gate &amp; atomarer XOR-Mutex (Stand: 24.11.2026)</summary>
+
+Damit im Multi-Root-Betrieb keine doppelten Agenten im Chat-Dropdown erscheinen und sich `git-labor` (SSH) und `assetto-corsa-content` (Host) bei Aufträgen an den SimRacer nicht ins Gehege kommen, greifen seit dem **24.11.2026** drei Mechanismen:
+
+1. **Workspace-Sichtbarkeit (`chat.agentFilesLocations` &amp; `user-invocable: false`):**
+   - `git-labor.code-workspace` schließt fremde `.github/agents`-Ordner über relative Pfade (`".github/agents": false`, `"../git-labor/.github/agents": true`) aus.
+   - Die `5` SSH-Worker (`dark`, `light`, `rig`, `sarah`, `rick`) unter `git-labor\.github\agents\` tragen `user-invocable: false`. So bleiben im `git-labor`-Dropdown nur `General Cyborg` und `Simwerkstatt: General Sim (SSH)` wählbar; im Workspace `assetto-corsa-content` bleiben alle `6` Agenten direkt aktiv.
+2. **Hierarchie- &amp; Pitwall-Gate (`Send-SimAgentTask.ps1` &amp; `sim_agent_bridge.py`):**
+   - Jeder Dispatch prüft vor dem Schreiben in die Queue sowohl die Delegations-Hierarchie (`General_Cyborg`/`General_Sim` &rarr; `Light` &rarr; Worker, gesteuert über `-WorkspaceContext` / `-IssuedBy`) als auch `pitwall_control_policy.json` (`agents_paused`, `agent_states`, `mode`).
+3. **Atomarer XOR-Mutex (`execution_mutex.lock` + `.json`):**
+   - Vor jeder Ausführung sperrt der Dispatcher unter `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\execution_mutex.lock` (plus Metadaten `.json`) mit `120 s` TTL-Recovery und prüft laufende Inbox-Tasks des jeweils anderen Workspace-Kontexts (keine gleichzeitige Host-/SSH-Parallel-Mutation).
+
+</details>
+
+<details>
 <summary><b>Übungsaufgaben</b></summary>
 
 1. **Queue-Pfad-Verständnis:** Unter welchem Netzwerk-Pfad muss das Skript aus `git-labor` eine JSON-Datei ablegen, wenn es dem `@rig`-Agenten am SimRacer einen Auftrag erteilen will?
@@ -394,6 +409,7 @@ Seit dem **23.11.2026** ergänzt die Live-Steuerdatei `\\192.168.178.68\ac-sandb
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
 ### Handbücher & Bridge-Skripte
+* [Letztstand 24.11.2026 &amp; Nacharbeiten-Register (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
 * [Detailliertes Handbuch im SimRacer-Workspace](../../../assetto-corsa-content/docs/03_agenten_system/agenten-terminals-prompt-verarbeitung-und-rueckmeldungs-handbuch.md)
 * [E2E-Testbericht: Agenten-Kommunikation, Sandbox & Log-Links (10.11.2026)](../../../assetto-corsa-content/docs/03_agenten_system/agenten-kommunikation-und-sandbox-testbericht.md)
 * [Modul 5.4: Agenten trainieren, primen und orchestrieren](./04_agenten-trainieren-primen-und-orchestrieren.md)

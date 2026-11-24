@@ -24,6 +24,10 @@
   "settings": {
     "antigravity.autoOpenFiles": true,
     "antigravity.autoRecover": true,
+    "chat.agentFilesLocations": {
+      ".github/agents": false,
+      "../git-labor/.github/agents": true
+    },
     "chat.agent.sandbox.enabled": "off",
     "chat.agent.sandbox.network.allowLocalNetwork": true,
     "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
@@ -48,7 +52,7 @@
     "antigravity.serverPort": 0,
     "inlineChat.defaultModel": "gemma4:e4b (ollama-models)",
     "accessibility.voice.autoSynthesize": "on",
-    "accessibility.voice.keywordActivation": "inlineChat",
+    "accessibility.voice.keywordActivation": "chatInView",
     "terminal.integrated.defaultProfile.windows": "PowerShell (Git-Labor)",
     "terminal.integrated.profiles.windows": {
       "PowerShell (Git-Labor)": {
