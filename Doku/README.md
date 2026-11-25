@@ -167,7 +167,7 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 .doku-arch-badge { display: inline-block; font-size: 0.74em; padding: 0 6px; margin-left: 5px; border-radius: 999px; background: rgba(59, 130, 246, 0.22); color: #bfdbfe !important; border: 1px solid rgba(96, 165, 250, 0.4); }
 details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 292px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.93); border: 1px solid rgba(96, 165, 250, 0.62); border-radius: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); transition: width 0.18s ease, max-height 0.18s ease, border-color 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
 details.doku-minimap:hover { border-color: #93c5fd; }
-details.doku-minimap[open] { width: min(900px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; border-radius: 14px; }
+details.doku-minimap[open] { width: min(920px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; border-radius: 14px; }
 details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 13px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.92)); border-bottom: 1px solid rgba(148, 163, 184, 0.24); display: flex; align-items: center; justify-content: space-between; user-select: none; }
 details.doku-minimap > summary::-webkit-details-marker { display: none; }
 details.doku-minimap > summary .minimap-toggle::after { content: "+"; font-size: 1.05em; opacity: 0.85; padding: 0 4px; }
@@ -188,53 +188,60 @@ details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 <div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Letztstand 24.11.</a></div>
+<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Letztstand 25.11. (v5)</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
-<div class="doku-arch-card-title">🐧 <a href="01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
+<div class="doku-arch-card-title">🐧 <a href="01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
-<li>├─ <a href="01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
-<li>├─ <a href="01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
-<li>├─ <a href="01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
-<li>└─ <a href="01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
+<li>├─ <a href="01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams & Expansions</a> <a class="doku-arch-badge" href="../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess & systemd</a></li>
+<li>├─ <a href="01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH & Nginx</a></li>
+<li>├─ <a href="01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts & Backups</a></li>
+<li>└─ <a href="01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen & Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🧩 <a href="02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
+<div class="doku-arch-card-title">🧩 <a href="02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP & Gemini)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
-<li>├─ <a href="02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a></li>
-<li>├─ <a href="02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
-<li>└─ <a href="02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity &amp; Parallel-Limits</a></li>
+<li>├─ <a href="02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) & Remote</a></li>
+<li>├─ <a href="02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow & Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) & Ports (Archiv: Proxy)</a> <a class="doku-arch-badge" href="../.vscode/mcp.json">mcp.json</a></li>
+<li>├─ <a href="02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio & API-Keys</a></li>
+<li>└─ <a href="02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity & Parallel-Limits</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r3">
-<div class="doku-arch-card-title">🐍 <a href="03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
+<div class="doku-arch-card-title">🐍 <a href="03_Python_Coding/README.md">03_Python_Coding (Python, uv & GenAI SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance &amp; Notebooks</a></li>
-<li>├─ <a href="03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
-<li>└─ <a href="03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
+<li>├─ <a href="03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance & Notebooks</a> <a class="doku-arch-badge" href="../notebook-agent-environments/agent_demo.ipynb">.ipynb</a></li>
+<li>├─ <a href="03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) & Interactions API</a></li>
+<li>└─ <a href="03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse & pytest</a> <a class="doku-arch-badge" href="../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r4">
-<div class="doku-arch-card-title">🌐 <a href="04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
+<div class="doku-arch-card-title">🌐 <a href="04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS & Web-SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
-<li>├─ <a href="04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
+<li>├─ <a href="04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 & DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) & TypeScript</a></li>
 <li>└─ <a href="04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r5">
-<div class="doku-arch-card-title">🤖 <a href="05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
+<div class="doku-arch-card-title">🤖 <a href="05_Agents/README.md">05_Agents (KI-Agenten, Skills & Orchestrierung)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
-<li>├─ <a href="05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href="../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
-<li>├─ <a href="05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills &amp; MCP-Tools</a> <a class="doku-arch-badge" href="../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
-<li>├─ <a href="05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../.github/agents/light.agent.md">@light</a></li>
-<li>├─ <a href="05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals &amp; XOR-Mutex</a> <a class="doku-arch-badge" href="../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
-<li>└─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Letztstand 24.11. &amp; Nacharbeiten-Register</a> <a class="doku-arch-badge" href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md">23.11.</a></li>
+<li>├─ <a href="05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules & Prompts</a> <a class="doku-arch-badge" href="../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills & MCP-Tools</a> <a class="doku-arch-badge" href="../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../.github/agents/light.agent.md">@light</a></li>
+<li>├─ <a href="05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
+<li>├─ <a href="05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 6-Rollen-Verbund</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Letztstand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
+<li>├─ <a href="05_Agents/HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md">Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md">Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md">Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)</a></li>
+<li>├─ <a href="05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md">Pitwall & Systemreferenz (NotebookLM-Quelle)</a></li>
+<li>└─ <a href="05_Agents/PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md">Boxencrew & Teamchef Konzept (NotebookLM)</a></li>
 </ul>
 </div>
 </div>

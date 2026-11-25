@@ -58,7 +58,10 @@ param(
     [int]$LockTtlSeconds = 120,
 
     [Parameter()]
-    [switch]$QueryStatus
+    [switch]$QueryStatus,
+
+    [Parameter()]
+    [switch]$QueryLeitstand
 )
 
 $AgentsRoot = "\\$SimRacerHost\ac-sandbox\shared\agents"
@@ -261,6 +264,42 @@ if ($QueryStatus) {
     return
 }
 
+if ($QueryLeitstand) {
+    $protoFile = Join-Path $AgentsRoot "general-SIM\logs\leitstand_protocol.jsonl"
+    $gapsFile = Join-Path $AgentsRoot "general-SIM\logs\capability_gaps_summary.json"
+    Write-Host "`n=== General SIM Leitstand-Protokoll & Missing-Tools-Digest ===" -ForegroundColor Cyan
+    if (Test-Path $protoFile) {
+        $rows = @(Get-Content -Path $protoFile -Encoding UTF8 -ErrorAction SilentlyContinue | Where-Object { $_.Trim() -ne "" } | Select-Object -Last 15)
+        [array]::Reverse($rows)
+        foreach ($r in $rows) {
+            try {
+                $obj = $r | ConvertFrom-Json
+                $col = switch ($obj.final_status) {
+                    "VerifiedSuccess"    { "Green" }
+                    "Executed"           { "Cyan" }
+                    "MissingCapability"  { "Yellow" }
+                    "Unsupported"        { "Yellow" }
+                    default              { "Red" }
+                }
+                Write-Host ("  [{0}] {1,-26} | {2,-18} | {3,-20} | {4}" -f ([string]$obj.timestamp).Substring(0, [Math]::Min(19, ([string]$obj.timestamp).Length)), $obj.task_id, $obj.final_status, $obj.error_code, $obj.summary) -ForegroundColor $col
+            } catch {}
+        }
+    } else {
+        Write-Host "  (Noch keine Eintraege in $protoFile)" -ForegroundColor DarkGray
+    }
+    if (Test-Path $gapsFile) {
+        try {
+            $g = Get-Content -Path $gapsFile -Raw -Encoding UTF8 | ConvertFrom-Json
+            Write-Host "`n  Fehlende Werkzeuge: $($g.unique_missing_tools) | Fehlende Kompetenzen: $($g.unique_missing_competencies) | Gap-Events: $($g.total_gap_events)" -ForegroundColor Yellow
+            foreach ($mt in @($g.missing_tools)) {
+                Write-Host ("    - @{0}: {1} ({2}x)" -f $mt.agent, $mt.tool, $mt.count) -ForegroundColor Yellow
+            }
+        } catch {}
+    }
+    Write-Host ""
+    return
+}
+
 $TargetAgent = $TargetAgent.ToLower()
 
 # --- 1. HIERARCHIE-GATE ---
@@ -442,10 +481,28 @@ for ($attempt = 1; $attempt -le 5; $attempt++) {
     }
 }
 if ($resultJson) {
+    $stColor = switch ($resultJson.status) {
+        "VerifiedSuccess"    { "Green" }
+        "Success"            { "Green" }
+        "Executed"           { "Cyan" }
+        "MissingCapability"  { "Yellow" }
+        "Unsupported"        { "Yellow" }
+        "Ignored"            { "Yellow" }
+        default              { "Red" }
+    }
     Write-Host "`n========================= RÜCKMELDUNG ERHALTEN =========================" -ForegroundColor Cyan
     Write-Host "Task-ID:      $($resultJson.task_id)" -ForegroundColor White
     Write-Host "Agent:        $($resultJson.agent)" -ForegroundColor White
-    Write-Host "Status:       $($resultJson.status)" -ForegroundColor (if ($resultJson.status -eq "Success") { "Green" } else { "Red" })
+    Write-Host "Status:       $($resultJson.status)" -ForegroundColor $stColor
+    if ($resultJson.error_code) { Write-Host "Fehlercode:   $($resultJson.error_code)" -ForegroundColor Yellow }
+    if ($resultJson.executed_handler) { Write-Host "Handler:      $($resultJson.executed_handler)" -ForegroundColor Gray }
+    if ($resultJson.tool_used) { Write-Host "Werkzeug:     $($resultJson.tool_used)" -ForegroundColor Gray }
+    if ($resultJson.missing_tools -and @($resultJson.missing_tools).Count -gt 0) {
+        Write-Host "Fehlende Tools: $((@($resultJson.missing_tools)) -join ', ')" -ForegroundColor Yellow
+    }
+    if ($resultJson.ollama_extension_proposal) {
+        Write-Host "Ollama-Vorschlag: $($resultJson.ollama_extension_proposal | ConvertTo-Json -Compress)" -ForegroundColor DarkCyan
+    }
     Write-Host "Exit-Code:    $($resultJson.exit_code)" -ForegroundColor White
     Write-Host "Dauer:        $($resultJson.duration_seconds) s" -ForegroundColor Gray
     Write-Host "------------------------------------------------------------------------" -ForegroundColor DarkGray

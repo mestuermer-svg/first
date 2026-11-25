@@ -397,6 +397,55 @@ class SimAgentBridge:
             "inbox_path": str(paths["inbox"])
         }
 
+    def get_leitstand_protocol(self, limit: int = 30) -> List[Dict[str, Any]]:
+        """Liest die jüngsten Einträge des General-SIM Leitstand-Protokolls."""
+        proto_path = self.agents_base_path / "general-SIM" / "logs" / "leitstand_protocol.jsonl"
+        if not proto_path.exists():
+            return []
+        entries: List[Dict[str, Any]] = []
+        for raw in proto_path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = raw.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+                if isinstance(obj, dict):
+                    entries.append(obj)
+            except Exception:
+                continue
+        entries.reverse()
+        return entries[: max(1, limit)]
+
+    def get_missing_tools_report(self) -> Dict[str, Any]:
+        """Liest den aggregierten Missing-Tools- und Kompetenz-Digest aus General SIM."""
+        summary_path = self.agents_base_path / "general-SIM" / "logs" / "capability_gaps_summary.json"
+        if not summary_path.exists():
+            return {"total_gap_events": 0, "unique_missing_tools": 0, "missing_tools": [], "missing_competencies": []}
+        try:
+            return json.loads(summary_path.read_text(encoding="utf-8-sig"))
+        except Exception:
+            return {"total_gap_events": 0, "unique_missing_tools": 0, "missing_tools": [], "missing_competencies": []}
+
+    def get_agent_toolboxes(self) -> Dict[str, Any]:
+        """Liest die Werkzeugkoffer (toolbox.json) aller Agenten aus shared/memories/."""
+        mem_root = self.agents_base_path.parent / "memories"
+        rel_map = {
+            "general": mem_root / "host" / "general" / "toolbox.json",
+            "light": mem_root / "host" / "light" / "toolbox.json",
+            "rig": mem_root / "host" / "rig" / "toolbox.json",
+            "dark": mem_root / "sandbox" / "toolbox.json",
+            "sarah": mem_root / "host" / "sarah" / "toolbox.json",
+            "rick": mem_root / "host" / "rick" / "toolbox.json",
+        }
+        result: Dict[str, Any] = {}
+        for aid, p in rel_map.items():
+            if p.exists():
+                try:
+                    result[aid] = json.loads(p.read_text(encoding="utf-8-sig"))
+                except Exception:
+                    pass
+        return result
+
     def send_agent_task(
         self,
         target_agent: str,

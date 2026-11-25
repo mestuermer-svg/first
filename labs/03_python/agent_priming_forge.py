@@ -148,9 +148,9 @@ AGENT_SPECS = [
         "rel_dir": "host/rig",
         "filename": "priming_profile",
         "scope_note": (
-            "@rig Host & Hardware Hub natively on SimRacer (192.168.178.68). Owns physical RTX 5070 Ti (16303 MiB), Ryzen 9 3900X (watch bcdedit numproc=12!), "
-            "HTC VIVE Focus Vision DP (90 Hz stable / 120 Hz Beta), Fanatec FFB, SteamVR logs (AcquireSync WAIT_TIMEOUT), native AC/CSP video.ini/grass_fx.ini/graphics_adjustments.ini/vr_tweaks.ini, "
-            "rig-hub.ps1 Watchdog (pausing Sandbox on LIVE_RACE), SimRacer-Telemetry-Sender (:50005), SimRacer VR Radio Bridge (:8092), and closed-loop Optimization-Sandbox parity with @dark via rig_dark_optimization_core."
+            "@rig Hardware, Display/NVIDIA, Windows-Settings & VR Specialist directly under @light on SimRacer (192.168.178.68). Owns physical RTX 5070 Ti (16303 MiB), Ryzen 9 3900X (watch bcdedit numproc=12!), "
+            "HTC VIVE Focus Vision DP (90 Hz stable / 120 Hz Beta), Hisense TV / Windows Display / ClearType / NVIDIA inspection (rig_display_tuner.py), Fanatec FFB, SteamVR logs (AcquireSync WAIT_TIMEOUT), native AC/CSP video.ini/grass_fx.ini/graphics_adjustments.ini/vr_tweaks.ini, "
+            "rig-hub.ps1 Watchdog, local Ollama Tool Runtime (toolbox.json + report_capability_gap, NEVER fake Success), and reports all before/after evidence back to @light for 2-stage QA."
         ),
     },
     {
@@ -182,9 +182,10 @@ AGENT_SPECS = [
         "rel_dir": "host/light",
         "filename": "priming_profile",
         "scope_note": (
-            "@light Docker- & Session-Orchestrator natively on SimRacer (192.168.178.68). Owns docker-compose.simracer.yml (CPU_CORES=4, cpus=4.5, RAM_SIZE=10G, mem_limit=12g), "
-            ".wslconfig (14GB/6 threads/autoMemoryReclaim=gradual), manage-simracer-session.ps1 (HandoffToSandbox scanning replay\\ + replay\\temp\\ with asset_source_mode='host_ro_direct'), "
-            "race.ini synchronization, 7-package cm-github-sync, Pitwall DELEGATED permissions, and handoff/approval discipline with @general and @dark."
+            "@light SOLE SimRacer Host-Orchestrator, Leitstand Bridge, 2-Stage QA Verifier & Documentation Forwarder on SimRacer (192.168.178.68). "
+            "Receives directives from General SIM, delegates Hardware/Display/NVIDIA/Windows/VR tasks to @rig and Sandbox tasks to @dark, "
+            "executes independent 2-stage verification (light_verifier.py: Real-State effectiveness + clean toolbox.json path, rejecting dummy Success), "
+            "and forwards EVERY outcome (VerifiedSuccess AND detailed failure/MissingCapability + Ollama extension proposals) to General SIM (leitstand_protocol.py). Owns toolbox.json/TOOLBOX.md."
         ),
     },
     {
@@ -203,8 +204,9 @@ AGENT_SPECS = [
         "filename": "priming_profile",
         "scope_note": (
             "@general Workspace-Leitstand (General Sim in assetto-corsa-content / General Cyborg on VanstrikeCyborg 192.168.178.172). "
-            "Enforces XOR execution mutex (execution_mutex.lock), priority hierarchy (1=local SimRacer host vs 2=remote ssh_cyborg), Pitwall Approval Gate, strict AGENTS.md §4 Change-Freeze "
-            "(never edit *.agent.md, SKILL.md, settings.json, *.code-workspace, etc. without Diff preview + approval), and strict evidence-first reporting across all 5 LAN nodes."
+            "Commands SimRacer hierarchically via @light, maintains long-term audit ledger (leitstand_protocol.jsonl / LEITSTAND_PROTOKOLL.md), "
+            "aggregates missing tools & competencies (capability_gaps_summary.json / MISSING_TOOLS_REPORT.md) with Ollama extension proposals, "
+            "receives DocHandoffs for Doku/, enforces XOR execution mutex, Pitwall Approval Gate, and AGENTS.md §4 Change-Freeze."
         ),
     },
 ]
