@@ -1,6 +1,6 @@
-# Technische Systemquelle: Pitwall-Steuerungskonsole (v2.1.0) & Multi-Agenten-Architektur (v5) – Stand 25.11.2026
+# Technische Systemquelle: Pitwall-Steuerungskonsole (v2.2.0 / 26.11.2026) & Multi-Agenten-Architektur (v5)
 
-> **Verwendungszweck dieses Dokuments:** Flache, eigenständige Markdown-Systemreferenz für **Gemini NotebookLM** (ohne einklappbares HTML/CSS). Sie beschreibt den verifizierten Produktivstand vom **25.11.2026** über alle 5 Systemknoten hinweg: Hardware-Topologie, Agenten-Hierarchie (`Architektur v5`), Werkzeugkoffer (`toolbox.json`), lokale Ollama-Tool-Runtime (`qwen3.5:9b`), 2-Stufen-Qualitätssicherung (`light_verifier.py`), Leitstand-Protokoll & Ausbauvorschläge (`leitstand_protocol.py`), **Pitwall v2.1.0 Webkonsole** inkl. 3-stufigem Drill-Down, verifizierte E2E-/GPU-Testläufe (inkl. Hisense 4K-TV-Optimierung) sowie alle REST- und WebSocket-Schnittstellen.
+> **Verwendungszweck dieses Dokuments:** Flache, eigenständige Markdown-Systemreferenz für **Gemini NotebookLM** (ohne einklappbares HTML/CSS). Sie beschreibt den verifizierten Produktivstand vom **26.11.2026** (Live-Stand auf `StrikerPi`, SHA256 `5e290c4b…`) über alle 5 Systemknoten hinweg — inklusive Dual-GPU-Ollama-Fallback (`SimRacer` &rarr; `VanstrikeCyborg`), zentraler KI-Schaltweiche (`ollama` / `auto` / `gemini`), Pitwall-Tab **`🧠 GPU-Modelle`** sowie der **live deployten 7-Rollen-Registry &amp; `/opt/general-sim/`**.
 > **Live-Endpunkt Pitwall:** `http://192.168.178.86:8080/` (auf `StrikerPi`, Dienst `telemetry-relay.service`, Quellspiegel: `c:\Users\strik\strikerpi-hub\telemetry-relay\telemetry_relay.py`).
 
 ---
@@ -11,11 +11,11 @@ Das Gesamtsystem verbindet zwei Entwickler-/Leitstand-PCs, eine virtualisierte W
 
 | Knoten | IP / Ports | Hardware & OS | Rolle, Agenten & Dienste | Besonderheiten / Limits |
 | :--- | :--- | :--- | :--- | :--- |
-| **VanstrikeCyborg** | `192.168.178.172` | Host-Laptop: Intel Core 7 240H, NVIDIA RTX 5060 Laptop (8 GB), 16 GB RAM, Windows | Leitstand **`General Cyborg`** (global) & **`General SIM`** (`assetto-corsa-content`); lokales Ollama (`qwen3.5:4b`, `gemma4:e4b`); Bridge `Send-SimAgentTask.ps1` | Teilt `Cyborg-GitLabor-RO` und `Cyborg-AC-Content-RO` **Read-Only** an `SimRacer`. Alle Repo-Schreibrechte liegen beim Leitstand. |
-| **SimRacer** | `192.168.178.68` | AMD Ryzen 9 3900X, 31,92 GB RAM, NVIDIA **RTX 5070 Ti** (16303 MiB VRAM, Treiber `621.40`), `C:` NVMe + `D:\OllamaModels` USB; HTC VIVE Focus Vision (DP), Fanatec Wheelbase, **Hisense 4K-TV** (`DISPLAY\HECB340`) | **`@light`** (alleiniger Host-Orchestrator & QA-Prüfer), **`@rig`** (Hardware/Display/NVIDIA/VR-Facharbeiter); Ollama `:11434` (`qwen3.5:9b`, `gemma4:12b`, `qwen2.5-coder:14b`) | `bcdedit numproc=12` aktiv (6c/12t bis Admin-Bereinigung); `OLLAMA_KEEP_ALIVE=30m`, `OLLAMA_NUM_PARALLEL=1`; **0 %** GPU-Hintergrundlast bei `LIVE_RACE` oder laufender Sim/VR. |
+| **VanstrikeCyborg** | `192.168.178.172` (LAN) / `.145` (WLAN) | Host-Laptop: Intel Core 7 240H, NVIDIA **RTX 5060 Laptop** (8151 MiB VRAM), 16 GB RAM, Windows 11 | Leitstand **`General Cyborg`** (`@cyborg`) &amp; Legacy-Workspace **`General SIM`**; Ollama `0.40.18` (`0.0.0.0:11434`, `32K`, `qwen3.5:4b`, `gemma4:e4b`) als GPU-Fallback; Bridge `Send-SimAgentTask.ps1`, `Switch-LlmBackend.ps1` | Teilt `Cyborg-GitLabor-RO` und `Cyborg-AC-Content-RO` **Read-Only** an `SimRacer`. Alle Repo-Schreibrechte liegen beim Leitstand. |
+| **SimRacer** | `192.168.178.68` | AMD Ryzen 9 3900X, 31,92 GB RAM, NVIDIA **RTX 5070 Ti** (16303 MiB VRAM, Treiber `621.40`), `C:` NVMe + `D:\OllamaModels` USB; HTC VIVE Focus Vision (DP), Fanatec Wheelbase, **Hisense 4K-TV** (`DISPLAY\HECB340`) | **`@light`** (alleiniger Host-Orchestrator &amp; QA-Prüfer), **`@rig`** (Hardware/Display/NVIDIA/VR-Facharbeiter); Ollama `:11434` (`qwen3.5:9b` @ `64K`, `gemma4:12b` @ `64K`, `qwen2.5-coder:14b` @ `32K`) | `bcdedit numproc=12` aktiv (6c/12t bis Admin-Bereinigung); `OLLAMA_KEEP_ALIVE=30m`, `OLLAMA_NUM_PARALLEL=1`, `q8_0`; **0 %** 5070-Ti-Last bei `LIVE_RACE` oder Policy-Sperre (Routing-Fallback auf Cyborg / Gemini). |
 | **ac-win11-sandbox** | `192.168.178.68:2222` (SSH), `:8006` (noVNC), `:3390` (RDP) | Docker/KVM Windows-11-Guest auf `SimRacer` (`CPU_CORES: 6`, `RAM_SIZE: 10G`; `.wslconfig`: 6 Kerne / 14 GB) | **`@dark`** (Sandboxed Guest-Worker unter `@light`, `worker.ps1` / `runner.ps1`) | Read-Only-Mounts `:ro` für `Original_AC_Content`, `Original_AC_Settings`, `Original_AC_Replays`, `Original_AC_Downloads`. |
-| **Archibald** | `192.168.178.98` | Lenovo IdeaPad 5, Arch Linux / Omarchy (Hyprland) Touch-Kiosk | Chromium Fullscreen Pitwall-Kiosk (`StrikerPi:8080`); **`@sarah`** (`RaceEngineerCoach`); Dienste `sarah-agent.service`, `sarah-pitwall-telemetry.service` (UDP `:9996`), `voxtype.service` | `@sarah` sendet Live-Coaching per Sprache an die SimRacer VR Radio Bridge (`:8092`). |
-| **StrikerPi** | `192.168.178.86` | Raspberry Pi 4 (`aarch64`), Linux | Pitwall-Host **`telemetry-relay.service`** (`telemetry_relay.py`, Port `:8080`); `mosquitto.service` (`:1883` / WS `:9001`); `rick-agent.service` (**`@rick`**); `caddy.service`; Bare-Git `/srv/git/simrig.git` | Empfangsport UDP `:50005` mit Weiterleitung an Archibald `:9996`; API-Cache 8s (`/api/leitstand/protocol`) bzw. 15s (`/api/leitstand/toolboxes`). |
+| **Archibald** | `192.168.178.98` | Lenovo IdeaPad 5, Arch Linux / Omarchy (Hyprland) Touch-Kiosk | Chromium Fullscreen Pitwall-Kiosk (`StrikerPi:8080`); **`@sarah`** (`RaceEngineerCoach`); Dienste `sarah-agent.service`, `sarah-pitwall-telemetry.service` (UDP `:9996`), `voxtype.service` | `@sarah` sendet Live-Coaching per Sprache an die SimRacer VR Radio Bridge (`:8092`). Entwurf für Lüfteroptimierung (`fanscripts/tlp-idle.conf`, `fan-watchdog.sh`) liegt im Repo. |
+| **StrikerPi** | `192.168.178.86` | Raspberry Pi 4 (`aarch64`), Linux | Pitwall-Host **`telemetry-relay.service`** (`telemetry_relay.py`, Port `:8080`, inkl. Gemini LAN-Bridge `/api/llm/gemini` &amp; `agent_registry.*`); `mosquitto.service` (`:1883` / WS `:9001`); `rick-agent.service` (**`@rick`**); **`/opt/general-sim/`** (**`@general-sim`** `LIVE`); `caddy.service`; Bare-Git `/srv/git/simrig.git` | Empfangsport UDP `:50005` mit Weiterleitung an Archibald `:9996`; Caches: 6s (`/api/ollama/gpus`), 8s (`/api/leitstand/protocol`), 15s (`/api/leitstand/toolboxes`); `/opt/general-sim/` &amp; `agent_registry.*` am 26.11.2026 deployed (`available`). |
 
 ---
 
@@ -110,17 +110,13 @@ Alle Änderungen an Lenkrad-, FFB- (`controls.ini`, `ff_post_process.ini`, `exte
 3. **Stufe 3 — Pflicht-Kräfte-Briefing:** Erzeugt vorab die exakte Vorher/Nachher-Übersicht in `Nm` und `%` inkl. Griff-Sicherheitshinweis (und optionaler VR-Radio-Warnung `:8092`).
 4. **Stufe 4 — Ausdrückliche Fahrer-Freigabe per Einmal-Token (`WFB-...`):** Ohne an den exakten Parameter-Hash gebundenes Fahrer-Token + Bestätigung wird **nicht** geschrieben (`DRIVER_CONFIRMATION_REQUIRED`) – selbst bei Pitwall-Modus `AUTO`/`DELEGATED`. Unmittelbar vor dem Schreiben wird der Boxengassen-Stillstand erneut geprüft; `light_verifier.py` verlangt bei Stage A neben Live-Grenzwert-Check sowohl `backup_file` als auch `driver_receipt_file`.
 
-### 3.2 Lokale Ollama Tool-Runtime (`agent_ollama_tool_runtime.py`)
+### 3.2 Dual-GPU Ollama Tool-Runtime (`ollama_router.py`) & Zentrale KI-Schaltweiche
 
-Die Tool-Ausführung der Worker auf `SimRacer` läuft **rein lokal** (0 Cloud-Aufrufe) über `\\192.168.178.68\ac-sandbox\shared\scripts\agent_ollama_tool_runtime.py` gegen die lokale Ollama-Instanz (`127.0.0.1:11434`):
+Die Tool-Ausführung der Worker (`agent_ollama_tool_runtime.py`, `rig_ollama_vr_analyzer.py`, `runner.ps1`, `sarah_worker.py`) wird seit dem **26.11.2026** zentral über `\\192.168.178.68\ac-sandbox\shared\scripts\ollama_router.py` und die **3-Modi-KI-Schaltweiche** in `pitwall_control_policy.json` (`llm_backend`: `"ollama" | "auto" | "gemini"`, `llm_gemini_model`, Pro-Agenten-Overrides `agent_llm_backends`) gesteuert:
 
-* **Modell & Inferenz-Parameter:** Standardmodell `qwen3.5:9b`, `think: False` (direkte Tool-Calls ohne langwierige Denk-Latenz), `keep_alive: "30m"`.
-* **Timeouts:** `240s` für Kaltstart (erstes Laden der ~6–9 GB Modellgewichte in den VRAM der RTX 5070 Ti) und `90s` für warme Folgeläufe.
-* **Harte GPU-Guardrail:** Vor jedem LLM- oder GPU-Aufruf prüft die Runtime auf aktive Sim-/VR-Prozesse (`acs.exe`, `acs_x86.exe`, `vrserver.exe`) sowie das Policy-Flag `gpu_background_allowed=false` (im Pitwall-Modus `LIVE_RACE`). Ist eine dieser Bedingungen aktiv, bricht die Runtime sofort mit `Blocked` / `EXECUTION_ERROR` ab – dadurch bleibt die GPU-Zusatzlast im Rennbetrieb bei garantiert **0 %**.
-* **Pflicht zur Lückenmeldung (`report_capability_gap`):** Kann das Modell einen Auftrag nicht mit den registrierten Werkzeugen des eigenen Koffers erfüllen, darf es keine Ausrede erfinden, sondern muss `report_capability_gap` aufrufen. Dieses Tool liefert ein standardisiertes JSON-Paket mit:
-  * `missing_tools` (konkrete fehlende Tool-Bezeichner),
-  * `missing_competencies` (fehlende Hardware-, Treiber- oder SDK-Fähigkeiten),
-  * `ollama_extension_proposal` (Ausbauvorschlag für ein neues Ollama-Tool inkl. Parameter-Schema, Anpassungen am Priming-Profil und Risikoklassifizierung).
+* **Dual-GPU-Fallback (Modus `ollama` / lokal):** Primär läuft `qwen3.5:9b` (`num_ctx=65536`, `q8_0`, `keep_alive="30m"`) auf **SimRacer RTX 5070 Ti** (`127.0.0.1:11434`). Bei aktivem `acs.exe`/`vrserver.exe` (`LIVE_RACE`) oder Pitwall-Sperre (`gpu_background_allowed=false`) weicht `ollama_router.py` automatisch auf **VanstrikeCyborg RTX 5060** (`192.168.178.172:11434`, `qwen3.5:4b` @ `32768`, sofern `sarah_cyborg_gpu_allowed=true`) aus — damit bleibt die 5070-Ti-Zusatzlast im Rennbetrieb bei garantiert **0 %**.
+* **Zentrale KI-Schaltweiche (`auto` / `gemini`):** Im Modus `gemini` (oder im Modus `auto` bei blockierten lokalen GPUs) nutzt der Router **Google Gemini** (`google-genai` Interactions API bzw. für Sandbox/Headless die LAN-geschützte StrikerPi-Bridge `POST /api/llm/gemini`, bei der `GEMINI_API_KEY` isoliert in `/etc/telemetry-relay.env` liegt). Ein Pitwall-Not-Aus (`EMERGENCY_REVOKE`) setzt `llm_backend` automatisch auf `"ollama"` zurück.
+* **Pflicht zur Lückenmeldung (`report_capability_gap`):** Kann das Modell einen Auftrag nicht mit den registrierten Werkzeugen des eigenen Koffers erfüllen, darf es keine Ausrede erfinden, sondern muss `report_capability_gap` aufrufen (`missing_tools`, `missing_competencies`, `ollama_extension_proposal`).
 
 ---
 
@@ -173,19 +169,20 @@ Die Pitwall auf `http://192.168.178.86:8080/` ist als scroll-freie **6-Seiten-To
   1. **Telemetrie:** 50-Hz-Echtzeitdaten über `WS /ws/telemetry` (UDP-Eingang `StrikerPi :50005` mit Weiterleitung an `Archibald :9996`).
   2. **Streams / Video:** Live-Lobby-Kamerabilder (`simracer.jpg` / `simracer.mjpeg`) inkl. Kamera-Umschaltung (`POST /api/stream/camera`) und noVNC-Einbindung (`:8006`).
   3. **Sandbox / AC Content:** Lebenszyklus-Steuerung von `ac-win11-sandbox` (`start`, `stop`, `pause`, `resume`) sowie AC-Content-/Session-Aktionen (`POST /api/sandbox/ac/action`).
-  4. **Agentensteuerung (`🛡️ Agenten`, `#page-control`):** Zentraler Leitstand für Status, Policy, Freigaben, Werkzeugkoffer und Protokoll-Diagnose (4 Sub-Tabs, siehe §5.2).
+  4. **Agentensteuerung (`🛡️ Agenten`, `#page-control`):** Zentraler Leitstand für Status, Policy, KI-Schaltweiche, Freigaben, Werkzeugkoffer, Protokoll-Diagnose und Dual-GPU-Modelle (5 Sub-Tabs, siehe §5.2).
   5. **SSH-Terminals:** Integrierte WebSocket-Terminals je Agent über `WS /ws/terminal/{agent}`.
   6. **Agenten-Logs:** Historische Aufgaben- und Hardware-Logs über `GET /api/logs/history` und `GET /api/logs/task/{agent}/{task_id}`.
 * **Touch-/Display-Menü & Sprachchat-Overlay:** Touch-optimiertes Drawer-Menü für Betriebsmodi (`POST /api/mode`), Archibald-Kiosk-Steuerung (`POST /api/pitwall/archibald`) und einklappbares Voice-Overlay (`POST /api/voice/dispatch` bzw. `voxtype.service` -> `@sarah`).
 
-### 5.2 Bereich `🛡️ Agenten` (`#page-control`) – Die 4 Sub-Tabs
+### 5.2 Bereich `🛡️ Agenten` (`#page-control`) – Die 5 Sub-Tabs
 
 1. **`🤖 Agenten & Status` (`subTab-agents`):**
-   * **3 Master-Karten:**
+   * **Master-Karten & KI-Schaltweiche (`#llmSwitchBar`):**
      * `⏯️ Global-Status` (Systembetriebsmodus / globale Freigabe),
-     * `🎮 RTX 5070 Ti & Ollama` (Anzeige/Steuerung der GPU-Hintergrundfreigabe während `LIVE_RACE`),
-     * `🚨 Not-Aus & Mandat` (sofortiger Stopp aller autonomen Agentenläufe / Mandatslaufzeit).
-   * **6 Einzel-Agenten-Zeilen:** Status-Schalter (`▶️ Aktiv`, `⏸️ Pause`, `⛔ Deaktiviert`) sowie Direktbuttons `💻` (Terminal) und `📜` (Log) je Agent (`light`, `rig`, `dark`, `general`, `sarah`, `rick`).
+     * `🎮 RTX 5070 Ti & Cyborg RTX 5060` (GPU-Hintergrundfreigabe während `LIVE_RACE` inkl. `sarah_cyborg_gpu_allowed`),
+     * `🧠 KI-Schaltweiche` (`ollama` / `auto` / `gemini` + Gemini-Modellauswahl + Pro-Agenten-Dropdown),
+     * `🚨 Not-Aus & Mandat` (sofortiger Stopp aller autonomen Agentenläufe / Mandatslaufzeit / Rückfall auf `ollama`).
+   * **Einzel-Agenten-Zeilen:** Status-Schalter (`▶️ Aktiv`, `⏸️ Pause`, `⛔ Deaktiviert`), Pro-Agenten-KI-Override sowie Direktbuttons `💻` (Terminal) und `📜` (Log). *(Live auf StrikerPi: zeigt getrennt `@cyborg [nur lokal]` und `@general-sim [verfügbar unter /opt/general-sim/]` neben `@general (Legacy)`).*
 2. **`🤝 Freigabe-Matrix` (`subTab-matrix`):**
    * **Globale Betriebsmodi:** `MANUAL` (einzelne Vorabfreigabe nötig), `DELEGATED` (Delegation über `@light` nach Matrix), `AUTO` (zeitlich/kategorisch freigegebene Routineausführung).
    * **Zeitmandate:** `Unbegrenzt`, `+60 Min`, `+180 Min`.
@@ -202,6 +199,11 @@ Die Pitwall auf `http://192.168.178.86:8080/` ist als scroll-freie **6-Seiten-To
 | **Ebene 0: Systemübersicht & Werkzeugkoffer** | Sub-Tab `subTab-protocol` | • **4 klickbare KPI-Karten (Filter):** `Protokoll-Aufträge`, `VerifiedSuccess`, `Tool / Kompetenz fehlt`, `Fehler / Verifikation`<br>• **Ansichts-Umschalter:** `📋 Leitstand-Protokoll` vs. `🧰 Werkzeugkoffer` (lädt alle 6 `toolbox.json`-Inventare)<br>• **Filterleiste:** `agent`, `status`, `error_code`, Volltextsuche `q`, Button `🔄 Aktualisieren`<br>• **Scrollbare Eintragsliste** aller Protokoll- und Gap-Läufe |
 | **Ebene 1: Unterfenster Auftrags- & Fehlerdiagnose** | `#protoDrillBackdrop` / `#protoLevel1`<br>Breadcrumb: `← Übersicht` | • **Meta & Kette:** Ausführende Kette (`General_Sim → @light → @rig`), `hardware_node`, Freigabe-ID, Original-Prompt & Summary<br>• **2-Stufen Light-QA-Karten:** Getrennte Statusanzeige für `Stufe A Real-State` und `Stufe B Sauberer Pfad`<br>• **Vorher/Nachher-Diff-Grid:** Gegenüberstellung der gemessenen Ausgangs- und Zielwerte + Backup-Pfad<br>• **3 Drill-Down-Karten zu Ebene 2** |
 | **Ebene 2: Detail-Unterfenster** | `#protoLevel2`<br>Breadcrumb: `← Übersicht › ← Auftrag › Detail` | Öffnet fokussiert je eine Detailansicht:<br>1. `🔧 Ollama-Ausbauvorschlag` (Schema, Parameter, Priming- & Risikoklassifizierungs-Vorschlag bei fehlenden Tools)<br>2. `🧰 Agenten-Werkzeugkoffer` (komplettes Tool-Inventar des beteiligten Agenten)<br>3. `📜 Roh-Evidenz & Log` (vollständige Evidenzdaten + Button `💻 Terminal öffnen`) |
+
+5. **`🧠 GPU-Modelle` (`subTab-models`):**
+   * Zweispaltige Kartenansicht für **SimRacer RTX 5070 Ti** (`16303 MiB`) und **Cyborg RTX 5060** (`8151 MiB`) mit Live-VRAM-Belegung (`nvidia-smi` per Base64-SSH) und aktiven Modellen (`/api/ps`).
+   * Kontext-Dropdown je Modell (empfohlenes `num_ctx` aus `ollama_gpu_profiles.json` mit `★` markiert), **`🔄 Laden / Tauschen`**, **`⏹️ Entladen`** (`keep_alive=0`) und **2-Klick-Schutz `🗑️ Deinstallieren`** (`5 s` Bestätigungsfenster).
+   * Harter Schutz bei aktivem AC/VR: `load`/`swap` auf `simracer` wird mit **HTTP `409`** blockiert; zeigt zudem den aktiven Routing-Status (`⚡ Fallback aktiv` / `KI-Schaltweiche`).
 
 ---
 
@@ -264,5 +266,13 @@ Alle Endpunkte laufen über FastAPI/Uvicorn in `/opt/telemetry-relay/telemetry_r
 | `GET /api/leitstand/toolboxes` | **15s TTL-Cache** | Liefert alle 6 geladenen `toolbox.json`-Werkzeugkoffer aus `shared/memories/` für die Werkzeugkoffer-Ansicht und Ebene 2. |
 | `GET /api/logs/history` | — | Historische Agenten-Logs mit Hardware-Knoten-Zuordnung. |
 | `GET /api/logs/task/{agent}/{task_id}` | Path: `agent`, `task_id` | Detail-Log eines spezifischen Tasks eines Agenten (Ebene 2 `Roh-Evidenz & Log`). |
-| `POST /api/voice/dispatch` | — | Endpunkt des einklappbaren Sprachchat-Overlays für Sprachkommandos. |
+| `POST /api/voice/dispatch` | — | Endpunkt des einklappbaren Sprachchat-Overlays für Sprachkommandos mit UTF-8-Erhalt und `409`-Sperre für `@cyborg`/`@general-sim` *(Live auf StrikerPi)*. |
 | `POST /api/pitwall/archibald` | — | Kiosk-, Display- und Steuerbefehle an `Archibald` (`192.168.178.98`). |
+| `GET /api/ollama/gpus` | Query: `refresh`; **6s TTL-Cache** | Fragt parallel beide Ollama-Hosts (`/api/tags`, `/api/ps`), `nvidia-smi` (SimRacer &amp; Cyborg) sowie die aktive Routing-Policy ab *(Live auf StrikerPi)*. |
+| `POST /api/ollama/action` | JSON (`host`, `action`, `model`, `num_ctx`) | Führt `load`, `swap`, `unload` (`keep_alive=0`) oder `delete` auf `simracer`/`cyborg` aus (`HTTP 409` bei laufendem AC/VR auf `simracer`) *(Live auf StrikerPi)*. |
+| `GET /api/llm/status` | Query: `refresh` | Liefert Status der KI-Schaltweiche (`llm_backend`, `llm_gemini_model`, `agent_llm_backends`, `gemini_key_present`, `gemini_ready`) *(Live auf StrikerPi)*. |
+| `POST /api/llm/gemini` | JSON (`GeminiProxyRequest`), LAN-Only | LAN-geschützte Gemini-Interactions-Bridge (`_is_lan_client_ip()`, `HTTP 403` außerhalb privater Netze, blockiert bei `agents_paused=true`) *(Live auf StrikerPi)*. |
+| `GET /api/agents/registry` | — | Liefert kanonische 7-Rollen-Registry, Alias `general -> general-sim`, `tool_governance` (`download_enabled: false`) und Deploy-Status (`general-sim`: `available`) *(Live auf StrikerPi)*. |
+| `WS /ws/terminal/general-sim` | — | Getrenntes Terminal für StrikerPi General Sim (`/opt/general-sim/start_general_sim_terminal.sh`); Altstrecke `/ws/terminal/general` bleibt bis zur Migration Legacy *(Live auf StrikerPi)*. |
+
+*(Hinweis zu `GET /api/logs/history`: Auf StrikerPi live um lokale General-Sim-Logs `/opt/general-sim/{outbox,logs}` und explizite `source_errors` erweitert.)*

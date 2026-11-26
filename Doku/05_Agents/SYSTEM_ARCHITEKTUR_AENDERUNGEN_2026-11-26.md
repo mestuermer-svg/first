@@ -31,7 +31,7 @@
 </details>
 <!-- DOKU-SUBNAV-END -->
 
-Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`) sowie den neuen Pitwall-Sub-Tab **`🧠 GPU-Modelle`** auf dem StrikerPi (`192.168.178.86:8080`).
+Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`), den Pitwall-Sub-Tab **`🧠 GPU-Modelle`** samt **KI-Schaltweiche** auf dem StrikerPi (`192.168.178.86:8080`), den **live auf StrikerPi deployten Ausbau für die kanonische 7-Rollen-Registry &amp; `@general-sim`** sowie den **Archibald-Lüfter-Entwurf**.
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -40,7 +40,8 @@ Nach dem Durcharbeiten dieses Protokolls kannst du:
 1. die Ursache des defekten Ollama-Starts auf `VanstrikeCyborg` (`upgrade.log` Rollback nach `DeleteFile code 5` &rarr; fehlendes `lib\ollama\*`) benennen und die Reparatur via `winget` (`0.40.18`) + Task `Ollama-Server-Cyborg` nachvollziehen,
 2. für alle **5 installierten Modelle** auf RTX 5070 Ti (`16303 MiB`) und RTX 5060 Laptop (`8151 MiB`) die gemessenen `num_ctx`- und VRAM-Grenzen angeben,
 3. die **5-stufige Routing-Entscheidung** von `ollama_router.py` zwischen `simracer`, `cyborg` (Fallback bei `LIVE_RACE` oder `gpu_background_allowed=false`) und `Blocked` (`agents_paused=true` / `sarah_cyborg_gpu_allowed=false`) erklären,
-4. über die Pitwall-Oberfläche (`🛡️ Agenten` &rarr; `🧠 GPU-Modelle`) Modelle auf beiden GPUs **laden/tauschen**, **entladen** und sicher **deinstallieren** sowie die Live-Fahrbetrieb-Sperre (`HTTP 409`) einordnen.
+4. über die Pitwall-Oberfläche (`🛡️ Agenten` &rarr; `🧠 GPU-Modelle`) Modelle auf beiden GPUs **laden/tauschen**, **entladen** und sicher **deinstallieren** sowie die Live-Fahrbetrieb-Sperre (`HTTP 409`) einordnen,
+5. die **kanonische 7-Rollen-Registry** (`cyborg` vs. `general-sim`, **LIVE auf StrikerPi**) vom weiterhin aktiven Legacy-`@general`-Pfad sauber abgrenzen.
 
 </details>
 
@@ -188,6 +189,32 @@ flowchart LR
 
 </details>
 
+<details>
+<summary><b>7. Kanonische 7-Rollen-Registry, General-Sim-CLI &amp; Pitwall-Erweiterung (<code>LIVE</code> auf StrikerPi)</b></summary>
+
+Zur sauberen Entkopplung zwischen dem Laptop-Agenten (**`General Cyborg` / `@cyborg`**) und dem Simulations-Leitstand (**`General Sim` / `@general-sim`** auf `StrikerPi`) wurden am **26.11.2026** die neuen Registry-, Terminal- und API-Bausteine erstellt, repariert und **live auf StrikerPi (`192.168.178.86`) deployed**:
+
+| Komponente / Datei | Funktion &amp; Sicherheitsregeln | Live-Status (`StrikerPi .86`) |
+| :--- | :--- | :--- |
+| **[`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json)** &amp; **[`agent_registry.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.py)** | Definiert 7 kanonische Rollen (`cyborg`, `general-sim`, `light`, `rig`, `dark`, `sarah`, `rick`), den Alias `general` &rarr; `general-sim` sowie `tool_governance` (`download_enabled: false`, manuelle Zuweisung, Dual-Approval durch `cyborg` + `user`). | **LIVE** (`/opt/telemetry-relay/agent_registry.*`, `GET /api/agents/registry` &rarr; `available`) |
+| **[`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py)** &amp; **[`start_general_sim_terminal.sh`](file:///c:/Users/strik/strikerpi-hub/general-sim/start_general_sim_terminal.sh)** | Eigenständiges StrikerPi-Leitstand-CLI (Status-, Log-, Tool-Governance-Abfragen und sicherer UTF-8-JSON-Dispatch an Worker mit mehrzeiligem `:send`/`:cancel`-Modus). | **LIVE** (`/opt/general-sim/`, CLI `status` + `Agent-Terminals.ps1` = `READY`) |
+| **[`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py)** *(Live-SHA256 `5e290c4b…`)* | Ergänzt `GET /api/agents/registry`, `_collect_local_general_sim_logs()`, explizite `source_errors` in `/api/logs/history`, UTF-8-Erhalt + `409`-Sperre im Voice-Dispatch sowie Legacy-Trennung (`/ws/terminal/general` vs. `general-sim`). | **LIVE** (`telemetry-relay.service` `active`, Backup `.bak_20261126_pre_registry`) |
+| **[`Agent-Terminals.ps1`](file:///c:/Users/strik/git-labor/labs/Agent-Terminals.ps1)** | Liest Rollen und Aliase dynamisch aus `agent_registry.json`; startet `@cyborg` lokal (`copilot --agent "General Cyborg"`) und `@general-sim` auf StrikerPi (`READY`). | Auf `VanstrikeCyborg` aktiv (`@general-sim`: `READY`) |
+| **Unit- &amp; Live-Tests (`14/14` ✅)** | `test_agent_registry.py` (`6/6` OK), `test_general_sim_terminal.py` (`8/8` OK) sowie Live-Checks (`/api/agents/registry`, `/api/logs/history?agent=general-sim` `source_errors: []`, `@cyborg` Dispatch `HTTP 409`). | Verifiziert per `unittest` &amp; Live-API |
+
+</details>
+
+<details>
+<summary><b>8. Archibald-Lüfteroptimierung (Entwurf / Ausstehendes Deployment)</b></summary>
+
+Für leiseren Leerlaufbetrieb auf dem Pitwall-Laptop **Archibald** (`192.168.178.98`, Omarchy Linux) liegen erste Konfigurations- und Testentwürfe im Repository `git-labor` bereit:
+
+- **[`tlp-idle.conf`](file:///c:/Users/strik/git-labor/fanscripts/tlp-idle.conf):** TLP-Entwurf mit Governor `schedutil`, reduzierten Polling-Intervallen (`POLLING_HDD_IDLE=30`, `POLLING_BAT=45`) und angepassten Thermal-Schwellenwerten (`START_THERMAL_LIMIT=75`, `STOP_THERMAL_LIMIT=65`) für `/etc/tlp.conf`.
+- **[`fan-watchdog.sh`](file:///c:/Users/strik/git-labor/fanscripts/fan-watchdog.sh):** Bash-Watchdog zur Überwachung von Inaktivität (`300 s`), `hwmon`-Lüfterdrehzahl (`fan*_input`) und CPU-Thermal-Zonen.
+- **[`fan-quiet-test.md`](file:///c:/Users/strik/git-labor/Systemtests/fan-quiet-test.md):** Testprotokoll; Deployment und Messung stehen noch aus (Archibald war beim Abgleich am 26.11. per SSH `archibald@192.168.178.98` nicht erreichbar).
+
+</details>
+
 </details>
 
 </details>
@@ -209,7 +236,9 @@ flowchart LR
 - **Cyborg Ollama-Startskript:** [`start-ollama-laptop.ps1`](file:///C:/Users/strik/AppData/Local/Programs/Ollama/start-ollama-laptop.ps1) · **SimRacer:** [`start-ollama-simracer.ps1`](file:///192.168.178.68/ac-sandbox/shared/scripts/start-ollama-simracer.ps1)
 - **Routing, Schaltweiche &amp; Profile:** [`ollama_router.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/ollama_router.py) · [`hybrid_llm_router.py`](file:///c:/Users/strik/git-labor/labs/03_python/hybrid_llm_router.py) · [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1) · [`ollama_gpu_profiles.json`](file:///192.168.178.68/ac-sandbox/shared/scripts/ollama_gpu_profiles.json)
 - **Angepasste Agenten-Skripte:** [`agent_ollama_tool_runtime.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/agent_ollama_tool_runtime.py) · [`rig_ollama_vr_analyzer.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/rig_ollama_vr_analyzer.py) · [`start_light_terminal.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`runner.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/dark/runner.ps1) · [`sarah_worker.py`](file:///192.168.178.68/ac-sandbox/shared/telemetry/sarah_worker.py) · [`start_general_terminal.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/start_general_terminal.ps1)
-- **Pitwall Hub (StrikerPi):** [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (`http://192.168.178.86:8080`)
+- **Pitwall Hub (StrikerPi):** [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (`http://192.168.178.86:8080`) · [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json) · [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py)
+- **Rollen-Umsetzung &amp; Launcher:** [`rollen-terminals-pitwall-umsetzung.md`](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md) · [`Agent-Terminals.ps1`](file:///c:/Users/strik/git-labor/labs/Agent-Terminals.ps1)
+- **Archibald-Lüfterentwurf (`NOT DEPLOYED`):** [`tlp-idle.conf`](file:///c:/Users/strik/git-labor/fanscripts/tlp-idle.conf) · [`fan-watchdog.sh`](file:///c:/Users/strik/git-labor/fanscripts/fan-watchdog.sh) · [`fan-quiet-test.md`](file:///c:/Users/strik/git-labor/Systemtests/fan-quiet-test.md)
 
 </details>
 
@@ -221,6 +250,7 @@ flowchart LR
 - **Automatischer 5070-Ti-Fallback:** Bei `LIVE_RACE` (`acs.exe`/`vrserver.exe`) oder Pitwall-Sperre routet `ollama_router.py` SimRacer-Agenten nahtlos auf Cyborgs RTX 5060 (`qwen3.5:4b @ 32768`) bei `0 %` 5070-Ti-Last.
 - **Pitwall `🧠 GPU-Modelle`:** Live-Übersicht beider GPUs inkl. Kontext-Wahl, `Entladen`, `Laden/Tauschen` (mit Fahrbetrieb-HTTP-409-Schutz) und 2-Klick-`Deinstallieren`.
 - **Zentrale KI-Schaltweiche (`ollama` / `auto` / `gemini`):** Alle Agenten sind global oder individuell per Pitwall UI, `@general llm` oder [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1) zwischen lokalem Ollama und Google Gemini Cloud (`google-genai` Interactions API bzw. StrikerPi LAN-Bridge `/api/llm/gemini`) umschaltbar.
+- **Kanonische 7-Rollen-Registry (`LIVE` auf StrikerPi):** [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json), [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) &amp; [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (SHA256 `5e290c4b…`, Backup `.bak_20261126_pre_registry`) trennen `cyborg` (Laptop) und `general-sim` (`/opt/general-sim/` auf StrikerPi = `available` / `READY`); `14/14` Unit-Tests und Live-API-Checks bestanden.
 
 </details>
 

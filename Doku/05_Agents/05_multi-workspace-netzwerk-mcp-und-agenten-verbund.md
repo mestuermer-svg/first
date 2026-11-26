@@ -1,15 +1,42 @@
-> **Thema:** Multi-Workspace & Multi-PC-Verbund: Standorte, MCP-Server, Ports & Agenten-Rollen
+> **Thema:** Multi-Workspace &amp; Multi-PC-Verbund: Standorte, MCP-Server, Ports, Ollama, Pitwall-Steuerung &amp; Agenten-Rollen
 > **Autor:** Michael Stürmer
-> **Datum:** 11.11.2026
+> **Datum:** 26.11.2026 *(Dual-GPU Ollama-Fallback, KI-Schaltweiche &amp; 7-Rollen-Registry LIVE auf StrikerPi)*
+
+<!-- DOKU-SUBNAV-START -->
+<details>
+<summary><b>🧭 Rubrik-Navigation &amp; Modul-Übersicht (05 Agents)</b></summary>
+
+**Zentrale:** [📚 Doku-Index](../README.md) · [📂 Rubrik 05 Agents](./README.md) · **Vorheriges:** [⬅️ 05 • Schnittstelle, Terminals & XOR-Mutex](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md) · **Nächstes:** [Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle) ➡️](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)
+
+**Alle Module in `05_Agents/`:**
+- [01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau](./01_agent-stilfibel-und-didaktik-ruler.md)
+- [02 • Agenten erstellen: Instructions, Rules & Prompts](./02_agenten-erstellen-instructions-rules-und-prompts.md) · `gemini.instructions`
+- [03 • Agenten ausrüsten: Skills & MCP-Tools](./03_agenten-ausruesten-skills-und-mcp-tools.md) · `SKILL.md`
+- [04 • Priming, Memory & Multi-Agent-Orchestrierung](./04_agenten-trainieren-primen-und-orchestrieren.md) · `@light`
+- [05 • Schnittstelle, Terminals & XOR-Mutex](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md) · `Bridge`
+- 👉 **[06 • Multi-Workspace Netzwerk & 7-Rollen-Verbund](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md)** *(aktuell)*
+- [Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)
+- [Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md)
+- [Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)](./HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md)
+- [Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
+- [Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md)
+- [Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md)
+- [Pitwall & Systemreferenz (NotebookLM-Quelle)](./PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md)
+- [Boxencrew & Teamchef Konzept (NotebookLM)](./PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md)
+
+**Weitere Rubriken:** [🐧 01 Linux & Bash](../01_Linux_Bash/README.md) · [🧩 02 VS Code & MCP](../02_VSCode_Env/README.md) · [🐍 03 Python](../03_Python_Coding/README.md) · [🌐 04 JS/TS Web](../04_JS_TS_Web/README.md)
+
+</details>
+<!-- DOKU-SUBNAV-END -->
 
 <details>
 <summary><b>Lernziele</b></summary>
 
-* Die **verteilte Multi-PC- & Multi-Workspace-Architektur** zwischen dem Entwicklungs-Laptop (`VanstrikeCyborg`), der SimRacing-Workstation (`SimRacer`), der Windows-11-Sandbox (`ac-win11-sandbox`), dem Pitwall-Node (`Archibald` / Omarchy Linux) und dem 24/7-Edge-Hub (`StrikerPi` / Arch Linux ARM) im Detail verstehen.
-* Die zentrale Konfigurationsdatei **`git-labor.code-workspace`** und deren **5 Repositories/Ordner** (`Git-Labor`, `Local-Cyborg`, `AC-CM-CSP-Sandbox`, `Assetto-Corsa-Content`, `StrikerPi-Hub`) sicher administrieren.
-* Die **Netzwerk- und Port-Matrix** aller beteiligten Dienste beherrschen (`8317` CLIProxyAPI, `8000` Antigravity, `13508` NVIDIA App MCP, `8006` VNC/Kasm, `8090` Lobby-Stream, `8080` StrikerPi Pitwall Hub, `1883`/`9001` Mosquitto MQTT, `22` Host-SSH, `2222` Sandbox-SSH).
-* Das **6-Rollen-Modell der KI-Agenten** (`@general`, `@rig`, `@light`, `@dark`, `@sarah`, `@rick`) sowie die **Trennung zwischen lokalem Host-Terminal und SSH-Client-Mode** (`Agent-Terminals.ps1`) souverän orchestrieren.
-* Den **Handshake- & Task-Queue-Mechanismus** (`inbox/` $\rightarrow$ Pre-Flight-Check $\rightarrow$ Execution $\rightarrow$ `outbox/`) über PowerShell und Python im laufenden Betrieb fehlerfrei einsetzen.
+* Die **verteilte Multi-PC- &amp; Multi-Workspace-Architektur** zwischen dem Entwicklungs-Laptop (`VanstrikeCyborg`), der SimRacing-Workstation (`SimRacer`), der Windows-11-Sandbox (`ac-win11-sandbox`), dem Pitwall-Node (`Archibald` / Omarchy Linux) und dem 24/7-Edge-Hub (`StrikerPi` / Arch Linux ARM) im Detail verstehen.
+* Die zentrale Konfigurationsdatei **`git-labor.code-workspace`**, ihr SimRacer-Gegenstück **`simracer.code-workspace`** und deren **Single-Writer-1-zu-1-Synchronisation** (VS Code Settings Sync mit 26er-Extensions-Sperrliste &amp; GitHub-Sync) sicher administrieren.
+* Die **aktuelle Netzwerk- und Port-Matrix** aller beteiligten Dienste beherrschen (`11434` Dual-GPU Ollama + Fallback-Routing &amp; KI-Schaltweiche `ollama`/`auto`/`gemini`, `8317` legitimer Antigravity Hub `agy.exe`, `13508` NVIDIA App MCP, `8006` VNC/Kasm, `8090` Lobby-Stream, `8080` StrikerPi Pitwall Hub + GPU-Modelle/Leitstand, `1883`/`9001` Mosquitto MQTT, `22` Host-SSH, `2222` Sandbox-SSH).
+* Die Entwicklung vom **6-Rollen-Modell** (`@general`, `@rig`, `@light`, `@dark`, `@sarah`, `@rick`) zur kanonischen **7-Rollen-Registry** (`@cyborg` lokal, `@general-sim` **LIVE** auf StrikerPi + Legacy `@general`), die **Host-Orchestrierung durch `@light` (Architektur v5)** sowie die **Trennung zwischen lokalem Host-Terminal und SSH-Client-Mode** (`Agent-Terminals.ps1`) souverän orchestrieren.
+* Den **Handshake- &amp; Task-Queue-Mechanismus** (`inbox/` $\rightarrow$ Pre-Flight-Check $\rightarrow$ Execution $\rightarrow$ `outbox/`) über PowerShell und Python im laufenden Betrieb fehlerfrei einsetzen.
 
 </details>
 
@@ -17,186 +44,164 @@
 <summary><b>Kernkonzepte</b></summary>
 
 <details>
-<summary>1.1 Die 4-Knoten-Topologie: Standorte, Hardware & Rollen</summary>
+<summary>1.1 Die 5-Knoten-Topologie: Standorte, Hardware &amp; Rollen</summary>
 
-Um maximale Rechenleistung für Simulation und KI bereitzustellen und den Entwicklungsrechner frei von riesigen Mod- und Spieldaten zu halten, ist das Gesamtsystem auf vier physische bzw. virtuelle Knoten verteilt:
+Um maximale Rechenleistung für Simulation und KI bereitzustellen und den Entwicklungsrechner frei von riesigen Mod- und Spieldaten zu halten, ist das Gesamtsystem auf fünf physische bzw. virtuelle Knoten verteilt:
 
 ```mermaid
 flowchart TD
     subgraph NODE1 ["1. Dev-Station: VanstrikeCyborg (MSI Laptop / Windows 11)"]
-        DEV_IDE["Google Antigravity IDE & VS Code"]
-        PROXY["CLIProxyAPI (Port 8317)<br/>Modell-Endpunkt für Copilot"]
-        GEN_AGENT["@general Agent<br/>(Master-Orchestrator)"]
-        WS_CORE["Workspace: git-labor<br/>(Code, Doku, Python, MCP)"]
+        DEV_IDE["VS Code &amp; Google Antigravity Hub (:8317)"]
+        OLL_LAP["Ollama Laptop (127.0.0.1:11434)<br/>qwen3.5:4b &amp; gemma4:e4b (RTX 5060 8 GB)"]
+        GEN_AGENT["@general Agent (General Cyborg &amp; General Sim)"]
+        WS_CORE["Workspace: git-labor (Single-Writer Master)"]
     end
 
     subgraph NODE2 ["2. Gaming-Rig: SimRacer (192.168.178.68 / Windows 11)"]
-        HW["Ryzen 9 & RTX 5070 Ti<br/>Fanatec DD & SteamVR (120 Hz)"]
+        HW["Ryzen 9 &amp; RTX 5070 Ti (16 GB)<br/>Fanatec DD &amp; SteamVR (90/120 Hz)"]
+        OLL_SIM["Ollama SimRacer (0.0.0.0:11434)<br/>qwen3.5:9b, gemma4:12b &amp; qwen2.5-coder:14b"]
         NV_MCP["NVIDIA App MCP (Port 13508)"]
-        RIG_AGENT["@rig Agent (Hardware & VR Mechaniker)"]
-        LIGHT_AGENT["@light Agent (Software, Content & Session Hub)"]
-        HOST_AC["D:\SteamLibrary\...\assettocorsa<br/>(Natives Assetto Corsa)"]
+        RIG_AGENT["@rig Agent (Hardware &amp; VR Mechaniker)"]
+        LIGHT_AGENT["@light Agent (Docker, Content &amp; Light-Mandat)"]
+        HOST_AC["Native Steam Assetto Corsa &amp; CM"]
     end
 
     subgraph NODE3 ["3. Testlabor: ac-win11-sandbox (Docker Container auf SimRacer)"]
         VM["Isoliertes Windows 11 (dockurr/windows)<br/>Ports: 8006 (Web-GUI), 3390 (RDP), 2222 (SSH)"]
-        DARK_AGENT["@dark Agent<br/>(In-Container Test & Setup-Worker)"]
-        SHARED_MOUNT["Mount: \\host.lan\Data<br/>(C:\ac-sandbox\shared)"]
+        DARK_AGENT["@dark Agent (In-Container Test &amp; Setup-Worker)"]
+        SHARED_MOUNT["Mount: \\host.lan\Data (C:\ac-sandbox\shared)"]
     end
 
     subgraph NODE4 ["4. Pitwall: Archibald (192.168.178.98 / Omarchy Arch Linux)"]
-        SARAH_AGENT["@sarah Coach<br/>(Digital Race Engineer, Debriefing & Telemetrie)"]
-        NOTEBOOK["Jupyter Lab / Telemetrie-Notebooks"]
+        SARAH_AGENT["@sarah Coach (Live-Telemetrie, Voice &amp; Replays)"]
+        CHROMIUM["Chromium Fullscreen (:8080 Pitwall + Sprachchat)"]
     end
 
-    subgraph NODE5 ["5. Telemetrie-Hub: StrikerPi (192.168.178.86 / Raspberry Pi 4)"]
-        RELAY["telemetry_relay.py<br/>(UDP 50005/9996 & WebSocket 8080)"]
-        CACHE["Mosquitto MQTT (:1883/:9001)<br/>& Bare-Git (/srv/git/simrig.git)"]
+    subgraph NODE5 ["5. Telemetrie-Hub: StrikerPi (192.168.178.86 / .125 / Raspberry Pi 4)"]
+        RELAY["telemetry_relay.py (Live 26.11.: Dual-GPU, KI-Schaltweiche &amp; Registry)<br/>(:50005/:9996 UDP, :8080 Pitwall, /api/llm/gemini &amp; @general-sim /opt/general-sim/)"]
+        CACHE["Mosquitto MQTT (:1883/:9001)<br/>Caddy (:80) &amp; Bare-Git (/srv/git/simrig.git)"]
     end
 
-    DEV_IDE <== "VS Code Remote-SSH (:22)" ==> NODE2
+    DEV_IDE <== "VS Code Remote-SSH (:22) + Settings Sync" ==> NODE2
     GEN_AGENT -->|"Delegiert Hardware-Aufgaben"| RIG_AGENT
-    GEN_AGENT -->|"Delegiert Session & Content"| LIGHT_AGENT
-    LIGHT_AGENT -->|"Pre-Flight Check & Handshake (:2222)"| DARK_AGENT
+    GEN_AGENT -->|"Delegiert Session &amp; Content (+ Light-Mandat)"| LIGHT_AGENT
+    LIGHT_AGENT -->|"Pre-Flight Check &amp; Handshake (:2222)"| DARK_AGENT
     HOST_AC -.->|"UDP 50005 Raw Telemetrie"| RELAY
     RELAY -->|"UDP 9996 / WebSocket 8080 / MQTT"| SARAH_AGENT
+    RELAY -.->|"SSH Freigaben / Pause / GPU-Gate"| NODE2
 ```
 
-| Knoten | Hostname / IP | Betriebssystem | Primäre Aufgabe | Verwendete Tools & Ports |
+| Knoten | Hostname / IP | Betriebssystem | Primäre Aufgabe | Verwendete Tools &amp; Ports |
 | :--- | :--- | :--- | :--- | :--- |
-| **Knoten 1** | `VanstrikeCyborg`<br/>`192.168.178.172` | Windows 11 Home | Master-Planung, Code-Entwicklung, Doku, KI-Modell-Steuerung | Antigravity IDE, `CLIProxyAPI` (:8317), `geminiDocs` MCP |
-| **Knoten 2** | `SimRacer`<br/>`192.168.178.68` | Windows 11 Pro | Simulation, Content Manager, CSP-Shader, High-FPS VR | RTX 5070 Ti, NVIDIA MCP (:13508), OpenSSH (:22), Docker Desktop |
-| **Knoten 3** | `ac-win11-sandbox`<br/>*(SimRacer Container)* | Windows 11 Ent. | Isoliertes Testlabor für fremde Mods, Setup-Validierung, CM-Tests | KasmVNC (:8006), RDP (:3390), Gast-SSH (:2222) |
-| **Knoten 4** | `Archibald`<br/>`192.168.178.98` | Omarchy Linux | Telemetrie-Auswertung, Fahrstilanalyse, automatisierter Videoschnitt | Python 3.14, FFmpeg, Jupyter Lab, SSH (:22), CLIProxyAPI (:8317) |
-| **Knoten 5** | `StrikerPi`<br/>`192.168.178.86` | Arch Linux ARM | 24/7 Telemetrie-Relay, Mosquitto MQTT-Broker & Bare-Git-Hub (`/srv/git/simrig.git`) | Python 3.14 (`uv`), FastAPI/Uvicorn (:8080), Mosquitto (:1883/:9001), UDP (:50005/:9996) |
+| **Knoten 1** | `VanstrikeCyborg`<br/>`192.168.178.172` (LAN) / `.145` (WLAN) | Windows 11 Home | Master-Planung, Code-Entwicklung, Doku, Single-Writer-Lead &amp; GPU-Fallback (`RTX 5060`) | VS Code, Antigravity Hub (`8317`), Ollama `0.40.18` (`11434`, `32K`), `geminiDocs` MCP |
+| **Knoten 2** | `SimRacer`<br/>`192.168.178.68` | Windows 11 Pro | Simulation, Content Manager, CSP-Shader, VR, LAN-Ollama-Compute | RTX 5070 Ti, Ollama (`11434`), NVIDIA MCP (`13508`), OpenSSH (`22`), Docker |
+| **Knoten 3** | `ac-win11-sandbox`<br/>*(SimRacer Container)* | Windows 11 Ent. | Isoliertes Testlabor für fremde Mods, Setup-Validierung, CM-Tests | KasmVNC (`8006`), RDP (`3390`), Gast-SSH (`2222`) |
+| **Knoten 4** | `Archibald`<br/>`192.168.178.98` | Omarchy Linux | Pitwall-Display (`:8080`), Telemetrie-Auswertung, Voice-Funk &amp; Videoschnitt | Python 3.14, FFmpeg, Chromium Kiosk, SSH (`22`), UDP (`9996`) |
+| **Knoten 5** | `StrikerPi`<br/>`192.168.178.86` (WLAN)<br/>`192.168.178.125` (`end0`) | Arch Linux ARM | 24/7 Telemetrie-Relay, **Pitwall-Steuerungskonsole + Gemini LAN-Bridge**, MQTT, Caddy &amp; Bare-Git *(Live-Host für `general-sim` unter `/opt/general-sim/`)* | Python 3.14 (`uv`), FastAPI/Uvicorn (`8080`), Mosquitto (`1883`/`9001`), Caddy (`80`), `:8085` |
 
 </details>
 
 <details>
 <summary>1.2 Die Multi-Root Workspace-Architektur (<code>git-labor.code-workspace</code>)</summary>
 
-In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Datei `c:\Users\strik\git-labor\git-labor.code-workspace` in einem einzigen Fenster gebündelt:
+In VS Code und Antigravity werden alle Projekte über die zentrale Workspace-Datei `c:\Users\strik\git-labor\git-labor.code-workspace` in einem einzigen Fenster gebündelt (`4` globale MCP-Server in `User\mcp.json` + `2` exklusive in `.vscode\mcp.json`; keine `"mcp"`-Dubletten mehr im Workspace):
 
 ```json
 {
   "folders": [
-    {
-      "name": "1_Git-Labor (mestuermer-svg/first)",
-      "path": "."
-    },
-    {
-      "name": "2_Local-Cyborg (mestuermer-svg/local_Cyborg)",
-      "path": "../../../local_Cyborg"
-    },
-    {
-      "name": "3_AC-CM-CSP-Sandbox (mestuermer-svg/ac-cm-csp-sandbox)",
-      "path": "../ac-cm-csp-sandbox"
-    },
-    {
-      "name": "4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)",
-      "path": "../assetto-corsa-content"
-    },
-    {
-      "name": "5_StrikerPi-Hub (strikerpi/simrig.git)",
-      "path": "../strikerpi-hub"
-    }
+    { "name": "1_Git-Labor (mestuermer-svg/first)", "path": "." },
+    { "name": "2_Local-Cyborg (mestuermer-svg/local_Cyborg)", "path": "../../../local_Cyborg" },
+    { "name": "3_AC-CM-CSP-Lab (mestuermer-svg/ac-cm-csp-sandbox)", "path": "../ac-cm-csp-sandbox" },
+    { "name": "4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)", "path": "../assetto-corsa-content" },
+    { "name": "5_StrikerPi-Hub (strikerpi/simrig.git)", "path": "../strikerpi-hub" }
   ],
-  "mcp": {
-    "servers": {
-      "geminiDocs": {
-        "type": "http",
-        "url": "https://gemini-api-docs-mcp.dev"
-      }
-    }
-  },
   "settings": {
     "antigravity.serverPort": 8317,
-    "python.defaultInterpreterPath": "C:\\Users\\strik\\.local\\python-env\\Scripts\\python.exe",
+    "inlineChat.defaultModel": "gemma4:e4b (ollama-models)",
+    "python.defaultInterpreterPath": "C:\\Users\\strik\\AppData\\Roaming\\uv\\python\\cpython-3.12-windows-x86_64-none\\python.exe",
     "docker.context": "simracer",
-    "chat.tools.terminal.autoApprove": {
-      "/^ssh -o BatchMode=yes -o ConnectTimeout=5 Mike@192\\.168\\.178\\.68 \".*\"$/": {
-        "approve": true,
-        "matchCommandLine": true
-      }
-    }
+    "task.allowAutomaticTasks": "off"
   }
 }
 ```
 
 > [!TIP]
-> **Vorteil des Multi-Root-Ansatzes:**
-> - Du bearbeitest Python-Skripte in `git-labor`, steuerst Sandbox-Compose-Dateien in `ac-cm-csp-sandbox`, pflegst Mod-Strukturen in `assetto-corsa-content` und entwickelst den 24/7-Edge-Hub in `strikerpi-hub` (`git@192.168.178.86:/srv/git/simrig.git`) – alles in **einem** Editor ohne Fensterwechsel.
-> - Alle lokalen VS-Code-Konfigurationen (`git-labor.code-workspace`, `git-labor/.vscode/settings.json`, `assetto-corsa-content.code-workspace`) sind einheitlich auf den aktiven `CLIProxyAPI`-Port **`8317`** abgestimmt.
+> **Vorteil des Multi-Root- &amp; Single-Writer-Ansatzes:**
+> - Du bearbeitest alle 5 Repositories in **einem** Editor ohne Fensterwechsel (`VanstrikeCyborg` als führender Schreib-Master).
+> - Alle VS-Code-Chats auf `VanstrikeCyborg` starten direkt lokal mit **Ollama (`gemma4:e4b` auf `:11434`)** statt entfernter Proxy-Gateways; `task.allowAutomaticTasks` steht kontrolliert auf `"off"`.
 > - Über den Task **`🧭 Agent-Terminals Menü (SSH-Launcher)`** (`labs/Agent-Terminals.ps1`) lassen sich alle 6 Agenten-Terminals vom Laptop aus übersichtlich per SSH aufrufen.
 
 </details>
 
 <details>
-<summary>1.3 SimRacer-Gegenstück: Der Host-Workspace (<code>simracer.code-workspace</code>) &amp; Antigravity-Scharfschaltung</summary>
+<summary>1.3 SimRacer-Gegenstück: Der Host-Workspace (<code>simracer.code-workspace</code>) &amp; 1-zu-1-Synchronisation</summary>
 
-Um auch direkt auf der SimRacing-Workstation (`SimRacer` / `192.168.178.68`) unabhängig vom Laptop mit voller KI-Unterstützung arbeiten zu können, wird dort die Workspace-Datei **`D:\ac-sandbox\simracer.code-workspace`** betrieben.
+Auf der SimRacing-Workstation (`SimRacer` / `192.168.178.68`) wird das bereinigte Host-Workspace **`C:\ac-sandbox\simracer.code-workspace`** *(die riskante NTFS-Junction `D:\ac-sandbox` wurde am 24.11.2026 sauber entfernt; `C:` hat nach Archivierung `176,54 GB` frei)* betrieben — als **1-zu-1-Parität zu `VanstrikeCyborg` ohne SQLite-Konflikte**:
 
-#### 1. Verzeichnis-Bündelung auf dem SimRacer (4 Ordner)
+#### 1. Warum Settings Sync + Read-Only SMB-Shares statt geteiltem `.vscode`-Profil?
+- VS Code schreibt laufend in lokale SQLite-Datenbanken (`globalStorage\state.vscdb`). Ein direkter SMB-Zugriff von zwei PCs auf dasselbe `AppData\Roaming\Code\User\` würde zu DB-Locks und Korruption führen.
+- **Sauberes Single-Writer-Modell:**
+  1. **IDE-Einstellungen &amp; Extensions:** Beide PCs nutzen eine **identische 26-ID-Sperrliste** (`settingsSync.ignoredExtensions`) und **17 geschützte Maschinen-Keys** (`settingsSync.ignoredSettings` für `python.defaultInterpreterPath`, `ollama.endpoint`, lokale `chat.*Model`-Defaults). Über **VS Code Settings Sync** bleiben UI, Themes und saubere Extensions automatisch 1-zu-1 synchron.
+  2. **Code-Repositories &amp; Cyborg Read-Only Shares:** `VanstrikeCyborg` ist führender Schreiber (`git push`); `SimRacer` greift auf die aktiven Cyborg-Repos schreibgeschützt über **`Cyborg-GitLabor-RO`** und **`Cyborg-AC-Content-RO`** (`VANSTRIKECYBORG\strik | Allow | Read` + `files.readonlyInclude`) zu bzw. synchronisiert `D:\git-labor` per **`git pull`**.
+
+#### 2. Bereinigter SimRacer-Stand (24.11.2026)
+- **Extensions &amp; Tooling:** Alle `19` Proxy-/Wrapper-Altlasten deinstalliert; am 24.11.2026 weitere `50` fehlende Extensions (`OK=50, FAIL=0`) auf volle **`76` identische Extensions** nachgezogen sowie **`uv 0.13.9` / `uvx 0.13.9`** für `markitdown` (`5` globale MCP-Server in `User\mcp.json`) installiert.
+- **Lokale RTX 5070 Ti Defaults:** `chatLanguageModels.json` definiert `"Ollama"` (`http://127.0.0.1:11434`), installiert sind **`qwen3.5:9b`** (`6,6 GB`), `gemma4:12b` und Legacy `qwen2.5-coder:14b` unter `D:\OllamaModels` (`21,94 GB`), `task.allowAutomaticTasks` = `"off"`, **`0` Klartext-API-Keys** in Settings.
+
+#### 3. Verzeichnis-Bündelung auf dem SimRacer (`simracer.code-workspace`, `[HOST]` + `[CYBORG RO]`)
 ```json
 {
   "folders": [
-    { "name": "AC Sandbox & Docker Host", "path": "." },
-    { "name": "Native Assetto Corsa (Steam)", "path": "D:/SteamLibrary/steamapps/common/assettocorsa" },
-    { "name": "Assetto Corsa User Documents", "path": "C:/Users/Mike/Documents/Assetto Corsa" },
-    { "name": "Git-Labor (mestuermer-svg/first)", "path": "D:/git-labor" }
-  ]
+    { "name": "[HOST] AC Sandbox & Docker", "path": "." },
+    { "name": "[HOST] Native Assetto Corsa (Steam)", "path": "C:/Program Files (x86)/Steam/steamapps/common/assettocorsa" },
+    { "name": "[HOST] Assetto Corsa Documents", "path": "C:/Users/Mike/Documents/Assetto Corsa" },
+    { "name": "[HOST] Git-Labor (Lokal-Klon D:)", "path": "D:/git-labor" },
+    { "name": "[HOST] Local-Simracer (Doku & Configs)", "path": "C:/local_Simracer" },
+    { "name": "[CYBORG RO] Git-Labor (Read-Only)", "path": "//VanstrikeCyborg/Cyborg-GitLabor-RO" },
+    { "name": "[CYBORG RO] Assetto-Corsa-Content (Read-Only)", "path": "//VanstrikeCyborg/Cyborg-AC-Content-RO" }
+  ],
+  "settings": {
+    "files.readonlyInclude": { "//VanstrikeCyborg/**": true, "D:/git-labor/**": true }
+  }
 }
-```
-* Das zentrale Entwicklungsarchiv `mestuermer-svg/first` ist unter **`D:\git-labor`** geklont. Änderungen an Doku, Skripten oder Prompts werden über GitHub synchronisiert (`git push` am Laptop $\leftrightarrow$ `git pull` am SimRacer).
-
-#### 2. Antigravity-Scharfschaltung in VS Code auf dem SimRacer
-Damit die Erweiterung `google.google-antigravity` (v1.11.0) auf dem SimRacer reibungslos arbeitet, sind zwei Einstellungen in `%APPDATA%\Code\User\settings.json` zwingend:
-1. **Sandbox-Modus deaktivieren (`"chat.agent.sandbox.enabled": "off"`):**  
-   Im Windows-Standard blockiert die VS-Code-Sandbox Zugriffe auf Terminal-Tools und Skripte. Mit `"off"` arbeiten die Agenten direkt auf den Host-Dateien.
-2. **Dynamischer Server-Port (`"antigravity.serverPort": 0`):**  
-   Port `0` signalisiert der Extension, beim Start von `C:\Users\Mike\.gemini\bin\agy.exe` automatisch einen freien ephemeren Port zu wählen, wodurch Port-Kollisionen (z. B. mit Port 8317 oder 8000) ausgeschlossen werden.
-3. **Erstanmeldung:** Einmalig über `Strg + Shift + P` $\rightarrow$ `Antigravity: Sign in` den Google-Account bestätigen.
-
-#### 3. Dateizugriffsrechte (Windows NTFS-ACLs)
-Falls Agenten im Sandbox-Modus laufen, benötigen die betroffenen Verzeichnisse rekursive Schreibrechte für die lokale Gruppe `CodexSandboxUsers`:
-```powershell
-# Auf dem Host ausführen:
-icacls "C:\Users\strik\assetto-corsa-content" /grant "CodexSandboxUsers:(OI)(CI)M" /T
-icacls "C:\Users\strik\ac-cm-csp-sandbox" /grant "CodexSandboxUsers:(OI)(CI)M" /T
 ```
 
 </details>
 
 <details>
-<summary>1.4 Die Port- und Netzwerk-Architektur im Überblick</summary>
+<summary>1.4 Die aktuelle Port- und Netzwerk-Architektur im Überblick</summary>
 
-Zur reibungslosen Kommunikation ohne Portkonflikte gilt folgende feste Portbelegung:
+Zur reibungslosen Kommunikation ohne Portkonflikte gilt folgende aktive Portbelegung *(frühere Proxy-Ports `:8317` CLIProxyAPI &amp; `:8420` llm-gateway wurden am 23.11.2026 entfernt)*:
 
 | Port | Protokoll | Host | Dienst / Komponente | Funktion |
 | :--- | :--- | :--- | :--- | :--- |
-| **`8317`** | HTTP / REST | `127.0.0.1` (Laptop) | `CLIProxyAPI` (`cli-proxy-api.exe`) | Lokaler OpenAI-kompatibler Endpunkt (`/v1/chat/completions`) für Copilot |
-| **`8000`** | HTTP / HTML | `127.0.0.1` (Laptop) | Google Antigravity Web-UI (`agy.exe`) | Grafische Web-Oberfläche für Agenten-Status & Sessions |
-| **`13508`** | HTTP / MCP | `127.0.0.1` (SimRacer) | NVIDIA App MCP (`NvAppMcpServer.exe`) | GPU-Telemetrie (Temperatur, VRAM, Auslastung) für den Rig-Agenten |
+| **`11434`** | HTTP / REST | `127.0.0.1` (Laptop) &amp; `0.0.0.0` (SimRacer) | **Ollama Server (`ollama.exe`)** | Lokale (`qwen3.5:4b`, `gemma4:e4b`) &amp; LAN-Inferenz (`qwen3.5:9b`, `gemma4:12b`, `qwen2.5-coder:14b`) |
+| **`8317` / `0`** | TCP | `127.0.0.1` (Cyborg `8317`, SimRacer `0`) | **Google Antigravity Hub (`agy.exe`)** | Offizieller IDE-Extension-Hub (`antigravity.serverPort`) |
+| **`13508`** | HTTP / MCP | `127.0.0.1` (SimRacer) | NVIDIA App MCP (`NvAppMcpServer.exe`) | GPU-Telemetrie &amp; App-Steuerung für den SimRacer |
 | **`8006`** | HTTPS / Web | `192.168.178.68` | KasmVNC Web-Display | Browser-Zugriff auf die Windows-11-Sandbox-Oberfläche |
-| **`8090`** | HTTP / MJPEG | `192.168.178.68` | `sim_stream_server.py` (`SimRacer-Lobby-Stream`) | On-Demand-Stream der aktiven Sim-Perspektive (`acs.exe` / VR View) für Pitwall Lobby-Streams |
+| **`8090`** | HTTP / MJPEG | `192.168.178.68` | `sim_stream_server.py` (`SimRacer-Lobby-Stream`) | On-Demand-Stream der aktiven Sim-Perspektive (`acs.exe` / VR View) |
 | **`3390`** | RDP | `192.168.178.68` | Windows Remote Desktop | Direkte RDP-Verbindung in den virtuellen Windows-11-Gast |
 | **`22`** | SSH | `192.168.178.68` | Windows OpenSSH Server (Host) | Nativer Shell-Zugriff auf den SimRacer (`Mike@192.168.178.68`) |
 | **`2222`** | SSH | `192.168.178.68` | Gast OpenSSH Server (Sandbox) | Shell-Zugriff für den Dark Agent (`Docker@192.168.178.68`) |
-| **`22`** | SSH | `192.168.178.98` | OpenSSH Server (`Archibald`) | LAN-Freigabe `192.168.178.0/24` (ohne Rate-Limit) für Laptop & SimRacer |
-| **`8317`** | HTTP / REST | `127.0.0.1` (`Archibald`) | `CLIProxyAPI` (`cli-proxy-api.service`) | Lokaler Modell-Endpunkt (Antigravity OAuth, 21 Modelle) für `pitwall.code-workspace` |
-| **`9996`** | UDP | `192.168.178.98` | `sarah_telemetry_listener.py` | Direkter 50 Hz-AC-Telemetrie-Stream von `ac_telemetry_sender.py` (SimRacer → Pitwall) |
-| **`9` / `7`** | UDP (WoWLAN) | `192.168.178.98` | Intel AX201 (`14:18:c3:b4:3e:85`) | Magic-Packet-Broadcast (`255.255.255.255` & `192.168.178.255`) zum Wecken aus `s2idle` |
-| **`50005` / `9996`** | UDP | `192.168.178.86` | StrikerPi Telemetrie-Relay | Empfang der AC-Telemetrie, Weiterleitung an `Archibald:9996` & MQTT-Bridge |
-| **`1883` / `9001`** | TCP / WS | `192.168.178.86` | Mosquitto MQTT-Broker | Topics `simrig/mode` &amp; `simrig/telemetry` (LAN &amp; WebSockets, via Caddy `/mqtt*`) |
-| **`80`** | HTTP | `192.168.178.86` | Caddy Webserver &amp; Reverse Proxy | Hosting `/srv/git-labor/web` (`ts-linux-lab`), Proxy `/api/linux/*` $\rightarrow$ `:8085`, `/mqtt*` $\rightarrow$ `:9001` |
+| **`22`** | SSH | `192.168.178.98` | OpenSSH Server (`Archibald`) | LAN-Freigabe `192.168.178.0/24` für Laptop &amp; SimRacer |
+| **`9996`** | UDP | `192.168.178.98` | `sarah_telemetry_listener.py` | Direkter 50 Hz-AC-Telemetrie-Stream (StrikerPi $\rightarrow$ Pitwall) |
+| **`9` / `7`** | UDP (WoWLAN) | `192.168.178.98` | Intel AX201 (`14:18:c3:b4:3e:85`) | Magic-Packet-Broadcast zum Wecken aus `s2idle` |
+| **`50005` / `9996`** | UDP | `192.168.178.86` / `.125` | StrikerPi Telemetrie-Relay | Empfang der AC-Telemetrie, Weiterleitung an `Archibald:9996` &amp; MQTT |
+| **`1883` / `9001`** | TCP / WS | `192.168.178.86` / `.125` | Mosquitto MQTT-Broker | Topics `simrig/mode`, `simrig/agent_control` &amp; `simrig/telemetry` (LAN &amp; WebSockets, via Caddy `/mqtt*`) |
+| **`80`** | HTTP | `192.168.178.86` / `.125` | Caddy Webserver &amp; Reverse Proxy | Hosting `/srv/git-labor/web` (`ts-linux-lab`), Proxy `/api/linux/*` $\rightarrow$ `:8085`, `/mqtt*` $\rightarrow$ `:9001` |
 | **`8085`** | HTTP / REST | `127.0.0.1` (`StrikerPi`) | `gitlabor-api.service` (Node.js v26) | Gehärteter Linux-Livedienst (`/api/linux/health|status|ports|logs|echo`) hinter Caddy |
-| **`8080`** | HTTP / WS | `192.168.178.86` | StrikerPi Pitwall Hub & API | Fullscreen-Live-Dashboard (`/`), **Lobby-Streams** (`/api/streams`, `/api/stream/simracer.mjpeg`), `/health`, `/api/mode`, `/ws/telemetry` |
-| **`22`** | SSH / Git | `192.168.178.86` | Arch Linux ARM SSH & Bare-Git | Administration (`root`/`alarm`) & zentrales Repo `/srv/git/simrig.git` (`git`) |
+| **`8080`** | HTTP / WS | `192.168.178.86` / `.125` | StrikerPi Pitwall Hub &amp; Steuerungskonsole | Live-Telemetrie (`/`), Lobby-Streams, Sandbox-Steuerung, **Agenten &amp; Light Freigabe-Konsole (`/api/approvals/*`)** + **Antigravity Sprachchat-Button** |
+| **`22`** | SSH / Git | `192.168.178.86` / `.125` | Arch Linux ARM SSH &amp; Bare-Git | Administration &amp; zentrales Repo `/srv/git/simrig.git` |
 
 </details>
 
 <details>
-<summary>1.5 Das Agenten-Rollenmodell: Hardware-Standorte, <code>General Cyborg</code> &amp; <code>General Sim</code></summary>
+<summary>1.5 Das Agenten-Rollenmodell: Hardware-Standorte, 7-Rollen-Registry &amp; Architektur v5</summary>
+
+> [!NOTE]
+> **Fortschreibung (25.–26.11.2026):**
+> - **Host-Orchestrierung (Architektur v5):** Auf dem `SimRacer` koordiniert **`@light`** als alleiniger Host-Orchestrator &amp; 2-Stufen-QA-Prüfer (`light_verifier.py`) alle Facharbeiter-Läufe an `@rig` und `@dark`; die lokale Ollama-Tool-Runtime (`ollama_router.py`) weicht bei `LIVE_RACE` oder 5070-Ti-Sperre auf **Cyborg RTX 5060** oder über die zentrale **KI-Schaltweiche (`ollama` / `auto` / `gemini`)** auf Google Gemini aus (siehe [SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)).
+> - **Kanonische 7-Rollen-Registry (`strikerpi-hub/telemetry-relay/agent_registry.json`, `LIVE` auf StrikerPi):** Trennt **`General Cyborg` (`@cyborg`)** auf `VanstrikeCyborg` strikt von **`General Sim` (`@general-sim`)** unter `/opt/general-sim/` auf `StrikerPi` (`READY` / `available`). Die alte `@general`-Queue bleibt bis zum vollständigen E2E-Cutover als Legacy-Pfad bestehen (siehe [Rollen-, Terminal- und Pitwall-Umsetzung](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md)).
 
 Um Missverständnisse und Kompetenzüberschneidungen zu vermeiden, ist jeder Agent sowohl einer festen **Domäne** als auch einem klaren **Hardware-Knoten** zugewiesen:
 
@@ -305,18 +310,18 @@ Da der Fahrer im Renncockpit eine geschlossene VR-Brille trägt, kann er das phy
 - **Basisbetrieb ohne Auto-Suspend:** `/etc/systemd/logind.conf.d/disable-sleep.conf` (`HandleLidSwitch=ignore`, `IdleAction=ignore`) und `~/.config/omarchy/shell.json` (`screensaver: 150`, `lock: 300`) aktivieren im Leerlauf den Bildschirmschoner ohne automatischen Standby.
 - **Renneinsatz / Render-Betrieb:** Sobald eine Session oder ein FFmpeg-Replay-Schnitt gestartet wird, pausiert Sarah den Schoner automatisch via `omarchy-toggle screensaver-off on` und `pkill -f org.omarchy.screensaver`. Im Leerlauf wird er wieder scharfgeschaltet (`screensaver-off off`).
 - **Remote-Suspend &amp; Wake-on-WLAN (`s2idle`):** `sleep.target`/`suspend.target` sind entmaskiert; über `/etc/sudoers.d/archibald-suspend` (`NOPASSWD: /usr/bin/systemctl suspend`) dürfen `VanstrikeCyborg` und `SimRacer` (`192.168.178.68`, eigener `ed25519`-Key) Archibald via `sleep_archibald.ps1` gezielt schlafen legen. Die Intel-AX201-Schnittstelle `wlp0s20f3` (`14:18:c3:b4:3e:85`, `nmcli wake-on-wlan=8`, `udev`-Regel `50-wowlan.rules`) wacht über `wake_archibald.ps1` (Dual-Broadcast `255.255.255.255` &amp; `192.168.178.255`, UDP `9`/`7`) wieder auf.
-- **UFW-Firewall &amp; `CLIProxyAPI` (`:8317`):** LAN-Ausnahmen (`192.168.178.0/24`) für `22/tcp` (vor `omarchy-sshd LIMIT IN`) und `9996/udp` (`sarah_telemetry_listener.py`); `cli-proxy-api.service` läuft lokal auf `127.0.0.1:8317` mit synchronisiertem Antigravity-OAuth (`m.e.stuermer@gmail.com`, 21 Modelle) für `pitwall.code-workspace`.
+- **UFW-Firewall (`Archibald`):** LAN-Ausnahmen (`192.168.178.0/24`) für `22/tcp` (vor `omarchy-sshd LIMIT IN`) und `9996/udp` (`sarah_telemetry_listener.py`); *[ENTFERNT / ARCHIVIERT – 23.11.2026]* der frühere `cli-proxy-api.service` (`:8317`) ist deaktiviert (`inactive`).
 
 </details>
 
 <details>
-<summary>1.8 Knoten 5 (StrikerPi / Arch Linux ARM): Agent <code>@rick</code>, Bare-Git &amp; Terminal-Trennung (Host-Lokal vs. SSH-Client-Mode)</summary>
+<summary>1.8 Knoten 5 (StrikerPi / Arch Linux ARM): Agent <code>@rick</code>, Bare-Git, Pitwall <code>:8080</code> &amp; Terminal-Trennung</summary>
 
-Der Raspberry Pi 4 (**`StrikerPi`**, `192.168.178.86`, Arch Linux ARM `aarch64`) bildet den dauerhaft laufenden **24/7-Infrastruktur-Anker** im Verbund:
+Der Raspberry Pi 4 (**`StrikerPi`**, WLAN `192.168.178.86`, LAN `end0` `.125`, Arch Linux ARM `aarch64`) bildet den dauerhaft laufenden **24/7-Infrastruktur-Anker** im Verbund:
 
 1. **Dienste &amp; Infrastruktur auf StrikerPi:**
-   - **`telemetry-relay.service` (`/opt/telemetry-relay/telemetry_relay.py`, v1.3.0):** Nimmt 50 Hz-UDP-Pakete von `SimRacer` (`SimRacer-Telemetry-Sender` $\rightarrow$ `192.168.178.86:50005`) entgegen, leitet sie an `Archibald:9996` weiter, liefert das Pitwall-Web-UI (`:8080`) und proxyt den Lobby-Stream (`http://192.168.178.68:8090` $\rightarrow$ `/api/stream/mjpeg`).
-   - **`mosquitto.service` (`:1883` / `:9001`):** Verwaltet Echtzeit-Status-Topics wie `simrig/mode`.
+   - **`telemetry-relay.service` (`/opt/telemetry-relay/telemetry_relay.py`, `v1.4.0`):** Nimmt 50 Hz-UDP-Pakete von `SimRacer` (`SimRacer-Telemetry-Sender` $\rightarrow$ `192.168.178.86:50005`) entgegen, leitet sie an `Archibald:9996` weiter, liefert unter `http://192.168.178.86:8080/` das Pitwall-Web-UI inklusive der **Steuerungskonsole (`🛡️ Agenten & Light`)**, des **`🎙️ Antigravity Sprachchat`**-Buttons und der Live-GPU-/Ollama-Telemetrie (`GET/POST /api/approvals/*`) und proxyt den Lobby-Stream (`http://192.168.178.68:8090` $\rightarrow$ `/api/stream/mjpeg`).
+   - **`mosquitto.service` (`:1883` / `:9001`):** Verwaltet Echtzeit-Status-Topics wie `simrig/mode` und `simrig/agent_control`.
    - **`rick-agent.service` (`/opt/rick-agent/rick_worker.py`):** Überwacht alle LAN-Endpunkte (`status.json` alle 15 s) und verarbeitet Aufgaben aus `/opt/rick-agent/inbox/` nach `outbox/`.
    - **Bare-Git-Hub (`/srv/git/simrig.git`):** Erreichbar per `git@192.168.178.86:/srv/git/simrig.git` (`git-shell`) und als 5. Workspace-Ordner **`5_StrikerPi-Hub`** (`C:\Users\strik\strikerpi-hub`) direkt in `git-labor.code-workspace` eingebunden.
 
@@ -334,41 +339,53 @@ Der Raspberry Pi 4 (**`StrikerPi`**, `192.168.178.86`, Arch Linux ARM `aarch64`)
 </details>
 
 <details>
-<summary>1.9 VS Code User-Profile, Python-Umgebung &amp; Agenten-Settings pro Workspace (Stand: 12.11.2026)</summary>
+<summary>1.9 VS Code Parity Sync, Parallel-Ressourcenlimits &amp; bereinigte Workspace-Settings (Stand: 24.11.2026)</summary>
 
-Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abgeleitet, vollständig synchronisiert (`55` Extensions, `mcp.json`, `chatLanguageModels.json` mit 6 Modell-Anbietern, `snippets\javascript.json`) und in `%APPDATA%\Code\User\globalStorage\storage.json` fest mit ihren Workspaces verknüpft:
+Um SQLite-Datenbankkorruption in `%APPDATA%\Code\User\globalStorage\state.vscdb` auszuschließen, teilen `VanstrikeCyborg` und `SimRacer` **keinen** gemeinsamen SMB-Profilordner. Stattdessen laufen beide Windows-Knoten im **1-zu-1-Parity-Sync** (identische **`76`** Extensions am 24.11.2026 nachgezogen, `uvx 0.13.9` + `5` MCP-Server auf SimRacer, Single-Writer-GitHub + Read-Only-SMB-Shares) mit symmetrischem Maschinenschutz:
 
-| Profil | Profil-ID (`User\profiles\`) | Theme &amp; Layout | Zugeordneter Workspace | Synchronisierte Kern-Settings |
-| :--- | :--- | :--- | :--- | :--- |
-| **`Default`** | `__default__profile__` | `Default High Contrast`, `compact` | Fallback | Basis-Profil; `applyToAllProfiles` für `geminiCode.useDirectAPI`, `geminiMcp.taskCwd`, `chat.mcp.discovery.enabled`, `antigravity.serverPort` |
-| **`General SIM`** | `-4f926864` | `Abyss`, `compact` | `assetto-corsa-content.code-workspace` | `antigravityCopilot.server.executablePath` (`cli-proxy-api.exe`), `containers.containerClient`/`orchestratorClient`, `python.defaultInterpreterPath` (`\.local\python-env\Scripts\python.exe`), `mcp.json`, `chatLanguageModels.json` |
-| **`General Cyborg`** | `-37467b98` | `Default High Contrast`, `compact` | `git-labor.code-workspace` | Identisch zu `General SIM` + `github.copilot.llm-gateway.showReplyTokenUsage: true` (fehlerhafter Key unter `additionalTrustedCertificates` entfernt) |
+- **Identische Sync-Sperrliste auf beiden PCs (`User\settings.json`):**
+  - `settingsSync.ignoredExtensions` (**`26`** entfernte Proxy-/Gateway-/Wrapper-IDs, damit gelöschte Extensions nicht zurücksynchronisiert werden).
+  - `settingsSync.ignoredSettings` (**`17`** maschinenlokale Keys inkl. `python.defaultInterpreterPath`, `whispering.pythonPath`, `ollama.endpoint`, `antigravity.serverPort`, `chatLanguageModels.json`-Lokal-Overrides).
+- **Bereinigte LLM-, Agenten- &amp; Parallel-Ressourcen-Basis (24.11.2026):**
+  - **Ollama Single-Source-of-Truth (`chatLanguageModels.json`):** Laptop (`http://127.0.0.1:11434`, `qwen3.5:4b` &amp; `gemma4:e4b`) kommt einmalig über `settings.json`; `chatLanguageModels.json` hält für den SimRacer ausschließlich **`Ollama (SimRacer RTX 5070 Ti)`** (`192.168.178.68:11434`, `qwen3.5:9b`, `gemma4:12b`, Legacy `qwen2.5-coder:14b`).
+  - **Parallel-Schutz auf `SimRacer` (Host + Ollama + AC-Sandbox):** `.wslconfig` auf `memory=14GB` / `processors=6` (`autoMemoryReclaim=gradual`), beide `docker-compose*.yml` auf `RAM_SIZE: "10G"` / `CPU_CORES: "6"` (`cpus: 6.0`, `mem_limit: 12g`), `start-ollama-simracer.ps1` auf `OLLAMA_KEEP_ALIVE=30m` &amp; `OLLAMA_NUM_PARALLEL=1` *(offener Admin-Fix auf SimRacer: `bcdedit /deletevalue "{current}" numproc` hebt den 6-Kern-/12-Thread-Deckel auf alle 12 Kerne / 24 Threads)*.
 
 #### Python-Standardumgebung auf `VanstrikeCyborg`
 - **Systemweiter User-`PATH` (Position 1):** `C:\Users\strik\.local\python-env\Scripts\` (`Python 3.14.7`, `pip 26.3`, eingerichtet via `uv venv --seed --python 3.14`), inkl. **`google-antigravity 0.1.23`**, **`google-genai 3.2.0`** und **`mcp 2.3.0`**.
 - **Projekt-`.venv` (`uv 0.12.10`):** `notebook-agent-environments\.venv` enthält `google-genai 3.1.0`, `google-antigravity 0.1.23`, `ipykernel`, `ipywidgets`, `matplotlib`.
 
-#### Agenten- &amp; Workspace-Settings pro Workspace
+#### Aktuelle Workspace-Settings pro Knoten
 
-| Workspace | Aktives Profil | Proxy / Port &amp; Auth | Agent- &amp; Sandbox-Settings | MCP-Server &amp; Besonderheiten |
+| Workspace | Aktives Profil / Knoten | KI-Endpunkt &amp; Auth | Agent- &amp; Sandbox-Settings | MCP-Server &amp; Besonderheiten |
 | :--- | :--- | :--- | :--- | :--- |
-| **`assetto-corsa-content.code-workspace`** *(Laptop)* | **`General SIM`** (`-4f926864`) | `antigravity.serverPort: 8317`, `llm-gateway.serverUrl: http://localhost:8317`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `allowLocalNetwork: true`, `docker.context: "simracer"` | `geminiDocs`; `.vscode/settings.json` lädt `doku-minimap.css` |
-| **`git-labor.code-workspace`** *(Laptop)* | **`General Cyborg`** (`-37467b98`) | `antigravity.serverPort: 8317`, `inlineChat.defaultModel: "Gemini 3.8 Flash (gemini)"`, OAuth (`acpHub`) | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `task.allowAutomaticTasks: "on"` (`.vscode/settings.json`) | `geminiDocs`, `chat.mcp.serverSampling`, `python-envs.pythonProjects` (`pip`), 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
-| **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` | `antigravity.serverPort: 0`, `llm-gateway.serverUrl: http://127.0.0.1:8420`, `geminiCode.authMethod: "apikey"` | `chat.agent.sandbox.enabled: "off"`, `docker.context: "simracer"`, `python.defaultInterpreterPath: Python311\python.exe` | `geminiDocs`, `nvidia-app` (`:13508/mcp`), `local-workspace-filesystem`, `sequential-thinking` |
-| **`pitwall.code-workspace`** *(Archibald `192.168.178.98`)* | Linux `archibald` | `cli-proxy-api.service` auf `127.0.0.1:8317` (OAuth, 21 Modelle) | `~/ac-pitwall/.venv` für `@sarah` | AC-UDP `9996`, StrikerPi-Anbindung (`192.168.178.86`) |
+| **`git-labor.code-workspace`** *(Laptop)* | `VanstrikeCyborg` (`Default`) | Ollama lokal (`http://127.0.0.1:11434`, `qwen3.5:4b`/`gemma4:e4b`) + SimRacer (`192.168.178.68:11434`, `qwen3.5:9b`) + Vertex ADC | `chat.agentFilesLocations` (filtert fremde Agents), `user-invocable: false` auf SSH-Workern, XOR-Mutex, `task.allowAutomaticTasks: "off"` | `4` globale MCP + `2` Workspace-MCP (`git-labor/.vscode/mcp.json`); 5 SSH-Profile (`@rig`, `@light`, `@dark`, `@sarah`, `@rick`) |
+| **`simracer.code-workspace`** *(SimRacer `192.168.178.68`)* | Host `Mike` (`76` offizielle Extensions) | `ollama.endpoint: "http://127.0.0.1:11434"` (`qwen3.5:9b`, `gemma4:12b`, `qwen2.5-coder:14b` unter `D:\OllamaModels`) | `[HOST]` + `[CYBORG RO]` SMB-Shares (`files.readonlyInclude`), `.wslconfig` `14GB`/`6`, Compose `10G`/`6` | `geminiDocs`, `nvidia-app`, `microsoft-learn`, `chrome-devtools`, `markitdown` (`User\mcp.json`) + `local-workspace-filesystem` (`C:\ac-sandbox\.vscode\mcp.json`) |
+| **`pitwall.code-workspace`** *(Archibald `192.168.178.98`)* | Linux `archibald` *(Sleep / ausstehender Abgleich)* | Legacy `:8317` bei nächster Aktivierung auf Ollama / Google SDK umzustellen | `~/ac-pitwall/.venv` für `@sarah` | AC-UDP `9996`, StrikerPi-Anbindung (`192.168.178.86`) |
 
 </details>
 
 <details>
-<summary>1.10 End-to-End-Stabilisierung: Behobene Schein-Erfolge, SMB-Cache &amp; Dienste (Stand: 12.11.2026)</summary>
+<summary>1.10 End-to-End-Stabilisierung &amp; Pitwall-Steuerungskonsole (Stand: 23.11.2026)</summary>
 
-| Komponente | Behobenes Problem | Lösung &amp; Verifizierter Live-Stand |
+| Komponente | Problem / Aufgabe | Lösung &amp; Verifizierter Live-Stand |
 | :--- | :--- | :--- |
 | **Dark Agent (`runner.ps1`, `worker.ps1`, `start_dark_terminal.ps1`)** | Generische Prompts terminierten mit Exit-Code `0` (`Success`); `prompt` übersteuerte `action`. | Intent-Parser (`LaunchCM`, `StopCM`, `Status`, `SetTimezone`, `SyncCoreAssets`), `action` vor `prompt`, Exit-Code `2` $\rightarrow$ `status: "Ignored"`. |
-| **Light Agent (`start_light_terminal.ps1`)** | `action: "Status"` fehlte und meldete falschen `Success`. | Nativer Status-Handler + `Ignored` bei unbekannten Aktionen; synchroner `Light -> Dark` Handshake in **~2,1 s**. |
-| **Sarah Coach (`start_sarah_terminal.ps1`)** | Kein Inbox-Polling / Outbox-Result (`telemetry\inbox` staute Tasks auf). | Polling + Outbox implementiert, Ordner `telemetry\clips\analysis` &amp; `promotion` angelegt, `telemetry\inbox` bereinigt (`0` Tasks). |
-| **VM SMB-Cache &amp; Headless-Konsolen** | SMB-Cache (`10s`/`5s`) verzögerte Dateien um bis zu 30s; 0-Byte-JSON-Race-Conditions; `[Console]::KeyAvailable`-Crashes. | Registry `LanmanWorkstation\Parameters` (`DirectoryCacheLifetime`, `FileNotFoundCacheLifetime`, `FileInfoCacheLifetime`) in der VM auf **`0`**; 10× atomares JSON-Read-Retry; `try/catch`-Wrapper. |
-| **Approval-Policy &amp; StrikerPi Caddy (`:80`)** | Veraltete Laptop-Instanz blockierte Freigaben; Caddy auf StrikerPi `failed` durch `Caddyfile`-Syntaxfehler. | `approval_policy.json` auf `mode: "AUTO"`; sauberes `Caddyfile` mit `unix//run/caddy/admin.socket` &amp; `import /etc/caddy/conf.d/*.caddy`. Alle 4 StrikerPi-Dienste (`mosquitto`, `telemetry-relay`, `rick-agent`, `caddy`) und alle 4 Windows-Agent-Tasks (`Light`, `Rig`, `Dark`, `Sarah`) sind aktiv. |
+| **Light Agent (`start_light_terminal.ps1`) &amp; Delegations-Gate** | `action: "Status"` fehlte; zudem brauchte `@light` ein zentral vom Nutzer &amp; Pitwall steuerbares Mandat. | `Get-PitwallControlPolicy`, `Get-LightTaskCategory` &amp; `Test-LightDelegatedApproval` an **`pitwall_control_policy.json`** gekoppelt (`mode: "DELEGATED"`, 5 Kategorien, `agents_paused`- und `gpu_background_allowed`-Gate). |
+| **General Sim (`start_general_terminal.ps1`) &amp; Pitwall-Konsole (`:8080`)** | `approval_policy.json` steht unter Change-Freeze; Freigaben, globale Pause &amp; GPU-Nutzung sollten im Web-UI steuerbar sein. | `pitwall_control_policy.json` (Laufzeit-Policy neben unberührter `approval_policy.json`), Pitwall-Seite `🛡️ Agenten & Light` (`GET/POST /api/approvals/*`), **`🎙️ Antigravity Sprachchat`**-Button, Not-Aus (`Emergency Revoke`) sowie Live-`nvidia-smi` (RTX 5070 Ti) &amp; Ollama-Telemetrie; `general-SIM` synchronisiert `pending_requests` automatisch. |
+| **Sarah Coach &amp; VM SMB-Cache** | `telemetry\inbox` staute Tasks; SMB-Cache (`10s`/`5s`) verzögerte Dateien; `[Console]::KeyAvailable`-Crashes. | Polling + Outbox; `LanmanWorkstation\Parameters` (`DirectoryCacheLifetime`, `FileNotFoundCacheLifetime`, `FileInfoCacheLifetime`) in der VM auf **`0`**; atomares JSON-Retry. |
+
+</details>
+
+<details>
+<summary>1.11 [ENTFERNT / ARCHIVIERT – 23.11.2026] Historische Proxy-Profile, Ports (<code>:8317</code> / <code>:8420</code>) &amp; Alt-Extensions</summary>
+
+> [!NOTE]
+> Die folgenden Komponenten aus dem Ausbaustand **12.11.2026** wurden am **23.11.2026** im Zuge der ToS-Bereinigung und 1-zu-1-Sync-Vereinheitlichung vollständig entfernt und dienen ausschließlich als historischer Rückblick.
+
+- **Entfernte VS-Code-Extensions (`26` gesperrte IDs in `settingsSync.ignoredExtensions`):** U. a. alle inoffiziellen Proxy-/Gateway-/Custom-LLM-/Wrapper-Extensions (`19` Stück auf SimRacer am 23.11.2026 deinstalliert, `16` Stück auf Laptop bereits zuvor entfernt; `"printfn.gemini-improved"` aus `git-labor.code-workspace` entfernt und durch `"ollama.ollama"` ersetzt).
+- **Entfernte Lokal-Proxys &amp; Plaintext-Secrets:**
+  - `CLIProxyAPI` (`cli-proxy-api.exe` / Port `:8317` als externer LLM-Proxy), `llm-gateway.serverUrl` (`:8317` / `:8420`), `antigravityCopilot.server.*`, `acpHub.agents.google.authPreference: "oauth"`, `mcp_proxy.js`, `"Google 2"` in `chatLanguageModels.json`, Klartext-Keys in `settings.json` und `simracer.code-workspace`. *(Hinweis: Ein aktiver lokaler Port `127.0.0.1:8317` stammt ausschließlich regulär von `agy.exe`, nicht vom entfernten Wrapper-Proxy.)*
+- **Archivierte Laptop-Mehrprofil-Aufteilung (Stand 12.11.2026):** Die getrennten Profile `General SIM` (`-4f926864`, gekoppelt an `assetto-corsa-content.code-workspace` mit `Abyss`-Theme) und `General Cyborg` (`-37467b98`, `Default High Contrast`) mit ehemals `55` Extensions und Proxy-Pfaden wurden in den bereinigten `27`-Extensions-Parity-Stand überführt.
 
 </details>
 
@@ -393,8 +410,13 @@ Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abg
 <details>
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
-* [02 – Git, GitHub & Multi-Root Workspaces](./02_git-github-und-multi-root-workspaces.md)
-* [03 – MCP-Server, Localhost-Proxy & Port-Diagnose](./03_mcp-server-localhost-proxy-und-ports.md)
+* [Letztstand 26.11.2026: Dual-GPU Ollama, KI-Schaltweiche &amp; 7-Rollen-Registry (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)
+* [Stand 25.11.2026: Architektur v5, Toolbox &amp; Pitwall v2.1 (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md)
+* [Rollen-, Terminal- und Pitwall-Umsetzung (7-Rollen-Status LIVE auf StrikerPi)](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md)
+* [Stand 24.11.2026 &amp; Nacharbeiten-Register (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
+* [Letztstand 23.11.2026 (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md)
+* [02 – Git, GitHub & Multi-Root Workspaces](../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md)
+* [03 – MCP-Server, Ollama (:11434) & Ports (Archiv: Proxy)](../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md)
 * [05 – Workspace-Schnittstelle SimRacer & Agenten-Terminals](../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md)
 * [VS Code Multi-Root Workspaces Dokumentation](https://code.visualstudio.com/docs/editor/multi-root-workspaces)
 * [Official Google Antigravity Documentation](https://antigravity.google)
@@ -406,7 +428,8 @@ Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abg
 
 * `Multi-Root Workspace`: Bündelt `git-labor`, `local_Cyborg`, `ac-cm-csp-sandbox` und `assetto-corsa-content` in einer zentralen VS-Code-Instanz.
 * `Standort-Trennung`: Laptop (`VanstrikeCyborg`) für Code & Steuerung; SimRacer (`192.168.178.68`) für Simulation, GPU & Docker; Archibald (`192.168.178.98`) für Pitwall & Linux-Telemetrie.
-* `Port 8317 vs. 8000`: Port `8317` ist der JSON-Endpunkt der `CLIProxyAPI`; Port `8000` ist die HTML-Weboberfläche von Antigravity.
+* `Port 11434 vs. 8317 (Abgrenzung)`: **`11434`** ist der produktive Ollama-Endpunkt (Cyborg &amp; SimRacer), **`8317`** gehört auf Cyborg ausschließlich dem offiziellen Antigravity Hub (`agy.exe`); der frühere `CLIProxyAPI`-Proxy ist entfernt.
+* `Pitwall &amp; Light-Mandat (:8080)`: Auf `http://192.168.178.86:8080/` verwaltet die Steuerungskonsole (`🛡️ Agenten &amp; Light`) globale Agenten-Pause, GPU-/Hintergrund-Freigabe, `pitwall_control_policy.json` sowie den Antigravity Sprachchat-Tab.
 * `Aufgabenteilung @rig vs. @light`: `@rig` steuert ausschließlich physische Hardware, GPU und VR; `@light` steuert Content Manager, native Sessions (`race.ini`), Presets und Docker von außen.
 * `Pre-Flight Check`: Verhindert hängende Skripte, indem vor jedem Dark-Agent-Task geprüft wird, ob `ac-win11-sandbox` läuft.
 * `Sarah Voice & Pitwall`: `de-DE-SeraphinaMultilingualNeural` spricht englische Fachbegriffe (*Apex*, *Delta*, *Stint*, *Trail-Braking*) akzentfrei aus; der omARCHy-Bildschirmschoner wird bei aktiver Session/Render automatisch pausiert.
@@ -420,47 +443,107 @@ Auf `VanstrikeCyborg` sind zwei spezialisierte VS-Code-Profile aus `Default` abg
 
 <!-- DOKU-MINIMAP-START -->
 <style>
-.doku-arch-flow { font-family: var(--vscode-editor-font-family, Consolas, monospace); background: rgba(20, 24, 33, 0.92); border: 1px solid rgba(100, 140, 220, 0.35); border-radius: 10px; padding: 14px 16px; margin: 10px 0; color: #e2e8f0; }
-.doku-arch-root { text-align: center; font-weight: 700; font-size: 1.04em; padding: 8px 12px; margin-bottom: 12px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(96, 165, 250, 0.5); border-radius: 8px; }
+.doku-arch-flow { font-family: var(--vscode-editor-font-family, Consolas, monospace); background: linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.94)); border: 1px solid rgba(96, 165, 250, 0.35); border-radius: 12px; padding: 14px 16px; margin: 8px 0 0 0; color: #e2e8f0; }
+.doku-arch-root { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 0.98em; padding: 9px 14px; margin-bottom: 12px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(30, 41, 59, 0.92)); border: 1px solid rgba(96, 165, 250, 0.48); border-radius: 10px; }
 .doku-arch-root a { color: #93c5fd !important; text-decoration: none !important; }
-.doku-arch-root a:hover { text-decoration: underline !important; }
-.doku-arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 10px; }
-.doku-arch-card { background: rgba(30, 41, 59, 0.78); border: 1px solid rgba(148, 163, 184, 0.28); border-left: 4px solid #3b82f6; border-radius: 8px; padding: 9px 11px; transition: transform 0.12s ease, border-color 0.12s ease; }
-.doku-arch-card:hover { border-color: #60a5fa; transform: translateY(-1px); }
-.doku-arch-card.r1 { border-left-color: #22c55e; }
-.doku-arch-card.r2 { border-left-color: #3b82f6; }
-.doku-arch-card.r3 { border-left-color: #eab308; }
-.doku-arch-card.r4 { border-left-color: #ec4899; }
-.doku-arch-card.r5 { border-left-color: #a855f7; }
-.doku-arch-card-title { font-weight: 700; font-size: 0.95em; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed rgba(148, 163, 184, 0.25); }
+.doku-arch-root a:hover { color: #dbeafe !important; text-decoration: underline !important; }
+.doku-arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 11px; }
+.doku-arch-card { background: rgba(30, 41, 59, 0.72); border: 1px solid rgba(148, 163, 184, 0.24); border-top: 3px solid #3b82f6; border-left: 4px solid #3b82f6; border-radius: 10px; padding: 10px 12px; transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease; }
+.doku-arch-card:hover { border-color: #93c5fd; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+.doku-arch-card.r1 { border-left-color: #22c55e; border-top-color: #22c55e; }
+.doku-arch-card.r2 { border-left-color: #3b82f6; border-top-color: #3b82f6; }
+.doku-arch-card.r3 { border-left-color: #eab308; border-top-color: #eab308; }
+.doku-arch-card.r4 { border-left-color: #ec4899; border-top-color: #ec4899; }
+.doku-arch-card.r5 { border-left-color: #a855f7; border-top-color: #a855f7; }
+.doku-arch-card-title { font-weight: 700; font-size: 0.93em; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px dashed rgba(148, 163, 184, 0.26); }
 .doku-arch-card-title a { color: #f8fafc !important; text-decoration: none !important; display: block; }
-.doku-arch-card-title a:hover { color: #60a5fa !important; }
-.doku-arch-lines { list-style: none; margin: 0; padding: 0; font-size: 0.85em; line-height: 1.5; }
-.doku-arch-lines li { margin: 3px 0; padding: 2px 5px; border-radius: 4px; white-space: normal; }
-.doku-arch-lines li:hover { background: rgba(59, 130, 246, 0.18); }
+.doku-arch-card-title a:hover { color: #93c5fd !important; }
+.doku-arch-lines { list-style: none; margin: 0; padding: 0; font-size: 0.84em; line-height: 1.5; }
+.doku-arch-lines li { margin: 3px 0; padding: 2px 6px; border-radius: 5px; white-space: normal; }
+.doku-arch-lines li:hover { background: rgba(59, 130, 246, 0.16); }
 .doku-arch-lines a { color: #cbd5e1 !important; text-decoration: none !important; display: inline; }
 .doku-arch-lines a:hover { color: #93c5fd !important; text-decoration: underline !important; }
-.doku-arch-badge { display: inline-block; font-size: 0.75em; padding: 0 5px; margin-left: 4px; border-radius: 4px; background: rgba(59, 130, 246, 0.22); color: #93c5fd !important; border: 1px solid rgba(96, 165, 250, 0.35); }
-details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 250px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
-details.doku-minimap:hover { border-color: #60a5fa; }
-details.doku-minimap[open] { width: min(860px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
-details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 12px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.9)); border-bottom: 1px solid rgba(148, 163, 184, 0.25); display: flex; align-items: center; justify-content: space-between; user-select: none; }
+.doku-arch-badge { display: inline-block; font-size: 0.74em; padding: 0 6px; margin-left: 5px; border-radius: 999px; background: rgba(59, 130, 246, 0.22); color: #bfdbfe !important; border: 1px solid rgba(96, 165, 250, 0.4); }
+details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 292px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.93); border: 1px solid rgba(96, 165, 250, 0.62); border-radius: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); transition: width 0.18s ease, max-height 0.18s ease, border-color 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
+details.doku-minimap:hover { border-color: #93c5fd; }
+details.doku-minimap[open] { width: min(920px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; border-radius: 14px; }
+details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 13px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.92)); border-bottom: 1px solid rgba(148, 163, 184, 0.24); display: flex; align-items: center; justify-content: space-between; user-select: none; }
+details.doku-minimap > summary::-webkit-details-marker { display: none; }
+details.doku-minimap > summary .minimap-toggle::after { content: "+"; font-size: 1.05em; opacity: 0.85; padding: 0 4px; }
+details.doku-minimap[open] > summary .minimap-toggle::after { content: "−"; }
+details.doku-minimap .minimap-preview-strip { display: flex; gap: 5px; padding: 6px 10px 8px 10px; font-size: 0.71em; color: #cbd5e1; justify-content: space-between; }
+details.doku-minimap[open] .minimap-preview-strip { display: none; }
+details.doku-minimap .minimap-preview-strip span { display: inline-flex; align-items: center; gap: 4px; background: rgba(30, 41, 59, 0.92); padding: 2px 7px; border-radius: 999px; border: 1px solid rgba(148, 163, 184, 0.26); }
+details.doku-minimap .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+details.doku-minimap .dot.r1 { background: #22c55e; }
+details.doku-minimap .dot.r2 { background: #3b82f6; }
+details.doku-minimap .dot.r3 { background: #eab308; }
+details.doku-minimap .dot.r4 { background: #ec4899; }
+details.doku-minimap .dot.r5 { background: #a855f7; }
+details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 </style>
-
 <details class="doku-minimap">
-<summary><span>🗺️ Doku-Minimap (Rubrik 02: VS Code Env)</span></summary>
+<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
+<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
+<div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root">🏛️ <a href="../README.md">Doku-Index</a> | <a href="../../README.md">Repo-README</a> | <a href="../../AGENTS.md">AGENTS.md</a></div>
+<div class="doku-arch-root"><span>🏛️ <a href="../README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../../README.md">Repo-README</a> · <a href="../../AGENTS.md">AGENTS.md</a> · <a href="../../notebook-agent-environments/README.md">Notebooks</a> · <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11.</a></div>
 <div class="doku-arch-grid">
-<div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🧩 <a href="README.md">02_VSCode_Env</a></div>
+<div class="doku-arch-card r1">
+<div class="doku-arch-card-title">🐧 <a href="../01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur & LSP</a></li>
-<li>├─ <a href="02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow & Workspaces</a></li>
-<li>├─ <a href="03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ports (8317) & Localhost</a></li>
-<li>├─ <a href="04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem & AI Studio</a></li>
-<li>└─ <a href="05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • Multi-Workspace, Standorte & Verbund</a></li>
+<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams & Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess & systemd</a></li>
+<li>├─ <a href="../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH & Nginx</a></li>
+<li>├─ <a href="../01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts & Backups</a></li>
+<li>└─ <a href="../01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen & Sandbox Micro-VMs (sbx)</a></li>
 </ul>
+</div>
+<div class="doku-arch-card r2">
+<div class="doku-arch-card-title">🧩 <a href="../02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP & Gemini)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) & Remote</a></li>
+<li>├─ <a href="../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow & Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) & Ports (Archiv: Proxy)</a> <a class="doku-arch-badge" href="../../.vscode/mcp.json">mcp.json</a></li>
+<li>├─ <a href="../02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio & API-Keys</a></li>
+<li>└─ <a href="../02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity & Parallel-Limits</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r3">
+<div class="doku-arch-card-title">🐍 <a href="../03_Python_Coding/README.md">03_Python_Coding (Python, uv & GenAI SDK)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance & Notebooks</a> <a class="doku-arch-badge" href="../../notebook-agent-environments/agent_demo.ipynb">.ipynb</a></li>
+<li>├─ <a href="../03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) & Interactions API</a></li>
+<li>└─ <a href="../03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse & pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r4">
+<div class="doku-arch-card-title">🌐 <a href="../04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS & Web-SDK)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 & DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="../04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) & TypeScript</a></li>
+<li>└─ <a href="../04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r5">
+<div class="doku-arch-card-title">🤖 <a href="../05_Agents/README.md">05_Agents (KI-Agenten, Skills & Orchestrierung)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="../05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules & Prompts</a> <a class="doku-arch-badge" href="../../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="../05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills & MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="../05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a></li>
+<li>├─ <a href="../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
+<li>├─ <a href="../05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 6-Rollen-Verbund</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
+<li>├─ <a href="../05_Agents/HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md">Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md">Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md">Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)</a></li>
+<li>├─ <a href="../05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md">Pitwall & Systemreferenz (NotebookLM-Quelle)</a></li>
+<li>└─ <a href="../05_Agents/PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md">Boxencrew & Teamchef Konzept (NotebookLM)</a></li>
+</ul>
+</div>
 </div>
 </div>
 </div>

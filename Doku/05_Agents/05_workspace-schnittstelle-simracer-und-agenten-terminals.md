@@ -1,6 +1,55 @@
 > **Thema:** Workspace-Schnittstelle: SimRacer-Verbund, Task-Queue & Agenten-Terminals
 > **Autor:** Michael Stürmer
-> **Datum:** 11.11.2026
+> **Datum:** 26.11.2026 *(Workspace-Isolation, XOR-Mutex &amp; 7-Rollen-Registry LIVE auf StrikerPi)*
+
+<!-- DOKU-SUBNAV-START -->
+<details>
+<summary><b>🧭 Rubrik-Navigation &amp; Modul-Übersicht (05 Agents)</b></summary>
+
+**Zentrale:** [📚 Doku-Index](../README.md) · [📂 Rubrik 05 Agents](./README.md) · **Vorheriges:** [⬅️ 04 • Priming, Memory & Multi-Agent-Orchestrierung](./04_agenten-trainieren-primen-und-orchestrieren.md) · **Nächstes:** [06 • Multi-Workspace Netzwerk & 7-Rollen-Verbund ➡️](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md)
+
+**Alle Module in `05_Agents/`:**
+- [01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau](./01_agent-stilfibel-und-didaktik-ruler.md)
+- [02 • Agenten erstellen: Instructions, Rules & Prompts](./02_agenten-erstellen-instructions-rules-und-prompts.md) · `gemini.instructions`
+- [03 • Agenten ausrüsten: Skills & MCP-Tools](./03_agenten-ausruesten-skills-und-mcp-tools.md) · `SKILL.md`
+- [04 • Priming, Memory & Multi-Agent-Orchestrierung](./04_agenten-trainieren-primen-und-orchestrieren.md) · `@light`
+- 👉 **[05 • Schnittstelle, Terminals & XOR-Mutex](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md)** *(aktuell)* · `Bridge`
+- [06 • Multi-Workspace Netzwerk & 7-Rollen-Verbund](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md)
+- [Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)
+- [Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md)
+- [Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)](./HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md)
+- [Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
+- [Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md)
+- [Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md)
+- [Pitwall & Systemreferenz (NotebookLM-Quelle)](./PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md)
+- [Boxencrew & Teamchef Konzept (NotebookLM)](./PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md)
+
+**Weitere Rubriken:** [🐧 01 Linux & Bash](../01_Linux_Bash/README.md) · [🧩 02 VS Code & MCP](../02_VSCode_Env/README.md) · [🐍 03 Python](../03_Python_Coding/README.md) · [🌐 04 JS/TS Web](../04_JS_TS_Web/README.md)
+
+</details>
+<!-- DOKU-SUBNAV-END -->
+
+<details>
+<summary><b>0.1 Kanonische Rollen- und Terminalmatrix (aktueller Umsetzungsstand)</b></summary>
+
+| Terminal-ID | Rolle | System | Start / Status |
+| :--- | :--- | :--- | :--- |
+| `cyborg` | General Cyborg | VanstrikeCyborg | Lokaler Copilot-CLI-Agent (`copilot --agent "General Cyborg"`); nicht über die Pitwall ausführbar |
+| `general-sim` | General Sim | StrikerPi `.86` | Getrenntes SSH-Terminal und JSON-Dispatch; **LIVE** unter `/opt/general-sim/` (`READY`) |
+| `light`, `rig` | SimRacer Light, Rig Agent | SimRacer `.68` | Bestehende SSH-Terminals (`@light` als Host-Orchestrator &amp; 2-Stufen-QA laut Architektur v5) |
+| `dark` | Dark Agent | Sandbox auf SimRacer | Bestehendes Sandbox-SSH-Terminal (`:2222`) |
+| `sarah` | Sarah Coach | Archibald `.98` | Bestehendes SSH-Terminal |
+| `rick` | Rick Agent | StrikerPi `.86` | Bestehendes SSH-Terminal |
+
+Die zentrale Registry liegt in [`agent_registry.json`](../../../strikerpi-hub/telemetry-relay/agent_registry.json). [`labs/Agent-Terminals.ps1`](../../labs/Agent-Terminals.ps1) lädt die IDs und Host-Zuordnungen aus dieser Datei. In diesem Launcher ist `general` ein Kompatibilitätsalias für `general-sim`; falls das Pi-Terminal fehlt, startet der Launcher keinen lokalen Ersatz.
+
+**Übergangsgrenze:** Die Pitwall (`telemetry_relay.py` live auf StrikerPi, SHA256 `5e290c4b…`) kennzeichnet `@general (Legacy)` für die bisherige SimRacer-Queue und den alten Approval-Pfad. `/ws/terminal/general` und Voice-Dispatch `target=general` bleiben während der Übergangsphase aktiv auf SimRacer. Neue General-Sim-Aufträge nutzen `/ws/terminal/general-sim` bzw. `/opt/general-sim/`; die Altstrecke wird erst nach abgeschlossenem E2E-Cutover stillgelegt.
+
+Prompt-Transport erfolgt als UTF-8-JSON-Daten über `/api/voice/dispatch`. PowerShell-Freitext wird nicht dynamisch als Befehl ausgeführt. Outbox-Resultate und Logdateien bleiben die Evidenzquelle; eine Pi-SQLite-Datenbank ist nicht Bestandteil dieser Ausbaustufe. Neue Tool-Downloads sind in der Registry deaktiviert (`download_enabled: false`) und erfordern vor einer späteren Installation die Zustimmung von General Cyborg und Nutzer.
+
+Details zu Implementierung, Abnahme und offenen Deploy-Schritten stehen in [Rollen-, Terminal- und Pitwall-Umsetzung](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md).
+
+</details>
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -23,10 +72,10 @@ Das Entwickler-Ökosystem ist strikt in zwei Rollenbereiche unterteilt:
 ```mermaid
 flowchart TB
     subgraph GITLABOR["Workspace: git-labor (Laptop VanstrikeCyborg)"]
-        DEV["Entwickler / General Cyborg (Global) &amp; General Sim (Leitstand)"]
+        DEV["Entwickler / General Cyborg (Global)"]
         LAUNCHER["Agent-Terminals.ps1 (SSH-Launcher)"]
         BRIDGE_PY["sim_agent_bridge.py"]
-        CLI_PS["Send-SimAgentTask.ps1 / @general Terminal"]
+        CLI_PS["Send-SimAgentTask.ps1 / @general-sim Terminal"]
     end
 
     subgraph NETWORK["Netzwerk-Schnittstelle (SMB / SSH)"]
@@ -46,6 +95,7 @@ flowchart TB
             T_SARAH["@sarah Terminal (Telemetrie, Video)"]
         end
         subgraph EDGE["24/7 Edge Hub (StrikerPi 192.168.178.86)"]
+            T_GS["@general-sim Leitstand (StrikerPi LIVE)"]
             T_RICK["@rick (Relay :8080, MQTT :1883, Bare-Git)"]
         end
     end
@@ -54,12 +104,13 @@ flowchart TB
     LAUNCHER -->|SSH -ClientMode / Bash| SSH
     BRIDGE_PY &amp; CLI_PS -->|Schreibt Task-JSON in inbox| SMB
     BRIDGE_PY &amp; CLI_PS -->|SCP/SSH fuer @rick| T_RICK
+    T_GS -->|JSON-Dispatch / Status / Logs| T_LIGHT &amp; T_RIG &amp; T_DARK &amp; T_SARAH
     SMB --> T_LIGHT &amp; T_RIG &amp; T_DARK &amp; T_SARAH
     T_LIGHT &amp; T_RIG &amp; T_DARK &amp; T_SARAH -->|Schreibt Result-JSON in outbox| SMB
     SMB -->|Liest Status &amp; Output| BRIDGE_PY &amp; CLI_PS
 ```
 
-* **`General Cyborg` (Global) &amp; `General Sim` (Leitstand):** Beide laufen physisch auf **`VanstrikeCyborg`**. `General Cyborg` betreut die Laptop-Hardware/MSI/VIVE/VS Code, während `General Sim` die Brücke zum `SimRacer` (`192.168.178.68`) und das `@general`-Freigabe-Gate steuert.
+* **`General Cyborg`** läuft lokal auf **`VanstrikeCyborg`** und verantwortet Laptop, VS Code, Workspace, Modelle und NVIDIA/VIVE. **`General Sim`** ist als separate Leitstandsrolle auf **StrikerPi (`192.168.178.86`)** registriert und seit **26.11.2026 live unter `/opt/general-sim/`** deployed (`READY`). Der alte `@general`-Queue-/Approval-Pfad bleibt bis zum E2E-Cutover Legacy.
 * **`git-labor`:** Experimentelles Skripting, Datenanalyse, Erstellung und Test von MCP-Servern, KI-Modell-Workflows und Orchestrierung.
 * **`assetto-corsa-content`:** Produktionsumgebung für Assetto Corsa, Content Manager (CM), Custom Shaders Patch (CSP), Setup-Validierung, VR-Frametimes (120 Hz) und Container-Lifecycle.
 
@@ -90,9 +141,9 @@ Wenn ein Prompt in einem Agenten-Terminal oder über ein externes Skript abgesch
      [00:15:34] [COMMAND] Action=ValidateSetups Car=rss_formula_hybrid_x_2026
      ```
 3. **Status-Matrix für das Gesamtsystem:**
-   * In jedem Terminal zeigt die mittlere Matrix den aktuellen Zustand aller 5 Agenten an:
+   * Die folgende Matrix ist ein illustratives Beispiel aus dem Terminal-Verbund (aktuelle Live-Prüfung über `.\labs\Agent-Terminals.ps1 -StatusOnly`, dort ist `@general-sim` auf StrikerPi als `READY` verifiziert):
      ```text
-     [General: IDLE]  [Light: IDLE]  [Rig: IDLE]  [Dark: RUNNING]  [Sarah: IDLE]
+     [General Sim: READY]  [Light: IDLE]  [Rig: IDLE]  [Dark: RUNNING]  [Sarah: IDLE]
      ```
 
 </details>
@@ -229,16 +280,16 @@ Erkennt der Dark Agent in der Sandbox einen Auftrag zur Zeitzonen-/Uhrzeitkorrek
 </details>
 
 <details>
-<summary>1.8 Verbindliches Rückversicherungs- &amp; Freigabe-Gate (<code>@rig</code> / <code>@light</code> ↔ <code>@general</code>)</summary>
+<summary>1.8 Legacy-Freigabe-Gate (<code>@rig</code> / <code>@light</code> ↔ bisherige <code>@general</code>-Queue)</summary>
 
-Um sicherzustellen, dass die SimRacer-Agenten (`@rig` und `@light` auf `192.168.178.68`) keine System-, Container-, Content- oder Weiterleitungs-Aktionen ohne Wissen des Leitstands ausführen, gilt eine **verbindliche Rückversicherungs- und Freigabepflicht** gegenüber dem **General Agent (`@general`)**:
+Dieser Abschnitt dokumentiert die vorhandene Übergangsroute über die SimRacer-Queue (`pitwall_control_policy.json` &amp; `approval_policy.json`). Sie bleibt während der Übergangsphase parallel zur kanonischen General-Sim-Rolle auf StrikerPi aktiv und wird erst nach vollständigem E2E-Cutover abgelöst. Bis dahin gilt die bestehende Rückversicherungs- und Freigabepflicht gegenüber dem Legacy-General-Terminal:
 
 ```mermaid
 sequenceDiagram
     autonumber
     participant S as @rig / @light (SimRacer)
     participant GI as general-SIM/inbox/
-    participant G as @general Terminal (Laptop)
+    participant G as Legacy @general Terminal (SimRacer / Pitwall)
     participant GO as general-SIM/outbox/ (Lokal & SMB)
 
     alt Auftrag kommt NICHT als General-Order (kein approved_by: GeneralAgent_Laptop)
@@ -259,9 +310,9 @@ sequenceDiagram
 | :--- | :--- | :--- |
 | **`@rig` / `@light`** | `@general <Frage>`, `frag general <Text>`, `freigabe <Vorhaben>` | Sendet direkt ein `ApprovalRequest` an `agents/general-SIM/inbox/` und wartet auf Rückmeldung. |
 | **`@rig` / `@light`** | Jeder andere Task (außer `status`/`help` und direkten General-Orders) | Wird automatisch in `agents/{rig\|light}/approvals/` geparkt (`Gen-Wait: N`) und wartet auf `Approved`. |
-| **`@general`** | `ok [Nr/ID] [Hinweis]` / `ja` / `approve` / `freigeben` | Erteilt die Freigabe (`status: "Approved"`, `approved: true`) und schreibt in die lokale und Remote-Outbox (`\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\outbox`). |
-| **`@general`** | `nein [Nr/ID] [Grund]` / `reject` / `ablehnen` | Lehnt die Anfrage ab (`status: "Rejected"`, `approved: false`). |
-| **`@general`** | `reply [Nr/ID] <Antwort>` / `antwort <Text>` | Sendet eine freie Text-Antwort inklusive Freigabe zurück. |
+| **`@general` (Legacy)** | `ok [Nr/ID] [Hinweis]` / `ja` / `approve` / `freigeben` | Erteilt die Freigabe (`status: "Approved"`, `approved: true`) und schreibt in die lokale und Remote-Outbox (`\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\outbox`). |
+| **`@general` (Legacy)** | `nein [Nr/ID] [Grund]` / `reject` / `ablehnen` | Lehnt die Anfrage ab (`status: "Rejected"`, `approved: false`). |
+| **`@general` (Legacy)** | `reply [Nr/ID] <Antwort>` / `antwort <Text>` | Sendet eine freie Text-Antwort inklusive Freigabe zurück. |
 
 </details>
 
@@ -270,14 +321,14 @@ sequenceDiagram
 
 Alle vier aktiven PowerShell-Agenten-Terminals protokollieren ihre Kommunikation vollständig auf Disk und verlinken die Dateien direkt in der Terminal-Ansicht:
 
-1. **Zentrale Markdown- &amp; JSONL-Historie (General Terminal):**
+1. **Zentrale Markdown- &amp; JSONL-Historie (Legacy-General-Terminal):**
    * **[AGENT_KOMMUNIKATION_HISTORIE.md](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md):** Vollständige, ungekürzte Übergaben, Antworten und Rückfragen in eingeklappten `<details>`-Blöcken mit Zeitstempel, Quelle (`source_file`) und Direktlinks zu den Tages-Logfiles.
    * **`agent_comm_history.jsonl` &amp; `agent_comm_YYYYMMDD.log`:** Maschinenlesbare Historie sowie rohes Gesamt-Kommunikationslog unter `ac-sandbox/shared/agents/general-SIM/logs/`.
 2. **Vollständige Agenten-Einzellogs (`[COMM]`):**
    * Jedes Terminal (`general`, `rig`, `light`, `dark`) schreibt eigene Tages-Logs (`<agent>_YYYYMMDD.log`) inklusive `[COMM][ANTWORT]`- und `[COMM][RUECKFRAGE]`-Einträgen.
 3. **Klickbare OSC-8 Terminal-Hyperlinks &amp; Kurzbefehle:**
    * Im Terminal-Header jedes Agenten wird per ANSI-OSC-8 (`file:///...` bzw. `file://192.168.178.68/...`) ein direkt in VS Code anklickbarer Link auf das jeweilige Logfile und im General Terminal zusätzlich auf `AGENT_KOMMUNIKATION_HISTORIE.md` gerendert.
-   * Kurzbefehle im General-Prompt: **`md` / `open-md` / `historie`** öffnet `AGENT_KOMMUNIKATION_HISTORIE.md` direkt im VS-Code-Editor (`code.cmd`); **`log` / `open-log` / `comm-log`** öffnet das aktuelle Kommunikationslog.
+   * Kurzbefehle im Legacy-General-Prompt: **`md` / `open-md` / `historie`** öffnet `AGENT_KOMMUNIKATION_HISTORIE.md` direkt im VS-Code-Editor (`code.cmd`); **`log` / `open-log` / `comm-log`** öffnet das aktuelle Kommunikationslog.
 4. **Schneller Task-Start in VS Code ([`tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json)):**
    * Alle Agent-Konsolen-Tasks nutzen `"type": "process"` mit `"-NoProfile"`, explizitem `cwd`, `"clear": true` und `"dependsOrder": "parallel"`, sodass alle Terminals ohne Profil-Verzögerung und ohne Doppelstarts hochfahren.
 
@@ -290,7 +341,9 @@ Damit sich **lokale Host-Terminals** (z. B. direkt am SimRacer-Desktop oder in d
 
 | Agent | Host-Lokal (auf dem Zielgerät) | SSH-Aufruf von `VanstrikeCyborg` | Schutzmechanismus |
 | :--- | :--- | :--- | :--- |
-| **`@general`** | `start_general_terminal.ps1` (lokal auf `VanstrikeCyborg`) | *(Master – läuft direkt lokal)* | Singleton beendet nur doppelte lokale Instanzen |
+| **`@cyborg`** | `copilot --agent "General Cyborg"` (lokal auf `VanstrikeCyborg`) | `labs/Agent-Terminals.ps1 -Agent cyborg` | Lokaler Copilot-CLI-Agent; nicht der Simulations-Leitstand |
+| **`@general-sim`** | `/opt/general-sim/start_general_sim_terminal.sh` (StrikerPi, **LIVE / `READY`**) | `labs/Agent-Terminals.ps1 -Agent general-sim` | Prüft `/opt/general-sim/start_general_sim_terminal.sh` auf StrikerPi; kein lokaler Ersatz |
+| **`@general` (Legacy)** | `start_general_terminal.ps1` / bisheriger SimRacer-Queue-Pfad | `labs/Agent-Terminals.ps1 -Agent general` löst auf `general-sim` auf | Alte Approval-/Queue-Route bleibt bis zum E2E-Rollout sichtbar |
 | **`@rig`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_rig_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostRigWorkerActive`: Client-Mode killt keinen Host-Worker und verarbeitet nur bei Bedarf |
 | **`@light`** | `launch_simracer_host_terminals.ps1` (Scheduled Task `AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_light_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-HostLightWorkerActive`: Client-Mode arbeitet als sicherer Monitor + Prompt-Sender |
 | **`@dark`** | `launch_guest_terminals.ps1` in `ac-win11-sandbox` (`AtLogOn`, `ExecutionTimeLimit = 0`) | `connect_dark_terminal.ps1` $\rightarrow$ `-ClientMode` | `Test-GuestDarkWorkerActive`: kein Kill laufender In-Guest-Konsolen |
@@ -300,17 +353,21 @@ Damit sich **lokale Host-Terminals** (z. B. direkt am SimRacer-Desktop oder in d
 #### Zentraler Terminal-Launcher im Git-Labor (`labs/Agent-Terminals.ps1`)
 Im Workspace `git-labor` steht eine zentrale Übersicht inkl. Live-Port-Check zur Verfügung (auch als VS-Code-Task **`🧭 Agent-Terminals Menü (SSH-Launcher)`**):
 ```powershell
-# Interaktives Auswahlmenü mit Live-Online-Matrix aller 6 Agenten
+# Interaktives Auswahlmenü mit Registry- und Deploy-Status der 7 Rollen
 .\labs\Agent-Terminals.ps1
 
 # Nur Status-Matrix anzeigen
 .\labs\Agent-Terminals.ps1 -StatusOnly
 
+# Laptop-General und Pi-Leitstand getrennt starten
+.\labs\Agent-Terminals.ps1 -Agent cyborg
+.\labs\Agent-Terminals.ps1 -Agent general-sim
+
 # Direkt per SSH im aktuellen Fenster zu @rick oder @rig verbinden
 .\labs\Agent-Terminals.ps1 -Agent rick -InCurrentWindow
 .\labs\Agent-Terminals.ps1 -Agent rig -InCurrentWindow
 
-# Alle 6 Agenten-Terminals parallel in eigenen Fenstern starten
+# Alle verfuegbaren Terminals parallel starten
 .\labs\Agent-Terminals.ps1 -Agent all
 ```
 
@@ -341,50 +398,57 @@ Der 6. Agent **`@rick`** (`.github/agents/rick.agent.md`) betreut den **Raspberr
 </details>
 
 <details>
-<summary>1.12 Freigabe-Policy <code>AUTO</code>/<code>MANUAL</code> &amp; MQTT-Anbindung (Stand 11.11.2026)</summary>
+<summary>1.12 Freigabe-Policy (`pitwall_control_policy.json` &amp; `approval_policy.json`), Light-Mandat &amp; MQTT-Anbindung (Stand 23.11.2026)</summary>
 
-#### 1. Freigabe-Policy des General-Sim-Gates
-Das Freigabe-Gate aus 1.8 ist über die Datei `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\approval_policy.json` umschaltbar:
+#### 1. Feingliedrige Freigabe-Policy (`pitwall_control_policy.json`) &amp; Pitwall-Steuerungskonsole
+Seit dem **23.11.2026** ergänzt die Live-Steuerdatei `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\pitwall_control_policy.json` (mit Abwärtskompatibilität zu `approval_policy.json` als unverändert geschütztem Change-Freeze-Fallback) das General-Sim-Gate um:
+- **Globalen Modus (`MANUAL` | `DELEGATED` | `AUTO`)** inkl. optionalem Zeit-Mandat (`mandate_expires_at`),
+- **Globaler Pause-Schalter (`agents_paused`)** und **GPU-/Hintergrund-Schranke (`gpu_background_allowed`)** für die RTX 5070 Ti (`LIVE_RACE`-Schutz),
+- **5 delegierbare Kategorien für `@light`** (`LIGHT_AUTO` | `ASK_USER` | `LOCKED`): `session_presets`, `sandbox_dark_tasks`, `sandbox_lifecycle`, `content_sync`, `rig_actions` (Change-Freeze auf `*.agent.md`, `AGENTS.md`, `settings.json`, `mcp.json`, `approval_policy.json` bleibt immer fest gesperrt).
+- **Web-Steuerung auf StrikerPi (`http://192.168.178.86:8080/`):** Seitenumschaltung **`🛡️ Agenten & Light`** + Not-Aus-Button + Topbar-Button **`🎙️ Antigravity Sprachchat`**.
 
 | Modus | Wirkung |
 | :--- | :--- |
-| `MANUAL` | Rückfragen von `@rig`/`@light` warten im `@general`-Terminal auf `ok` / `nein` / `reply` (Fallback, wenn die Datei fehlt) |
-| `AUTO` | Dauerfreigabe, geeignet für autonome Ketten und CI/CD-ähnliche Abläufe |
+| `MANUAL` | Rückfragen von `@rig`/`@light` warten in der Pitwall-Konsole / im `@general`-Terminal auf `ok` / `nein` / `reply` (Fallback, wenn Datei fehlt) |
+| `DELEGATED` | Empfohlener Verbund-Betrieb: `@light` darf die freigegebenen Kategorien (`LIGHT_AUTO`) eigenständig ausführen (`approved_by: "LightAgent_Delegated"`), kritische Kategorien (`ASK_USER`) fragen weiterhin über die Pitwall / `@general` an |
+| `AUTO` | Dauerfreigabe für autonome Testketten |
 
-Dateiformat (Felder: `mode`, `description`, `updated_at`):
-```json
-{ "mode": "AUTO", "description": "...", "updated_at": "2026-11-11T09:00:53+01:00" }
-```
+> [!WARNING]
+> `AUTO` und dauerhafte `LIGHT_AUTO`-Freigaben sollten vor Wartungs-/Löschaktionen oder aktiven VR-Rennen in der Pitwall-Konsole auf `MANUAL` bzw. Pause geschaltet werden (ein Klick auf **Not-Aus** entzieht sofort alle Light-Vollmachten und pausiert den Verbund).
+
+#### 2. Legacy-/Bridge-Steuerung (`approval_policy.json` Fallback)
+`Send-SimAgentTask.ps1 -SetApprovalMode AUTO|MANUAL` und `SimAgentBridge` nutzen weiterhin `approval_policy.json` als Basiskompatibilität, während `start_light_terminal.ps1` und `start_general_terminal.ps1` vorrangig `pitwall_control_policy.json` auswerten.
 
 ```powershell
-# Modus setzen (schreibt approval_policy.json auf dem SimRacer)
-.\labs\Send-SimAgentTask.ps1 -SetApprovalMode AUTO
-.\labs\Send-SimAgentTask.ps1 -SetApprovalMode MANUAL
-
-# Aktuellen Modus samt Queue-Status aller Agenten anzeigen
+# Aktuellen Queue-Status aller Agenten anzeigen
 .\labs\Send-SimAgentTask.ps1 -QueryStatus
 ```
 
-```python
-from sim_agent_bridge import SimAgentBridge
-bridge = SimAgentBridge()
-print(bridge.get_approval_policy())      # {'mode': 'AUTO', ...}
-bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zurück
-```
-
-> [!WARNING]
-> `AUTO` hebelt die Rückversicherungspflicht aus 1.8 praktisch aus. Vor Aktionen mit Datenverlust-Risiko (Löschen, Docker-Prune, Container-Reset) auf `MANUAL` zurückschalten.
-
-#### 2. MQTT-Anbindung (StrikerPi `192.168.178.86:1883`)
+#### 3. MQTT-Anbindung (StrikerPi `192.168.178.86:1883`)
 - **Broker:** `mosquitto.service` (`:1883` TCP, `:9001` WebSockets), 24/7 aktiv.
 - **Task-Events aus Python:** `SimAgentBridge.publish_mqtt_task(agent, payload)` ruft per SSH `mosquitto_pub` auf StrikerPi auf. Topic-Schema: `agents/<agent>/inbox`. Eine zusätzliche Python-Abhängigkeit wie `paho-mqtt` ist dafür nicht nötig.
-- **Relay-Topics:** `simrig/mode` (Betriebsmodus) und `simrig/telemetry` (max. 10 Hz).
+- **Relay-Topics:** `simrig/mode` (Betriebsmodus), `simrig/agent_control` (Pitwall-Policy/Pause-Events) und `simrig/telemetry` (max. 10 Hz).
 - **Weiterhin gültig:** Die Dateischnittstelle (`inbox/` → `outbox/`) bleibt der Standardweg. MQTT ergänzt sie.
 
-#### 3. Statusprüfung aller Agenten
+#### 4. Statusprüfung aller Agenten
 ```powershell
 .\labs\Agent-Terminals.ps1 -StatusOnly   # schneller TCP-Port-Check der Agenten-Endpunkte, ohne Terminal zu öffnen
 ```
+
+</details>
+
+<details>
+<summary>1.13 Workspace-Agenten-Isolation, Hierarchie-Gate &amp; atomarer XOR-Mutex (Stand: 24.11.2026)</summary>
+
+Damit im Multi-Root-Betrieb keine doppelten Agenten im Chat-Dropdown erscheinen und sich `git-labor` (SSH) und `assetto-corsa-content` (Host) bei Aufträgen an den SimRacer nicht ins Gehege kommen, greifen seit dem **24.11.2026** drei Mechanismen:
+
+1. **Workspace-Sichtbarkeit (`chat.agentFilesLocations` &amp; `user-invocable: false`):**
+   - `git-labor.code-workspace` schließt fremde `.github/agents`-Ordner über relative Pfade (`".github/agents": false`, `"../git-labor/.github/agents": true`) aus.
+   - Die `5` SSH-Worker (`dark`, `light`, `rig`, `sarah`, `rick`) unter `git-labor\.github\agents\` tragen `user-invocable: false`. So bleiben im `git-labor`-Dropdown nur `General Cyborg` und `Simwerkstatt: General Sim (SSH)` wählbar; im Workspace `assetto-corsa-content` bleiben alle `6` Agenten direkt aktiv.
+2. **Hierarchie- &amp; Pitwall-Gate (`Send-SimAgentTask.ps1` &amp; `sim_agent_bridge.py`):**
+   - Jeder Dispatch prüft vor dem Schreiben in die Queue sowohl die Delegations-Hierarchie (`General_Cyborg`/`General_Sim` &rarr; `Light` &rarr; Worker, gesteuert über `-WorkspaceContext` / `-IssuedBy`) als auch `pitwall_control_policy.json` (`agents_paused`, `agent_states`, `mode`).
+3. **Atomarer XOR-Mutex (`execution_mutex.lock` + `.json`):**
+   - Vor jeder Ausführung sperrt der Dispatcher unter `\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\execution_mutex.lock` (plus Metadaten `.json`) mit `120 s` TTL-Recovery und prüft laufende Inbox-Tasks des jeweils anderen Workspace-Kontexts (keine gleichzeitige Host-/SSH-Parallel-Mutation).
 
 </details>
 
@@ -402,6 +466,10 @@ bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zu
 <summary><b>Weiterführende Links & Quellen</b></summary>
 
 ### Handbücher & Bridge-Skripte
+* [Letztstand 26.11.2026: Dual-GPU Ollama, KI-Schaltweiche &amp; 7-Rollen-Registry (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)
+* [Stand 25.11.2026: Architektur v5 &amp; Pitwall v2.1 (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md)
+* [Rollen-, Terminal- und Pitwall-Umsetzung (7-Rollen-Status LIVE auf StrikerPi)](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md)
+* [Stand 24.11.2026 &amp; Nacharbeiten-Register (`SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md`)](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md)
 * [Detailliertes Handbuch im SimRacer-Workspace](../../../assetto-corsa-content/docs/03_agenten_system/agenten-terminals-prompt-verarbeitung-und-rueckmeldungs-handbuch.md)
 * [E2E-Testbericht: Agenten-Kommunikation, Sandbox & Log-Links (10.11.2026)](../../../assetto-corsa-content/docs/03_agenten_system/agenten-kommunikation-und-sandbox-testbericht.md)
 * [Modul 5.4: Agenten trainieren, primen und orchestrieren](./04_agenten-trainieren-primen-und-orchestrieren.md)
@@ -437,79 +505,109 @@ bridge.set_approval_policy("MANUAL")     # ungültige Werte fallen auf MANUAL zu
 
 <!-- DOKU-MINIMAP-START -->
 <style>
-.doku-arch-flow { font-family: var(--vscode-editor-font-family, Consolas, monospace); background: rgba(20, 24, 33, 0.92); border: 1px solid rgba(100, 140, 220, 0.35); border-radius: 10px; padding: 14px 16px; margin: 10px 0; color: #e2e8f0; }
-.doku-arch-root { text-align: center; font-weight: 700; font-size: 1.04em; padding: 8px 12px; margin-bottom: 12px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(96, 165, 250, 0.5); border-radius: 8px; }
+.doku-arch-flow { font-family: var(--vscode-editor-font-family, Consolas, monospace); background: linear-gradient(160deg, rgba(15, 23, 42, 0.96), rgba(17, 24, 39, 0.94)); border: 1px solid rgba(96, 165, 250, 0.35); border-radius: 12px; padding: 14px 16px; margin: 8px 0 0 0; color: #e2e8f0; }
+.doku-arch-root { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; font-weight: 700; font-size: 0.98em; padding: 9px 14px; margin-bottom: 12px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(30, 41, 59, 0.92)); border: 1px solid rgba(96, 165, 250, 0.48); border-radius: 10px; }
 .doku-arch-root a { color: #93c5fd !important; text-decoration: none !important; }
-.doku-arch-root a:hover { text-decoration: underline !important; }
-.doku-arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(275px, 1fr)); gap: 10px; }
-.doku-arch-card { background: rgba(30, 41, 59, 0.78); border: 1px solid rgba(148, 163, 184, 0.28); border-left: 4px solid #3b82f6; border-radius: 8px; padding: 9px 11px; transition: transform 0.12s ease, border-color 0.12s ease; }
-.doku-arch-card:hover { border-color: #60a5fa; transform: translateY(-1px); }
-.doku-arch-card.r1 { border-left-color: #22c55e; }
-.doku-arch-card.r2 { border-left-color: #3b82f6; }
-.doku-arch-card.r3 { border-left-color: #eab308; }
-.doku-arch-card.r4 { border-left-color: #ec4899; }
-.doku-arch-card.r5 { border-left-color: #a855f7; }
-.doku-arch-card-title { font-weight: 700; font-size: 0.95em; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed rgba(148, 163, 184, 0.25); }
+.doku-arch-root a:hover { color: #dbeafe !important; text-decoration: underline !important; }
+.doku-arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 11px; }
+.doku-arch-card { background: rgba(30, 41, 59, 0.72); border: 1px solid rgba(148, 163, 184, 0.24); border-top: 3px solid #3b82f6; border-left: 4px solid #3b82f6; border-radius: 10px; padding: 10px 12px; transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease; }
+.doku-arch-card:hover { border-color: #93c5fd; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35); }
+.doku-arch-card.r1 { border-left-color: #22c55e; border-top-color: #22c55e; }
+.doku-arch-card.r2 { border-left-color: #3b82f6; border-top-color: #3b82f6; }
+.doku-arch-card.r3 { border-left-color: #eab308; border-top-color: #eab308; }
+.doku-arch-card.r4 { border-left-color: #ec4899; border-top-color: #ec4899; }
+.doku-arch-card.r5 { border-left-color: #a855f7; border-top-color: #a855f7; }
+.doku-arch-card-title { font-weight: 700; font-size: 0.93em; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px dashed rgba(148, 163, 184, 0.26); }
 .doku-arch-card-title a { color: #f8fafc !important; text-decoration: none !important; display: block; }
-.doku-arch-card-title a:hover { color: #60a5fa !important; }
-.doku-arch-lines { list-style: none; margin: 0; padding: 0; font-size: 0.85em; line-height: 1.5; }
-.doku-arch-lines li { margin: 3px 0; padding: 2px 5px; border-radius: 4px; white-space: normal; }
-.doku-arch-lines li:hover { background: rgba(59, 130, 246, 0.18); }
+.doku-arch-card-title a:hover { color: #93c5fd !important; }
+.doku-arch-lines { list-style: none; margin: 0; padding: 0; font-size: 0.84em; line-height: 1.5; }
+.doku-arch-lines li { margin: 3px 0; padding: 2px 6px; border-radius: 5px; white-space: normal; }
+.doku-arch-lines li:hover { background: rgba(59, 130, 246, 0.16); }
 .doku-arch-lines a { color: #cbd5e1 !important; text-decoration: none !important; display: inline; }
 .doku-arch-lines a:hover { color: #93c5fd !important; text-decoration: underline !important; }
-.doku-arch-badge { display: inline-block; font-size: 0.75em; padding: 0 5px; margin-left: 4px; border-radius: 4px; background: rgba(59, 130, 246, 0.22); color: #93c5fd !important; border: 1px solid rgba(96, 165, 250, 0.35); }
-details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 250px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(96, 165, 250, 0.65); border-radius: 10px; box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65); backdrop-filter: blur(8px); transition: width 0.18s ease, max-height 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
-details.doku-minimap:hover { border-color: #60a5fa; }
-details.doku-minimap[open] { width: min(860px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; }
-details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 12px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.9)); border-bottom: 1px solid rgba(148, 163, 184, 0.25); display: flex; align-items: center; justify-content: space-between; user-select: none; }
+.doku-arch-badge { display: inline-block; font-size: 0.74em; padding: 0 6px; margin-left: 5px; border-radius: 999px; background: rgba(59, 130, 246, 0.22); color: #bfdbfe !important; border: 1px solid rgba(96, 165, 250, 0.4); }
+details.doku-minimap { position: fixed; bottom: 18px; right: 18px; z-index: 9999; width: 292px; max-height: 76px; overflow: hidden; background: rgba(15, 23, 42, 0.93); border: 1px solid rgba(96, 165, 250, 0.62); border-radius: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px); transition: width 0.18s ease, max-height 0.18s ease, border-color 0.18s ease; font-family: var(--vscode-font-family, sans-serif); }
+details.doku-minimap:hover { border-color: #93c5fd; }
+details.doku-minimap[open] { width: min(920px, 94vw); max-height: 84vh; overflow-y: auto; padding-bottom: 10px; border-radius: 14px; }
+details.doku-minimap > summary { cursor: pointer; list-style: none; padding: 8px 13px; font-weight: 700; font-size: 0.84em; color: #f8fafc; background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(30, 41, 59, 0.92)); border-bottom: 1px solid rgba(148, 163, 184, 0.24); display: flex; align-items: center; justify-content: space-between; user-select: none; }
+details.doku-minimap > summary::-webkit-details-marker { display: none; }
+details.doku-minimap > summary .minimap-toggle::after { content: "+"; font-size: 1.05em; opacity: 0.85; padding: 0 4px; }
+details.doku-minimap[open] > summary .minimap-toggle::after { content: "−"; }
+details.doku-minimap .minimap-preview-strip { display: flex; gap: 5px; padding: 6px 10px 8px 10px; font-size: 0.71em; color: #cbd5e1; justify-content: space-between; }
+details.doku-minimap[open] .minimap-preview-strip { display: none; }
+details.doku-minimap .minimap-preview-strip span { display: inline-flex; align-items: center; gap: 4px; background: rgba(30, 41, 59, 0.92); padding: 2px 7px; border-radius: 999px; border: 1px solid rgba(148, 163, 184, 0.26); }
+details.doku-minimap .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+details.doku-minimap .dot.r1 { background: #22c55e; }
+details.doku-minimap .dot.r2 { background: #3b82f6; }
+details.doku-minimap .dot.r3 { background: #eab308; }
+details.doku-minimap .dot.r4 { background: #ec4899; }
+details.doku-minimap .dot.r5 { background: #a855f7; }
+details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 </style>
-
 <details class="doku-minimap">
-<summary><span>Doku-Minimap (Rubrik 05: KI-Agenten)</span></summary>
+<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
+<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
+<div class="minimap-body">
 <div class="doku-arch-flow">
-  <div class="doku-arch-root"><a href="README.md">Rubrik 05 – KI-Agenten Übersicht</a></div>
-  <div class="doku-arch-grid">
-    <div class="doku-arch-card r1">
-      <div class="doku-arch-card-title"><a href="01_agent-stilfibel-und-didaktik-ruler.md">5.1 Stilfibel & Ruler</a></div>
-      <ul class="doku-arch-lines">
-        <li>Tonalität, keine Floskeln, Praxis-Bezug</li>
-        <li>Pflicht: Eingeklappte &lt;details&gt;-Blöcke</li>
-        <li>7 feste Bausteine pro Lernskript</li>
-      </ul>
-    </div>
-    <div class="doku-arch-card r2">
-      <div class="doku-arch-card-title"><a href="02_agenten-erstellen-instructions-rules-und-prompts.md">5.2 Agenten erstellen</a></div>
-      <ul class="doku-arch-lines">
-        <li>Custom Agents (*.agent.md)</li>
-        <li>Instructions & Rules</li>
-        <li>Model Harnesses & Reasoning-Tiers</li>
-      </ul>
-    </div>
-    <div class="doku-arch-card r3">
-      <div class="doku-arch-card-title"><a href="03_agenten-ausruesten-skills-und-mcp-tools.md">5.3 Skills & MCP</a></div>
-      <ul class="doku-arch-lines">
-        <li>Eigene SKILL.md Pakete</li>
-        <li>Gemini Skills (skills.sh)</li>
-        <li>MCP Tools & Setup</li>
-      </ul>
-    </div>
-    <div class="doku-arch-card r4">
-      <div class="doku-arch-card-title"><a href="04_agenten-trainieren-primen-und-orchestrieren.md">5.4 Training & Priming</a></div>
-      <ul class="doku-arch-lines">
-        <li>General Agent auf VanstrikeCyborg</li>
-        <li>Headless-Agenten (Arch/Pi 4)</li>
-        <li>Memory-System & Observability</li>
-      </ul>
-    </div>
-    <div class="doku-arch-card r5">
-      <div class="doku-arch-card-title"><a href="05_workspace-schnittstelle-simracer-und-agenten-terminals.md">5.5 Workspace-Schnittstelle SimRacer</a></div>
-      <ul class="doku-arch-lines">
-        <li>Multi-Workspace Verbund (git-labor &lt;=&gt; sim)</li>
-        <li>Prompt-Lebenszyklus: TUI-Monitoring</li>
-        <li>Rückmeldungen: outbox/, logs/ & CLI</li>
-      </ul>
-    </div>
-  </div>
+<div class="doku-arch-root"><span>🏛️ <a href="../README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../../README.md">Repo-README</a> · <a href="../../AGENTS.md">AGENTS.md</a> · <a href="../../notebook-agent-environments/README.md">Notebooks</a> · <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11.</a></div>
+<div class="doku-arch-grid">
+<div class="doku-arch-card r1">
+<div class="doku-arch-card-title">🐧 <a href="../01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams & Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess & systemd</a></li>
+<li>├─ <a href="../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH & Nginx</a></li>
+<li>├─ <a href="../01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts & Backups</a></li>
+<li>└─ <a href="../01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen & Sandbox Micro-VMs (sbx)</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r2">
+<div class="doku-arch-card-title">🧩 <a href="../02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP & Gemini)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) & Remote</a></li>
+<li>├─ <a href="../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow & Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) & Ports (Archiv: Proxy)</a> <a class="doku-arch-badge" href="../../.vscode/mcp.json">mcp.json</a></li>
+<li>├─ <a href="../02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio & API-Keys</a></li>
+<li>└─ <a href="../02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity & Parallel-Limits</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r3">
+<div class="doku-arch-card-title">🐍 <a href="../03_Python_Coding/README.md">03_Python_Coding (Python, uv & GenAI SDK)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance & Notebooks</a> <a class="doku-arch-badge" href="../../notebook-agent-environments/agent_demo.ipynb">.ipynb</a></li>
+<li>├─ <a href="../03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) & Interactions API</a></li>
+<li>└─ <a href="../03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse & pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r4">
+<div class="doku-arch-card-title">🌐 <a href="../04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS & Web-SDK)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 & DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="../04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) & TypeScript</a></li>
+<li>└─ <a href="../04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r5">
+<div class="doku-arch-card-title">🤖 <a href="../05_Agents/README.md">05_Agents (KI-Agenten, Skills & Orchestrierung)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="../05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules & Prompts</a> <a class="doku-arch-badge" href="../../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="../05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills & MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="../05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a></li>
+<li>├─ <a href="../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
+<li>├─ <a href="../05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 6-Rollen-Verbund</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
+<li>├─ <a href="../05_Agents/HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md">Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md">Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)</a></li>
+<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md">Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)</a></li>
+<li>├─ <a href="../05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md">Pitwall & Systemreferenz (NotebookLM-Quelle)</a></li>
+<li>└─ <a href="../05_Agents/PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md">Boxencrew & Teamchef Konzept (NotebookLM)</a></li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </details>
 <!-- DOKU-MINIMAP-END -->
