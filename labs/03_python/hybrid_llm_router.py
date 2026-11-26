@@ -51,9 +51,21 @@ SIMRACER_CODE_MODEL = os.getenv("SIMRACER_CODE_MODEL", "qwen3.5:9b")
 LAPTOP_CHAT_MODEL = os.getenv("LAPTOP_CHAT_MODEL", "gemma4:e4b")
 LAPTOP_CODE_MODEL = os.getenv("LAPTOP_CODE_MODEL", "qwen3.5:4b")
 
-TaskTier = Literal["auto", "local", "cloud"]
+TaskTier = Literal["policy", "auto", "local", "cloud", "ollama", "gemini"]
 WorkloadType = Literal["general", "code"]
 WeightClass = Literal["low", "medium", "high"]
+
+ALLOWED_GEMINI_MODELS = (
+    "gemini-3.8-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
+    "gemini-4-argon",
+    "gemini-4-neon",
+)
+DEFAULT_GEMINI_MODEL = os.getenv("HYBRID_GEMINI_MODEL", "gemini-3.8-flash")
+STRIKERPI_API_BASE = os.getenv("STRIKERPI_API_BASE", "http://192.168.178.86:8080").rstrip("/")
+SHARED_POLICY_PATH = Path(r"\\192.168.178.68\ac-sandbox\shared\agents\general-SIM\pitwall_control_policy.json")
 
 HIGH_WEIGHT_QUEUE_DIR = Path(__file__).resolve().parents[2] / "Systemtests" / "high_weight_queue"
 CLOUD_BUDGET_LIMIT_PER_DAY = int(os.getenv("HYBRID_CLOUD_DAILY_BUDGET", "50"))
@@ -247,8 +259,96 @@ def has_antigravity_sdk() -> bool:
         return False
 
 
+def has_google_genai_sdk() -> bool:
+    try:
+        return importlib.util.find_spec("google") is not None and importlib.util.find_spec("google.genai") is not None
+    except (ImportError, ValueError, AttributeError):
+        return False
+
+
+def fetch_llm_switch_policy(timeout: float = 1.5) -> dict[str, Any]:
+    """Liest die zentrale Schaltweichen-Policy vom StrikerPi Pitwall-Hub oder direkt ueber SMB."""
+    default_pol: dict[str, Any] = {
+        "llm_backend": "ollama",
+        "llm_gemini_model": DEFAULT_GEMINI_MODEL,
+        "agent_llm_backends": {},
+        "source": "default",
+    }
+    st = _http_get_json(f"{STRIKERPI_API_BASE}/api/llm/status", timeout=timeout)
+    if st and st.get("llm_backend"):
+        return {
+            "llm_backend": str(st.get("llm_backend") or "ollama").lower(),
+            "llm_gemini_model": str(st.get("llm_gemini_model") or DEFAULT_GEMINI_MODEL),
+            "agent_llm_backends": dict(st.get("agent_llm_backends") or {}),
+            "gemini_ready": bool(st.get("gemini_ready")),
+            "source": "strikerpi_api",
+        }
+    if SHARED_POLICY_PATH.is_file():
+        try:
+            raw = json.loads(SHARED_POLICY_PATH.read_text(encoding="utf-8-sig"))
+            if isinstance(raw, dict):
+                return {
+                    "llm_backend": str(raw.get("llm_backend") or "ollama").lower(),
+                    "llm_gemini_model": str(raw.get("llm_gemini_model") or DEFAULT_GEMINI_MODEL),
+                    "agent_llm_backends": dict(raw.get("agent_llm_backends") or {}),
+                    "source": "smb_policy",
+                }
+        except Exception:
+            pass
+    return default_pol
+
+
+def set_llm_switch_policy(
+    backend: str | None = None,
+    gemini_model: str | None = None,
+    agent: str | None = None,
+    timeout: float = 10.0,
+) -> dict[str, Any]:
+    """Schaltet die zentrale LLM-Schaltweiche ueber den Pitwall-Hub um."""
+    payload: dict[str, Any] = {}
+    if backend:
+        bk = backend.strip().lower()
+        if agent:
+            payload["agent_llm_backends"] = {agent.strip().lower().lstrip("@"): bk}
+        else:
+            payload["llm_backend"] = bk
+    if gemini_model:
+        payload["llm_gemini_model"] = gemini_model.strip()
+    req = urllib.request.Request(
+        f"{STRIKERPI_API_BASE}/api/approvals/policy",
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        headers={"Content-Type": "application/json; charset=utf-8"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _resolve_tier_from_policy(task_tier: str, agent: str | None = None, timeout: float = 1.5) -> tuple[str, dict[str, Any]]:
+    pol = fetch_llm_switch_policy(timeout=timeout)
+    t = (task_tier or "policy").strip().lower()
+    if t in ("ollama", "local"):
+        return "local", pol
+    if t in ("gemini", "cloud"):
+        return "cloud", pol
+    if t == "auto":
+        return "auto", pol
+    # policy mode:
+    eff = pol.get("llm_backend", "ollama")
+    if agent:
+        ag_key = agent.strip().lower().lstrip("@")
+        ag_ov = str((pol.get("agent_llm_backends") or {}).get(ag_key) or "inherit").lower()
+        if ag_ov in ("ollama", "auto", "gemini"):
+            eff = ag_ov
+    if eff == "gemini":
+        return "cloud", pol
+    if eff == "auto":
+        return "auto", pol
+    return "local", pol
+
+
 def select_route(
-    task_tier: TaskTier = "auto",
+    task_tier: TaskTier = "policy",
     workload: WorkloadType = "general",
     simrig_mode: str | None = None,
     prefer_vertex: bool = True,
@@ -256,14 +356,17 @@ def select_route(
     prompt: str = "",
     files_count: int = 0,
     cloud_budget_exhausted: bool = False,
+    agent: str | None = None,
 ) -> RouteDecision:
+    eff_tier, pol = _resolve_tier_from_policy(task_tier, agent=agent, timeout=timeout)
+    pol_model = str(pol.get("llm_gemini_model") or DEFAULT_GEMINI_MODEL)
     mode = (simrig_mode or fetch_simrig_mode(timeout=timeout)).strip().upper()
     adc_ok = has_vertex_adc()
     key_ok = has_gemini_api_key()
     weight = assess_payload_weight(prompt=prompt, files_count=files_count)
 
     # Praediktives Ressourcen-Dispatching bei High-Weight Tasks im Auto-Modus:
-    if task_tier == "auto" and weight.weight_class == "high" and mode == "LIVE_RACE":
+    if eff_tier == "auto" and weight.weight_class == "high" and mode == "LIVE_RACE":
         if cloud_budget_exhausted or (not adc_ok and not key_ok):
             q_path = enqueue_high_weight_task(prompt=prompt, workload=workload, assessment=weight)
             return RouteDecision(
@@ -284,6 +387,7 @@ def select_route(
             simrig_mode=mode,
             prefer_vertex=prefer_vertex,
             timeout=timeout,
+            agent=agent,
         )
         cloud_dec.reason = f"High-Weight Task (Score={weight.weight_score}, Dateien={weight.attached_files}) waehrend LIVE_RACE -> Eskalation an Cloud ({cloud_dec.target}) zum Schutz der Laptop-GPU."
         cloud_dec.weight_score = weight.weight_score
@@ -291,7 +395,7 @@ def select_route(
         return cloud_dec
 
     # Low-Weight Telemetrie/Coaching-Tasks (z. B. Sarah Sektordeltas) direkt auf Laptop-Ollama halten, um 5070 Ti zu schonen
-    if task_tier == "auto" and weight.weight_class == "low" and prompt and len(prompt) < 180 and workload == "general":
+    if eff_tier == "auto" and weight.weight_class == "low" and prompt and len(prompt) < 180 and workload == "general":
         laptop_fast = probe_ollama(LAPTOP_OLLAMA_BASE, timeout=timeout)
         if laptop_fast["online"]:
             chosen, warn = _pick_ollama_model(laptop_fast["installed_models"], LAPTOP_CHAT_MODEL)
@@ -309,34 +413,45 @@ def select_route(
                 weight_class=weight.weight_class,
             )
 
-    if task_tier == "cloud":
-        if prefer_vertex and (adc_ok or not key_ok):
-            warn = None if adc_ok else "Keine gcloud ADC gefunden ('gcloud auth application-default login' ausfuehren)."
-            return RouteDecision(
-                target="vertex_adc",
-                model=None,
-                base_url=None,
-                project=GCP_PROJECT,
-                location=GCP_LOCATION,
-                simrig_mode=mode,
-                workload=workload,
-                reason="Cloud-Routing ueber Vertex AI (Application Default Credentials).",
-                warning=warn,
-            )
-        if key_ok:
+    if eff_tier == "cloud":
+        if key_ok and (not prefer_vertex or not adc_ok):
             return RouteDecision(
                 target="gemini_api_env",
-                model=None,
+                model=pol_model,
                 base_url=None,
                 project=None,
                 location=None,
                 simrig_mode=mode,
                 workload=workload,
-                reason="Cloud-Routing ueber Gemini API (Umgebungsvariable GEMINI_API_KEY).",
+                reason=f"Cloud-Routing ueber Google Gemini Interactions API ({pol_model}, GEMINI_API_KEY).",
+            )
+        if prefer_vertex and (adc_ok or not key_ok):
+            warn = None if adc_ok else "Keine gcloud ADC gefunden ('gcloud auth application-default login' ausfuehren)."
+            return RouteDecision(
+                target="vertex_adc",
+                model=pol_model,
+                base_url=None,
+                project=GCP_PROJECT,
+                location=GCP_LOCATION,
+                simrig_mode=mode,
+                workload=workload,
+                reason=f"Cloud-Routing ueber Vertex AI / ADC ({pol_model}).",
+                warning=warn,
+            )
+        if key_ok:
+            return RouteDecision(
+                target="gemini_api_env",
+                model=pol_model,
+                base_url=None,
+                project=None,
+                location=None,
+                simrig_mode=mode,
+                workload=workload,
+                reason=f"Cloud-Routing ueber Gemini API ({pol_model}, Umgebungsvariable GEMINI_API_KEY).",
             )
         return RouteDecision(
             target="vertex_adc",
-            model=None,
+            model=pol_model,
             base_url=None,
             project=GCP_PROJECT,
             location=GCP_LOCATION,
@@ -396,13 +511,14 @@ def select_route(
             weight_class=weight.weight_class,
         )
 
-    if task_tier == "auto":
+    if eff_tier == "auto":
         cloud_decision = select_route(
             task_tier="cloud",
             workload=workload,
             simrig_mode=mode,
             prefer_vertex=prefer_vertex,
             timeout=timeout,
+            agent=agent,
         )
         cloud_decision.reason = f"Lokale Ollama-Knoten nicht verfuegbar ({mode}) -> Eskalation: {cloud_decision.reason}"
         return cloud_decision
@@ -464,23 +580,27 @@ def build_antigravity_config(
 
 
 def run_diagnostic(
-    task_tier: TaskTier = "auto",
+    task_tier: TaskTier = "policy",
     workload: WorkloadType = "general",
-    prefer_vertex: bool = True,
+    prefer_vertex: bool = False,
     timeout: float = 1.5,
+    agent: str | None = None,
 ) -> dict[str, Any]:
     strikerpi = fetch_simrig_status(timeout=timeout)
     simracer = probe_ollama(SIMRACER_OLLAMA_BASE, timeout=timeout)
     laptop = probe_ollama(LAPTOP_OLLAMA_BASE, timeout=timeout)
+    switch_pol = fetch_llm_switch_policy(timeout=timeout)
     decision = select_route(
         task_tier=task_tier,
         workload=workload,
         simrig_mode=strikerpi["mode"],
         prefer_vertex=prefer_vertex,
         timeout=timeout,
+        agent=agent,
     )
     return {
         "strikerpi_relay": strikerpi,
+        "llm_switch_policy": switch_pol,
         "simracer_ollama": simracer,
         "laptop_ollama": laptop,
         "auth": {
@@ -490,18 +610,79 @@ def run_diagnostic(
             "gcp_location": GCP_LOCATION,
         },
         "sdk": {
+            "google_genai_installed": has_google_genai_sdk(),
             "google_antigravity_installed": has_antigravity_sdk(),
         },
         "selected_route": asdict(decision),
     }
 
 
+def _run_ollama_chat_sync(base_url: str, model: str, prompt: str, timeout: float = 120.0) -> str:
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "stream": False,
+        "think": False,
+    }
+    req = urllib.request.Request(
+        f"{base_url.rstrip('/')}/api/chat",
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        headers={"Content-Type": "application/json; charset=utf-8"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    return str(((data.get("message") or {}).get("content")) or "").strip()
+
+
 async def run_prompt(
     prompt: str, decision: RouteDecision, cloud_model: str | None = None
 ) -> str:
+    if decision.target == "offline":
+        raise RuntimeError(decision.warning or decision.reason)
+    if decision.target == "high_weight_queue":
+        return decision.reason
+
+    if decision.target in ("simracer_ollama", "laptop_ollama"):
+        if not decision.model or not decision.base_url:
+            raise ValueError(f"Unvollstaendige Ollama-Routing-Konfiguration: {decision}")
+        return _run_ollama_chat_sync(decision.base_url, decision.model, prompt)
+
+    target_model = (cloud_model or decision.model or DEFAULT_GEMINI_MODEL).strip()
+    if has_google_genai_sdk():
+        from google import genai
+
+        if decision.target == "vertex_adc" and not has_gemini_api_key():
+            client = genai.Client(
+                vertexai=True,
+                project=decision.project or GCP_PROJECT,
+                location=decision.location or GCP_LOCATION,
+            )
+        else:
+            api_key = os.getenv("GEMINI_API_KEY", "").strip()
+            if not api_key:
+                raise RuntimeError("Umgebungsvariable GEMINI_API_KEY ist nicht gesetzt.")
+            client = genai.Client(api_key=api_key)
+
+        resp = client.interactions.create(
+            model=target_model,
+            input=prompt,
+            store=False,
+        )
+        txt = str(getattr(resp, "output_text", "") or "").strip()
+        if txt:
+            return txt
+        parts: list[str] = []
+        for step in (getattr(resp, "steps", None) or []):
+            for item in (getattr(step, "content", None) or []):
+                t = getattr(item, "text", None)
+                if isinstance(t, str) and t:
+                    parts.append(t)
+        return "\n".join(parts).strip()
+
     from google.antigravity import Agent
 
-    cfg = build_antigravity_config(decision, cloud_model=cloud_model)
+    cfg = build_antigravity_config(decision, cloud_model=target_model)
     async with Agent(config=cfg) as agent:
         response = await agent.chat(prompt)
         return await response.text()
@@ -509,13 +690,18 @@ async def run_prompt(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Hybrid Ollama + Google Antigravity SDK Router"
+        description="Hybrid Ollama + Google Gemini (Interactions API) Router & Schaltweiche"
     )
     parser.add_argument(
         "--tier",
-        choices=["auto", "local", "cloud"],
-        default="auto",
-        help="Routing-Strategie (Standard: auto).",
+        choices=["policy", "auto", "local", "cloud", "ollama", "gemini"],
+        default="policy",
+        help="Routing-Strategie (Standard: policy -> folgt Pitwall-Schaltweiche).",
+    )
+    parser.add_argument(
+        "--agent",
+        default=None,
+        help="Optionaler Agent-Name zur Pruefung eines Pro-Agent-Overrides (z. B. rig, dark, sarah).",
     )
     parser.add_argument(
         "--workload",
@@ -526,12 +712,29 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--cloud-model",
         default=None,
-        help="Optionales explizites Gemini Cloud-Modell (ohne Angabe gilt SDK-Standard).",
+        help="Optionales explizites Gemini Cloud-Modell (Standard: Pitwall-Modell oder gemini-3.8-flash).",
+    )
+    parser.add_argument(
+        "--set-backend",
+        choices=["ollama", "auto", "gemini", "inherit"],
+        default=None,
+        help="Schaltet die zentrale Pitwall-Schaltweiche um (global oder mit --agent fuer einen Agenten).",
+    )
+    parser.add_argument(
+        "--set-gemini-model",
+        choices=list(ALLOWED_GEMINI_MODELS),
+        default=None,
+        help="Setzt das zentrale Gemini-Modell in der Pitwall-Schaltweiche.",
+    )
+    parser.add_argument(
+        "--prefer-vertex",
+        action="store_true",
+        help="Bei Cloud-Nutzung Vertex ADC statt GEMINI_API_KEY bevorzugen.",
     )
     parser.add_argument(
         "--no-vertex",
         action="store_true",
-        help="Bei Cloud-Nutzung GEMINI_API_KEY statt Vertex ADC bevorzugen.",
+        help="Rueckwaertskompatibles Flag: GEMINI_API_KEY bevorzugen.",
     )
     parser.add_argument(
         "--check",
@@ -551,7 +754,27 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     args = parser.parse_args(argv)
-    prefer_vertex = not args.no_vertex
+    prefer_vertex = bool(args.prefer_vertex) and not bool(args.no_vertex)
+
+    if args.set_backend or args.set_gemini_model:
+        try:
+            res = set_llm_switch_policy(
+                backend=args.set_backend,
+                gemini_model=args.set_gemini_model,
+                agent=args.agent,
+                timeout=max(5.0, args.timeout),
+            )
+            pol = res.get("policy") or {}
+            print(json.dumps({
+                "ok": True,
+                "llm_backend": pol.get("llm_backend"),
+                "llm_gemini_model": pol.get("llm_gemini_model"),
+                "agent_llm_backends": pol.get("agent_llm_backends"),
+            }, indent=2, ensure_ascii=False))
+            return 0
+        except Exception as exc:
+            print(f"[FEHLER Schaltweiche] {exc}", file=sys.stderr)
+            return 1
 
     if args.check or not args.prompt:
         report = run_diagnostic(
@@ -559,6 +782,7 @@ def main(argv: list[str] | None = None) -> int:
             workload=args.workload,
             prefer_vertex=prefer_vertex,
             timeout=args.timeout,
+            agent=args.agent,
         )
         print(json.dumps(report, indent=2, ensure_ascii=False))
         return 0
@@ -568,6 +792,8 @@ def main(argv: list[str] | None = None) -> int:
         workload=args.workload,
         prefer_vertex=prefer_vertex,
         timeout=args.timeout,
+        prompt=args.prompt,
+        agent=args.agent,
     )
     try:
         answer = asyncio.run(

@@ -1,6 +1,5 @@
 ---
 name: Sarah Coach
-user-invocable: false
 description: Sarah Coach – Live-Telemetrie-Coaching, Stint-Pitfile-Optimierung, Replay-Analyse & Automatisierter Videoschnitt – nativ auf IdeaPad 5 (Archibald @ 192.168.178.98), erreichbar aus git-labor über SSH und Bridge-Skripte.
 ---
 

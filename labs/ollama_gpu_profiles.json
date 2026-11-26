@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "updated_at": "2026-11-26T01:42:00+01:00",
+  "nodes": {
+    "simracer": {
+      "label": "SimRacer RTX 5070 Ti (16 GB)",
+      "gpu_name": "NVIDIA GeForce RTX 5070 Ti",
+      "vram_total_mib": 16303,
+      "urls": ["http://192.168.178.68:11434"],
+      "local_url": "http://127.0.0.1:11434",
+      "default_num_ctx": 65536,
+      "keep_alive": "30m",
+      "model_priority": ["qwen3.5:9b", "gemma4:12b", "qwen2.5-coder:14b"],
+      "models": {
+        "qwen3.5:9b": {
+          "recommended_num_ctx": 65536,
+          "native_max_ctx": 262144,
+          "allowed_ctx_options": [8192, 16384, 32768, 65536, 131072],
+          "measured_size_gb": 6.43,
+          "measured_vram_gb": 6.43,
+          "measured_nvidia_vram_mib": 10806,
+          "gpu_pct": 100.0,
+          "supports_tools": true,
+          "role": "Primär-Agent (@light/@rig/@dark) & VS Code General"
+        },
+        "gemma4:12b": {
+          "recommended_num_ctx": 65536,
+          "native_max_ctx": 262144,
+          "allowed_ctx_options": [8192, 16384, 32768, 65536, 131072],
+          "measured_size_gb": 1.15,
+          "measured_vram_gb": 1.15,
+          "measured_nvidia_vram_mib": 12785,
+          "gpu_pct": 100.0,
+          "supports_tools": true,
+          "role": "Multimodal (Vision/Audio) & Alternativ-Reasoning"
+        },
+        "qwen2.5-coder:14b": {
+          "recommended_num_ctx": 32768,
+          "native_max_ctx": 32768,
+          "allowed_ctx_options": [8192, 16384, 32768],
+          "measured_size_gb": 11.35,
+          "measured_vram_gb": 11.35,
+          "measured_nvidia_vram_mib": 14954,
+          "gpu_pct": 100.0,
+          "supports_tools": true,
+          "role": "Code-/INI-Analyse (natives Max 32K)"
+        }
+      }
+    },
+    "cyborg": {
+      "label": "VanstrikeCyborg RTX 5060 Laptop (8 GB)",
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "vram_total_mib": 8151,
+      "urls": ["http://192.168.178.172:11434", "http://192.168.178.145:11434"],
+      "local_url": "http://127.0.0.1:11434",
+      "default_num_ctx": 32768,
+      "keep_alive": "10m",
+      "model_priority": ["qwen3.5:4b", "gemma4:e4b"],
+      "models": {
+        "qwen3.5:4b": {
+          "recommended_num_ctx": 32768,
+          "native_max_ctx": 262144,
+          "allowed_ctx_options": [4096, 8192, 16384, 32768, 65536],
+          "measured_size_gb": 3.47,
+          "measured_vram_gb": 3.47,
+          "measured_nvidia_vram_mib": 4775,
+          "gpu_pct": 100.0,
+          "supports_tools": true,
+          "role": "Primärer 5070-Ti-Fallback für Agenten (64K bei 5479 MiB möglich)"
+        },
+        "gemma4:e4b": {
+          "recommended_num_ctx": 32768,
+          "native_max_ctx": 131072,
+          "allowed_ctx_options": [4096, 8192, 16384, 32768],
+          "measured_size_gb": 0.41,
+          "measured_vram_gb": 0.41,
+          "measured_nvidia_vram_mib": 5492,
+          "gpu_pct": 100.0,
+          "supports_tools": true,
+          "role": "Multimodal-Fallback (Vision/Audio) auf RTX 5060"
+        }
+      }
+    }
+  }
+}

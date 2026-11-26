@@ -1,6 +1,5 @@
 ---
 name: Dark Agent
-user-invocable: false
 description: Dark Agent – Spezial-Agent rein innerhalb der Docker-Windows-11-Sandbox (ac-win11-sandbox auf SimRacer 192.168.178.68). Erreichbar aus git-labor über SSH (ac-sandbox :2222) und Bridge-Skripte.
 ---
 
