@@ -31,7 +31,7 @@
 </details>
 <!-- DOKU-SUBNAV-END -->
 
-Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`), den Pitwall-Sub-Tab **`🧠 GPU-Modelle`** samt **KI-Schaltweiche** auf dem StrikerPi (`192.168.178.86:8080`), den **live auf StrikerPi deployten Ausbau für die kanonische 7-Rollen-Registry &amp; `@general-sim`** sowie den **Archibald-Lüfter-Entwurf**.
+Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`), den Pitwall-Sub-Tab **`🧠 GPU-Modelle`** samt **KI-Schaltweiche** auf dem StrikerPi (`192.168.178.86:8080`), den **live auf StrikerPi deployten Ausbau für die kanonische 7-Rollen-Registry &amp; `@general-sim`**, das **NetBird-Mesh-VPN** (externer Zugriff ohne FRITZ!Box), das **Google-ToS-Audit**, den **Archibald-Lüfter-Entwurf** sowie die **StrikerPi-Lüfter-/UART-Evaluierung**.
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -41,7 +41,8 @@ Nach dem Durcharbeiten dieses Protokolls kannst du:
 2. für alle **5 installierten Modelle** auf RTX 5070 Ti (`16303 MiB`) und RTX 5060 Laptop (`8151 MiB`) die gemessenen `num_ctx`- und VRAM-Grenzen angeben,
 3. die **5-stufige Routing-Entscheidung** von `ollama_router.py` zwischen `simracer`, `cyborg` (Fallback bei `LIVE_RACE` oder `gpu_background_allowed=false`) und `Blocked` (`agents_paused=true` / `sarah_cyborg_gpu_allowed=false`) erklären,
 4. über die Pitwall-Oberfläche (`🛡️ Agenten` &rarr; `🧠 GPU-Modelle`) Modelle auf beiden GPUs **laden/tauschen**, **entladen** und sicher **deinstallieren** sowie die Live-Fahrbetrieb-Sperre (`HTTP 409`) einordnen,
-5. die **kanonische 7-Rollen-Registry** (`cyborg` vs. `general-sim`, **LIVE auf StrikerPi**) vom weiterhin aktiven Legacy-`@general`-Pfad sauber abgrenzen.
+5. die **kanonische 7-Rollen-Registry** (`cyborg` vs. `general-sim`, **LIVE auf StrikerPi**) vom weiterhin aktiven Legacy-`@general`-Pfad sauber abgrenzen,
+6. das **NetBird-Mesh-Routing (`100.64.0.0/10` / `192.168.178.0/24`) über WLAN vs. LAN**, den **Google-ToS-Status** und die **StrikerPi GPIO-14/UART-Lüfterdiagnose** technisch beurteilen.
 
 </details>
 
@@ -189,6 +190,8 @@ flowchart LR
 
 </details>
 
+</details>
+
 <details>
 <summary><b>7. Kanonische 7-Rollen-Registry, General-Sim-CLI &amp; Pitwall-Erweiterung (<code>LIVE</code> auf StrikerPi)</b></summary>
 
@@ -214,6 +217,49 @@ Für leiseren Leerlaufbetrieb auf dem Pitwall-Laptop **Archibald** (`192.168.178
 - **[`fan-quiet-test.md`](file:///c:/Users/strik/git-labor/Systemtests/fan-quiet-test.md):** Testprotokoll; Deployment und Messung stehen noch aus (Archibald war beim Abgleich am 26.11. per SSH `archibald@192.168.178.98` nicht erreichbar).
 
 </details>
+
+<details>
+<summary><b>9. NetBird Mesh-VPN (Externer Zugriff ohne FRITZ!Box, WLAN-Routing &amp; <code>/api/llm/gemini</code>)</b></summary>
+
+Da die Pitwall-Weboberfläche (`:8080`) ohne Login arbeitet, darf Port `8080` bzw. `80` **niemals** ungeschützt per Router-Portfreigabe ins Internet gestellt werden. Stattdessen verbindet seit **26.11.2026** ein kostenloses **NetBird-Mesh (`v0.83.2`, WireGuard)** den mobilen **VanstrikeCyborg** direkt und verschlüsselt mit dem **StrikerPi** — ohne Änderung am FRITZ!Box-Router (funktioniert auch hinter DS-Lite/CGNAT):
+
+| Komponente / Peer | Konfiguration &amp; IP | Verifizierter Stand (`26.11.2026`) |
+| :--- | :--- | :--- |
+| **`StrikerPi` (`routing-peer.netbird.cloud`)** | `100.95.181.226/16` (`wt0`, Kernel-WireGuard `wireguard.ko`), Installation via `pkgs.netbird.io/install.sh` (`arm64`), dauerhaft per **Setup-Key** registriert (kein 24h-Ablauf), `net.ipv4.ip_forward = 1` (`/etc/sysctl.d/99-netbird-forward.conf`), `rp_filter = 2` (`wlan0`/`end0`) | `netbird.service` `enabled`/`active`, Route `192.168.178.0/24` aktiv |
+| **`VanstrikeCyborg` (`vanstrikecyborg.netbird.cloud`)** | `100.95.101.63/16`, `Netbird.Netbird 0.83.2` (`winget`), Dienst `NetBird` (`Running` / `Automatic`), SSO-Anmeldung | `1/1 Connected` P2P (`~3,4–5,5 ms`), Relay `streamline-de-fra1-7.relay.netbird.io:443`; im Windows-Client empfohlen: *Eingehend blockieren* = **AN** (Client-Betrieb), *LAN-Zugriff blockieren* = **AUS**, *Quantenresistenz* = **AUS** |
+| **Pitwall-Bridge &amp; SSH-Alias (`strikerpi-ext`)** | [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py#L5054-L5068) (Commit `d5cde7f`) erweitert `_is_lan_client_ip()` explizit um `100.64.0.0/10` (RFC 6598 ist unter Python `3.14` bei `is_private` `False`); [`C:/Users/strik/.ssh/config`](file:///c:/Users/strik/.ssh/config) ergänzt `Host strikerpi-ext` | Alle Mesh-Ports erreichbar: `:22` (`NETBIRD_SSH_OK`), `:80` (`HTTP 200`), `:8080` (`HTTP 200`, `/health` &amp; `/api/agents/registry` = `7` Agenten), `:1883`, `:9001`; `POST /api/llm/gemini` über NetBird erlaubt (`HTTP 422` auf `{}` statt `403`) |
+
+- **WLAN vs. LAN-Kabel &amp; Qwen-Bewertung:** Beim Test ohne LAN-Kabel (`end0` `DOWN`) liefen alle NetBird-Forwarding- (`NETBIRD-RT-FWD-IN`) und NAT-Regeln (`oifname != "lo" MASQUERADE`) interface-unabhängig sauber über **`wlan0` (`192.168.178.86`)** bis ins Heimnetz (`SimRacer`). Für direkten Pitwall-Zugriff (`:8080`) genügt WLAN völlig; ein LAN-Kabel lohnt nur für MJPEG-/noVNC-Videostreams oder große Datentransfers. Auch für `qwen3.5:9b` im VRAM der SimRacer RTX 5070 Ti macht LAN vs. WLAN am StrikerPi praktisch keinen Unterschied, da nur kurze Text-Prompts und Antwort-Tokens über das Netz laufen.
+
+</details>
+
+<details>
+<summary><b>10. Google Terms-of-Service-Audit (26.11.2026 — Gesamtsystem)</b></summary>
+
+**Ergebnis: ✅ KONFORM** (keine aktiven ToS-Verstöße auf `VanstrikeCyborg`, `SimRacer`, `StrikerPi` oder in den drei Repositories; `Archibald` war offline und nicht prüfbar):
+
+- **Keine inoffiziellen OAuth-/Gateway-Proxys:** Auf Ports `:8317` und `:8420` laufen weder `CLIProxyAPI`, `llm-gateway` noch `antigravityCopilot` (`ss`/TCP-Check sauber; der Windows-Task `Proxy` ist der Microsoft-Systemtask `\Microsoft\Windows\Autochk\Proxy` mit `acproxy.dll`).
+- **Offizielle Extensions &amp; Sperrliste:** Auf `VanstrikeCyborg` und `SimRacer` laufen nur offizielle Google-Extensions (`google.gemini-cli-vscode-ide-companion`, `google.geminicodeassist`, `google.google-antigravity`), Themes und `ollama.ollama`; alle `26` früheren Proxy-/Wrapper-IDs sind über `settingsSync.ignoredExtensions` in [`settings.json`](file:///c:/Users/strik/AppData/Roaming/Code/User/settings.json#L225-L252) gesperrt.
+- **Offizielle API, aktuelles SDK &amp; Key-Hygiene:** `0` Funde veralteter SDKs (`google-generativeai` / `@google/generative-ai`), `0` echte geleakte Google-API-Keys (`antigravity_safety_policies.py` Zeile `195` enthält nur einen Unit-Test-Dummy). [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py#L5121-L5201) nutzt einen einzelnen eigenen `GEMINI_API_KEY` aus `/etc/telemetry-relay.env` (`chmod 600 root:root`) direkt gegen `https://generativelanguage.googleapis.com/v1beta/interactions`; [`hybrid_llm_router.py`](file:///c:/Users/strik/git-labor/labs/03_python/hybrid_llm_router.py) und `ollama_router.py` verwenden nur Ollama, Vertex ADC (`gen-lang-client-0668043276`) oder `GEMINI_API_KEY`.
+- **4 Hygiene-Hinweise (keine ToS-Verletzung):**
+  1. **`Archibald` (`192.168.178.98`):** Bei nächster Aktivierung kurz verifizieren, dass `cli-proxy-api.service` weiterhin `inactive` ist.
+  2. **[`.mcp.json`](file:///c:/Users/strik/git-labor/.mcp.json) (Commit `7ccb919`):** Nutzt offiziellen Google-LLC-Code ([`mcp_proxy.js`](file:///c:/Users/strik/.vscode/google_data_cloud_tools/mcp_proxy.js), Apache-2.0, ToS-konform), dupliziert aber `12` bereits am 23.11. bereinigte `datacloud_*_remote`-Einträge.
+  3. **GitHub-PAT in [`mcp_config.json`](file:///c:/Users/strik/.gemini/config/mcp_config.json#L35):** Unabhängig von Google-ToS liegt dort weiterhin ein Klartext-GitHub-PAT (Rotation empfohlen).
+  4. **NetBird Access Control:** Im Dashboard sicherstellen, dass nur eigene Geräte auf den StrikerPi (`/api/llm/gemini`) zugreifen dürfen.
+
+</details>
+
+<details>
+<summary><b>11. StrikerPi Lüfter- &amp; Thermik-Evaluierung (Raspberry Pi 4 / GPIO-14-UART-Konflikt)</b></summary>
+
+Die Live-Diagnose des sporadisch anlaufenden/geräuschvollen Lüfters auf dem **StrikerPi** (`Raspberry Pi 4 Model B Rev 1.4`) ergab:
+
+- **Messwerte:** CPU-Temperatur **`37,0 – 37,5 °C`** bei `load 0.00` (Thermal-Throttling erst ab `80 °C`, kritisch `90 °C`). Softwareseitig existiert **keine** Lüftersteuerung (`0` Cooling-Devices, kein `hwmon`-Lüfter/PWM, kein `argononed`/Skript, keine `/boot/overlays/*fan*` im Arch-ARM-Mainline-Kernel `7.3.3`).
+- **Ursache bei 3-Pin-Lüftern (`enable_uart=1` Konflikt):** In `/boot/config.txt` stehen `enable_uart=1` und `arm_64bit=1`, zudem läuft `serial-getty@ttyS1.service` aktiv. Damit liegt die serielle UART-TXD-Leitung (`3,3 V` High + Signalimpulse) direkt auf **Pin 8 (GPIO 14)** — genau dem Steuer-Pin des offiziellen 3-Pin-Pi-4-Lüfters, der dadurch trotz `37 °C` grundlos angesteuert wird.
+- **Maßnahmen nach verbautem Lüftertyp:**
+  1. **3-Pin-Lüfter an Pin 8 (GPIO 14):** `enable_uart=1` + `serial-getty@ttyS1` deaktivieren und kleines `systemd`-Hysterese-Skript über `/dev/gpiochip0` einrichten (z. B. `60 °C` EIN / `50 °C` AUS &rarr; im Leerlauf lautlos).
+  2. **2-Pin-Lüfter (nur 5 V + GND):** Keine Software-Steuerung möglich (Lager-/Brummgeräusch &rarr; auf `3,3 V` Pin 1/6 umstecken oder bei `37 °C` passiv betreiben).
+  3. **Argon-Gehäuse:** I²C aktivieren (`/dev/i2c*`) und `argononed` einrichten.
 
 </details>
 
@@ -251,6 +297,8 @@ Für leiseren Leerlaufbetrieb auf dem Pitwall-Laptop **Archibald** (`192.168.178
 - **Pitwall `🧠 GPU-Modelle`:** Live-Übersicht beider GPUs inkl. Kontext-Wahl, `Entladen`, `Laden/Tauschen` (mit Fahrbetrieb-HTTP-409-Schutz) und 2-Klick-`Deinstallieren`.
 - **Zentrale KI-Schaltweiche (`ollama` / `auto` / `gemini`):** Alle Agenten sind global oder individuell per Pitwall UI, `@general llm` oder [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1) zwischen lokalem Ollama und Google Gemini Cloud (`google-genai` Interactions API bzw. StrikerPi LAN-Bridge `/api/llm/gemini`) umschaltbar.
 - **Kanonische 7-Rollen-Registry (`LIVE` auf StrikerPi):** [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json), [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) &amp; [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (SHA256 `5e290c4b…`, Backup `.bak_20261126_pre_registry`) trennen `cyborg` (Laptop) und `general-sim` (`/opt/general-sim/` auf StrikerPi = `available` / `READY`); `14/14` Unit-Tests und Live-API-Checks bestanden.
+- **NetBird-Mesh (`100.95.181.226` ↔ `.101.63`) ohne FRITZ!Box:** P2P-WireGuard zwischen `routing-peer.netbird.cloud` (Setup-Key, `ip_forward=1`, Route `192.168.178.0/24` über WLAN &amp; LAN) und `vanstrikecyborg.netbird.cloud`; Pitwall-Bridge `/api/llm/gemini` lässt `100.64.0.0/10` zu (`d5cde7f`), SSH über `strikerpi-ext`.
+- **Google-ToS-Audit &amp; Pi-Thermik:** Gesamtsystem **ToS-konform** (`0` Proxy-Ports/`:8317`-Altlasten, `0` alte SDKs, `0` Key-Leaks; Archibald offline); StrikerPi läuft kühl bei `37,0–37,5 °C` ohne Lüfterdienst, wobei `enable_uart=1` / `serial-getty@ttyS1` GPIO 14 (Pin 8) belegt.
 
 </details>
 
