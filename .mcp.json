@@ -25,20 +25,7 @@
         "C:\\Users\\strik\\git-labor",
         "C:\\local_Cyborg"
       ],
-      "tools": [
-        "*"
-      ]
-    },
-    "chrome-devtools": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "chrome-devtools-mcp@latest"
-      ],
-      "tools": [
-        "*"
-      ]
+      "tools": []
     },
     "markitdown": {
       "type": "stdio",
@@ -46,16 +33,7 @@
       "args": [
         "markitdown-mcp"
       ],
-      "tools": [
-        "*"
-      ]
-    },
-    "microsoft-learn": {
-      "type": "http",
-      "url": "https://learn.microsoft.com/api/mcp",
-      "tools": [
-        "*"
-      ]
+      "tools": []
     },
     "datacloud_alloydb_remote": {
       "type": "stdio",
@@ -64,9 +42,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://alloydb.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -78,9 +54,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://bigquery.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -92,9 +66,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://bigtableadmin.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -106,9 +78,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://bigtable.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -120,9 +90,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://sqladmin.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\",\"X-Goog-User-Project\":\"gen-lang-client-0668043276\"}"
       }
@@ -134,9 +102,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://composer.europe-west3.rep.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -148,9 +114,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://dataproc.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -162,9 +126,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://dataflow.europe-west3.rep.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -176,9 +138,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://dataform.europe-west3.rep.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -190,9 +150,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://storage.googleapis.com/storage/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -204,9 +162,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://dataplex.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\"}"
       }
@@ -218,9 +174,7 @@
         "C:\\Users\\strik\\.vscode\\google_data_cloud_tools\\mcp_proxy.js",
         "https://spanner.googleapis.com/mcp"
       ],
-      "tools": [
-        "*"
-      ],
+      "tools": [],
       "env": {
         "X_GOOG_PROXY_HEADERS": "{\"User-Agent\":\"datacloud.vscode\",\"X-Goog-User-Project\":\"gen-lang-client-0668043276\"}"
       }
@@ -228,16 +182,12 @@
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "tools": [
-        "*"
-      ]
+      "tools": []
     },
     "nvidia-app": {
       "type": "http",
       "url": "http://127.0.0.1:13508/mcp",
-      "tools": [
-        "*"
-      ]
+      "tools": []
     }
   }
 }

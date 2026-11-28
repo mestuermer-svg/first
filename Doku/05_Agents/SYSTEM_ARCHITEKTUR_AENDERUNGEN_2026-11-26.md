@@ -1,4 +1,4 @@
-> **Thema:** System-Letztstand 26.11.2026 – Dual-GPU Ollama (SimRacer RTX 5070 Ti + Cyborg RTX 5060), Pro-GPU Kontext-Profile, Agenten-Fallback bei 5070-Ti-Sperre & Pitwall GPU-Modellverwaltung (`Entladen` / `Tauschen` / `Deinstallieren`)
+> **Thema:** System-Letztstand 26.11.2026 – Dual-GPU Ollama (SimRacer RTX 5070 Ti + Cyborg RTX 5060), KI-Schaltweiche, NetBird-Mesh, VS Code 1.146 Agents Window (Ollama/MCP-Tool-Budget) & StrikerPi SQLite Leitstand-Datenbank (Werkzeug-Bibliothek)
 > **Autor:** Michael Stürmer
 > **Datum:** 26.11.2026
 
@@ -31,7 +31,7 @@
 </details>
 <!-- DOKU-SUBNAV-END -->
 
-Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`), den Pitwall-Sub-Tab **`🧠 GPU-Modelle`** samt **KI-Schaltweiche** auf dem StrikerPi (`192.168.178.86:8080`), den **live auf StrikerPi deployten Ausbau für die kanonische 7-Rollen-Registry &amp; `@general-sim`**, das **NetBird-Mesh-VPN** (externer Zugriff ohne FRITZ!Box), das **Google-ToS-Audit**, den **Archibald-Lüfter-Entwurf** sowie die **StrikerPi-Lüfter-/UART-Evaluierung**.
+Dieses Protokoll dokumentiert die am **26.11.2026** umgesetzte Dual-GPU-Ollama-Architektur über **SimRacer (RTX 5070 Ti, 16 GB VRAM)** und **VanstrikeCyborg (RTX 5060 Laptop, 8 GB VRAM)**, die pro GPU gemessenen Kontext- und VRAM-Profile (`ollama_gpu_profiles.json`), den automatischen **Agenten-Fallback bei 5070-Ti-Sperre** (`ollama_router.py`), den Pitwall-Sub-Tab **`🧠 GPU-Modelle`** samt **KI-Schaltweiche** auf dem StrikerPi (`192.168.178.86:8080`), den **live auf StrikerPi deployten Ausbau für die kanonische 7-Rollen-Registry &amp; `@general-sim`**, das **NetBird-Mesh-VPN** (externer Zugriff ohne FRITZ!Box), das **Google-ToS-Audit**, den **Archibald-Lüfter-Entwurf**, die **StrikerPi-Lüfter-/UART-Evaluierung**, die **VS Code 1.146 Agents-Window-Freischaltung (`ollama.ollama`), `.copilot`-ACL-Reparatur &amp; MCP-Tool-Budget-Bereinigung** sowie die **live auf StrikerPi in Betrieb genommene SQLite-Leitstand-Datenbank &amp; Werkzeug-Bibliothek** (`/opt/general-sim/data/leitstand.db`, WAL + FTS5, 5 Organisationsregeln).
 
 <details>
 <summary><b>Lernziele</b></summary>
@@ -42,7 +42,9 @@ Nach dem Durcharbeiten dieses Protokolls kannst du:
 3. die **5-stufige Routing-Entscheidung** von `ollama_router.py` zwischen `simracer`, `cyborg` (Fallback bei `LIVE_RACE` oder `gpu_background_allowed=false`) und `Blocked` (`agents_paused=true` / `sarah_cyborg_gpu_allowed=false`) erklären,
 4. über die Pitwall-Oberfläche (`🛡️ Agenten` &rarr; `🧠 GPU-Modelle`) Modelle auf beiden GPUs **laden/tauschen**, **entladen** und sicher **deinstallieren** sowie die Live-Fahrbetrieb-Sperre (`HTTP 409`) einordnen,
 5. die **kanonische 7-Rollen-Registry** (`cyborg` vs. `general-sim`, **LIVE auf StrikerPi**) vom weiterhin aktiven Legacy-`@general`-Pfad sauber abgrenzen,
-6. das **NetBird-Mesh-Routing (`100.64.0.0/10` / `192.168.178.0/24`) über WLAN vs. LAN**, den **Google-ToS-Status** und die **StrikerPi GPIO-14/UART-Lüfterdiagnose** technisch beurteilen.
+6. das **NetBird-Mesh-Routing (`100.64.0.0/10` / `192.168.178.0/24`) über WLAN vs. LAN**, den **Google-ToS-Status** und die **StrikerPi GPIO-14/UART-Lüfterdiagnose** technisch beurteilen,
+7. die Ursachen und Behebung der VS-Code-1.146-Probleme im Agents Window (`extensions.supportAgentsWindow` für `ollama.ollama`, NTFS-`0600`-ACL/`transaction root`-Reparatur unter `.copilot`, `ByokLmProxyService`-128-Tool-Limit, `66.281`-Token-Überlauf auf `qwen3.5:4b`, `applyToAllProfiles` &amp; `ollama.thinkingLevels`) nachvollziehen,
+8. Architektur, Betriebsmodell (rekonstruierbarer Index über Rohdaten-Master), `db`-Befehle (StrikerPi-Terminal &amp; Remote-SSH) sowie die **5 verbindlichen Bibliotheks-Organisationsregeln** der StrikerPi-SQLite-Datenbank `/opt/general-sim/data/leitstand.db` (`leitstand_db.py`) anwenden.
 
 </details>
 
@@ -203,7 +205,7 @@ Zur sauberen Entkopplung zwischen dem Laptop-Agenten (**`General Cyborg` / `@cyb
 | **[`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py)** &amp; **[`start_general_sim_terminal.sh`](file:///c:/Users/strik/strikerpi-hub/general-sim/start_general_sim_terminal.sh)** | Eigenständiges StrikerPi-Leitstand-CLI (Status-, Log-, Tool-Governance-Abfragen und sicherer UTF-8-JSON-Dispatch an Worker mit mehrzeiligem `:send`/`:cancel`-Modus). | **LIVE** (`/opt/general-sim/`, CLI `status` + `Agent-Terminals.ps1` = `READY`) |
 | **[`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py)** *(Live-SHA256 `5e290c4b…`)* | Ergänzt `GET /api/agents/registry`, `_collect_local_general_sim_logs()`, explizite `source_errors` in `/api/logs/history`, UTF-8-Erhalt + `409`-Sperre im Voice-Dispatch sowie Legacy-Trennung (`/ws/terminal/general` vs. `general-sim`). | **LIVE** (`telemetry-relay.service` `active`, Backup `.bak_20261126_pre_registry`) |
 | **[`Agent-Terminals.ps1`](file:///c:/Users/strik/git-labor/labs/Agent-Terminals.ps1)** | Liest Rollen und Aliase dynamisch aus `agent_registry.json`; startet `@cyborg` lokal (`copilot --agent "General Cyborg"`) und `@general-sim` auf StrikerPi (`READY`). | Auf `VanstrikeCyborg` aktiv (`@general-sim`: `READY`) |
-| **Unit- &amp; Live-Tests (`14/14` ✅)** | `test_agent_registry.py` (`6/6` OK), `test_general_sim_terminal.py` (`8/8` OK) sowie Live-Checks (`/api/agents/registry`, `/api/logs/history?agent=general-sim` `source_errors: []`, `@cyborg` Dispatch `HTTP 409`). | Verifiziert per `unittest` &amp; Live-API |
+| **Unit- &amp; Live-Tests (`14/14` ✅, mit SQLite `20/20`)** | `test_agent_registry.py` (`6/6` OK), `test_general_sim_terminal.py` (`8/8` OK) sowie Live-Checks (`/api/agents/registry`, `/api/logs/history?agent=general-sim` `source_errors: []`, `@cyborg` Dispatch `HTTP 409`); *in Abschnitt 13 um 6 SQLite-Tests auf **`20/20` OK** erweitert*. | Verifiziert per `unittest` &amp; Live-API |
 
 </details>
 
@@ -243,7 +245,7 @@ Da die Pitwall-Weboberfläche (`:8080`) ohne Login arbeitet, darf Port `8080` bz
 - **Offizielle API, aktuelles SDK &amp; Key-Hygiene:** `0` Funde veralteter SDKs (`google-generativeai` / `@google/generative-ai`), `0` echte geleakte Google-API-Keys (`antigravity_safety_policies.py` Zeile `195` enthält nur einen Unit-Test-Dummy). [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py#L5121-L5201) nutzt einen einzelnen eigenen `GEMINI_API_KEY` aus `/etc/telemetry-relay.env` (`chmod 600 root:root`) direkt gegen `https://generativelanguage.googleapis.com/v1beta/interactions`; [`hybrid_llm_router.py`](file:///c:/Users/strik/git-labor/labs/03_python/hybrid_llm_router.py) und `ollama_router.py` verwenden nur Ollama, Vertex ADC (`gen-lang-client-0668043276`) oder `GEMINI_API_KEY`.
 - **4 Hygiene-Hinweise (keine ToS-Verletzung):**
   1. **`Archibald` (`192.168.178.98`):** Bei nächster Aktivierung kurz verifizieren, dass `cli-proxy-api.service` weiterhin `inactive` ist.
-  2. **[`.mcp.json`](file:///c:/Users/strik/git-labor/.mcp.json) (Commit `7ccb919`):** Nutzt offiziellen Google-LLC-Code ([`mcp_proxy.js`](file:///c:/Users/strik/.vscode/google_data_cloud_tools/mcp_proxy.js), Apache-2.0, ToS-konform), dupliziert aber `12` bereits am 23.11. bereinigte `datacloud_*_remote`-Einträge.
+  2. **[`.mcp.json`](file:///c:/Users/strik/git-labor/.mcp.json) (Commit `7ccb919`):** Nutzt offiziellen Google-LLC-Code ([`mcp_proxy.js`](file:///c:/Users/strik/.vscode/google_data_cloud_tools/mcp_proxy.js), Apache-2.0, ToS-konform), duplizierte aber `12` bereits am 23.11. bereinigte `datacloud_*_remote`-Einträge *(in Abschnitt 12 bereinigt: Dubletten entfernt, `datacloud_*_remote` auf `"tools": []` deaktiviert)*.
   3. **GitHub-PAT in [`mcp_config.json`](file:///c:/Users/strik/.gemini/config/mcp_config.json#L35):** Unabhängig von Google-ToS liegt dort weiterhin ein Klartext-GitHub-PAT (Rotation empfohlen).
   4. **NetBird Access Control:** Im Dashboard sicherstellen, dass nur eigene Geräte auf den StrikerPi (`/api/llm/gemini`) zugreifen dürfen.
 
@@ -263,6 +265,112 @@ Die Live-Diagnose des sporadisch anlaufenden/geräuschvollen Lüfters auf dem **
 
 </details>
 
+<details>
+<summary><b>12. VS Code 1.146 Agents Window: Ollama-Freischaltung, <code>.copilot</code>-ACL-Reparatur &amp; MCP-Tool-Budget</b></summary>
+
+<details>
+<summary><b>12.1 Agents-Window-Freischaltung für <code>Ollama.ollama</code> (<code>vendor: "ollama-models"</code>)</b></summary>
+
+- **Ursache:** In VS Code `1.146` ist der eingebaute Provider `vendor: "ollama"` als deprecated markiert, während die Extension `ollama.ollama` (`0.0.14`) im Manifest kein `capabilities.agentsWindow.supported: true` deklariert. Dadurch blockierte das **Agents Window** (`sessions.desktop.main.js`) die Extension und bot kein aktuelles Cyborg-Ollama-Modell an.
+- **Konfigurationslösung:**
+  - In [`settings.json`](file:///c:/Users/strik/AppData/Roaming/Code/User/settings.json#L359-L361) `"extensions.supportAgentsWindow": { "ollama.ollama": true }` gesetzt.
+  - In [`chatLanguageModels.json`](file:///c:/Users/strik/AppData/Roaming/Code/User/chatLanguageModels.json#L59-L63) den Endpunkt **`Ollama (VanstrikeCyborg RTX 5060)`** (`"vendor": "ollama-models"`, `"url": "http://127.0.0.1:11434"`) ergänzt.
+  - Scheduled Task **`Ollama-Server-Cyborg`** auf `VanstrikeCyborg` reaktiviert; Pitwall `/api/ollama/gpus?refresh=1` bestätigte anschließend `cyborg` `online: True` auf `http://192.168.178.172:11434` (`qwen3.5:4b` &amp; `gemma4:e4b`, je `32768` Kontext).
+
+</details>
+
+<details>
+<summary><b>12.2 <code>.copilot</code> NTFS-ACL- &amp; Transaction-Root-Reparatur (<code>os_error=5</code>)</b></summary>
+
+- **Auslöser:** Ein vorheriger Start von VS Code mit erhöhten Rechten setzte `Administratoren` als Dateibesitzer unter `C:\Users\strik\.copilot\`. Die Copilot-/Agent-Host-Runtime prüft strikte `0600`-Privat-ACLs (`OWNER RIGHTS`, `SYSTEM`, `Administratoren`, ohne geerbte Benutzerrechte) und brach sonst mit `(modelSelectionFailed)` / `os_error=5` ab.
+- **Folgeproblem (`The protected transaction root changed`):** Nach Admin-`takeown` + `icacls /setowner "VANSTRIKECYBORG\strik"` entzog ein rekursiver `icacls ... /T`-Aufruf mit Vererbungsflags `(OI)(CI)` auf den Verzeichnissen `mcp-remote-installation-transactions` und `credential-proxy-ca` die `*S-1-3-4`-Berechtigung auf 7 Einzeldateien.
+- **Endgültiger Fix:** Re-Apply der SID-Rechte per Einzeldatei **ohne** `(OI)(CI)` (`icacls <file> /inheritance:r /grant:r "*S-1-3-4:(F)" "*S-1-5-18:(F)" "*S-1-5-32-544:(F)"`). Damit blieben Besitzer, Lesbarkeit und NTFS-`file_index` konsistent (`mcp-config.json` in-place editiert, `com.figma.mcp/mcp` wegen des `mcp-installations.json`-Fingerprints unberührt gelassen).
+
+</details>
+
+<details>
+<summary><b>12.3 128-Tool-Limit, 66.281-Token-Prompt-Überlauf &amp; MCP-Tool-Bereinigung</b></summary>
+
+- **Diagnose:** Der `ByokLmProxyService` erzwingt ein hartes Limit von **`128` Tools**. Im Ausgangszustand waren `237` Tools geladen (`109` verworfen). Zudem greift `chat.agentHost.experimental.mcpToolRouting` bei lokalen Ollama-BYOK-Modellen mangels Cloud-Tool-Suche nicht: Der aufgeblähte System-Prompt wuchs für `qwen3.5:4b` auf **`66.281` Tokens** (`exceeded Ollama context 32768`, automatischer Retry mit `num_ctx=70656`), wodurch die `55 W`-RTX-5060 bei `~90 %` Last / `47 W` / `70 °C` stark verzögert antwortete.
+- **Umgesetzte Maßnahmen** (Backups unter `C:\Users\strik\AppData\Roaming\Code\User\_mcp_backups_20261126_1532\` mit `copilot_mcp-config.json` &amp; `git-labor_.mcp.json`):
+  1. **[`settings.json`](file:///c:/Users/strik/AppData/Roaming/Code/User/settings.json#L31-L361):** `chat.mcp.discovery.enabled` (`claude-desktop`, `copilot`, `cursor-workspace` auf `false`), `chat.agentHost.githubMcpServer.enabled: false`, `chat.agentHost.computerUse.enabled: false`, `"ollama.thinkingLevels": { "qwen3.5:4b": false }` (verhindert zähe Denkschleifen auf 4B) sowie Übernahme von `chat.agentHost.githubMcpServer.enabled`, `chat.agentHost.computerUse.enabled` und `ollama.thinkingLevels` in `workbench.settings.applyToAllProfiles` (notwendig, da das Agents Window das interne Profil `profiles/builtin/agents` nutzt).
+  2. **[`settings.json` (`.copilot`)](file:///c:/Users/strik/.copilot/settings.json):** `"enabledPlugins": { "computer-use": false }`.
+  3. **[`mcp-config.json`](file:///c:/Users/strik/.copilot/mcp-config.json) &amp; [`.mcp.json`](file:///c:/Users/strik/git-labor/.mcp.json):** Fehlerhaften Eintrag `io.github.github/github-mcp-server.acc` (HTTP `422`) und Dubletten (`chrome-devtools`, `microsoft-learn`) entfernt; ressourcenintensive Server (`nvidia-app`, `github` / `io.github.github/github-mcp-server`, `chrome-devtools-mcp`, `microsoftdocs/mcp`, `markitdown`, `local-workspace-filesystem` sowie alle `12` `datacloud_*_remote`-Server) auf `"tools": []` deaktiviert; `io.github.shariqriazz/google-ai-search-mcp` mit `["*"]` (sowie `com.figma.mcp/mcp` wegen Installations-Fingerprint in `.copilot`) beibehalten.
+  4. **Validierung &amp; Übergabe:** Alle bearbeiteten JSON-Dateien per `ConvertFrom-Json` validiert und im Leitstand als Handoff [`cyborg_tool_budget_20261126_1326`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/doc_handoffs/handoff_cyborg_tool_budget_20261126_1326.md) (`VerifiedSuccess`) dokumentiert.
+
+</details>
+
+</details>
+
+<details>
+<summary><b>13. StrikerPi SQLite Leitstand-Datenbank &amp; Werkzeug-Bibliothek (<code>/opt/general-sim/data/leitstand.db</code> — LIVE)</b></summary>
+
+<details>
+<summary><b>13.1 Architektur &amp; Betriebsmodell (Rekonstruierbarer Index über Rohdaten-Master)</b></summary>
+
+- **Technologiewahl auf `StrikerPi` (`192.168.178.86`):** Python **`3.14.9`** + SQLite **`3.54.1`** (`4` CPU-Kerne, `3,7 GiB` RAM, SSD), implementiert in [`leitstand_db.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/leitstand_db.py) ausschließlich mit der Python-Standardbibliothek (keine externen Pakete).
+- **Schema &amp; Nebenläufigkeit:** Datenbankdatei `/opt/general-sim/data/leitstand.db` im **WAL-Modus** (`PRAGMA journal_mode=WAL`, `PRAGMA busy_timeout=5000`), **Single-Writer** (`General Sim`), `schema_migrations` (`v1`) und **6 Kernstrukturen**: `tools_catalog`, `agent_tool_assignments`, `log_entries`, `log_entries_fts` (`FTS5`, Tokenizer `unicode61`), `capability_gaps` und `sync_runs`.
+- **Rohdaten bleiben Master (`Source of Truth`):** `toolbox.json` (unter `shared/memories/`), `leitstand_protocol.jsonl` und Worker-Outbox-JSONs bleiben die führende Evidenzquelle; `leitstand.db` arbeitet als schneller Index, der jederzeit per `db sync` nachgezogen oder per `db rebuild` komplett aus den Rohdaten neu aufgebaut werden kann.
+- **Atomare Online-Backups &amp; Ressourcenhygiene:** `backup_db()` sichert über `sqlite3.backup()` atomar in `/opt/general-sim/data/backups/leitstand_<YYYYMMDD_HHMMSS>.db`, erzwingt anschließend `PRAGMA integrity_check` (`"ok"`) und hält automatisch die letzten **`14` Backups** vor (`keep=14`). Der Context-Manager `open_db()` (plus `contextlib.closing()` beim Backup) schließt SQLite-Verbindungen deterministisch am Blockende (verhindert `[WinError 32]` unter Windows).
+
+</details>
+
+<details>
+<summary><b>13.2 Befehle: StrikerPi-Terminal (<code>general-sim&gt;</code>) vs. Remote-SSH</b></summary>
+
+In [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) (`handle_db_command`, Backup auf Pi: `/opt/general-sim/general_sim_terminal.py.bak_20261126_pre_sqlite`) stehen **7 `db`-Befehle** bereit:
+
+| Befehl im `general-sim&gt;`-Terminal | Funktion |
+| :--- | :--- |
+| `db init` | Legt Schema (WAL, Tabellen, `FTS5`-Index, `schema_migrations`) idempotent an |
+| `db stats` | Zeigt Tabellenstände, Dateigröße, `budget_status` je Agent &amp; letzten `sync_runs`-Eintrag |
+| `db sync` | Synchronisiert Live-Daten von `/api/leitstand/toolboxes`, `/api/leitstand/protocol` &amp; `/api/logs/history` |
+| `db rebuild` | Leert Index-Tabellen transaktional und baut sie verlustfrei aus den Rohdaten neu auf |
+| `db tools [agent]` | Listet Werkzeuge aus `tools_catalog` inkl. Rolle, `risk_class` &amp; Freigabe-Status |
+| `db search <Suchbegriff>` | `FTS5`-Volltextsuche (`unicode61`) über Protokolle, Prompts, Summaries &amp; Outputs |
+| `db backup` | Atomares Online-Backup per `sqlite3.backup()` inkl. `PRAGMA integrity_check` &amp; Rotation (`14`) |
+
+- **Aufruf-Geltungsbereich:** Die interaktive `db ...`-Kurzform funktioniert direkt im **`general-sim&gt;`-Terminal auf dem StrikerPi** (`/opt/general-sim/start_general_sim_terminal.sh`). Aus jedem anderen Terminal (PowerShell, VS Code, SimRacer) wird derselbe Python-Unterbau direkt per SSH-Einzeiler angesteuert:
+
+```bash
+ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py stats"
+ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py sync"
+ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py tools rig"
+ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py search \"qwen3.5:4b\""
+ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py backup"
+```
+
+</details>
+
+<details>
+<summary><b>13.3 Fünf verbindliche Bibliotheks-Organisationsregeln (<code>BIBLIOTHEKS_ORGANISATION_LEITFADEN.md</code>)</b></summary>
+
+General Sim wurde über [`BIBLIOTHEKS_ORGANISATION_LEITFADEN.md`](file:///c:/Users/strik/strikerpi-hub/general-sim/BIBLIOTHEKS_ORGANISATION_LEITFADEN.md) (deployed unter `/opt/general-sim/BIBLIOTHEKS_ORGANISATION_LEITFADEN.md`) auf fünf verbindliche Regeln verpflichtet:
+
+1. **Rollen-Strikt-Prinzip &amp; Ollama-Tool-Budget einhalten:** Max. **`8–12` aktive Tools/Agent** für Cyborg `qwen3.5:4b` (`ok_cyborg_and_simracer`) bzw. max. **`10–20` aktive Tools/Agent** für SimRacer `qwen3.5:9b` (`simracer_only`, bei VS-Code-BYOK-Hardlimit `128`), laufend überwacht per `db stats` (`agent_budgets`).
+2. **Kanonische IDs &amp; vollständige Metadaten pflegen:** ID-Konvention `<agent_id>:<snake_case_name>` sowie Pflichtfelder `capability_title`, `risk_class`, `requires_approval`, `handler_type`, `handler_path`, `verification_spec` und schlankes `ollama_schema`; keine funktionalen Dubletten über Rollen/MCP-Server streuen (`db tools`).
+3. **Dual-Approval &amp; Governance (`download_enabled: false`):** Neue Werkzeuge dürfen nur aus real erfassten `capability_gaps` abgeleitet und nach Freigabe durch **General Cyborg + Nutzer** (unter Change-Freeze) zugewiesen werden; kein Auto-Download.
+4. **Rohdateien bleiben Master (`Source of Truth`):** `toolbox.json` und Log-/Outbox-Dateien bleiben maßgeblich; nach Änderungen `db sync`, bei Inkonsistenzen `db rebuild`.
+5. **Backup- &amp; Audit-Routine vor Änderungen:** Vor größeren Umbauten immer `db backup` (`integrity_check: ok`), bei Analysen zuerst `db search` (`FTS5`) ausführen.
+
+</details>
+
+<details>
+<summary><b>13.4 Live-Verifikation &amp; Onboarding (26.11.2026)</b></summary>
+
+| Prüfpunkt | Verifizierter Live-Stand (`26.11.2026`) |
+| :--- | :--- |
+| **SQLite-Datei (`StrikerPi`)** | `/opt/general-sim/data/leitstand.db` (`1.724.416` Bytes, `journal_mode: wal`, `schema_version: 1`, `sync_runs: 2`) |
+| **Werkzeug-Katalog (`tools_catalog`)** | **`29` Werkzeuge** &amp; **`29` Zuweisungen** über 6 Rollen: `dark: 6`, `general-sim: 3`, `light: 7`, `rick: 2`, `rig: 8`, `sarah: 3` — alle `ok_cyborg_and_simracer` |
+| **Logs &amp; Capability-Gaps** | **`104` Einträge** in `log_entries` &amp; `log_entries_fts` (`FTS5 unicode61`), **`5` `capability_gaps`** |
+| **Online-Backup &amp; FTS5-Suche** | `/opt/general-sim/data/backups/leitstand_20261126_144839.db` (`integrity_check: "ok"`); `search "qwen3.5:4b"` (`2` Treffer) &amp; `search "Bibliothek"` (`protocol:general_sim_db_library_briefing_20261126_1555`) |
+| **Automatisierte Unit-Tests** | **`20/20` Tests OK** (`6/6` in [`test_leitstand_db.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/test_leitstand_db.py), `8/8` in `test_general_sim_terminal.py`, `6/6` in `test_agent_registry.py`); `telemetry-relay.service` `active` |
+| **Onboarding &amp; Ausblick** | Leitfaden `/opt/general-sim/BIBLIOTHEKS_ORGANISATION_LEITFADEN.md` (`5,4K`, `chmod 644`) + DocHandoff [`general_sim_db_library_briefing_20261126_1555`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/doc_handoffs/handoff_general_sim_db_library_briefing_20261126_1555.md) (`VerifiedSuccess`); nächster Schritt: automatischer `systemd`-Timer für periodisches `sync`/`backup` + Pitwall-UI-Integration |
+
+</details>
+
+</details>
+
 </details>
 
 <details>
@@ -272,6 +380,8 @@ Die Live-Diagnose des sporadisch anlaufenden/geräuschvollen Lüfters auf dem **
 2. **Dual-GPU-Verwaltung testen:** Wechsle auf den Sub-Tab `🧠 GPU-Modelle`, lade `qwen3.5:4b` (`32K`) auf **Cyborg RTX 5060**, prüfe die VRAM-Anzeige (`~4775 / 8151 MiB`) und entlade es wieder per `⏹️ Entladen`.
 3. **5070-Ti-Sperrfall simulieren:** Sperre auf `🤖 Agenten &amp; Status` die `5070 Ti`, prüfe im Tab `🧠 GPU-Modelle`, dass der Routing-Banner auf **`⚡ Fallback aktiv (Pitwall 5070-Ti-Sperre)`** umspringt, und starte eine Analyse über `@rig` oder `@dark`.
 4. **KI-Schaltweiche umschalten (CLI &amp; Pitwall):** Prüfe die aktuelle Matrix mit [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1), schalte z. B. gezielt `@dark` temporär auf `gemini` (`-Agent dark -Backend gemini`), teste eine Read-Only-Analyse und stelle per `-Agent dark -Backend inherit` wieder auf Standard-Ollama zurück.
+5. **SQLite-Leitstand-DB &amp; FTS5 testen:** Rufe per `ssh strikerpi "/opt/telemetry-relay/.venv/bin/python /opt/general-sim/leitstand_db.py stats"` die aktuellen Rollen-Budgets ab, prüfe mit `search "Bibliothek"` den `FTS5`-Index und erstelle per `backup` ein Online-Backup inkl. `integrity_check`.
+6. **VS Code Agents Window mit `qwen3.5:4b` verifizieren:** Öffne nach `Developer: Reload Window` einen neuen Chat mit `General Cyborg` und `qwen3.5:4b` und prüfe, dass keine `128-Tools`-Warnung erscheint und das Modell dank deaktiviertem Thinking ohne Schleife direkt antwortet.
 
 </details>
 
@@ -282,7 +392,8 @@ Die Live-Diagnose des sporadisch anlaufenden/geräuschvollen Lüfters auf dem **
 - **Cyborg Ollama-Startskript:** [`start-ollama-laptop.ps1`](file:///C:/Users/strik/AppData/Local/Programs/Ollama/start-ollama-laptop.ps1) · **SimRacer:** [`start-ollama-simracer.ps1`](file:///192.168.178.68/ac-sandbox/shared/scripts/start-ollama-simracer.ps1)
 - **Routing, Schaltweiche &amp; Profile:** [`ollama_router.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/ollama_router.py) · [`hybrid_llm_router.py`](file:///c:/Users/strik/git-labor/labs/03_python/hybrid_llm_router.py) · [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1) · [`ollama_gpu_profiles.json`](file:///192.168.178.68/ac-sandbox/shared/scripts/ollama_gpu_profiles.json)
 - **Angepasste Agenten-Skripte:** [`agent_ollama_tool_runtime.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/agent_ollama_tool_runtime.py) · [`rig_ollama_vr_analyzer.py`](file:///192.168.178.68/ac-sandbox/shared/scripts/rig_ollama_vr_analyzer.py) · [`start_light_terminal.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`runner.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/dark/runner.ps1) · [`sarah_worker.py`](file:///192.168.178.68/ac-sandbox/shared/telemetry/sarah_worker.py) · [`start_general_terminal.ps1`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/start_general_terminal.ps1)
-- **Pitwall Hub (StrikerPi):** [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (`http://192.168.178.86:8080`) · [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json) · [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py)
+- **Pitwall Hub &amp; StrikerPi SQLite-DB:** [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (`http://192.168.178.86:8080`) · [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json) · [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) · [`leitstand_db.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/leitstand_db.py) · [`test_leitstand_db.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/test_leitstand_db.py) · [`BIBLIOTHEKS_ORGANISATION_LEITFADEN.md`](file:///c:/Users/strik/strikerpi-hub/general-sim/BIBLIOTHEKS_ORGANISATION_LEITFADEN.md)
+- **Leitstand-Handoffs (26.11.2026):** [`handoff_cyborg_tool_budget_20261126_1326.md`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/doc_handoffs/handoff_cyborg_tool_budget_20261126_1326.md) · [`handoff_general_sim_db_library_briefing_20261126_1555.md`](file:///192.168.178.68/ac-sandbox/shared/agents/general-SIM/doc_handoffs/handoff_general_sim_db_library_briefing_20261126_1555.md)
 - **Rollen-Umsetzung &amp; Launcher:** [`rollen-terminals-pitwall-umsetzung.md`](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md) · [`Agent-Terminals.ps1`](file:///c:/Users/strik/git-labor/labs/Agent-Terminals.ps1)
 - **Archibald-Lüfterentwurf (`NOT DEPLOYED`):** [`tlp-idle.conf`](file:///c:/Users/strik/git-labor/fanscripts/tlp-idle.conf) · [`fan-watchdog.sh`](file:///c:/Users/strik/git-labor/fanscripts/fan-watchdog.sh) · [`fan-quiet-test.md`](file:///c:/Users/strik/git-labor/Systemtests/fan-quiet-test.md)
 
@@ -296,9 +407,11 @@ Die Live-Diagnose des sporadisch anlaufenden/geräuschvollen Lüfters auf dem **
 - **Automatischer 5070-Ti-Fallback:** Bei `LIVE_RACE` (`acs.exe`/`vrserver.exe`) oder Pitwall-Sperre routet `ollama_router.py` SimRacer-Agenten nahtlos auf Cyborgs RTX 5060 (`qwen3.5:4b @ 32768`) bei `0 %` 5070-Ti-Last.
 - **Pitwall `🧠 GPU-Modelle`:** Live-Übersicht beider GPUs inkl. Kontext-Wahl, `Entladen`, `Laden/Tauschen` (mit Fahrbetrieb-HTTP-409-Schutz) und 2-Klick-`Deinstallieren`.
 - **Zentrale KI-Schaltweiche (`ollama` / `auto` / `gemini`):** Alle Agenten sind global oder individuell per Pitwall UI, `@general llm` oder [`Switch-LlmBackend.ps1`](file:///c:/Users/strik/git-labor/labs/Switch-LlmBackend.ps1) zwischen lokalem Ollama und Google Gemini Cloud (`google-genai` Interactions API bzw. StrikerPi LAN-Bridge `/api/llm/gemini`) umschaltbar.
-- **Kanonische 7-Rollen-Registry (`LIVE` auf StrikerPi):** [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json), [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) &amp; [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (SHA256 `5e290c4b…`, Backup `.bak_20261126_pre_registry`) trennen `cyborg` (Laptop) und `general-sim` (`/opt/general-sim/` auf StrikerPi = `available` / `READY`); `14/14` Unit-Tests und Live-API-Checks bestanden.
+- **Kanonische 7-Rollen-Registry (`LIVE` auf StrikerPi):** [`agent_registry.json`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/agent_registry.json), [`general_sim_terminal.py`](file:///c:/Users/strik/strikerpi-hub/general-sim/general_sim_terminal.py) &amp; [`telemetry_relay.py`](file:///c:/Users/strik/strikerpi-hub/telemetry-relay/telemetry_relay.py) (SHA256 `5e290c4b…`, Backup `.bak_20261126_pre_registry`) trennen `cyborg` (Laptop) und `general-sim` (`/opt/general-sim/` auf StrikerPi = `available` / `READY`); `20/20` Unit-Tests (mit SQLite) und Live-API-Checks bestanden.
 - **NetBird-Mesh (`100.95.181.226` ↔ `.101.63`) ohne FRITZ!Box:** P2P-WireGuard zwischen `routing-peer.netbird.cloud` (Setup-Key, `ip_forward=1`, Route `192.168.178.0/24` über WLAN &amp; LAN) und `vanstrikecyborg.netbird.cloud`; Pitwall-Bridge `/api/llm/gemini` lässt `100.64.0.0/10` zu (`d5cde7f`), SSH über `strikerpi-ext`.
 - **Google-ToS-Audit &amp; Pi-Thermik:** Gesamtsystem **ToS-konform** (`0` Proxy-Ports/`:8317`-Altlasten, `0` alte SDKs, `0` Key-Leaks; Archibald offline); StrikerPi läuft kühl bei `37,0–37,5 °C` ohne Lüfterdienst, wobei `enable_uart=1` / `serial-getty@ttyS1` GPIO 14 (Pin 8) belegt.
+- **VS Code 1.146 Agents Window &amp; MCP-Tool-Budget:** `extensions.supportAgentsWindow` schaltet `ollama.ollama` frei; `.copilot`-ACLs (`0600` per SID ohne `(OI)(CI)` auf Einzeldateien) repariert; MCP-Tool-Last bereinigt (`datacloud_*_remote`/Schwergewichte auf `"tools": []`), `applyToAllProfiles` + `ollama.thinkingLevels: {"qwen3.5:4b": false}` beseitigen `128`-Tool-Warnung &amp; `66K`-Token-Prompt-Überlauf.
+- **StrikerPi SQLite Leitstand-DB (`LIVE`):** `/opt/general-sim/data/leitstand.db` (`leitstand_db.py`, SQLite `3.54.1`, WAL + FTS5 `unicode61`) indexiert **`29` Werkzeuge** (6 Rollen, alle `ok_cyborg_and_simracer`), **`104` Logs** und **`5` Capability-Gaps** über Rohdaten-Master (`db sync`/`rebuild`/`backup`/`search` im Terminal &amp; per SSH), flankiert von 5 Bibliotheks-Organisationsregeln ([`BIBLIOTHEKS_ORGANISATION_LEITFADEN.md`](file:///c:/Users/strik/strikerpi-hub/general-sim/BIBLIOTHEKS_ORGANISATION_LEITFADEN.md)) und **`20/20` Unit-Tests**.
 
 </details>
 

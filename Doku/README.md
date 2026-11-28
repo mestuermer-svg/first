@@ -1,6 +1,6 @@
 > **Thema:** Zentrales Handbuch & Inhaltsverzeichnis der Wissensdatenbank (`Doku/`) im Test- und Lern-Workspace `git-labor`
 > **Autor:** Michael Stürmer
-> **Datum:** 26.11.2026
+> **Datum:** 27.11.2026
 
 # Wissensdatenbank & Lern-Handbuch (`git-labor/Doku`)
 
@@ -129,7 +129,9 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 * **[04_agenten-trainieren-primen-und-orchestrieren.md](./05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md)** – Priming-Methodik, 3-Stufen-Memory (`/memories/`), Evaluierung (`analyze-prompt`) und die Architektur um den **General Agenten** auf `VanstrikeCyborg`.
 * **[05_workspace-schnittstelle-simracer-und-agenten-terminals.md](./05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md)** – Task-Queue (`inbox/` $\rightarrow$ `outbox/`), Freigabe-Gate (`@rig`/`@light` ↔ `@general`) inkl. Policy `AUTO`/`MANUAL` & MQTT-Anbindung, SSH-Launcher (`Agent-Terminals.ps1` / `-ClientMode`), `@rick` auf StrikerPi (`simrig.git`), [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md) und Bridge-Skripte.
 * **[05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md](./05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md)** – 5-Knoten-Topologie (Laptop, SimRacer, Sandbox, Archibald, StrikerPi), Multi-Root-Workspace, Port-Matrix, **7-Rollen-Verbund** (`@cyborg`, `@general-sim [LIVE auf StrikerPi]` + Legacy `@general`), Dual-GPU Ollama und Handshake mit Pre-Flight-Check.
-* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)** – Letztstand 26.11.2026 (Cyborg Ollama `0.40.18`-Reparatur, Pro-GPU-Kontextprofile für RTX 5070 Ti &amp; 5060, Fallback-Routing `ollama_router.py`, zentrale **KI-Schaltweiche**, Pitwall-Tab `🧠 GPU-Modelle`, 7-Rollen-Registry **LIVE auf StrikerPi** &amp; Archibald-Lüfter-Entwurf).
+* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md)** – **Letztstand 27.11.2026** (Host-vs.-Sandbox-Trennung, Light/Rig-Koordination, Pitwall SQLite/Tool-Swap/Touch-Terminals, Auto-Dual-GPU-Routing &amp; Nachmittags-Härtung: Timeouts, `:2222`-SSH/WebSocket, Token-Limits, `@light`-Executors &amp; `@dark`-Grafik/Replay/`SkipIfPresent`).
+* **[NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md](./05_Agents/NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md)** – NotebookLM Audio-Bericht &amp; flache Systemzusammenfassung (`27.11.2026`).
+* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)** – Stand 26.11.2026 (Cyborg Ollama `0.40.18`-Reparatur, Pro-GPU-Kontextprofile für RTX 5070 Ti &amp; 5060, Fallback-Routing `ollama_router.py`, zentrale **KI-Schaltweiche**, Pitwall-Tab `🧠 GPU-Modelle`, 7-Rollen-Registry **LIVE auf StrikerPi** &amp; Archibald-Lüfter-Entwurf).
 * **[Rollen-, Terminal- und Pitwall-Umsetzung](../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md)** – Kanonische Rollen-IDs (`agent_registry.json`), General-Cyborg/General-Sim-Trennung (**LIVE** auf StrikerPi) und Legacy-Übergang.
 * **[PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md](./05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md)** – Komplette Pitwall- (`v2.2.0`) &amp; Architektur-v5-Referenz (inkl. GPU-Modelle, KI-Schaltweiche &amp; REST/WS-API) für NotebookLM.
 * **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md)** – Stand 25.11.2026 (Architektur v5, Werkzeugkoffer, `light_verifier.py` QA, Pitwall v2.1 &amp; 64K-Ollama-Umstellung).
@@ -192,7 +194,7 @@ details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 <div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11.</a></div>
+<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11.</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
 <div class="doku-arch-card-title">🐧 <a href="01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
@@ -239,7 +241,9 @@ details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 <li>├─ <a href="05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../.github/agents/light.agent.md">@light</a></li>
 <li>├─ <a href="05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
 <li>├─ <a href="05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 7-Rollen-Verbund</a></li>
-<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Letztstand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11. (Host/Sandbox, Pitwall, Härtung &amp; Dual-GPU)</a></li>
+<li>├─ <a href="05_Agents/NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md">NotebookLM Audio-Bericht 27.11.</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Stand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
 <li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
 <li>├─ <a href="05_Agents/HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md">Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)</a></li>
 <li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)</a></li>
