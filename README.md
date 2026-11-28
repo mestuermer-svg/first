@@ -2,11 +2,11 @@
 
 Dieses Repository ist das zentrale **Test-, Lern- und Entwicklungs-Labor** auf dem Hauptarbeitsplatz (`VanstrikeCyborg`). Die Workspace-Datei [`git-labor.code-workspace`](./git-labor.code-workspace) wird in VS Code als **Sim Werkstatt | General Cyborg** angezeigt und bündelt die fünf Arbeits-Repositories der Sim-Werkstatt.
 
-Das Assetto-Corsa-Content-Projekt behält zusätzlich sein eigenes Workspace [`assetto-corsa-content.code-workspace`](../assetto-corsa-content/assetto-corsa-content.code-workspace), angezeigt als **Assetto Corsa Content**. Dieses Projekt-Workspace bleibt separat; die Sim-Werkstatt bindet das Content-Repository weiterhin als einen ihrer fünf Ordner ein. Das `git-labor` enthält **5 strukturierte Fachrubriken** mit vollständiger Wissensdatenbank unter **[`Doku/`](./Doku/README.md)** sowie praktischen Übungsumgebungen unter **`labs/`** und **`notebook-agent-environments/`**.
+Das Assetto-Corsa-Content-Projekt behält zusätzlich sein eigenes Workspace [`assetto-corsa-content.code-workspace`](../assetto-corsa-content/assetto-corsa-content.code-workspace), angezeigt als **Assetto Corsa Content**. Dieses Projekt-Workspace bleibt separat; die Sim-Werkstatt bindet das Content-Repository weiterhin als einen ihrer fünf Ordner ein. Das `git-labor` enthält **7 strukturierte Fachrubriken** mit vollständiger Wissensdatenbank unter **[`Doku/`](./Doku/README.md)** sowie praktischen Übungsumgebungen unter **`labs/`** und **`notebook-agent-environments/`**.
 
 ---
 
-## 1. Die 5 Lern- & Test-Rubriken im Überblick
+## 1. Die 7 Lern- & Test-Rubriken im Überblick
 
 | Rubrik | Dokumentation (`Doku/`) | Praxis- & Testbereich | Themenfokus |
 | :--- | :--- | :--- | :--- |
@@ -15,12 +15,14 @@ Das Assetto-Corsa-Content-Projekt behält zusätzlich sein eigenes Workspace [`a
 | **03 – Python Coding** | [`Doku/03_Python_Coding/`](./Doku/03_Python_Coding/README.md) | [`labs/03_python/`](./labs/03_python/sensor_demo.py) & [`notebook-agent-environments/`](./notebook-agent-environments/README.md) | Moderne Umgebungen mit `uv` & `.venv`, Jupyter Notebooks (Python 3.14), `google-genai` SDK & Interactions API, Pylance Type Hints & `pytest`. |
 | **04 – JS & TS (Web)** | [`Doku/04_JS_TS_Web/`](./Doku/04_JS_TS_Web/README.md) | [`labs/04_js_ts_web/rechner.html`](./labs/04_js_ts_web/rechner.html) | HTML5, CSS3, Browser-DOM, modernes JavaScript (ES6+, `async/await`), statisch typisiertes TypeScript (`tsconfig.json`), Node.js & `@google/genai`. |
 | **05 – Agents** | [`Doku/05_Agents/`](./Doku/05_Agents/README.md) | [`AGENTS.md`](./AGENTS.md), [`.github/instructions/`](./.github/instructions/gemini-api.instructions.md) & [`.agents/skills/`](./.agents/skills/) | Verbindliche Stilfibel & Didaktik-Ruler (`<details>`-Regel), Agenten erstellen (`*.agent.md`, `*.instructions.md`), mit Skills & MCP (`geminiDocs`) ausrüsten, primen/trainieren & orchestrieren. |
+| **06 – AC `.kn5` Modding** | [`Doku/06_AC_KN5_Modding/`](./Doku/06_AC_KN5_Modding/README.md) | [`labs/06_ac_kn5_modding/`](./labs/06_ac_kn5_modding/README.md) | Binäres `.kn5`-Format (`sc6969`, Texturen, Shader, `collider.kn5`), Toolchain (Blender, `ksEditor`, CM Showroom), non-destruktives CSP `ext_config.ini` & `@dark` Sandbox-Gate. |
+| **07 – VR Engineering** | [`Doku/07_VR_Engineering/`](./Doku/07_VR_Engineering/README.md) | [`labs/07_vr_engineering/`](./labs/07_vr_engineering/README.md) | VR-Signalweg (`90 Hz` / `11,11 ms`), SteamVR `vrcompositor.txt`-Diagnose (`AcquireSync`), AC/CSP-VR-Invarianten (`Single Pass Stereo`, `pureVR`) & `@dark -> @rig` Testworkflow. |
 
 ---
 
 ## 2. Schnellzugriff auf die wichtigsten Einstiegspunkte
 
-* **[Zentrales Handbuch & Inhaltsverzeichnis (`Doku/README.md`)](./Doku/README.md)** – Komplette Übersicht aller 17 Lernskripte und Module.
+* **[Zentrales Handbuch & Inhaltsverzeichnis (`Doku/README.md`)](./Doku/README.md)** – Komplette Übersicht aller Lernskripte und Lab-Module.
 * **[Projektregeln für KI-Agenten (`AGENTS.md`)](./AGENTS.md)** – Gemeinsames Grundgesetz für GitHub Copilot & Google Antigravity.
 * **[Gemini API Guidelines (`.github/instructions/gemini-api.instructions.md`)](./.github/instructions/gemini-api.instructions.md)** – Automatische Regeln für Python-, JS/TS- und Notebook-Dateien (`google-genai`, `@google/genai`, `client.interactions.create`, `geminiDocs` MCP).
 * **[Didaktik-Ruler & Stilfibel (`Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md`)](./Doku/05_Agents/01_agent-stilfibel-und-didaktik-ruler.md)** – Vorgabe für ausklappbare `<details>`-Strukturen und Chips.
@@ -46,6 +48,8 @@ Das Assetto-Corsa-Content-Projekt behält zusätzlich sein eigenes Workspace [`a
 .doku-arch-card.r3 { border-left-color: #eab308; }
 .doku-arch-card.r4 { border-left-color: #ec4899; }
 .doku-arch-card.r5 { border-left-color: #a855f7; }
+.doku-arch-card.r6 { border-left-color: #f97316; }
+.doku-arch-card.r7 { border-left-color: #06b6d4; }
 .doku-arch-card-title { font-weight: 700; font-size: 0.95em; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed rgba(148, 163, 184, 0.25); }
 .doku-arch-card-title a { color: #f8fafc !important; text-decoration: none !important; display: block; }
 .doku-arch-card-title a:hover { color: #60a5fa !important; }
@@ -66,8 +70,8 @@ details.doku-minimap .minimap-preview-strip span { background: rgba(30, 41, 59, 
 details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
-<div class="minimap-preview-strip"><span>01 Linux</span><span>02 VSCode</span><span>03 Python</span><span>04 JS/TS</span><span>05 Agents</span></div>
+<summary><span>🗺️ Doku-Minimap (7 Rubriken &amp; Labs)</span><span title="Klicken zum Vergrößern / Einklappen">⛶</span></summary>
+<div class="minimap-preview-strip"><span>01 Linux</span><span>02 VSCode</span><span>03 Python</span><span>04 JS/TS</span><span>05 Agents</span><span>06 KN5</span><span>07 VR</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
 <div class="doku-arch-root">🏛️ <a href="Doku/README.md">VanstrikeCyborg — git-labor Lern- &amp; Test-Architektur (Doku-Index)</a>  |  <a href="README.md">Repo-README</a>  |  <a href="AGENTS.md">AGENTS.md</a>  |  <a href="notebook-agent-environments/README.md">Notebooks</a></div>
@@ -114,6 +118,19 @@ details.doku-minimap .minimap-body { padding: 8px 12px 4px 12px; }
 <li>├─ <a href="Doku/05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href=".github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
 <li>├─ <a href="Doku/05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills (SKILL.md) &amp; MCP-Tools</a> <a class="doku-arch-badge" href=".agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
 <li>└─ <a href="Doku/05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Agenten trainieren, primen &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href=".github/agents/light.agent.md">@light</a> <a class="doku-arch-badge" href=".github/agents/rig.agent.md">@rig</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r6">
+<div class="doku-arch-card-title">🏎️ <a href="Doku/06_AC_KN5_Modding/README.md">06_AC_KN5_Modding (.kn5 &amp; Toolchain)</a></div>
+<ul class="doku-arch-lines">
+<li>└─ <a href="Doku/06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md">01 • `.kn5`-Binärformat, ext_config &amp; Sandbox-Gate</a> <a class="doku-arch-badge" href="labs/06_ac_kn5_modding/inspect_kn5.py">inspect_kn5.py</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r7">
+<div class="doku-arch-card-title">🥽 <a href="Doku/07_VR_Engineering/README.md">07_VR_Engineering (90 Hz VR &amp; @rig)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="Doku/07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md">01 • VR-Architektur, Frametimes &amp; Compositor-Diagnose</a> <a class="doku-arch-badge" href="labs/07_vr_engineering/analyze_vr_compositor.py">analyze_vr_compositor.py</a></li>
+<li>└─ <a href="labs/07_vr_engineering/README.md">Lab 07 • VR-Invarianten &amp; Read-Only Check</a> <a class="doku-arch-badge" href="labs/07_vr_engineering/Check-VrInvariants.ps1">Check-VrInvariants.ps1</a></li>
 </ul>
 </div>
 </div>

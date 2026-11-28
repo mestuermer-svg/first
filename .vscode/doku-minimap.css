@@ -83,6 +83,8 @@
 .doku-arch-card.r3 { border-top: 3px solid #f9e2af; }
 .doku-arch-card.r4 { border-top: 3px solid #94e2d5; }
 .doku-arch-card.r5 { border-top: 3px solid #cba6f7; }
+.doku-arch-card.r6 { border-top: 3px solid #fab387; }
+.doku-arch-card.r7 { border-top: 3px solid #74c7ec; }
 .doku-arch-card.active-rubric {
   box-shadow: 0 0 0 2px #89b4fa, 0 6px 18px rgba(137, 180, 250, 0.25);
 }

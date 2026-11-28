@@ -61,13 +61,13 @@ function Get-AgentLaunchDefinition {
             return @{ Mode = "SSH (StrikerPi)"; Script = ""; LaunchArgs = @("-t", "strikerpi", "bash -l /opt/general-sim/start_general_sim_terminal.sh") }
         }
         "rig" {
-            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_rig_terminal.ps1"; LaunchArgs = @("-t", "simracer", "powershell -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\scripts\connect_rig_terminal.ps1") }
+            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_rig_terminal.ps1"; LaunchArgs = @("-t", "simracer", "powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\agents\rig\start_rig_terminal.ps1 -ClientMode") }
         }
         "light" {
-            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_light_terminal.ps1"; LaunchArgs = @("-t", "simracer", "powershell -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\scripts\connect_light_terminal.ps1") }
+            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_light_terminal.ps1"; LaunchArgs = @("-t", "simracer", "powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\ac-sandbox\shared\agents\light\start_light_terminal.ps1 -ClientMode") }
         }
         "dark" {
-            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_dark_terminal.ps1"; LaunchArgs = @("-t", "ac-sandbox") }
+            return @{ Mode = "SSH -ClientMode"; Script = Join-Path $SharedScriptsRoot "connect_dark_terminal.ps1"; LaunchArgs = @("-t", "ac-sandbox", "powershell.exe -NoExit -ExecutionPolicy Bypass -File \\host.lan\Data\agents\dark\start_dark_terminal.ps1 -ClientMode") }
         }
         "sarah" {
             return @{ Mode = "SSH (Bash)"; Script = Join-Path $SharedScriptsRoot "connect_sarah_terminal.ps1"; LaunchArgs = @("-t", "archibald", "bash -l ~/ac-pitwall/start_sarah_terminal.sh") }

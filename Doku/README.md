@@ -1,10 +1,10 @@
 > **Thema:** Zentrales Handbuch & Inhaltsverzeichnis der Wissensdatenbank (`Doku/`) im Test- und Lern-Workspace `git-labor`
 > **Autor:** Michael Stürmer
-> **Datum:** 27.11.2026
+> **Datum:** 28.11.2026
 
 # Wissensdatenbank & Lern-Handbuch (`git-labor/Doku`)
 
-Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und Lern-Workspaces**. Nach der sauberen Ausgliederung der Assetto-Corsa-Spezifika in ihren eigenen Workspace sind hier alle allgemeinen Entwicklungs-, System- und KI-Themen in **5 klar getrennten Fachrubriken** gebündelt und nach den Vorgaben aus `agent_ruler.md` und `Agent-guidline.md` (mit standardmäßig geschlossenen `<details>`-Kapiteln) aufbereitet.
+Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und Lern-Workspaces**. Neben den allgemeinen Entwicklungs-, System- und KI-Themen stehen nun **7 klar getrennte Fachrubriken** inklusive praxisnaher Modding- & VR-Labore bereit, die nach den Vorgaben aus `agent_ruler.md` und `Agent-guidline.md` (mit standardmäßig geschlossenen `<details>`-Kapiteln) aufbereitet sind.
 
 <details>
 <summary><b>Architektur der 5 Lern- & Test-Rubriken</b></summary>
@@ -71,6 +71,18 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 <div class="doku-arch-row"><a href="./05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md" style="color:inherit;text-decoration:none;flex:1;" title="05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">• Trainieren: Priming, Memory & General Agent</a><a class="doku-arch-badge" href="./05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md" title="Direktlink: 05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">Orchestrator</a></div>
 </div>
 </div>
+<div class="doku-arch-card r6">
+<a class="doku-arch-card-head" href="./06_AC_KN5_Modding/README.md" title="Rubrik 06_AC_KN5_Modding öffnen"><span>06_AC_KN5_Modding</span><span class="doku-arch-badge">KN5, Blender & ksEditor</span></a>
+<div class="doku-arch-rows">
+<div class="doku-arch-row"><a href="./06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md" style="color:inherit;text-decoration:none;flex:1;" title="06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md">• KN5-Format, ext_config &amp; Toolchain</a><a class="doku-arch-badge" href="../labs/06_ac_kn5_modding/inspect_kn5.py" title="Direktlink: labs/06_ac_kn5_modding/inspect_kn5.py">inspect_kn5.py</a></div>
+</div>
+</div>
+<div class="doku-arch-card r7">
+<a class="doku-arch-card-head" href="./07_VR_Engineering/README.md" title="Rubrik 07_VR_Engineering öffnen"><span>07_VR_Engineering</span><span class="doku-arch-badge">90 Hz VR, SteamVR &amp; @rig</span></a>
+<div class="doku-arch-rows">
+<div class="doku-arch-row"><a href="./07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md" style="color:inherit;text-decoration:none;flex:1;" title="07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md">• VR-Architektur, Frametimes &amp; Invarianten</a><a class="doku-arch-badge" href="../labs/07_vr_engineering/analyze_vr_compositor.py" title="Direktlink: labs/07_vr_engineering/analyze_vr_compositor.py">analyze_vr_compositor.py</a></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -129,7 +141,8 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 * **[04_agenten-trainieren-primen-und-orchestrieren.md](./05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md)** – Priming-Methodik, 3-Stufen-Memory (`/memories/`), Evaluierung (`analyze-prompt`) und die Architektur um den **General Agenten** auf `VanstrikeCyborg`.
 * **[05_workspace-schnittstelle-simracer-und-agenten-terminals.md](./05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md)** – Task-Queue (`inbox/` $\rightarrow$ `outbox/`), Freigabe-Gate (`@rig`/`@light` ↔ `@general`) inkl. Policy `AUTO`/`MANUAL` & MQTT-Anbindung, SSH-Launcher (`Agent-Terminals.ps1` / `-ClientMode`), `@rick` auf StrikerPi (`simrig.git`), [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md) und Bridge-Skripte.
 * **[05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md](./05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md)** – 5-Knoten-Topologie (Laptop, SimRacer, Sandbox, Archibald, StrikerPi), Multi-Root-Workspace, Port-Matrix, **7-Rollen-Verbund** (`@cyborg`, `@general-sim [LIVE auf StrikerPi]` + Legacy `@general`), Dual-GPU Ollama und Handshake mit Pre-Flight-Check.
-* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md)** – **Letztstand 27.11.2026** (Host-vs.-Sandbox-Trennung, Light/Rig-Koordination, Pitwall SQLite/Tool-Swap/Touch-Terminals, Auto-Dual-GPU-Routing &amp; Nachmittags-Härtung: Timeouts, `:2222`-SSH/WebSocket, Token-Limits, `@light`-Executors &amp; `@dark`-Grafik/Replay/`SkipIfPresent`).
+* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md)** – **Letztstand 28.11.2026** (Labs `06_AC_KN5_Modding` &amp; `07_VR_Engineering`, `.kn5`-Repair &amp; VR-Startlog-Auswertung, Workspace-/Task-Cleanup `10+10`, direkter `-ClientMode`, `79` Altlasten entfernt, `D3` aktiv).
+* **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md)** – Stand 27.11.2026 (Host-vs.-Sandbox-Trennung, Light/Rig-Koordination, Pitwall SQLite/Tool-Swap/Touch-Terminals, Auto-Dual-GPU-Routing &amp; Nachmittags-Härtung: Timeouts, `:2222`-SSH/WebSocket, Token-Limits, `@light`-Executors &amp; `@dark`-Grafik/Replay/`SkipIfPresent`).
 * **[NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md](./05_Agents/NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md)** – NotebookLM Audio-Bericht &amp; flache Systemzusammenfassung (`27.11.2026`).
 * **[SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md](./05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md)** – Stand 26.11.2026 (Cyborg Ollama `0.40.18`-Reparatur, Pro-GPU-Kontextprofile für RTX 5070 Ti &amp; 5060, Fallback-Routing `ollama_router.py`, zentrale **KI-Schaltweiche**, Pitwall-Tab `🧠 GPU-Modelle`, 7-Rollen-Registry **LIVE auf StrikerPi** &amp; Archibald-Lüfter-Entwurf).
 * **[Rollen-, Terminal- und Pitwall-Umsetzung](../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md)** – Kanonische Rollen-IDs (`agent_registry.json`), General-Cyborg/General-Sim-Trennung (**LIVE** auf StrikerPi) und Legacy-Übergang.
@@ -143,6 +156,24 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
   * **Launcher & StrikerPi:** [`Agent-Terminals.ps1`](../labs/Agent-Terminals.ps1) · [`agent_registry.json`](../../strikerpi-hub/telemetry-relay/agent_registry.json) · [`strikerpi-hub/README.md`](../../strikerpi-hub/README.md)
   * **Regeln & Instructions:** [`AGENTS.md`](../AGENTS.md) · [`gemini-api.instructions.md`](../.github/instructions/gemini-api.instructions.md) · [`vscode-experte.instructions.md`](../../.copilot/instructions/vscode-experte.instructions.md)
   * **Skills (`SKILL.md`):** [`live-transfer-status-monitor` (Workspace)](../.agents/skills/live-transfer-status-monitor/SKILL.md) · [`live-transfer-status-monitor` (Gemini)](../.gemini/skills/live-transfer-status-monitor/SKILL.md) · [`managing-python-dependencies`](../../.copilot/skills/managing-python-dependencies/SKILL.md)
+</details>
+
+<details>
+<summary><b>6. Rubrik <code>06_AC_KN5_Modding/</code> (Assetto Corsa `.kn5`-Format, Modding &amp; Sandbox-Gate)</b></summary>
+
+* [`06_AC_KN5_Modding/README.md`](./06_AC_KN5_Modding/README.md) – Rubrik-Übersicht für `.kn5`-Modding und Asset-Inspektion
+* [`06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md`](./06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md) – `.kn5`-Containeraufbau, Blender/`ksEditor`/CM Showroom, non-destruktives `ext_config.ini` &amp; `@dark` Sandbox-Test
+* **Praxis-Lab:** [`labs/06_ac_kn5_modding/README.md`](../labs/06_ac_kn5_modding/README.md) · [`inspect_kn5.py`](../labs/06_ac_kn5_modding/inspect_kn5.py) · [`ext_config_template.ini`](../labs/06_ac_kn5_modding/templates/ext_config_template.ini)
+
+</details>
+
+<details>
+<summary><b>7. Rubrik <code>07_VR_Engineering/</code> (VR-Architektur, Frametime-Diagnose &amp; Invarianten)</b></summary>
+
+* [`07_VR_Engineering/README.md`](./07_VR_Engineering/README.md) – Rubrik-Übersicht für 90-Hz-VR-Betrieb am SimRacer
+* [`07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md`](./07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md) – VR-Signalweg, `11,111 ms`-Budget, SteamVR-Compositor-Diagnose (`AcquireSync`), CSP-Invarianten &amp; `@dark -> @rig`
+* **Praxis-Lab:** [`labs/07_vr_engineering/README.md`](../labs/07_vr_engineering/README.md) · [`analyze_vr_compositor.py`](../labs/07_vr_engineering/analyze_vr_compositor.py) · [`Check-VrInvariants.ps1`](../labs/07_vr_engineering/Check-VrInvariants.ps1)
+
 </details>
 
 ---
@@ -162,6 +193,8 @@ Willkommen in der neu strukturierten Dokumentation des **`git-labor` Test- und L
 .doku-arch-card.r3 { border-left-color: #eab308; border-top-color: #eab308; }
 .doku-arch-card.r4 { border-left-color: #ec4899; border-top-color: #ec4899; }
 .doku-arch-card.r5 { border-left-color: #a855f7; border-top-color: #a855f7; }
+.doku-arch-card.r6 { border-left-color: #f97316; border-top-color: #f97316; }
+.doku-arch-card.r7 { border-left-color: #06b6d4; border-top-color: #06b6d4; }
 .doku-arch-card-title { font-weight: 700; font-size: 0.93em; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px dashed rgba(148, 163, 184, 0.26); }
 .doku-arch-card-title a { color: #f8fafc !important; text-decoration: none !important; display: block; }
 .doku-arch-card-title a:hover { color: #93c5fd !important; }
@@ -187,14 +220,16 @@ details.doku-minimap .dot.r2 { background: #3b82f6; }
 details.doku-minimap .dot.r3 { background: #eab308; }
 details.doku-minimap .dot.r4 { background: #ec4899; }
 details.doku-minimap .dot.r5 { background: #a855f7; }
+details.doku-minimap .dot.r6 { background: #f97316; }
+details.doku-minimap .dot.r7 { background: #06b6d4; }
 details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
-<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
+<summary><span>🗺️ Doku-Minimap (7 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
+<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span><span><i class="dot r6"></i>KN5</span><span><i class="dot r7"></i>VR</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11.</a></div>
+<div class="doku-arch-root"><span>🏛️ <a href="README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../README.md">Repo-README</a> · <a href="../AGENTS.md">AGENTS.md</a> · <a href="../notebook-agent-environments/README.md">Notebooks</a> · <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md">Letztstand 28.11.</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
 <div class="doku-arch-card-title">🐧 <a href="01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
@@ -241,7 +276,8 @@ details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 <li>├─ <a href="05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../.github/agents/light.agent.md">@light</a></li>
 <li>├─ <a href="05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
 <li>├─ <a href="05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 7-Rollen-Verbund</a></li>
-<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11. (Host/Sandbox, Pitwall, Härtung &amp; Dual-GPU)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md">Letztstand 28.11. (Labs 06/07, Cleanup &amp; KN5-Fix)</a></li>
+<li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Stand 27.11. (Host/Sandbox, Pitwall, Härtung &amp; Dual-GPU)</a></li>
 <li>├─ <a href="05_Agents/NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md">NotebookLM Audio-Bericht 27.11.</a></li>
 <li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Stand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
 <li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
@@ -251,6 +287,19 @@ details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 <li>├─ <a href="05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md">Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)</a></li>
 <li>├─ <a href="05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md">Pitwall & Systemreferenz (NotebookLM-Quelle)</a></li>
 <li>└─ <a href="05_Agents/PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md">Boxencrew & Teamchef Konzept (NotebookLM)</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r6">
+<div class="doku-arch-card-title">🏎️ <a href="06_AC_KN5_Modding/README.md">06_AC_KN5_Modding (.kn5 &amp; Toolchain)</a></div>
+<ul class="doku-arch-lines">
+<li>└─ <a href="06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md">01 • .kn5-Format, ext_config &amp; Sandbox-Gate</a> <a class="doku-arch-badge" href="../labs/06_ac_kn5_modding/inspect_kn5.py">inspect_kn5.py</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r7">
+<div class="doku-arch-card-title">🥽 <a href="07_VR_Engineering/README.md">07_VR_Engineering (90 Hz VR &amp; @rig)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md">01 • VR-Architektur, Frametimes &amp; Compositor</a> <a class="doku-arch-badge" href="../labs/07_vr_engineering/analyze_vr_compositor.py">analyze_vr_compositor.py</a></li>
+<li>└─ <a href="../labs/07_vr_engineering/README.md">Lab 07 • VR-Invarianten &amp; Read-Only Check</a> <a class="doku-arch-badge" href="../labs/07_vr_engineering/Check-VrInvariants.ps1">Check-VrInvariants.ps1</a></li>
 </ul>
 </div>
 </div>

@@ -59,21 +59,13 @@
         "source": "PowerShell",
         "icon": "terminal-powershell"
       },
-      "SSH: @rig (SimRacer Host)": {
+      "SSH: SimRacer Host (.68)": {
         "path": "ssh.exe",
         "args": [
           "-t",
           "simracer"
         ],
         "icon": "server"
-      },
-      "SSH: @light (SimRacer Docker Host)": {
-        "path": "ssh.exe",
-        "args": [
-          "-t",
-          "simracer"
-        ],
-        "icon": "symbol-event"
       },
       "SSH: @dark (Docker Guest Sandbox)": {
         "path": "ssh.exe",
@@ -108,7 +100,7 @@
       {
         "label": "🚀 Start All Agent Terminals (Multi-PC Verbund)",
         "dependsOn": [
-          "Terminal: @general (Laptop Master)",
+          "Terminal: @general-sim (StrikerPi Leitstand)",
           "Terminal: @light (SimRacer Software/Sessions)",
           "Terminal: @rig (SimRacer Hardware/VR)",
           "Terminal: @dark (ac-win11-sandbox)",
@@ -140,7 +132,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Terminal: @general (Laptop Master)",
+        "label": "Terminal: @cyborg (Laptop Master)",
         "type": "process",
         "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
         "args": [
@@ -150,7 +142,31 @@
           "-File",
           "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs\\Agent-Terminals.ps1",
           "-Agent",
-          "general",
+          "cyborg",
+          "-InCurrentWindow"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs"
+        },
+        "presentation": {
+          "group": "agents",
+          "reveal": "always",
+          "panel": "new"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Terminal: @general-sim (StrikerPi Leitstand)",
+        "type": "process",
+        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:1_Git-Labor (mestuermer-svg/first)}\\labs\\Agent-Terminals.ps1",
+          "-Agent",
+          "general-sim",
           "-InCurrentWindow"
         ],
         "options": {
@@ -170,7 +186,7 @@
         "args": [
           "-t",
           "simracer",
-          "powershell -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\scripts\\connect_light_terminal.ps1"
+          "powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\agents\\light\\start_light_terminal.ps1 -ClientMode"
         ],
         "presentation": {
           "group": "agents",
@@ -186,7 +202,7 @@
         "args": [
           "-t",
           "simracer",
-          "powershell -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\scripts\\connect_rig_terminal.ps1"
+          "powershell.exe -NoExit -ExecutionPolicy Bypass -File C:\\ac-sandbox\\shared\\agents\\rig\\start_rig_terminal.ps1 -ClientMode"
         ],
         "presentation": {
           "group": "agents",
@@ -217,7 +233,8 @@
         "command": "ssh.exe",
         "args": [
           "-t",
-          "ac-sandbox"
+          "ac-sandbox",
+          "powershell.exe -NoExit -ExecutionPolicy Bypass -File \\\\host.lan\\Data\\agents\\dark\\start_dark_terminal.ps1 -ClientMode"
         ],
         "presentation": {
           "group": "agents",
@@ -239,38 +256,6 @@
           "group": "agents",
           "reveal": "always",
           "panel": "new"
-        },
-        "problemMatcher": []
-      },
-      {
-        "label": "🐳 Docker: Start auf SimRacer (On-Demand)",
-        "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "args": [
-          "-NoProfile",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\start-sandbox.ps1"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
-        },
-        "problemMatcher": []
-      },
-      {
-        "label": "🛑 Docker: Stopp auf SimRacer",
-        "type": "process",
-        "command": "${env:SystemRoot}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-        "args": [
-          "-NoProfile",
-          "-ExecutionPolicy",
-          "Bypass",
-          "-File",
-          "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox\\stop-docker.ps1"
-        ],
-        "options": {
-          "cwd": "${workspaceFolder:4_Assetto-Corsa-Content (mestuermer-svg/assetto-corsa-content)}\\ac-sandbox"
         },
         "problemMatcher": []
       },

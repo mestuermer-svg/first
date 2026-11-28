@@ -1,6 +1,6 @@
 > **Thema:** Rubrik 05 – KI-Agenten (Erstellen, Ausrüsten, Trainieren/Primen & Orchestrieren)
 > **Autor:** Michael Stürmer
-> **Datum:** 27.11.2026
+> **Datum:** 28.11.2026
 
 # 05 – KI-Agenten: Erstellen, Ausrüsten, Trainieren & Orchestrieren
 
@@ -17,7 +17,8 @@ Diese Rubrik ist das **Herzstück für den Bau und die Führung deiner KI-Agente
 | **Modul 5.4** | [04_agenten-trainieren-primen-und-orchestrieren.md](./04_agenten-trainieren-primen-und-orchestrieren.md) | Agenten-Training (Priming, Evaluierung, Memory-System), Remote Extension Host &amp; Headless-Agenten (Arch/Pi 4), Privacy-First Observability &amp; KI-Traffic-Analyse (On-Premise Matomo) sowie getrennte General-Rollen (`@cyborg` Laptop vs. `@general-sim` StrikerPi `LIVE`). |
 | **Modul 5.5** | [05_workspace-schnittstelle-simracer-und-agenten-terminals.md](./05_workspace-schnittstelle-simracer-und-agenten-terminals.md) | Workspace-Schnittstelle zwischen Git-Labor, SimRacer &amp; StrikerPi: kanonische Agent-IDs (`0.1`), Task-Queue (`inbox/` -> `outbox/`), Legacy-Freigabe-Gate (`@rig`/`@light` ↔ `@general`), SSH-Launcher (`Agent-Terminals.ps1` / `-ClientMode`), Agent `@rick` (`simrig.git`), Policy `pitwall_control_policy.json`, XOR-Mutex &amp; `sim_agent_bridge.py`. |
 | **Modul 5.6** | [05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md](./05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md) | 5-Knoten-Topologie (Laptop, SimRacer, Sandbox, Archibald, StrikerPi), Multi-Root-Workspace, Port-Matrix, 7-Rollen-Verbund &amp; Dual-GPU-Ollama-Stand, Handshake mit Pre-Flight-Check und SSH-Terminalprofile. |
-| **Modul 5.11 (Letztstand 27.11.)** | [SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md) | Dark-Sandbox-Fixes, **Host-vs.-Sandbox-Trennung (`@light`+`@rig` = Host)**, Light/Rig-Koordinationsprotokoll, Pitwall SQLite/Tool-Swap/Touch-Terminals/Sandbox-Schutz, `systemd`-Timer, **Auto-Dual-GPU-Routing** &amp; **Nachmittags-Härtung** (Timeouts, `:2222`-SSH/WebSocket, Token-Budgets, `@light`-Executors, `@dark`-Clock/Grafik/Replay/`SkipIfPresent`). |
+| **Modul 5.12 (Letztstand 28.11.)** | [SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md) | **Labs 06 (`.kn5`) &amp; 07 (VR)**, GP-2025-`.kn5`-Reparatur (`runner.ps1`), VR-Startlog-Auswertung (`AcquireSync`/`0xc0000374`), Workspace-Cleanup (`10+10` Tasks, direkter `-ClientMode`, `79` Altlasten entfernt, `26` Backups archiviert, `D3` aktiv). |
+| **Modul 5.11 (Stand 27.11.)** | [SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md) | Dark-Sandbox-Fixes, **Host-vs.-Sandbox-Trennung (`@light`+`@rig` = Host)**, Light/Rig-Koordinationsprotokoll, Pitwall SQLite/Tool-Swap/Touch-Terminals/Sandbox-Schutz, `systemd`-Timer, **Auto-Dual-GPU-Routing** &amp; **Nachmittags-Härtung** (Timeouts, `:2222`-SSH/WebSocket, Token-Budgets, `@light`-Executors, `@dark`-Clock/Grafik/Replay/`SkipIfPresent`). |
 | **NotebookLM Audio-Bericht (27.11.)** | [NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md](./NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md) | Flacher Sitzungsbericht vom 27.11.2026 für Gemini NotebookLM Audio Overview (alle Fehlerbehebungen, Architektur- &amp; UI-Updates). |
 | **Modul 5.10 (Stand 26.11.)** | [SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md](./SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md) | Dual-GPU Ollama (`SimRacer 5070 Ti` &rarr; `Cyborg 5060` Fallback), **KI-Schaltweiche (`ollama` / `auto` / `gemini`)**, Pitwall `🧠 GPU-Modelle`, kanonische 7-Rollen-Registry (`LIVE` auf StrikerPi), NetBird-Mesh, VS Code Agents Window/MCP-Tool-Budget &amp; **StrikerPi SQLite Leitstand-DB (Werkzeug-Bibliothek)**. |
 | **Umsetzungsstand (7-Rollen-Trennung)** | [Rollen-, Terminal- und Pitwall-Umsetzung](../../../assetto-corsa-content/docs/03_agenten_system/rollen-terminals-pitwall-umsetzung.md) | Kanonische Rollen-IDs (`agent_registry.json`), General-Cyborg/General-Sim-Trennung, Pitwall-Status (`LIVE` auf StrikerPi), UTF-8-JSON-Prompt-Transport, Legacy-Übergang, **SQLite-Leitstand-DB &amp; 5 Bibliotheksregeln**. |
@@ -51,7 +52,7 @@ Diese Rubrik ist das **Herzstück für den Bau und die Führung deiner KI-Agente
 | **Benutzer-Skills** | [`managing-python-dependencies`](../../../.copilot/skills/managing-python-dependencies/SKILL.md) · [`notebook-guidance`](../../../.copilot/skills/notebook-guidance/SKILL.md) · [`accidental-data-loss-prevention`](../../../.copilot/skills/accidental-data-loss-prevention/SKILL.md) | Globale Copilot-Skills unter `C:\Users\strik\.copilot\skills\`. |
 | **Kommunikations-Historie** | [`AGENT_KOMMUNIKATION_HISTORIE.md`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/logs/AGENT_KOMMUNIKATION_HISTORIE.md) | Vollständige Markdown-Historie aller Agenten-Übergaben, Antworten &amp; Freigaben. |
 | **Testbericht (10.11.2026)** | [`agenten-kommunikation-und-sandbox-testbericht.md`](../../../assetto-corsa-content/docs/03_agenten_system/agenten-kommunikation-und-sandbox-testbericht.md) | Verifizierter E2E-Testbericht zu `@general`, `@light`, `@rig`, `@dark`, `@sarah`, Sandbox-Start &amp; OSC-8-Log-Links. |
-| **Terminal-Konsolen &amp; Tasks** | [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1) · [`tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json) | PowerShell-REPL-Konsolen mit OSC-8 Logfile-Links und optimierter VS-Code-Task-Konfiguration. |
+| **Terminal-Konsolen &amp; Tasks** | [`start_general_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/general-SIM/start_general_terminal.ps1) · [`start_rig_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/rig/start_rig_terminal.ps1) · [`start_light_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/light/start_light_terminal.ps1) · [`start_dark_terminal.ps1`](../../../assetto-corsa-content/ac-sandbox/shared/agents/dark/start_dark_terminal.ps1) · [`tasks.json`](../../../assetto-corsa-content/.vscode/tasks.json) | PowerShell-REPL-Konsolen mit OSC-8 Logfile-Links (`10` zentrale Agenten-Tasks im direktem `-ClientMode` in `git-labor.code-workspace` + `10` Infrastruktur-Tasks in `tasks.json`). |
 
 </details>
 
@@ -72,6 +73,8 @@ Diese Rubrik ist das **Herzstück für den Bau und die Führung deiner KI-Agente
 .doku-arch-card.r3 { border-left-color: #eab308; border-top-color: #eab308; }
 .doku-arch-card.r4 { border-left-color: #ec4899; border-top-color: #ec4899; }
 .doku-arch-card.r5 { border-left-color: #a855f7; border-top-color: #a855f7; }
+.doku-arch-card.r6 { border-left-color: #f97316; border-top-color: #f97316; }
+.doku-arch-card.r7 { border-left-color: #06b6d4; border-top-color: #06b6d4; }
 .doku-arch-card-title { font-weight: 700; font-size: 0.93em; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px dashed rgba(148, 163, 184, 0.26); }
 .doku-arch-card-title a { color: #f8fafc !important; text-decoration: none !important; display: block; }
 .doku-arch-card-title a:hover { color: #93c5fd !important; }
@@ -97,70 +100,76 @@ details.doku-minimap .dot.r2 { background: #3b82f6; }
 details.doku-minimap .dot.r3 { background: #eab308; }
 details.doku-minimap .dot.r4 { background: #ec4899; }
 details.doku-minimap .dot.r5 { background: #a855f7; }
+details.doku-minimap .dot.r6 { background: #f97316; }
+details.doku-minimap .dot.r7 { background: #06b6d4; }
 details.doku-minimap .minimap-body { padding: 4px 12px 6px 12px; }
 </style>
 <details class="doku-minimap">
-<summary><span>🗺️ Doku-Minimap (5 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
-<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span></div>
+<summary><span>🗺️ Doku-Minimap (7 Rubriken &amp; Labs)</span><span class="minimap-toggle" title="Klicken zum Vergrößern / Einklappen"></span></summary>
+<div class="minimap-preview-strip"><span><i class="dot r1"></i>Linux</span><span><i class="dot r2"></i>VSCode</span><span><i class="dot r3"></i>Python</span><span><i class="dot r4"></i>JS/TS</span><span><i class="dot r5"></i>Agents</span><span><i class="dot r6"></i>KN5</span><span><i class="dot r7"></i>VR</span></div>
 <div class="minimap-body">
 <div class="doku-arch-flow">
-<div class="doku-arch-root"><span>🏛️ <a href="../README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../../README.md">Repo-README</a> · <a href="../../AGENTS.md">AGENTS.md</a> · <a href="../../notebook-agent-environments/README.md">Notebooks</a> · <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11.</a></div>
+<div class="doku-arch-root"><span>🏛️ <a href="../README.md">VanstrikeCyborg — git-labor Doku-Index</a></span> · <a href="../../README.md">Repo-README</a> · <a href="../../AGENTS.md">AGENTS.md</a> · <a href="../../notebook-agent-environments/README.md">Notebooks</a> · <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md">Letztstand 28.11.</a></div>
 <div class="doku-arch-grid">
 <div class="doku-arch-card r1">
-<div class="doku-arch-card-title">🐧 <a href="../01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell & Container)</a></div>
+<div class="doku-arch-card-title">🐧 <a href="../01_Linux_Bash/README.md">01_Linux_Bash (Linux, Shell &amp; Container)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams & Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
-<li>├─ <a href="../01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess & systemd</a></li>
-<li>├─ <a href="../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH & Nginx</a></li>
-<li>├─ <a href="../01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts & Backups</a></li>
-<li>└─ <a href="../01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen & Sandbox Micro-VMs (sbx)</a></li>
+<li>├─ <a href="../01_Linux_Bash/01_bash-grundlagen-und-skripting.md">01 • Bash CLI, Text-Tools, Streams &amp; Expansions</a> <a class="doku-arch-badge" href="../../labs/01_linux_bash/check-env.sh">check-env.sh</a></li>
+<li>├─ <a href="../01_Linux_Bash/02_linux-systemadministration-und-interna.md">02 • Inodes, LVM, Prozesse, Boot-Prozess &amp; systemd</a></li>
+<li>├─ <a href="../01_Linux_Bash/03_arch-linux-omarchy-und-remote-ssh.md">03 • Arch Linux, Omarchy, Remote-SSH &amp; Nginx</a></li>
+<li>├─ <a href="../01_Linux_Bash/04_fortgeschrittenes-bash-skripting-und-automatisierung.md">04 • Advanced Bash: Arrays, getopts &amp; Backups</a></li>
+<li>└─ <a href="../01_Linux_Bash/05_docker-und-sbx-micro-vms.md">05 • Docker Grundlagen &amp; Sandbox Micro-VMs (sbx)</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r2">
-<div class="doku-arch-card-title">🧩 <a href="../02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP & Gemini)</a></div>
+<div class="doku-arch-card-title">🧩 <a href="../02_VSCode_Env/README.md">02_VSCode_Env (IDE, Git, MCP &amp; Gemini)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) & Remote</a></li>
-<li>├─ <a href="../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow & Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
-<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) & Ports (Archiv: Proxy)</a> <a class="doku-arch-badge" href="../../.vscode/mcp.json">mcp.json</a></li>
-<li>├─ <a href="../02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio & API-Keys</a></li>
-<li>└─ <a href="../02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity & Parallel-Limits</a></li>
+<li>├─ <a href="../02_VSCode_Env/01_vscode-architektur-lsp-und-remote.md">01 • VS Code Architektur, Sprachserver (LSP) &amp; Remote</a></li>
+<li>├─ <a href="../02_VSCode_Env/02_git-github-und-multi-root-workspaces.md">02 • Git, GitHub Workflow &amp; Multi-Root Workspaces</a> <a class="doku-arch-badge" href="../../git-labor.code-workspace">Workspace</a></li>
+<li>├─ <a href="../02_VSCode_Env/03_mcp-server-localhost-proxy-und-ports.md">03 • MCP-Server, Ollama (:11434) &amp; Ports (Archiv: Proxy)</a> <a class="doku-arch-badge" href="../../.vscode/mcp.json">mcp.json</a></li>
+<li>├─ <a href="../02_VSCode_Env/04_gemini-oekosystem-ai-studio-und-api-keys.md">04 • Gemini Ökosystem, Google AI Studio &amp; API-Keys</a></li>
+<li>└─ <a href="../02_VSCode_Env/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">05 • 5-Knoten-Verbund, Parity &amp; Parallel-Limits</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r3">
-<div class="doku-arch-card-title">🐍 <a href="../03_Python_Coding/README.md">03_Python_Coding (Python, uv & GenAI SDK)</a></div>
+<div class="doku-arch-card-title">🐍 <a href="../03_Python_Coding/README.md">03_Python_Coding (Python, uv &amp; GenAI SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance & Notebooks</a> <a class="doku-arch-badge" href="../../notebook-agent-environments/agent_demo.ipynb">.ipynb</a></li>
-<li>├─ <a href="../03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) & Interactions API</a></li>
-<li>└─ <a href="../03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse & pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
+<li>├─ <a href="../03_Python_Coding/01_python-setup-uv-venv-und-notebooks.md">01 • Python Setup: uv, .venv, Pylance &amp; Notebooks</a> <a class="doku-arch-badge" href="../../notebook-agent-environments/agent_demo.ipynb">.ipynb</a></li>
+<li>├─ <a href="../03_Python_Coding/02_gemini-api-python-sdk-und-interactions.md">02 • Google GenAI SDK (google-genai) &amp; Interactions API</a></li>
+<li>└─ <a href="../03_Python_Coding/03_python-automatisierung-datenanalyse-und-tests.md">03 • Automatisierung, Datenanalyse &amp; pytest</a> <a class="doku-arch-badge" href="../../labs/03_python/sensor_demo.py">sensor_demo.py</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r4">
-<div class="doku-arch-card-title">🌐 <a href="../04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS & Web-SDK)</a></div>
+<div class="doku-arch-card-title">🌐 <a href="../04_JS_TS_Web/README.md">04_JS_TS_Web (HTML/CSS, JS/TS &amp; Web-SDK)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 & DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
-<li>├─ <a href="../04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) & TypeScript</a></li>
+<li>├─ <a href="../04_JS_TS_Web/01_html-css-und-dom-grundlagen.md">01 • HTML5, CSS3 &amp; DOM-Manipulation Grundlagen</a> <a class="doku-arch-badge" href="../../labs/04_js_ts_web/rechner.html">rechner.html</a></li>
+<li>├─ <a href="../04_JS_TS_Web/02_modernes-javascript-und-typescript.md">02 • Modernes JavaScript (ES6+) &amp; TypeScript</a></li>
 <li>└─ <a href="../04_JS_TS_Web/03_gemini-sdk-typescript-und-web-apps.md">03 • Google GenAI SDK (@google/genai) für Web-Apps</a></li>
 </ul>
 </div>
 <div class="doku-arch-card r5">
-<div class="doku-arch-card-title">🤖 <a href="../05_Agents/README.md">05_Agents (KI-Agenten, Skills & Orchestrierung)</a></div>
+<div class="doku-arch-card-title">🤖 <a href="../05_Agents/README.md">05_Agents (KI-Agenten, Skills &amp; Orchestrierung)</a></div>
 <ul class="doku-arch-lines">
-<li>├─ <a href="../05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler & 7-Stufen-Aufbau</a></li>
-<li>├─ <a href="../05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules & Prompts</a> <a class="doku-arch-badge" href="../../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
-<li>├─ <a href="../05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills & MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
-<li>├─ <a href="../05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory & Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a></li>
-<li>├─ <a href="../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals & XOR-Mutex</a> <a class="doku-arch-badge" href="../../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
-<li>├─ <a href="../05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk & 6-Rollen-Verbund</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-27.md">Letztstand 27.11. (Host/Sandbox, Pitwall, Härtung &amp; Dual-GPU)</a></li>
-<li>├─ <a href="../05_Agents/NOTEBOOKLM_AUDIO_BERICHT_2026-11-27.md">NotebookLM Audio-Bericht 27.11.</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-26.md">Stand 26.11. (Dual-GPU Ollama &amp; Pitwall GPU-Modelle)</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-25.md">Stand 25.11. (Architektur v5, Toolbox & Pitwall v2.1)</a></li>
-<li>├─ <a href="../05_Agents/HISENSE_TV_DISPLAY_OPTIMIERUNG_2026-11-25.md">Praxis-Referenz 25.11. (Hisense 4K-TV & ClearType)</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-24.md">Stand 24.11. (Parity, Qwen 3.5 & Nacharbeiten)</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-23.md">Stand 23.11. (ToS-Bereinigung, Ollama & Pitwall v1.5)</a></li>
-<li>├─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-11.md">Änderungsprotokoll 11.11. (MQTT, Gatekeeper & Caddy)</a></li>
-<li>├─ <a href="../05_Agents/PITWALL_STEUERUNG_UND_FUNKTIONSREFERENZ_NOTEBOOKLM.md">Pitwall & Systemreferenz (NotebookLM-Quelle)</a></li>
-<li>└─ <a href="../05_Agents/PITWALL_BOXENCREW_TEAMCHEF_KONZEPT_NOTEBOOKLM.md">Boxencrew & Teamchef Konzept (NotebookLM)</a></li>
+<li>├─ <a href="../05_Agents/01_agent-stilfibel-und-didaktik-ruler.md">01 • Agent-Stilfibel, Didaktik-Ruler &amp; 7-Stufen-Aufbau</a></li>
+<li>├─ <a href="../05_Agents/02_agenten-erstellen-instructions-rules-und-prompts.md">02 • Agenten erstellen: Instructions, Rules &amp; Prompts</a> <a class="doku-arch-badge" href="../../.github/instructions/gemini-api.instructions.md">gemini.instructions</a></li>
+<li>├─ <a href="../05_Agents/03_agenten-ausruesten-skills-und-mcp-tools.md">03 • Agenten ausrüsten: Skills &amp; MCP-Tools</a> <a class="doku-arch-badge" href="../../.agents/skills/live-transfer-status-monitor/SKILL.md">SKILL.md</a></li>
+<li>├─ <a href="../05_Agents/04_agenten-trainieren-primen-und-orchestrieren.md">04 • Priming, Memory &amp; Multi-Agent-Orchestrierung</a> <a class="doku-arch-badge" href="../../.github/agents/light.agent.md">@light</a></li>
+<li>├─ <a href="../05_Agents/05_workspace-schnittstelle-simracer-und-agenten-terminals.md">05 • Schnittstelle, Terminals &amp; XOR-Mutex</a> <a class="doku-arch-badge" href="../../labs/03_python/sim_agent_bridge.py">Bridge</a></li>
+<li>├─ <a href="../05_Agents/05_multi-workspace-netzwerk-mcp-und-agenten-verbund.md">06 • Multi-Workspace Netzwerk &amp; 7-Rollen-Verbund</a></li>
+<li>└─ <a href="../05_Agents/SYSTEM_ARCHITEKTUR_AENDERUNGEN_2026-11-28.md">Letztstand 28.11. (Labs 06/07, Cleanup &amp; KN5-Fix)</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r6">
+<div class="doku-arch-card-title">🏎️ <a href="../06_AC_KN5_Modding/README.md">06_AC_KN5_Modding (.kn5 &amp; Toolchain)</a></div>
+<ul class="doku-arch-lines">
+<li>└─ <a href="../06_AC_KN5_Modding/01_kn5-format-entwicklungsumgebung-und-setup.md">01 • .kn5-Format, ext_config &amp; Sandbox-Gate</a> <a class="doku-arch-badge" href="../../labs/06_ac_kn5_modding/inspect_kn5.py">inspect_kn5.py</a></li>
+</ul>
+</div>
+<div class="doku-arch-card r7">
+<div class="doku-arch-card-title">🥽 <a href="../07_VR_Engineering/README.md">07_VR_Engineering (90 Hz VR &amp; @rig)</a></div>
+<ul class="doku-arch-lines">
+<li>├─ <a href="../07_VR_Engineering/01_vr-architektur-frametimes-und-diagnose.md">01 • VR-Architektur, Frametimes &amp; Compositor</a> <a class="doku-arch-badge" href="../../labs/07_vr_engineering/analyze_vr_compositor.py">analyze_vr_compositor.py</a></li>
+<li>└─ <a href="../../labs/07_vr_engineering/README.md">Lab 07 • VR-Invarianten &amp; Read-Only Check</a> <a class="doku-arch-badge" href="../../labs/07_vr_engineering/Check-VrInvariants.ps1">Check-VrInvariants.ps1</a></li>
 </ul>
 </div>
 </div>
